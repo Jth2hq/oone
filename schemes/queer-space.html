@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>oone — pilot 4 · Queer Space (pixelated / primary)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=JetBrains+Mono:wght@400;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shell.css">
+<style>
+  /* ── SCHEME 4 · QUEER SPACE — pixelated / primary / generous white ── */
+  :root{
+    --bg:#fafafa;
+    --ink:#0a0a0a;
+    --ink2:rgba(10,10,10,.45);
+    --acc:#ff2a4d;            /* primary red */
+    --acc2:#1c4ef0;           /* primary blue */
+    --acc3:#ffd400;           /* primary yellow */
+    --bar-bg:#ffffff;
+    --ff-display:"Cormorant",Georgia,serif;
+    --ff-mono:"JetBrains Mono","Space Mono",ui-monospace,monospace;
+  }
+  body{background:var(--bg);color:var(--ink);font-family:var(--ff-mono)}
+  #cv{display:none}
+
+  /* nav reskin */
+  #nav{padding:24px 32px;border-bottom:none}
+  .nav-link,.nav-brand{color:#0a0a0a;opacity:1;font-family:var(--ff-mono);font-weight:400;text-transform:lowercase;letter-spacing:.04em}
+  .nav-link.on,.nav-link:hover{color:var(--acc)}
+  .tp-btn{border-color:#0a0a0a;color:#0a0a0a;text-transform:lowercase;letter-spacing:.04em}
+  .tp-btn:hover{background:var(--acc);color:#fff;border-color:var(--acc)}
+
+  /* MASTHEAD */
+  .pub{padding:120px 6vw 40px;max-width:1400px;margin:0 auto}
+  .pub-iss{font-family:var(--ff-mono);font-size:11px;color:var(--ink2);letter-spacing:.06em;display:flex;gap:24px;margin-bottom:48px}
+  .pub-iss span{display:inline-flex;align-items:center;gap:6px}
+  .pub-iss span::before{content:'';width:6px;height:6px;background:var(--acc);display:inline-block}
+  .pub-h{font-family:var(--ff-display);font-style:italic;font-size:clamp(64px,9vw,140px);line-height:.95;font-weight:300;letter-spacing:-.02em;color:#0a0a0a;max-width:14ch}
+  .pub-h em{color:var(--acc)}
+  .pub-sub{margin-top:32px;font-family:var(--ff-mono);font-size:14px;line-height:1.7;color:var(--ink2);max-width:60ch}
+
+  /* TOOL GRID — algorithmic art tiles, pixelated */
+  .tools{padding:80px 6vw;max-width:1400px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;background:#0a0a0a}
+  .tool{aspect-ratio:1/1;background:#fafafa;padding:24px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:background .15s}
+  .tool:hover{background:var(--acc3)}
+  .tool .num{font-family:var(--ff-mono);font-size:11px;color:var(--ink2);letter-spacing:.06em}
+  .tool .name{font-family:var(--ff-display);font-style:italic;font-size:32px;line-height:1.05;font-weight:300;color:#0a0a0a}
+  .tool .tag{font-family:var(--ff-mono);font-size:10px;letter-spacing:.10em;text-transform:uppercase;color:var(--ink2)}
+  .tool .pix{height:80px;display:grid;grid-template-columns:repeat(16,1fr);grid-template-rows:repeat(8,1fr);gap:1px}
+  .tool .pix i{background:#0a0a0a;display:block}
+  .tool .pix i.r{background:var(--acc)}
+  .tool .pix i.b{background:var(--acc2)}
+  .tool .pix i.y{background:var(--acc3)}
+  .tool .pix i.w{background:transparent}
+
+  /* INSIGHT BLOCK — primary block */
+  .insight{padding:120px 6vw;max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+  @media(max-width:760px){.insight{grid-template-columns:1fr;gap:40px}}
+  .insight-h{font-family:var(--ff-display);font-style:italic;font-size:clamp(36px,5vw,72px);line-height:1.0;font-weight:300}
+  .insight-h em{color:var(--acc2);font-style:italic}
+  .insight-block{background:var(--acc);padding:40px;color:#fff;font-family:var(--ff-mono);font-size:13px;line-height:1.7}
+  .insight-block.b{background:var(--acc2)}
+  .insight-block.y{background:var(--acc3);color:#0a0a0a}
+  .insight-block .lbl{font-family:var(--ff-mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;opacity:.7;margin-bottom:14px}
+  .insight-block .big{font-family:var(--ff-display);font-style:italic;font-size:48px;font-weight:300;line-height:1;margin-bottom:14px}
+
+  /* RISO/HALFTONE LARGE FIGURE */
+  .halftone{padding:80px 6vw;max-width:1400px;margin:0 auto}
+  .halftone-stage{aspect-ratio:16/9;background:#0a0a0a;position:relative;overflow:hidden}
+  .halftone-stage canvas{position:absolute;inset:0;width:100%;height:100%}
+  .halftone-cap{font-family:var(--ff-mono);font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:var(--ink2);margin-top:14px;display:flex;justify-content:space-between}
+
+  /* RESEARCH INDEX — list with primary dots */
+  .index-pub{padding:80px 6vw 160px;max-width:1400px;margin:0 auto}
+  .index-h{font-family:var(--ff-display);font-style:italic;font-size:clamp(28px,3.5vw,48px);font-weight:300;margin-bottom:36px}
+  .idx-row{display:grid;grid-template-columns:60px 1fr 80px 100px;gap:24px;align-items:center;padding:18px 0;border-top:1px solid #0a0a0a;cursor:pointer;transition:background .12s}
+  .idx-row:hover{background:var(--acc3)}
+  .idx-row .num{font-family:var(--ff-mono);font-size:11px;color:var(--ink2)}
+  .idx-row .ttl{font-family:var(--ff-display);font-style:italic;font-size:20px}
+  .idx-row .tag{font-family:var(--ff-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+  .idx-row .dot{width:14px;height:14px;background:var(--acc);justify-self:end}
+  .idx-row.b .dot{background:var(--acc2)}
+  .idx-row.y .dot{background:var(--acc3);border:1px solid #0a0a0a}
+
+  /* override drawer + chrome */
+  #drawer{background:#fafafa;color:#0a0a0a;border-top:2px solid #0a0a0a;backdrop-filter:none}
+  #drawer .dw-cat,#drawer .dw-btn{color:#0a0a0a}
+  #drawer h1{color:#0a0a0a}
+  #drawer p{color:rgba(10,10,10,.7)}
+  #panel-key,#panel-filter,#tip,.tc-panel,.tut-card{background:#fff;border:1px solid #0a0a0a;box-shadow:6px 6px 0 var(--acc);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .pk-lbl,.dw-cat{color:rgba(10,10,10,.7)}
+  #feed-overlay{background:#0a0a0a;color:#fafafa;border-top:none}
+  .feed-ticker{color:#fafafa}
+  .pilot-banner{background:var(--acc);color:#fff;border:none;padding:8px 16px}
+
+  html,body{overflow:auto;height:auto}
+</style>
+</head><body>
+
+<canvas id="cv"></canvas>
+<div id="cur"><svg width="14" height="14" viewBox="0 0 14 14"><rect x="2" y="2" width="10" height="10" fill="none" stroke="#0a0a0a" stroke-width="1"/><rect x="6" y="6" width="2" height="2" fill="#ff2a4d"/></svg></div>
+
+<div class="pilot-banner">scheme 04 · QUEER SPACE — pixelated / primary / publication</div>
+
+<nav id="nav" class="vis">
+  <div class="nav-left"><a class="nav-brand" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span class="oo-mark"><span class="o1">O</span><span class="o2">O</span></span><span style="margin-left:.4em;font-family:var(--ff-display);font-style:italic">ne — research</span></a></div>
+  <div class="nav-right">
+    <button class="nav-link" onclick="document.querySelector('.tools').scrollIntoView({behavior:'smooth'})">tools</button>
+    <button class="nav-link" onclick="document.querySelector('.insight').scrollIntoView({behavior:'smooth'})">insights</button>
+    <button class="nav-link" onclick="document.querySelector('.halftone').scrollIntoView({behavior:'smooth'})">figures</button>
+    <button class="nav-link" onclick="document.querySelector('.index-pub').scrollIntoView({behavior:'smooth'})">index</button>
+    <button class="tp-btn" onclick="openThemeChooser()">primary</button>
+  </div>
+</nav>
+
+<!-- MASTHEAD -->
+<section class="pub">
+  <div class="pub-iss">
+    <span>oone / research / 06</span>
+    <span style="opacity:.5">spring 2026</span>
+    <span style="opacity:.5">design publication</span>
+  </div>
+  <h1 class="pub-h">tools, treatments, and <em>insights</em> from the threshold.</h1>
+  <p class="pub-sub">A working publication. Six tools. Four insights. One index. Click anything to open its card. Pixels are honest about what they are.</p>
+</section>
+
+<!-- TOOL GRID -->
+<section class="tools" id="tools">
+  <!-- six tiles will be populated by JS to keep markup small -->
+</section>
+
+<!-- INSIGHT -->
+<section class="insight">
+  <div>
+    <h2 class="insight-h">A room is <em>not</em> a container.<br>It is a <em>set of agreements</em> about attention.</h2>
+    <p style="margin-top:24px;font-family:var(--ff-mono);font-size:13px;line-height:1.7;color:var(--ink2);max-width:48ch">Three insights from two years of logging. Each one a single sentence. The publication is what's left when nothing else is.</p>
+  </div>
+  <div style="display:grid;gap:2px">
+    <div class="insight-block">
+      <div class="lbl">insight 01</div>
+      <div class="big">240</div>
+      <div>entries logged across 24 months. Average 10 per month. Median rises in spring.</div>
+    </div>
+    <div class="insight-block b">
+      <div class="lbl">insight 02</div>
+      <div class="big">3:1</div>
+      <div>ratio of "sensations" to "ideas." Which means: notice first, conclude later.</div>
+    </div>
+    <div class="insight-block y">
+      <div class="lbl">insight 03</div>
+      <div class="big">62%</div>
+      <div>of entries were made within 200m of the East River. Place is a strong attractor.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HALFTONE / RISO FIGURE -->
+<section class="halftone">
+  <div class="halftone-stage"><canvas id="ht"></canvas></div>
+  <div class="halftone-cap"><span>fig. 04 · entry density · halftone treatment</span><span>generative · click to reroll</span></div>
+</section>
+
+<!-- INDEX -->
+<section class="index-pub">
+  <h2 class="index-h">research index.</h2>
+  <div class="idx-row"   onclick="openDrawer('research','01 · the corner agreement','The wall meeting the wall as a negotiation. Notes from 14 corners.')"><span class="num">01</span><span class="ttl">the corner agreement</span><span class="tag">essay</span><span class="dot"></span></div>
+  <div class="idx-row b" onclick="openDrawer('research','02 · thresholds, plural','Counting the moments a room asks you to slow down.')"><span class="num">02</span><span class="ttl">thresholds, plural</span><span class="tag">field log</span><span class="dot"></span></div>
+  <div class="idx-row y" onclick="openDrawer('research','03 · light as a verb','When a room admits the day, it makes a tense.')"><span class="num">03</span><span class="ttl">light as a verb</span><span class="tag">tool</span><span class="dot"></span></div>
+  <div class="idx-row"   onclick="openDrawer('research','04 · scale, falsified','How big is too big when nobody sits down?')"><span class="num">04</span><span class="ttl">scale, falsified</span><span class="tag">essay</span><span class="dot"></span></div>
+  <div class="idx-row b" onclick="openDrawer('research','05 · queer space, working def.','Space that does not require you to be only one thing.')"><span class="num">05</span><span class="ttl">queer space, def.</span><span class="tag">def.</span><span class="dot"></span></div>
+  <div class="idx-row y" onclick="openDrawer('research','06 · index of breaths','Air, taken in 38 rooms.')"><span class="num">06</span><span class="ttl">index of breaths</span><span class="tag">data</span><span class="dot"></span></div>
+</section>
+
+<div id="panel-key">
+  <div class="pk-head">channels</div>
+  <div class="pk-row on"><span class="pk-dot" style="background:var(--acc)"></span><span class="pk-lbl">red</span></div>
+  <div class="pk-row on"><span class="pk-dot" style="background:var(--acc2)"></span><span class="pk-lbl">blue</span></div>
+  <div class="pk-row on"><span class="pk-dot" style="background:var(--acc3);border:1px solid #0a0a0a"></span><span class="pk-lbl">yellow</span></div>
+</div>
+
+<div id="panel-filter">
+  <div class="pk-head">mode</div>
+  <div class="pk-row on"><span class="pk-circ"></span><span class="pk-lbl">tools</span></div>
+  <div class="pk-row on"><span class="pk-circ"></span><span class="pk-lbl">insights</span></div>
+</div>
+
+<div id="drawer">
+  <div class="dw-head"><span class="dw-cat" id="dw-cat"></span><div class="dw-acts"><button class="dw-btn" id="dw-expand-btn" onclick="toggleDrawerExpand()">expand</button><button class="dw-btn" onclick="closeDrawer()">×</button></div></div>
+  <div class="dw-body" id="dw-body"></div>
+</div>
+
+<div id="tip"><div class="t-cat" id="tip-cat"></div><div class="t-title" id="tip-title"></div><div class="t-sub" id="tip-sub"></div><div class="t-time" id="tip-time"></div></div>
+
+<div id="theme-chooser" onclick="if(event.target===this)closeThemeChooser()">
+  <div class="tc-panel">
+    <button class="tc-close" onclick="closeThemeChooser()">×</button>
+    <div class="tc-sec-lbl">primary</div>
+    <div class="tc-row-wrap">
+      <div class="tc-bub sel" title="red"    style="background:#ff2a4d"></div>
+      <div class="tc-bub" title="blue"   style="background:#1c4ef0"></div>
+      <div class="tc-bub" title="yellow" style="background:#ffd400;border:1px solid #0a0a0a"></div>
+      <div class="tc-bub" title="black"  style="background:#0a0a0a"></div>
+    </div>
+  </div>
+</div>
+
+<div id="tut" class="on">
+  <div class="tut-dim" onclick="closeTut()"></div>
+  <div class="tut-card">
+    <div class="tut-title">A research publication.</div>
+    <div class="tut-body">Tools above. Insights below. Pixels everywhere. Click to open a card. Click the figure to reroll it.</div>
+    <div class="tut-nav"><div></div><div style="display:flex;gap:8px"><button class="tut-skip" onclick="closeTut()">skip</button><button class="tut-btn" onclick="nextTut()">begin</button></div></div>
+  </div>
+</div>
+
+<div id="image-view"><div class="iv-grid" id="iv-grid"></div></div>
+
+<div id="feed-overlay"><div class="feed-ticker">oone / research / 06 · spring 2026 · design publication · pixels are honest · </div></div>
+
+<script src="_shell.js"></script>
+<script>
+  // SCHEME 4 — generate 6 tool tiles with pixelated patterns
+  const TOOLS = [
+    {n:'01',name:'the threshold counter',tag:'measure',c:'r'},
+    {n:'02',name:'corner glossary',tag:'reference',c:'b'},
+    {n:'03',name:'a sky log',tag:'log',c:'y'},
+    {n:'04',name:'breath index',tag:'data',c:'r'},
+    {n:'05',name:'room voltage',tag:'rubric',c:'b'},
+    {n:'06',name:'after-hour map',tag:'map',c:'y'}
+  ];
+  const tools = document.getElementById('tools');
+  TOOLS.forEach(t=>{
+    const el = document.createElement('div'); el.className='tool';
+    let pix = '';
+    for(let i=0;i<128;i++){
+      const r = Math.random();
+      const cls = r<.55?'w': r<.78?'': r<.9?t.c: 'w';
+      pix += `<i class="${cls}"></i>`;
+    }
+    el.innerHTML = `<div class="num">${t.n}</div><div class="pix">${pix}</div><div><div class="name">${t.name}</div><div class="tag">${t.tag}</div></div>`;
+    el.onclick = ()=>openDrawer('tool · '+t.n, t.name, 'Placeholder card for the '+t.name+' tool. Full content TBD.');
+    tools.appendChild(el);
+  });
+
+  // halftone figure — algorithmic dot pattern (entry density)
+  const ht = document.getElementById('ht');
+  const hctx = ht.getContext('2d');
+  function reroll(){
+    const w = ht.clientWidth, h = ht.clientHeight;
+    ht.width = w*2; ht.height = h*2; hctx.scale(2,2);
+    hctx.fillStyle='#0a0a0a'; hctx.fillRect(0,0,w,h);
+    const cols=['#ff2a4d','#1c4ef0','#ffd400','#fafafa'];
+    for(let y=8;y<h;y+=10){
+      for(let x=8;x<w;x+=10){
+        const cx=w*.5, cy=h*.5;
+        const d = Math.hypot(x-cx,y-cy)/Math.hypot(cx,cy);
+        const r = Math.max(0, 4.5*(1-d) + (Math.random()-.5)*1.6);
+        if(r<.4) continue;
+        hctx.fillStyle = cols[Math.floor(Math.random()*4)];
+        hctx.beginPath(); hctx.arc(x,y,r,0,Math.PI*2); hctx.fill();
+      }
+    }
+  }
+  ht.parentElement.addEventListener('click', reroll);
+  window.addEventListener('load', reroll);
+  window.addEventListener('resize', reroll);
+  window.drawField = function(){};
+</script>
+</body></html>

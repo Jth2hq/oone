@@ -1,0 +1,193 @@
+/* ────────────────────────────────────────────────────────────────────────
+   oone — Design Tokens 2026
+   Drop-in replacement for the :root block in oone.html.
+   Preserves existing variable names (--bg, --ink, --ink2, --acc, --bar-bg)
+   so no JS changes are required. Adds a semantic layer + per-scheme
+   iridescence palette + thermal endpoints.
+   ──────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* ── PRIMITIVE SCALE ──────────────────────────────────────────────── */
+  /* Neutral warm-dark ladder, OKLCH-spaced for perceptual uniformity */
+  --ink-100: oklch(96% 0.01 70);
+  --ink-80:  oklch(82% 0.01 70);
+  --ink-60:  oklch(64% 0.01 70);
+  --ink-40:  oklch(45% 0.01 70);
+  --ink-20:  oklch(28% 0.01 70);
+  --ink-10:  oklch(18% 0.01 70);
+  --ink-05:  oklch(12% 0.01 70);
+
+  /* ── TYPOGRAPHY ───────────────────────────────────────────────────── */
+  --fs-xs:     clamp(9px,  .75vw, 11px);
+  --fs-sm:     clamp(10px, .9vw,  12px);
+  --fs-md:     clamp(13px, 1.1vw, 15px);
+  --fs-lg:     clamp(20px, 2vw,   24px);
+  --fs-xl:     clamp(28px, 3.2vw, 38px);
+  --fs-2xl:    clamp(32px, 4vw,   52px);
+  --fs-display:clamp(52px, 7vw,   96px);
+
+  --font-display: "Cormorant Garamond", serif;
+  --font-body:    "Cormorant", serif;
+  --font-mono:    "Space Mono", monospace;
+  --font-data:    "IBM Plex Mono", monospace;
+
+  --track-xs: .06em;
+  --track-sm: .10em;
+  --track-md: .14em;
+  --track-lg: .18em;
+  --track-xl: .22em;
+
+  /* ── SPACING / LAYOUT ─────────────────────────────────────────────── */
+  --sp: clamp(10px, 1.2vw, 14px);
+  --sp-2: calc(var(--sp) * 2);
+  --sp-3: calc(var(--sp) * 3);
+  --sp-h: calc(var(--sp) / 2);
+
+  --radius-none: 0;
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-full: 9999px;
+
+  /* ── ELEVATION ────────────────────────────────────────────────────── */
+  --elev-1: 0 8px  20px rgba(0,0,0,.40), inset 0 1px 0 rgba(255,255,255,.08);
+  --elev-2: 0 12px 30px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.08);
+  --elev-3: 0 24px 60px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.09);
+  --elev-4: 0 30px 70px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.10);
+
+  /* ── MOTION ───────────────────────────────────────────────────────── */
+  --dur-quick: 120ms;
+  --dur-base:  220ms;
+  --dur-slow:  450ms;
+  --dur-stage: 880ms;
+  --ease-out:  cubic-bezier(.16, 1, .3, 1);
+  --ease-std:  cubic-bezier(.4, 0, .2, 1);
+
+  /* ── GLASS (frosted panel language) ───────────────────────────────── */
+  --glass-bg:     rgba(6,5,4,.52);
+  --glass-bg-lite:rgba(10,9,8,.38);
+  --glass-rim:    rgba(255,255,255,.08);
+  --glass-blur:   22px;
+  --glass-sat:    155%;
+  --glass-bright: 1.04;
+
+  /* ── CAUSTIC + FRESNEL (shared across schemes) ────────────────────── */
+  --caustic:     rgba(255,255,255,.85);
+  --caustic-dim: rgba(255,255,255,.32);
+  --fresnel:     linear-gradient(135deg,
+                  rgba(255,255,255,.22),
+                  rgba(255,255,255,0)    25%,
+                  rgba(255,255,255,0)    70%,
+                  rgba(255,255,255,.14));
+
+  /* ── DEFAULT SEASONAL TOKENS (FERRO v2 — the "FALL" default) ──────── */
+  --bg:          #1A0C06;
+  --ink:         #FAF0E8;
+  --ink2:        rgba(250,240,232,.35);
+  --acc:         #E4441C;
+  --bar-bg:      rgba(26,12,6,.97);
+  --film-warm:   oklch(82% 0.12 55);   /* amber film-highlight */
+  --film-cool:   oklch(78% 0.10 195);  /* teal  film-highlight */
+  --thermal-lo:  rgb(26, 12, 6);
+  --thermal-hi:  rgb(250, 240, 225);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   PER-SCHEME OVERRIDES
+   These match the existing SVARS map in oone.html so applyScheme() keeps
+   working. Only the v2 (default) variation is written here; v1/v3 cascade
+   through the existing JS setter.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* FERRO — the fall / rust scheme */
+[data-scheme="s-fal"] {
+  --bg:          #1A0C06;
+  --ink:         #FAF0E8;
+  --ink2:        rgba(250,240,232,.35);
+  --acc:         #E4441C;
+  --bar-bg:      rgba(26,12,6,.97);
+  --film-warm:   oklch(82% 0.14 55);   /* burnt amber */
+  --film-cool:   oklch(78% 0.09 195);  /* oxidized teal */
+  --thermal-lo:  rgb(26, 12, 6);
+  --thermal-hi:  rgb(250, 240, 225);
+}
+
+/* COBALT — the winter / deep-blue scheme */
+[data-scheme="s-win"] {
+  --bg:          #090B1C;
+  --ink:         #E8F0FF;
+  --ink2:        rgba(232,240,255,.35);
+  --acc:         #3A66FC;
+  --bar-bg:      rgba(9,11,28,.97);
+  --film-warm:   oklch(74% 0.11 305);  /* violet glow */
+  --film-cool:   oklch(84% 0.09 220);  /* ice-blue */
+  --thermal-lo:  rgb(9, 11, 28);
+  --thermal-hi:  rgb(232, 242, 255);
+}
+
+/* PATINA — spring / oxidized copper-green */
+[data-scheme="s-spr"] {
+  --bg:          #081412;
+  --ink:         #E8F8F2;
+  --ink2:        rgba(232,248,242,.35);
+  --acc:         #20C694;
+  --bar-bg:      rgba(8,20,18,.97);
+  --film-warm:   oklch(80% 0.13 10);   /* rose-coral */
+  --film-cool:   oklch(85% 0.14 130);  /* lime film */
+  --thermal-lo:  rgb(8, 20, 18);
+  --thermal-hi:  rgb(240, 252, 246);
+}
+
+/* SUMMER — high-sun citrus */
+[data-scheme="s-sum"] {
+  --bg:          #180E04;
+  --ink:         #FFF6E8;
+  --ink2:        rgba(255,246,232,.35);
+  --acc:         #FF6634;
+  --bar-bg:      rgba(24,14,4,.97);
+  --film-warm:   oklch(86% 0.15 75);   /* lemon */
+  --film-cool:   oklch(82% 0.13 140);  /* fresh green */
+  --thermal-lo:  rgb(24, 14, 4);
+  --thermal-hi:  rgb(255, 248, 228);
+}
+
+/* STONE — neutral archival */
+[data-scheme="s-stn"] {
+  --bg:          #14120F;
+  --ink:         #EEE6D6;
+  --ink2:        rgba(238,230,214,.35);
+  --acc:         #C6A880;
+  --bar-bg:      rgba(20,18,15,.97);
+  --film-warm:   oklch(78% 0.06 65);   /* sand */
+  --film-cool:   oklch(76% 0.05 245);  /* slate */
+  --thermal-lo:  rgb(20, 18, 15);
+  --thermal-hi:  rgb(240, 232, 218);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   SEMANTIC ALIASES (for future refactors — the existing oone.html does
+   not need to adopt these, but new markup should prefer them).
+   ──────────────────────────────────────────────────────────────────────── */
+:root {
+  --color-surface:       var(--bg);
+  --color-surface-chrome:var(--bar-bg);
+  --color-text-primary:  var(--ink);
+  --color-text-secondary:var(--ink2);
+  --color-accent:        var(--acc);
+
+  --surface-glass:       var(--glass-bg);
+  --surface-glass-lite:  var(--glass-bg-lite);
+  --surface-rim:         var(--glass-rim);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   REDUCED MOTION
+   ──────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-quick: 0ms;
+    --dur-base:  0ms;
+    --dur-slow:  0ms;
+    --dur-stage: 0ms;
+  }
+}

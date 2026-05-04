@@ -11,6 +11,7 @@ This is a single-file static portfolio website for Josh Harrison, an architect b
 - **Run:** Open `oone.html` directly in a browser
 - **Edit:** Modify `oone.html` directly; refresh browser to see changes
 - No build step, no package manager, no linting or test infrastructure
+- **Design refresh 2026:** Direction, brand voice, tokens, discovery, and release notes live in [`docs/design-refresh-2026/`](docs/design-refresh-2026/) (start with [`04-RELEASE-NOTES.md`](docs/design-refresh-2026/04-RELEASE-NOTES.md))
 
 ## Architecture
 

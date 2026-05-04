@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>oone — pilot 3 · Wine Bar (collage / op-ed)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono:wght@400;700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shell.css">
+<style>
+  /* ── SCHEME 3 · WINE BAR — collage / torn paper / B&W + claret accent ── */
+  :root{
+    --bg:#f3eee5;             /* newsprint cream */
+    --ink:#0c0a08;            /* near-black */
+    --ink2:rgba(12,10,8,.55);
+    --acc:#7a1a22;            /* claret */
+    --bar-bg:#f3eee5;
+    --ff-display:"Old Standard TT",Georgia,serif;
+  }
+  /* enable scroll for op-ed feel */
+  html,body{overflow:auto;height:auto}
+  body{background:#f3eee5;color:#0c0a08;font-family:var(--ff-display)}
+  /* heavy grain across everything */
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1000;mix-blend-mode:multiply;opacity:.55;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+
+  /* hide canvas — this scheme is page, not field */
+  #cv{display:none}
+
+  /* nav reskin */
+  #nav{background:#f3eee5;border-bottom:1px solid #0c0a08;padding:14px 32px}
+  .nav-link,.nav-brand{color:#0c0a08;opacity:1;font-family:var(--ff-mono);font-weight:700}
+  .tp-btn{border-color:#0c0a08;color:#0c0a08}
+
+  /* MASTHEAD */
+  .mh{padding:120px 6vw 60px;border-bottom:1px solid #0c0a08;position:relative}
+  .mh-eye{font-family:var(--ff-mono);font-size:11px;letter-spacing:.30em;text-transform:uppercase;color:#0c0a08;margin-bottom:18px;display:flex;align-items:center;gap:14px}
+  .mh-eye::after{content:'';flex:1;height:1px;background:#0c0a08}
+  .mh-h{font-family:var(--ff-display);font-style:italic;font-size:clamp(56px,11vw,180px);line-height:.92;letter-spacing:-.02em;font-weight:400}
+  .mh-h em{color:var(--acc);font-style:italic}
+  .mh-sub{font-family:var(--ff-display);font-size:clamp(18px,2vw,26px);max-width:50ch;margin-top:24px;line-height:1.45;color:rgba(12,10,8,.78)}
+  .mh-byline{font-family:var(--ff-mono);font-size:11px;letter-spacing:.20em;text-transform:uppercase;margin-top:36px}
+
+  /* TORN-PAPER COLLAGE BLOCK */
+  .torn{position:relative;padding:80px 6vw;background:#0c0a08;color:#f3eee5;clip-path:polygon(0 2%,3% 0,8% 1.5%,15% 0,22% 2%,28% .5%,36% 1.8%,42% 0,50% 1.5%,58% 0,66% 2%,74% .5%,82% 1.8%,90% 0,97% 1.5%,100% 3%,100% 97%,96% 100%,90% 98%,82% 100%,74% 98.5%,66% 100%,58% 98%,50% 100%,42% 98.5%,34% 100%,26% 98%,18% 100%,10% 98.5%,3% 100%,0 97%)}
+  .torn-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:center}
+  @media(max-width:760px){.torn-grid{grid-template-columns:1fr}}
+  .torn h2{font-family:var(--ff-display);font-style:italic;font-size:clamp(36px,5vw,64px);line-height:1.05;font-weight:400}
+  .torn p{font-family:var(--ff-display);font-size:clamp(15px,1.4vw,18px);line-height:1.7;color:rgba(243,238,229,.75);margin-top:16px;max-width:46ch}
+  .pull{font-family:var(--ff-display);font-style:italic;font-size:clamp(28px,4vw,52px);line-height:1.15;border-left:2px solid var(--acc);padding-left:24px;color:#f3eee5}
+  .pull em{color:var(--acc)}
+
+  /* DATA OP-ED — animated chart */
+  .opd{padding:80px 6vw;border-bottom:1px solid #0c0a08}
+  .opd-h{font-family:var(--ff-display);font-style:italic;font-size:clamp(32px,4vw,56px);max-width:24ch;line-height:1.05;margin-bottom:16px}
+  .opd-d{font-family:var(--ff-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:32px;color:rgba(12,10,8,.55)}
+  .opd-chart{position:relative;height:340px;border-bottom:1px solid #0c0a08;border-left:1px solid #0c0a08;display:flex;align-items:flex-end;gap:6px;padding:0 4px}
+  .bar{flex:1;background:#0c0a08;position:relative;transition:height 1.2s cubic-bezier(.16,1,.3,1)}
+  .bar.acc{background:var(--acc)}
+  .bar:hover::after{content:attr(data-v);position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-family:var(--ff-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;background:#0c0a08;color:#f3eee5;padding:2px 6px;white-space:nowrap}
+
+  /* WINE LABEL CARD */
+  .label{padding:80px 6vw;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;border-bottom:1px solid #0c0a08}
+  @media(max-width:760px){.label{grid-template-columns:1fr}}
+  .lbl-card{aspect-ratio:1/1.35;background:#f3eee5;border:1px solid #0c0a08;padding:34px;display:flex;flex-direction:column;justify-content:space-between;position:relative;box-shadow:6px 6px 0 #0c0a08}
+  .lbl-card .l-cat{font-family:var(--ff-mono);font-size:10px;letter-spacing:.30em;text-transform:uppercase;border-bottom:1px solid #0c0a08;padding-bottom:8px}
+  .lbl-card .l-h{font-family:var(--ff-display);font-style:italic;font-size:clamp(36px,5vw,64px);line-height:1;font-weight:400}
+  .lbl-card .l-h em{color:var(--acc)}
+  .lbl-card .l-meta{font-family:var(--ff-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;border-top:1px solid #0c0a08;padding-top:12px;display:flex;justify-content:space-between}
+
+  /* MENU LIST */
+  .menu{padding:80px 6vw;background:#0c0a08;color:#f3eee5}
+  .menu h3{font-family:var(--ff-display);font-style:italic;font-size:clamp(28px,3vw,42px);margin-bottom:24px;font-weight:400}
+  .menu-row{display:flex;align-items:baseline;gap:16px;padding:14px 0;border-bottom:1px dashed rgba(243,238,229,.3)}
+  .menu-row .name{font-family:var(--ff-display);font-style:italic;font-size:clamp(18px,1.8vw,22px)}
+  .menu-row .dots{flex:1;border-bottom:1px dotted rgba(243,238,229,.4);height:.5em}
+  .menu-row .price{font-family:var(--ff-mono);font-size:12px;letter-spacing:.10em}
+
+  /* COLOPHON */
+  .colo{padding:60px 6vw 100px;font-family:var(--ff-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(12,10,8,.55);text-align:center}
+
+  /* override drawer + tip with paper aesthetic */
+  #drawer{background:#f3eee5;color:#0c0a08;border-top:2px solid #0c0a08}
+  #drawer .dw-cat,#drawer .dw-btn{color:#0c0a08}
+  #drawer h1{color:#0c0a08;font-family:var(--ff-display)}
+  #drawer p{color:rgba(12,10,8,.7);font-family:var(--ff-display)}
+  #panel-key,#panel-filter,#tip,.tc-panel,.tut-card{background:#f3eee5;border-color:#0c0a08;color:#0c0a08;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:4px 4px 0 #0c0a08}
+  .pk-lbl,.dw-cat{color:rgba(12,10,8,.7)}
+  #feed-overlay{background:#0c0a08;color:#f3eee5;border-top:1px solid #0c0a08}
+  .feed-ticker{color:#f3eee5}
+  .pilot-banner{color:#0c0a08;background:#f3eee5;border-color:#0c0a08}
+</style>
+</head><body>
+
+<canvas id="cv"></canvas>
+<div id="cur"><svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="#0c0a08" stroke-width=".5"/><circle cx="7" cy="7" r="1.4" fill="#7a1a22"/></svg></div>
+
+<div class="pilot-banner">scheme 03 · WINE BAR — collage / torn paper / NYT op-ed</div>
+
+<nav id="nav" class="vis">
+  <div class="nav-left"><a class="nav-brand" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span class="oo-mark"><span class="o1">O</span><span class="o2">O</span></span><span style="margin-left:.4em">ne</span> · vol. III</a></div>
+  <div class="nav-right">
+    <button class="nav-link" onclick="document.querySelector('.torn').scrollIntoView({behavior:'smooth'})">essay</button>
+    <button class="nav-link" onclick="document.querySelector('.opd').scrollIntoView({behavior:'smooth'})">data</button>
+    <button class="nav-link" onclick="document.querySelector('.label').scrollIntoView({behavior:'smooth'})">labels</button>
+    <button class="nav-link" onclick="document.querySelector('.menu').scrollIntoView({behavior:'smooth'})">menu</button>
+    <button class="tp-btn" onclick="openThemeChooser()">CLARET</button>
+  </div>
+</nav>
+
+<!-- MASTHEAD -->
+<section class="mh">
+  <div class="mh-eye">vol. III · spring 2026 · issue 04</div>
+  <h1 class="mh-h">how a room <em>becomes</em><br>a feeling.</h1>
+  <p class="mh-sub">Six rooms. Six dinners. A study in the architecture of attention by an architect who will not stop looking at corners.</p>
+  <div class="mh-byline">by josh harrison · photographs by self · 24 min read</div>
+</section>
+
+<!-- TORN PAPER ESSAY BLOCK -->
+<section class="torn">
+  <div class="torn-grid">
+    <div>
+      <h2>The corner is not the wall meeting the wall. It is the wall agreeing to meet.</h2>
+      <p>Most architecture writing wants you to look up. This is about looking down — at the threshold, the joint, the place where the room admits it had to start somewhere. The corner is the room's first decision. Everything else is consequence.</p>
+      <p>I have been building a log of these decisions for two years. What follows is a sample.</p>
+    </div>
+    <div class="pull"><em>"The corner</em> is the room's first decision."</div>
+  </div>
+</section>
+
+<!-- OP-ED DATA -->
+<section class="opd">
+  <div class="opd-d">fig. 01 · entries by category · 24 months</div>
+  <h2 class="opd-h">two years of noticing.</h2>
+  <div class="opd-chart" id="opd-chart"></div>
+  <div style="display:flex;gap:24px;margin-top:18px;font-family:var(--ff-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase">
+    <span><span style="display:inline-block;width:10px;height:10px;background:#0c0a08;margin-right:6px"></span>artifacts</span>
+    <span><span style="display:inline-block;width:10px;height:10px;background:#7a1a22;margin-right:6px"></span>sensations</span>
+  </div>
+</section>
+
+<!-- WINE LABEL CARD (object catalogue) -->
+<section class="label">
+  <div class="lbl-card">
+    <div class="l-cat">project · 04</div>
+    <div>
+      <div class="l-h">stargazer<br><em>compound</em></div>
+      <div style="font-family:var(--ff-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(12,10,8,.55);margin-top:14px">big sky · 2025 · ~2.4ha</div>
+    </div>
+    <div class="l-meta"><span>13.5% abv*</span><span>n.v.</span></div>
+  </div>
+  <div>
+    <h2 style="font-family:var(--ff-display);font-style:italic;font-size:clamp(28px,3.5vw,48px);line-height:1.05;font-weight:400">A field of cabins arranged like a long sentence with three commas.</h2>
+    <p style="margin-top:18px;font-size:18px;line-height:1.7;color:rgba(12,10,8,.75)">Massing studies, schematic design, site planning. The labels are the project descriptions. Each project gets one. Each describes a room, not a building.</p>
+    <button class="btn" style="margin-top:24px;border-color:#0c0a08;color:#0c0a08" onclick="openDrawer('project','stargazer compound','Massing study and schematic design for a six-cabin compound in Big Sky, MT.')">read the label</button>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu">
+  <h3>services · by the glass</h3>
+  <div class="menu-row"><span class="name">schematic design</span><span class="dots"></span><span class="price">phase 01</span></div>
+  <div class="menu-row"><span class="name">massing studies</span><span class="dots"></span><span class="price">phase 01</span></div>
+  <div class="menu-row"><span class="name">space planning</span><span class="dots"></span><span class="price">phase 02</span></div>
+  <div class="menu-row"><span class="name">design development</span><span class="dots"></span><span class="price">phase 03</span></div>
+  <div class="menu-row"><span class="name">construction documentation</span><span class="dots"></span><span class="price">phase 04</span></div>
+  <div class="menu-row"><span class="name">interiors — concept to install</span><span class="dots"></span><span class="price">full scope</span></div>
+</section>
+
+<section class="colo">printed in brooklyn · set in old standard · oone vol. III</section>
+
+<div id="drawer">
+  <div class="dw-head"><span class="dw-cat" id="dw-cat"></span><div class="dw-acts"><button class="dw-btn" id="dw-expand-btn" onclick="toggleDrawerExpand()">expand</button><button class="dw-btn" onclick="closeDrawer()">×</button></div></div>
+  <div class="dw-body" id="dw-body"></div>
+</div>
+
+<div id="tip"><div class="t-cat" id="tip-cat"></div><div class="t-title" id="tip-title"></div><div class="t-sub" id="tip-sub"></div><div class="t-time" id="tip-time"></div></div>
+
+<div id="theme-chooser" onclick="if(event.target===this)closeThemeChooser()">
+  <div class="tc-panel">
+    <button class="tc-close" onclick="closeThemeChooser()">×</button>
+    <div class="tc-sec-lbl">accent</div>
+    <div class="tc-row-wrap">
+      <div class="tc-bub sel" title="claret" style="background:#7a1a22"></div>
+      <div class="tc-bub" title="amber" style="background:#a98763"></div>
+      <div class="tc-bub" title="ivy" style="background:#1f3a2a"></div>
+      <div class="tc-bub" title="ink" style="background:#0c0a08"></div>
+    </div>
+  </div>
+</div>
+
+<div id="tut" class="on">
+  <div class="tut-dim" onclick="closeTut()"></div>
+  <div class="tut-card">
+    <div class="tut-title">A volume in print.</div>
+    <div class="tut-body">Scroll. The site is a single op-ed broken across paper. Click any label to open its card.</div>
+    <div class="tut-nav"><div></div><div style="display:flex;gap:8px"><button class="tut-skip" onclick="closeTut()">skip</button><button class="tut-btn" onclick="nextTut()">begin</button></div></div>
+  </div>
+</div>
+
+<div id="image-view"><div class="iv-grid" id="iv-grid"></div></div>
+
+<div id="feed-overlay"><div class="feed-ticker">vol. III · spring 2026 · issue 04 · printed in brooklyn · oone — </div></div>
+
+<script src="_shell.js"></script>
+<script>
+  // SCHEME 3 — animated bar chart on scroll-in
+  const chart = document.getElementById('opd-chart');
+  const data = [12,18,14,22,28,24,30,26,34,32,38,36,40,42,38,44,46,52,48,54,58,62,56,60];
+  data.forEach((v,i)=>{
+    const b = document.createElement('div');
+    b.className = 'bar' + (i%6===5?' acc':'');
+    b.style.height = '0%';
+    b.dataset.v = v + ' entries · m' + (i+1);
+    chart.appendChild(b);
+  });
+  const io = new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){
+      [...chart.children].forEach((b,i)=>{ setTimeout(()=>{ b.style.height = (data[i]/Math.max(...data)*100)+'%'; }, i*60); });
+      io.disconnect();
+    }
+  }),{threshold:.3});
+  io.observe(chart);
+  // canvas not used in this scheme
+  window.drawField = function(){};
+</script>
+</body></html>

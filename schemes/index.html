@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>oone — scheme pilots</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#0a0a0a;color:#f4ead8;font-family:"Cormorant Garamond",Georgia,serif}
+  header{position:fixed;top:0;left:0;right:0;padding:18px 28px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(10,10,10,.85);backdrop-filter:blur(10px);z-index:10}
+  header .brand{font-style:italic;font-size:18px}
+  header .meta{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.20em;text-transform:uppercase;color:rgba(255,255,255,.4)}
+  main{padding:80px 24px 24px;display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr);gap:14px;height:100vh;height:100dvh}
+  @media(max-width:880px){main{grid-template-columns:1fr;grid-template-rows:repeat(4,minmax(420px,1fr));height:auto}}
+  .tile{position:relative;border:1px solid rgba(255,255,255,.10);overflow:hidden;background:#1a1a1a}
+  .tile iframe{width:100%;height:100%;border:0;transform:scale(.62);transform-origin:0 0;width:161.3%;height:161.3%;pointer-events:none}
+  .tile .scrim{position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.85) 100%);pointer-events:none}
+  .tile .label{position:absolute;left:18px;bottom:14px;right:18px;display:flex;justify-content:space-between;align-items:flex-end;color:#fff;pointer-events:none}
+  .tile .label .h{font-style:italic;font-size:24px;line-height:1.1}
+  .tile .label .d{font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6);max-width:18ch;text-align:right}
+  .tile a{position:absolute;inset:0;z-index:5}
+  .tile:hover{border-color:rgba(255,255,255,.45)}
+</style>
+</head><body>
+
+<header>
+  <div class="brand"><em>oone</em> — scheme pilots</div>
+  <div class="meta">4 schemes · placeholder content · click to open</div>
+</header>
+
+<main>
+  <div class="tile">
+    <iframe src="oone.html" loading="lazy"></iframe>
+    <div class="scrim"></div>
+    <div class="label"><div class="h">01 · OONE</div><div class="d">infrared · photoreal · editorial</div></div>
+    <a href="oone.html"></a>
+  </div>
+  <div class="tile">
+    <iframe src="light-room.html" loading="lazy"></iframe>
+    <div class="scrim"></div>
+    <div class="label"><div class="h">02 · Light Room</div><div class="d">milky · glass hierarchy · magnifier</div></div>
+    <a href="light-room.html"></a>
+  </div>
+  <div class="tile">
+    <iframe src="wine-bar.html" loading="lazy"></iframe>
+    <div class="scrim"></div>
+    <div class="label"><div class="h">03 · Wine Bar</div><div class="d">collage · torn paper · op-ed</div></div>
+    <a href="wine-bar.html"></a>
+  </div>
+  <div class="tile">
+    <iframe src="queer-space.html" loading="lazy"></iframe>
+    <div class="scrim"></div>
+    <div class="label"><div class="h">04 · Queer Space</div><div class="d">pixelated · primary · publication</div></div>
+    <a href="queer-space.html"></a>
+  </div>
+</main>
+
+</body></html>

@@ -1,1 +1,18 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp
+
+# Node
 framer-components/node_modules/
+node_modules/
+
+# Claude Code worktrees / runtime state
+.claude/worktrees/
+
+# Local server logs
+*.log
