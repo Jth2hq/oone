@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "oone-static",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8765", "--directory", "/Users/jth2hq/Desktop/website/Oone-Site"],
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["-y", "http-server", "/Users/jth2hq/Desktop/website/OONE-Site", "-p", "8765", "-c-1", "--silent"],
       "port": 8765
     }
   ]
