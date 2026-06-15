@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<title>OONE — the room</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,200;1,9..144,300;1,9..144,400&family=Hanken+Grotesk:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap"
+  rel="stylesheet"
+/>
+
+<style>
+/* =====================================================================
+   OONE · Scheme A — THE ROOM
+   Pan left / right / up / down. The room is implied by gradient walls,
+   a floor plane, weathered inscriptions, and lit objects hung in space.
+   Photoreal glass drifters fade in near the wordmark.
+   ===================================================================== */
+
+:root {
+  /* ground */
+  --concrete:    #8a8478;
+  --concrete-2:  #6e685c;
+  --concrete-3:  #a39c8e;
+  --bitumen:     #14110c;
+  --rust-stain:  #6a3418;
+  --lichen:      #4a5848;
+  --water:       #38423a;
+
+  /* object / lit surfaces */
+  --vellum:      #efe6d4;
+  --vellum-2:    #e2d7c0;
+  --ember:       #c04a1e;
+  --ember-hot:   #e88a3a;
+  --graphite:    #2a2620;
+
+  --serif: "Fraunces", "Times New Roman", serif;
+  --sans:  "Hanken Grotesk", -apple-system, sans-serif;
+  --mono:  "JetBrains Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: var(--concrete);
+  color: var(--bitumen);
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  cursor: none;
+  overscroll-behavior: none;
+  touch-action: none;
+  user-select: none;
+}
+a { color: inherit; text-decoration: none; cursor: none; }
+::selection { background: var(--ember); color: var(--vellum); }
+
+/* ======================================================
+   THE BLIGHT — stained wall of the room
+   ====================================================== */
+body {
+  background-image:
+    radial-gradient(ellipse 1400px 700px at 22% 28%, rgba(56,66,58,0.38) 0%, rgba(56,66,58,0.14) 40%, transparent 72%),
+    radial-gradient(ellipse 900px 500px at 72% 48%, rgba(106,52,24,0.28) 0%, rgba(106,52,24,0.08) 45%, transparent 72%),
+    radial-gradient(ellipse 1100px 560px at 45% 78%, rgba(74,88,72,0.28) 0%, rgba(74,88,72,0.06) 50%, transparent 74%),
+    radial-gradient(ellipse 1200px 700px at 85% 90%, rgba(20,17,12,0.38) 0%, rgba(20,17,12,0.1) 50%, transparent 76%),
+    radial-gradient(ellipse 700px 500px at 90% 10%, rgba(20,17,12,0.34) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 1400px at 0% 50%, rgba(56,66,58,0.3) 0%, transparent 70%);
+  background-size: 100% 100%;
+  background-attachment: fixed;
+}
+
+body::before {
+  content: "";
+  position: fixed; inset: -10%;
+  pointer-events: none; z-index: 1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='420' height='420'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.8 -0.9'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity: 0.52;
+  mix-blend-mode: multiply;
+}
+
+body::after {
+  content: "";
+  position: fixed; inset: -20%;
+  pointer-events: none; z-index: 2;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.96' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.44 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+  animation: drift 5.2s steps(6) infinite;
+}
+@keyframes drift {
+  0%,100% { transform: translate(0,0); }
+  16%     { transform: translate(-1.4%, 0.6%); }
+  33%     { transform: translate(0.8%, -1.2%); }
+  50%     { transform: translate(-0.4%, 1.6%); }
+  66%     { transform: translate(1.2%, -0.4%); }
+  83%     { transform: translate(-0.8%, 0.8%); }
+}
+
+/* deep atmospheric vignette */
+.vignette {
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 7900;
+  background:
+    radial-gradient(ellipse 120% 90% at center, transparent 30%, rgba(20,17,12,0.45) 100%);
+}
+
+/* ======================================================
+   THE FIELD — pannable 6400 × 5000
+   ====================================================== */
+.field {
+  position: fixed;
+  top: 50%; left: 50%;
+  width: 6400px; height: 5000px;
+  will-change: transform;
+  transform-origin: center center;
+  z-index: 10;
+}
+.field > * {
+  position: absolute;
+  transform-origin: center center;
+}
+
+/* floor vanishing plane — implies the room */
+.floor {
+  left: 0; top: 3600px;
+  width: 6400px; height: 1400px;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(20,17,12,0.25) 40%, rgba(20,17,12,0.55) 100%),
+    repeating-linear-gradient(90deg, transparent 0 48px, rgba(239,230,212,0.04) 48px 49px);
+  transform: perspective(1400px) rotateX(52deg);
+  transform-origin: center top;
+  pointer-events: none;
+  z-index: 11;
+}
+
+/* ceiling soft wash */
+.ceiling {
+  left: 0; top: 0;
+  width: 6400px; height: 700px;
+  background: linear-gradient(180deg, rgba(239,230,212,0.08) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 11;
+}
+
+/* proximity fade (v9 pattern) */
+[data-sensitive] {
+  --near: 0;
+  opacity: calc(0.04 + var(--near) * 0.96);
+  filter: blur(calc((1 - var(--near)) * 12px));
+  transition: opacity 0.5s ease, filter 0.5s ease;
+  will-change: opacity, filter;
+}
+
+/* ======================================================
+   THE OBJECT — oone, at the center of the room
+   ====================================================== */
+.oone {
+  left: 3200px; top: 2500px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 20;
+  text-align: center;
+}
+.oone .mark {
+  font-family: var(--serif);
+  font-weight: 200;
+  font-size: 560px;
+  line-height: 0.82;
+  letter-spacing: -0.07em;
+  color: var(--vellum);
+  white-space: nowrap;
+  text-shadow:
+    0 0 120px rgba(239,230,212,0.28),
+    0 0 60px rgba(239,230,212,0.18),
+    0 8px 40px rgba(20,17,12,0.6);
+  filter: drop-shadow(0 40px 60px rgba(20,17,12,0.55));
+}
+.oone .mark .ltr {
+  display: inline-block;
+  font-variation-settings: "opsz" 20, "wght" 200;
+  animation: breath 9.6s ease-in-out infinite;
+}
+.oone .mark .ltr:nth-child(2) {
+  animation-delay: -2.4s;
+  font-style: italic;
+  color: var(--ember);
+  text-shadow:
+    0 0 100px rgba(192,74,30,0.45),
+    0 0 40px rgba(192,74,30,0.3),
+    0 8px 30px rgba(20,17,12,0.6);
+}
+.oone .mark .ltr:nth-child(3) { animation-delay: -4.8s; }
+.oone .mark .ltr:nth-child(4) { animation-delay: -7.2s; }
+@keyframes breath {
+  0%, 100% { font-variation-settings: "opsz" 20,  "wght" 200; }
+  50%      { font-variation-settings: "opsz" 144, "wght" 400; }
+}
+.oone .line {
+  margin-top: 40px;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-style: italic;
+  font-size: 26px;
+  color: var(--vellum);
+  opacity: 0.62;
+  letter-spacing: 0.02em;
+  font-variation-settings: "opsz" 48;
+  text-shadow: 0 2px 20px rgba(20,17,12,0.7);
+}
+.oone .line em { color: var(--ember); opacity: 1; font-style: italic; }
+
+/* ======================================================
+   SOAP DRIFTERS — photoreal bubbles near the object
+   Banana-baked sprites when present, SVG fallback otherwise
+   ====================================================== */
+.drifter {
+  width: 380px; height: 380px;
+  pointer-events: none;
+  z-index: 18;
+  mix-blend-mode: screen;
+  opacity: 0.75;
+  filter: drop-shadow(0 20px 40px rgba(20,17,12,0.55));
+  animation: drift-bubble 28s ease-in-out infinite;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  /* fallback composited bubble if sprite missing */
+  background-image:
+    radial-gradient(circle at 32% 26%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.3) 8%, transparent 18%),
+    radial-gradient(circle at 60% 70%, rgba(232,138,58,0.35) 0%, transparent 32%),
+    radial-gradient(circle at 70% 30%, rgba(140,200,230,0.35) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(239,230,212,0.14) 0%, rgba(20,17,12,0.06) 55%, rgba(20,17,12,0.0) 100%),
+    radial-gradient(circle, rgba(255,255,255,0.04) 49%, transparent 50%);
+  border-radius: 50%;
+}
+.drifter.b1 { left: 2400px; top: 2000px; animation-delay: -3s; }
+.drifter.b2 { left: 3900px; top: 2900px; width: 300px; height: 300px; animation-delay: -12s; opacity: 0.6; }
+
+@keyframes drift-bubble {
+  0%,100% { transform: translate(0,0) scale(1); }
+  25%     { transform: translate(40px,-24px) scale(1.03); }
+  50%     { transform: translate(60px, 30px) scale(0.98); }
+  75%     { transform: translate(-30px,20px) scale(1.01); }
+}
+
+/* photoreal swap: when the sprite loads, CSS var is set */
+.drifter[data-sprite="loaded"] {
+  background-image: var(--sprite);
+}
+
+/* ======================================================
+   INSCRIPTIONS — weathered into the plaster
+   ====================================================== */
+.inscription {
+  font-family: var(--serif);
+  font-weight: 200;
+  font-style: italic;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: var(--vellum);
+  font-variation-settings: "opsz" 144;
+  white-space: nowrap;
+  opacity: 0.48;
+  mix-blend-mode: overlay;
+  text-shadow: 0 4px 30px rgba(20,17,12,0.5);
+}
+.inscription em { color: var(--ember); font-style: italic; mix-blend-mode: normal; opacity: 0.9; }
+
+.insc-1 { left: 900px;  top: 800px;  font-size: 360px; }
+.insc-2 { left: 4100px; top: 1100px; font-size: 460px; }
+.insc-3 { left: 600px;  top: 3500px; font-size: 380px; }
+.insc-4 { left: 3700px; top: 3700px; font-size: 300px; }
+
+/* ======================================================
+   WORKS — lit objects hung in the room
+   ====================================================== */
+.work {
+  cursor: none;
+  z-index: 15;
+}
+.work .frame {
+  position: relative;
+  overflow: hidden;
+  background: var(--bitumen);
+  box-shadow:
+    0 60px 120px -20px rgba(20,17,12,0.75),
+    0 20px 40px -10px rgba(20,17,12,0.6);
+  transition: transform 1.2s cubic-bezier(0.22,1,0.36,1), box-shadow 1.2s;
+}
+.work .frame::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 20%, rgba(239,230,212,0.06) 0%, transparent 60%);
+  z-index: 3;
+  pointer-events: none;
+}
+.work .frame::after {
+  content: "";
+  position: absolute; inset: 0;
+  box-shadow: inset 0 0 140px rgba(20,17,12,0.5), inset 0 0 1px rgba(239,230,212,0.08);
+  pointer-events: none;
+  z-index: 4;
+}
+.work .photo {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: calc(0.4 + var(--near, 0) * 0.6);
+  filter:
+    saturate(calc(0.5 + var(--near, 0) * 0.5))
+    brightness(calc(0.55 + var(--near, 0) * 0.45))
+    contrast(1.06);
+  transition: opacity 0.6s, filter 0.6s, transform 1.4s;
+  transform: scale(1.02);
+}
+.work canvas {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+  mix-blend-mode: overlay;
+  opacity: calc(0.85 - var(--near, 0) * 0.55);
+  transition: opacity 0.6s;
+}
+.work:hover .frame {
+  transform: translateY(-10px);
+  box-shadow:
+    0 80px 140px -20px rgba(20,17,12,0.85),
+    0 30px 60px -10px rgba(20,17,12,0.7);
+}
+
+/* caption — appears only when near */
+.work .caption {
+  position: absolute;
+  bottom: -90px;
+  left: 0; right: 0;
+  font-family: var(--serif);
+  font-weight: 300;
+  color: var(--vellum);
+  line-height: 1.3;
+  opacity: calc(var(--near, 0) * 0.9);
+  transform: translateY(calc((1 - var(--near, 0)) * 10px));
+  transition: opacity 0.6s, transform 0.8s cubic-bezier(0.22,1,0.36,1), color 0.6s;
+  text-shadow: 0 2px 16px rgba(20,17,12,0.7);
+}
+.work .caption .title {
+  font-style: italic;
+  font-size: 32px;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 72;
+  display: block;
+}
+.work .caption .meta {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  opacity: 0.48;
+  margin-top: 10px;
+  display: block;
+}
+.work:hover .caption .title { color: var(--ember); }
+
+/* arches */
+.work.arched .frame      { border-radius: 50% 50% 1px 1px / 32% 32% 0 0; }
+.work.arched-tall .frame { border-radius: 50% 50% 1px 1px / 44% 44% 0 0; }
+
+/* placement across the room */
+.w-001 { left: 2050px; top: 1850px; }  .w-001 .frame { width: 480px; aspect-ratio: 4/3; }
+.w-002 { left: 2780px; top: 3380px; }  .w-002 .frame { width: 340px; aspect-ratio: 3/4; }
+.w-003 { left: 4420px; top: 2200px; }  .w-003 .frame { width: 540px; aspect-ratio: 16/10; }
+.w-004 { left: 4620px; top: 3520px; }  .w-004 .frame { width: 360px; aspect-ratio: 3/4; }
+.w-005 { left: 1400px; top: 3020px; }  .w-005 .frame { width: 460px; aspect-ratio: 5/4; }
+.w-006 { left: 3520px; top: 1890px; }  .w-006 .frame { width: 420px; aspect-ratio: 3/2; }
+.w-007 { left: 5200px; top: 1410px; }  .w-007 .frame { width: 320px; aspect-ratio: 3/4; }
+.w-008 { left: 900px;  top: 2100px; }  .w-008 .frame { width: 520px; aspect-ratio: 4/3; }
+
+/* ======================================================
+   PROGRAM — east panel
+   ====================================================== */
+.program {
+  left: 5700px; top: 2400px;
+  width: 440px;
+  z-index: 12;
+  color: var(--vellum);
+  text-shadow: 0 2px 20px rgba(20,17,12,0.6);
+}
+.program h3 {
+  font-family: var(--serif);
+  font-weight: 200;
+  font-style: italic;
+  font-size: 96px;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  font-variation-settings: "opsz" 144;
+  margin-bottom: 48px;
+}
+.program h3 em { color: var(--ember); }
+.program .row {
+  padding: 20px 0;
+  border-top: 1px solid rgba(239,230,212,0.18);
+}
+.program .row:last-child { border-bottom: 1px solid rgba(239,230,212,0.18); }
+.program .ordinal {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin-bottom: 8px;
+  display: block;
+}
+.program .t {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-style: italic;
+  font-size: 28px;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  font-variation-settings: "opsz" 72;
+  display: block;
+}
+.program .ing {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 14px;
+  opacity: 0.6;
+  margin-top: 6px;
+  font-variation-settings: "opsz" 20;
+  line-height: 1.4;
+  display: block;
+}
+
+/* ======================================================
+   INGREDIENTS — west panel
+   ====================================================== */
+.ingredients {
+  left: 220px; top: 2000px;
+  width: 380px;
+  z-index: 12;
+  color: var(--vellum);
+  text-shadow: 0 2px 20px rgba(20,17,12,0.6);
+}
+.ingredients .label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin-bottom: 28px;
+  display: block;
+  text-align: center;
+}
+.ingredients h3 {
+  font-family: var(--serif);
+  font-weight: 200;
+  font-size: 108px;
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+  font-variation-settings: "opsz" 144;
+  margin-bottom: 44px;
+  text-align: center;
+}
+.ingredients h3 em { font-style: italic; color: var(--ember); }
+.ingredients ul {
+  list-style: none;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1;
+  font-variation-settings: "opsz" 20;
+}
+.ingredients li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(239,230,212,0.1);
+  gap: 12px;
+  align-items: baseline;
+  transition: color 0.4s;
+}
+.ingredients li:hover { color: var(--ember); }
+.ingredients .pct {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  opacity: 0.42;
+}
+
+/* ======================================================
+   FRAGMENTS — quiet whispers in corners
+   ====================================================== */
+.fragment {
+  font-family: var(--serif);
+  font-weight: 200;
+  font-style: italic;
+  font-size: 44px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  max-width: 16ch;
+  color: var(--vellum);
+  opacity: 0.7;
+  text-shadow: 0 2px 20px rgba(20,17,12,0.6);
+  font-variation-settings: "opsz" 96;
+}
+.fragment em { color: var(--ember); font-style: italic; }
+.f-1 { left: 700px;  top: 400px; }
+.f-2 { left: 5500px; top: 500px; text-align: right; }
+.f-3 { left: 600px;  top: 4400px; }
+.f-4 { left: 5400px; top: 4380px; text-align: right; }
+
+/* ======================================================
+   SIGNATURES — NW maker, SE contact
+   ====================================================== */
+.signature {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--vellum);
+  opacity: 0.48;
+  line-height: 2;
+  z-index: 12;
+  text-shadow: 0 2px 16px rgba(20,17,12,0.6);
+}
+.signature em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--vellum);
+  font-variation-settings: "opsz" 72;
+  opacity: 1;
+  display: block;
+  margin-bottom: 8px;
+}
+.signature.nw { left: 380px; top: 480px; }
+.signature.se { left: 5740px; top: 4200px; text-align: right; }
+.signature.se a {
+  display: inline-block;
+  margin-top: 16px;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 20px;
+  letter-spacing: -0.005em;
+  text-transform: none;
+  color: var(--ember);
+  opacity: 1;
+  font-variation-settings: "opsz" 48;
+  border-bottom: 1px solid rgba(192,74,30,0.4);
+  padding-bottom: 3px;
+  transition: color 0.4s, border-color 0.4s;
+}
+.signature.se a:hover { color: var(--vellum); border-color: var(--vellum); }
+
+/* ======================================================
+   HUD — minimap, compass, readout
+   ====================================================== */
+.hud { position: fixed; inset: 0; pointer-events: none; z-index: 400; }
+.hud > * { position: absolute; pointer-events: auto; }
+
+.hud .wm {
+  top: 28px; left: 32px;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-style: italic;
+  font-size: 20px;
+  font-variation-settings: "opsz" 72;
+  letter-spacing: -0.01em;
+  color: var(--vellum);
+  opacity: 0.7;
+  cursor: none;
+  transition: opacity 0.6s, font-variation-settings 0.9s, letter-spacing 0.9s;
+  text-shadow: 0 2px 10px rgba(20,17,12,0.6);
+}
+.hud .wm:hover { opacity: 1; font-variation-settings: "opsz" 144; letter-spacing: 0.03em; }
+.hud .wm em { color: var(--ember); }
+
+.hud .time {
+  top: 32px; right: 32px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--vellum);
+  opacity: 0.5;
+  text-align: right;
+  line-height: 1.7;
+  text-shadow: 0 2px 10px rgba(20,17,12,0.6);
+}
+
+.hud .hint {
+  bottom: 32px; left: 32px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--vellum);
+  opacity: 0.42;
+  line-height: 2;
+  transition: opacity 2s ease 4s;
+  text-shadow: 0 2px 10px rgba(20,17,12,0.6);
+}
+.hud .hint.faded { opacity: 0.14; transition-delay: 0s; }
+
+/* minimap — 128 × 100px ember plan of the room */
+.hud .minimap {
+  bottom: 32px; right: 32px;
+  width: 128px; height: 100px;
+  border: 1px solid rgba(239,230,212,0.16);
+  background: rgba(20,17,12,0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.hud .minimap .tick {
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--ember);
+  box-shadow: 0 0 12px rgba(192,74,30,0.7), 0 0 24px rgba(192,74,30,0.35);
+  transform: translate(-50%, -50%);
+  transition: left 0.2s, top 0.2s;
+}
+.hud .minimap .center {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px; height: 10px;
+  border: 1px solid rgba(239,230,212,0.32);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hud .minimap .dot {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: rgba(239,230,212,0.32);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.hud .minimap .label {
+  position: absolute;
+  bottom: -18px; left: 0; right: 0;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--vellum);
+  opacity: 0.42;
+}
+
+/* compass readout */
+.hud .readout {
+  bottom: 150px; right: 32px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--vellum);
+  opacity: 0.5;
+  text-align: right;
+  line-height: 1.8;
+  text-shadow: 0 2px 8px rgba(20,17,12,0.6);
+}
+.hud .readout .num {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 13px;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  color: var(--vellum);
+  opacity: 0.9;
+  font-variation-settings: "opsz" 36;
+}
+
+/* ======================================================
+   LOADER
+   ====================================================== */
+.loader {
+  position: fixed; inset: 0; z-index: 10000;
+  background: var(--concrete);
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 1.6s ease, visibility 1.6s;
+}
+.loader.done { opacity: 0; visibility: hidden; pointer-events: none; }
+.loader .word {
+  font-family: var(--serif);
+  font-weight: 200;
+  font-size: clamp(140px, 26vw, 320px);
+  letter-spacing: -0.06em;
+  font-variation-settings: "opsz" 144;
+  line-height: 0.85;
+  color: var(--vellum);
+  opacity: 0;
+  animation: emerge 2.8s cubic-bezier(0.22,1,0.36,1) forwards;
+  text-shadow:
+    0 0 100px rgba(239,230,212,0.25),
+    0 8px 40px rgba(20,17,12,0.6);
+}
+.loader .word em { font-style: italic; color: var(--ember); }
+@keyframes emerge {
+  0%   { opacity: 0; filter: blur(40px); letter-spacing: -0.02em; }
+  100% { opacity: 1; filter: blur(0); letter-spacing: -0.06em; }
+}
+
+/* ======================================================
+   CURSOR + FX
+   ====================================================== */
+#fx {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 8500;
+}
+.cursor-dot, .cursor-ring {
+  position: fixed; top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9500;
+  border-radius: 50%;
+}
+.cursor-dot  { width: 6px; height: 6px; background: var(--vellum); transform: translate(-50%,-50%); transition: width .4s, height .4s, opacity .4s, background .4s; box-shadow: 0 0 20px rgba(239,230,212,0.4); }
+.cursor-ring { width: 28px; height: 28px; border: 1px solid rgba(239,230,212,0.3); transform: translate(-50%,-50%); transition: width .5s, height .5s, border-color .5s; }
+.cursor-dot.grabbing { width: 2px; height: 2px; background: var(--ember); box-shadow: 0 0 30px rgba(192,74,30,0.7); }
+.cursor-ring.grabbing { width: 14px; height: 14px; border-color: rgba(192,74,30,0.6); }
+.cursor-ring.near  { width: 76px; height: 76px; border-color: rgba(239,230,212,0.6); }
+.cursor-ring.near::after {
+  content: attr(data-label);
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%,-50%);
+  font: 300 italic 13px/1 var(--serif);
+  letter-spacing: 0.01em;
+  color: var(--vellum);
+  white-space: nowrap;
+  font-variation-settings: "opsz" 36;
+}
+
+@media (pointer: coarse) {
+  html, body, a { cursor: auto; }
+  .cursor-dot, .cursor-ring { display: none; }
+}
+@media (max-width: 820px) {
+  .hud .wm { font-size: 15px; }
+  .hud .time, .hud .hint { font-size: 9px; }
+  .hud .minimap { width: 96px; height: 76px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="vignette"></div>
+<canvas id="fx"></canvas>
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<div class="loader" id="loader">
+  <div class="word">o<em>o</em>ne</div>
+</div>
+
+<div class="hud">
+  <a href="#" class="wm" id="home">o<em>o</em>ne</a>
+  <div class="time" id="time">—</div>
+  <div class="hint" id="hint">drag — arrows walk — space returns — the room</div>
+  <div class="readout">
+    <div>coord · <span class="num" id="ro-coord">0000, 0000</span></div>
+    <div>room · <span class="num" id="ro-quad">center</span></div>
+  </div>
+  <div class="minimap" id="minimap">
+    <div class="dot" style="left:32%;top:37%"></div>
+    <div class="dot" style="left:44%;top:68%"></div>
+    <div class="dot" style="left:69%;top:44%"></div>
+    <div class="dot" style="left:72%;top:70%"></div>
+    <div class="dot" style="left:22%;top:60%"></div>
+    <div class="dot" style="left:55%;top:38%"></div>
+    <div class="dot" style="left:81%;top:28%"></div>
+    <div class="dot" style="left:14%;top:42%"></div>
+    <div class="center"></div>
+    <div class="tick" id="mini-tick" style="left:50%;top:50%"></div>
+    <div class="label">you are here</div>
+  </div>
+</div>
+
+<div class="field" id="field">
+
+  <!-- room surfaces -->
+  <div class="ceiling"></div>
+  <div class="floor"></div>
+
+  <!-- the object -->
+  <div class="oone">
+    <div class="mark" id="kinetic">
+      <span class="ltr">o</span><span class="ltr">o</span><span class="ltr">n</span><span class="ltr">e</span>
+    </div>
+    <div class="line">in itself, <em>in orbit</em></div>
+  </div>
+
+  <!-- photoreal drifters (banana sprites when present) -->
+  <div class="drifter b1" id="drift1"></div>
+  <div class="drifter b2" id="drift2"></div>
+
+  <!-- inscriptions -->
+  <div class="inscription insc-1" data-sensitive data-threshold="1100">rooms that remember</div>
+  <div class="inscription insc-2" data-sensitive data-threshold="1100">thresholds hold <em>breath</em></div>
+  <div class="inscription insc-3" data-sensitive data-threshold="1100">the long quiet</div>
+  <div class="inscription insc-4" data-sensitive data-threshold="1100">of a surface <em>just touched</em></div>
+
+  <!-- works -->
+  <a class="work w-001" href="#" data-sensitive data-threshold="700" data-label="powder room">
+    <div class="frame">
+      <img class="photo" loading="lazy" alt="" src="https://lh3.googleusercontent.com/d/19LS8juC9gpiIq_zEyDUSZ8ZcJyTQBdpd=w1400" />
+      <canvas data-scheme="powder"></canvas>
+    </div>
+    <div class="caption">
+      <span class="title">Powder Room</span>
+      <span class="meta">oo·001 · 2025</span>
+    </div>
+  </a>
+
+  <a class="work w-002 arched-tall" href="#" data-sensitive data-threshold="700" data-label="color field">
+    <div class="frame">
+      <img class="photo" loading="lazy" alt="" src="https://lh3.googleusercontent.com/d/17QriCzKrAlMZ0txftrpXzE463FiqNoZ2=w1400" />
+      <canvas data-scheme="soapfilm"></canvas>
+    </div>
+    <div class="caption">
+      <span class="title">Color Field</span>
+      <span class="meta">oo·002 · 2025</span>
+    </div>
+  </a>
+
+  <a class="work w-003" href="#" data-sensitive data-threshold="700" data-label="land &amp; sea">
+    <div class="frame">
+      <img class="photo" loading="lazy" alt="" src="https://lh3.googleusercontent.com/d/1Erddy6fe_5ACu0dDs4MfpwM94bucPqyD=w1400" />
+      <canvas data-scheme="thermal"></canvas>
+    </div>
+    <div class="caption">
+      <span class="title">Land &amp; Sea</span>
+      <span class="meta">oo·003 · ongoing</span>
+    </div>
+  </a>
+
+  <a class="work w-004 arched-tall" href="#" data-sensitive data-threshold="700" data-label="frame house">
+    <div class="frame">
+      <img class="photo" loading="lazy" alt="" src="https://lh3.googleusercontent.com/d/1mR7pJEueQUYJrY0QRpDRvOChaS8TzIH7=w1400" />
+      <canvas data-scheme="concrete"></canvas>
+    </div>
+    <div class="caption">
+      <span class="title">Frame House</span>
+      <span class="meta">oo·004 · 2024</span>
+    </div>
+  </a>
+
+  <a class="work w-005" href="#" data-sensitive data-threshold="700" data-label="bodies in glass">
+    <div class="frame">
+      <img class="photo" loading="lazy" alt="" src="https://lh3.googleusercontent.com/d/19jdUx9l2CvppGPaGRUW6atv5ufGzECCi=w1400" />
+      <canvas data-scheme="bodies"></canvas>
+    </div>
+    <div class="caption">
+      <span class="title">Bodies in Glass</span>
+      <span class="meta">oo·005 · 2024</span>
+    </div>
+  </a>
+
+  <a class="work w-006" href="#" data-sensitive data-threshold="700" data-label="liquid pavilion">
+    <div class="frame">
+      <img class="photo" loading="lazy" alt="" src="https://lh3.googleusercontent.com/d/1MnmeVusArWHwm4OQy-zYU0xN7er584Lj=w1400" />
+      <canvas data-scheme="metal"></canvas>
+    </div>
+    <div class="caption">
+      <span class="title">Liquid Pavilion</span>
+      <span class="meta">oo·006 · 2024</span>
+    </div>
+  </a>
+
+  <a class="work w-007 arched" href="#" data-sensitive data-threshold="700" data-label="edge table">
+    <div class="frame">
+      <img class="photo" loading="lazy" alt="" src="https://lh3.googleusercontent.com/d/1Lr4CgyFEC1aPeN9PR_tlXC40YGzdBgdO=w1400" />
+      <canvas data-scheme="wood"></canvas>
+    </div>
+    <div class="caption">
+      <span class="title">Edge Table</span>
+      <span class="meta">oo·007 · 2024</span>
+    </div>
+  </a>
+
+  <a class="work w-008" href="#" data-sensitive data-threshold="700" data-label="steam study">
+    <div class="frame">
+      <img class="photo" loading="lazy" alt="" src="https://lh3.googleusercontent.com/d/1N0ghoXpHUlDY3ikCSHK_7HCE_9ZdvvVW=w1400" />
+      <canvas data-scheme="steam"></canvas>
+    </div>
+    <div class="caption">
+      <span class="title">Steam Study</span>
+      <span class="meta">oo·008 · 2023</span>
+    </div>
+  </a>
+
+  <!-- program -->
+  <div class="program" data-sensitive data-threshold="700">
+    <h3>this <em>season</em></h3>
+    <div class="row"><span class="ordinal">i</span><span class="t">Steam Room Study</span><span class="ing">cedar, eucalyptus, fog</span></div>
+    <div class="row"><span class="ordinal">ii</span><span class="t">Powder Room Tour</span><span class="ing">glass, rose, silver</span></div>
+    <div class="row"><span class="ordinal">iii</span><span class="t">Material Field</span><span class="ing">concrete, linen, breath</span></div>
+    <div class="row"><span class="ordinal">iv</span><span class="t">Edge Objects</span><span class="ing">wood, wax, candlelight</span></div>
+    <div class="row"><span class="ordinal">v</span><span class="t">Bodies in Glass</span><span class="ing">steam, silver, memory</span></div>
+    <div class="row"><span class="ordinal">vi</span><span class="t">Quiet Hour</span><span class="ing">silence, nothing</span></div>
+  </div>
+
+  <!-- ingredients -->
+  <div class="ingredients" data-sensitive data-threshold="700">
+    <span class="label">made of</span>
+    <h3>a practice, <em>distilled</em></h3>
+    <ul>
+      <li><span>concrete</span><span class="pct">22%</span></li>
+      <li><span>attention</span><span class="pct">16%</span></li>
+      <li><span>unshrinking linen</span><span class="pct">12%</span></li>
+      <li><span>birch ash, candlelight</span><span class="pct">10%</span></li>
+      <li><span>green marble</span><span class="pct">8%</span></li>
+      <li><span>breath held</span><span class="pct">7%</span></li>
+      <li><span>copper, wax, iron</span><span class="pct">6%</span></li>
+      <li><span>glycerin</span><span class="pct">5%</span></li>
+      <li><span>silence</span><span class="pct">5%</span></li>
+      <li><span>oiled wood</span><span class="pct">4%</span></li>
+      <li><span>ambient fog</span><span class="pct">3%</span></li>
+      <li><span>weather</span><span class="pct">2%</span></li>
+    </ul>
+  </div>
+
+  <!-- fragments -->
+  <div class="fragment f-1" data-sensitive data-threshold="800">
+    attention is <em>architecture</em> — what we look at longer becomes the room.
+  </div>
+  <div class="fragment f-2" data-sensitive data-threshold="800">
+    a <em>threshold</em> is the weather on either side of it.
+  </div>
+  <div class="fragment f-3" data-sensitive data-threshold="800">
+    some surfaces <em>remember</em>. concrete, velvet, breath on glass.
+  </div>
+  <div class="fragment f-4" data-sensitive data-threshold="800">
+    the body passes through and the <em>room keeps</em> a little of it.
+  </div>
+
+  <!-- signatures -->
+  <div class="signature nw" data-sensitive data-threshold="800">
+    <em>Josh Harrison</em>
+    brooklyn, new york<br/>
+    mmxxvi
+  </div>
+  <div class="signature se" data-sensitive data-threshold="800">
+    by arrangement only
+    <a href="mailto:studio@oone.work">studio@oone.work</a>
+  </div>
+
+</div>
+
+<script>
+/* ============ FIELD ============ */
+const field = document.getElementById("field");
+const FIELD_W = 6400;
+const FIELD_H = 5000;
+const state = {
+  x: 0, y: 0, tx: 0, ty: 0, vx: 0, vy: 0,
+  scale: 0.58, tScale: 0.58,
+  dragging: false, dragged: false
+};
+function clampPan() {
+  const maxX = (FIELD_W * state.scale) / 2 - window.innerWidth / 2 + 200;
+  const maxY = (FIELD_H * state.scale) / 2 - window.innerHeight / 2 + 200;
+  state.tx = Math.max(-maxX, Math.min(maxX, state.tx));
+  state.ty = Math.max(-maxY, Math.min(maxY, state.ty));
+}
+function applyTransform() {
+  field.style.transform = `translate(-50%, -50%) translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
+}
+
+let dragStart = null;
+let lastMove = null;
+
+document.addEventListener("pointerdown", e => {
+  if (e.target.closest("a, button")) {
+    dragStart = { x: e.clientX, y: e.clientY, tx: state.tx, ty: state.ty, t: performance.now(), onLink: true };
+    return;
+  }
+  state.dragging = true; state.dragged = false;
+  dragStart = { x: e.clientX, y: e.clientY, tx: state.tx, ty: state.ty, t: performance.now() };
+  lastMove = { x: e.clientX, y: e.clientY, t: performance.now() };
+  document.getElementById("cursorRing").classList.add("grabbing");
+  document.getElementById("cursorDot").classList.add("grabbing");
+  hideHint();
+});
+document.addEventListener("pointermove", e => {
+  if (!dragStart) return;
+  const dx = e.clientX - dragStart.x, dy = e.clientY - dragStart.y;
+  if (Math.hypot(dx, dy) > 6) state.dragged = true;
+  if (state.dragging) {
+    state.tx = dragStart.tx + dx; state.ty = dragStart.ty + dy;
+    clampPan();
+    const now = performance.now(), dt = now - lastMove.t;
+    if (dt > 0) {
+      state.vx = (e.clientX - lastMove.x) / dt * 16;
+      state.vy = (e.clientY - lastMove.y) / dt * 16;
+    }
+    lastMove = { x: e.clientX, y: e.clientY, t: now };
+  }
+});
+document.addEventListener("pointerup", e => {
+  document.getElementById("cursorRing").classList.remove("grabbing");
+  document.getElementById("cursorDot").classList.remove("grabbing");
+  if (dragStart && dragStart.onLink) { dragStart = null; return; }
+  if (state.dragging && !state.dragged) spawnRipple(e.clientX, e.clientY);
+  state.dragging = false; dragStart = null;
+});
+
+const keys = {};
+document.addEventListener("keydown", e => {
+  keys[e.key.toLowerCase()] = true;
+  if (e.key === " ") { e.preventDefault(); returnHome(); }
+  hideHint();
+});
+document.addEventListener("keyup", e => { keys[e.key.toLowerCase()] = false; });
+
+function returnHome() { state.tx = 0; state.ty = 0; state.vx = 0; state.vy = 0; state.tScale = 0.58; }
+document.getElementById("home").addEventListener("click", e => { e.preventDefault(); returnHome(); });
+
+document.addEventListener("wheel", e => {
+  e.preventDefault();
+  state.tScale = Math.max(0.32, Math.min(1.6, state.tScale - e.deltaY * 0.0012));
+  hideHint();
+}, { passive: false });
+
+let lastPinch = null;
+document.addEventListener("touchstart", e => {
+  if (e.touches.length === 2) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    lastPinch = Math.hypot(dx, dy);
+  }
+}, { passive: false });
+document.addEventListener("touchmove", e => {
+  if (e.touches.length === 2 && lastPinch) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    const d = Math.hypot(dx, dy);
+    state.tScale = Math.max(0.32, Math.min(1.6, state.tScale * (d / lastPinch)));
+    lastPinch = d; e.preventDefault();
+  }
+}, { passive: false });
+document.addEventListener("touchend", e => { if (e.touches.length < 2) lastPinch = null; });
+
+/* proximity + HUD driver */
+const sensitives = Array.from(document.querySelectorAll("[data-sensitive]"));
+const coord = document.getElementById("ro-coord");
+const quad  = document.getElementById("ro-quad");
+const miniTick = document.getElementById("mini-tick");
+
+function quadrantName(nx, ny) {
+  // map pan to room quadrants — center is the object
+  const v = Math.abs(nx) < 0.18 && Math.abs(ny) < 0.18 ? "center" :
+    [(ny < -0.2 ? "n" : ny > 0.2 ? "s" : ""), (nx < -0.2 ? "w" : nx > 0.2 ? "e" : "")].join("") || "center";
+  return v;
+}
+
+function animate() {
+  if (!state.dragging) {
+    const walkSpeed = 14;
+    if (keys["w"] || keys["arrowup"])    state.vy = walkSpeed;
+    if (keys["s"] || keys["arrowdown"])  state.vy = -walkSpeed;
+    if (keys["a"] || keys["arrowleft"])  state.vx = walkSpeed;
+    if (keys["d"] || keys["arrowright"]) state.vx = -walkSpeed;
+    state.tx += state.vx; state.ty += state.vy;
+    state.vx *= 0.93; state.vy *= 0.93;
+    if (Math.abs(state.vx) < 0.05) state.vx = 0;
+    if (Math.abs(state.vy) < 0.05) state.vy = 0;
+    clampPan();
+  }
+  state.x += (state.tx - state.x) * 0.12;
+  state.y += (state.ty - state.y) * 0.12;
+  state.scale += (state.tScale - state.scale) * 0.10;
+  applyTransform();
+
+  const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+  sensitives.forEach(el => {
+    const r = el.getBoundingClientRect();
+    const ex = r.left + r.width / 2, ey = r.top + r.height / 2;
+    const dist = Math.hypot(cx - ex, cy - ey);
+    const threshold = parseFloat(el.dataset.threshold || "900");
+    const near = Math.max(0, Math.min(1, 1 - dist / threshold));
+    el.style.setProperty("--near", near.toFixed(3));
+  });
+
+  /* HUD readout */
+  const nxp = state.tx / ((FIELD_W * state.scale) / 2);
+  const nyp = state.ty / ((FIELD_H * state.scale) / 2);
+  const roomX = Math.round(3200 - state.tx / state.scale);
+  const roomY = Math.round(2500 - state.ty / state.scale);
+  coord.textContent = String(roomX).padStart(4, "0") + ", " + String(roomY).padStart(4, "0");
+  quad.textContent = quadrantName(-nxp, -nyp);
+  // minimap: user is where the pan "points to" in the room
+  const mx = (1 + (-nxp)) * 50;
+  const my = (1 + (-nyp)) * 50;
+  miniTick.style.left = Math.max(4, Math.min(96, mx)) + "%";
+  miniTick.style.top  = Math.max(4, Math.min(96, my)) + "%";
+
+  requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
+
+let hintHidden = false;
+function hideHint() {
+  if (hintHidden) return;
+  hintHidden = true;
+  document.getElementById("hint").classList.add("faded");
+}
+setTimeout(() => document.getElementById("loader").classList.add("done"), 2400);
+
+/* ============ CURSOR + RIPPLES ============ */
+(() => {
+  const dot  = document.getElementById("cursorDot");
+  const ring = document.getElementById("cursorRing");
+  const fx   = document.getElementById("fx");
+  const fctx = fx.getContext("2d");
+  let mx = window.innerWidth/2, my = window.innerHeight/2;
+  let rx = mx, ry = my;
+
+  function resizeFx() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    fx.width  = window.innerWidth  * dpr;
+    fx.height = window.innerHeight * dpr;
+    fx.style.width  = window.innerWidth  + "px";
+    fx.style.height = window.innerHeight + "px";
+    fctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resizeFx();
+  window.addEventListener("resize", resizeFx);
+
+  window._ripples = [];
+  window.spawnRipple = (x, y) => window._ripples.push({ x, y, t: performance.now() });
+
+  document.addEventListener("mousemove", e => { mx = e.clientX; my = e.clientY; });
+
+  const hover = "a";
+  document.addEventListener("mouseover", e => {
+    const t = e.target.closest(hover);
+    if (t) { ring.classList.add("near"); ring.setAttribute("data-label", t.getAttribute("data-label") || ""); }
+  });
+  document.addEventListener("mouseout", e => {
+    const t = e.target.closest(hover);
+    if (t) ring.classList.remove("near");
+  });
+
+  function tick(t) {
+    rx += (mx - rx) * 0.2; ry += (my - ry) * 0.2;
+    dot.style.transform  = `translate(${mx}px, ${my}px) translate(-50%,-50%)`;
+    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%)`;
+
+    fctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    for (let i = window._ripples.length - 1; i >= 0; i--) {
+      const r = window._ripples[i];
+      const age = (t - r.t) / 2400;
+      if (age > 1) { window._ripples.splice(i, 1); continue; }
+      const ease = 1 - Math.pow(1 - age, 3);
+      const radius = ease * 340;
+      const alpha = (1 - age) * 0.4;
+      const g = fctx.createRadialGradient(r.x, r.y, radius * 0.6, r.x, r.y, radius);
+      g.addColorStop(0, `rgba(239,230,212,0)`);
+      g.addColorStop(0.7, `rgba(239,230,212,${alpha * 0.3})`);
+      g.addColorStop(1, `rgba(239,230,212,0)`);
+      fctx.fillStyle = g;
+      fctx.beginPath(); fctx.arc(r.x, r.y, radius, 0, Math.PI * 2); fctx.fill();
+      fctx.strokeStyle = `rgba(239,230,212,${alpha * 0.7})`;
+      fctx.lineWidth = (1 - age) * 0.8;
+      fctx.beginPath(); fctx.arc(r.x, r.y, radius, 0, Math.PI * 2); fctx.stroke();
+      if (age > 0.2) {
+        const emberAlpha = (1 - age) * 0.7;
+        fctx.fillStyle = `rgba(192,74,30,${emberAlpha})`;
+        fctx.beginPath(); fctx.arc(r.x, r.y, (1 - age) * 4, 0, Math.PI * 2); fctx.fill();
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
+/* ============ TIME ============ */
+(() => {
+  const el = document.getElementById("time");
+  const fmt = n => String(n).padStart(2,"0");
+  function upd() {
+    const d = new Date();
+    el.innerHTML = `${fmt(d.getHours())}:${fmt(d.getMinutes())} <span style="opacity:0.5">nsh</span>`;
+  }
+  setInterval(upd, 1000); upd();
+})();
+
+/* ============ PHOTOREAL DRIFTERS — banana sprite swap ============ */
+// If assets/frames/bubble-*.png exist, swap them in as photoreal skins.
+(function swapDrifters() {
+  const candidates = [
+    { el: document.getElementById("drift1"), src: "assets/frames/bubble-01.png" },
+    { el: document.getElementById("drift2"), src: "assets/frames/bubble-02.png" },
+  ];
+  candidates.forEach(({ el, src }) => {
+    if (!el) return;
+    const img = new Image();
+    img.onload = () => {
+      el.style.setProperty("--sprite", `url("${src}")`);
+      el.setAttribute("data-sprite", "loaded");
+    };
+    img.onerror = () => {}; // keep SVG fallback
+    img.src = src;
+  });
+})();
+
+/* ============ CANVAS TILES — ambient skins inside work frames ============ */
+const TILE_SCHEMES = {
+  powder:   { bg: ["#3a1a14","#7a2f22","#c4631e"], mode:"radial", speed: 0.00016 },
+  soapfilm: { bg: ["#20161a","#4a3242","#b07a90","#f0d8b8"], mode:"soapfilm", speed: 0.00018 },
+  thermal:  { bg: ["#0c0b0a","#2a1a14","#c4631e","#f2ede4"], mode:"thermal", speed: 0.00022 },
+  concrete: { bg: ["#1a1814","#3a362f","#58524a"], mode:"grain", speed: 0.00009 },
+  bodies:   { bg: ["#2a1418","#60242a","#a45060","#e8c7bc"], mode:"bodies", speed: 0.00023 },
+  metal:    { bg: ["#18161a","#4a4650","#b0a8b4","#e8e2dc"], mode:"metal", speed: 0.00026 },
+  wood:     { bg: ["#1e140a","#5a3818","#a06a2e","#d9a968"], mode:"grain", speed: 0.00007 },
+  steam:    { bg: ["#1a1a1a","#3a3a3a","#8a8780","#e4ddd0"], mode:"steam", speed: 0.00042 },
+};
+const tiles = [];
+document.querySelectorAll(".work canvas").forEach(cv => {
+  const scheme = TILE_SCHEMES[cv.dataset.scheme]; if (!scheme) return;
+  const ctx = cv.getContext("2d");
+  const host = cv.parentElement;
+  function resize() {
+    const r = host.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width  = Math.max(1, Math.floor(r.width  * dpr));
+    cv.height = Math.max(1, Math.floor(r.height * dpr));
+    cv.style.width = r.width + "px"; cv.style.height = r.height + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  new ResizeObserver(resize).observe(host);
+  tiles.push({ cv, ctx, scheme, host, seed: Math.random() * 1000 });
+});
+function paint(tile, t) {
+  const { ctx, cv, scheme, seed } = tile;
+  const dpr = window.devicePixelRatio || 1;
+  const w = cv.width / dpr, h = cv.height / dpr;
+  const p = t * scheme.speed + seed;
+  const g = ctx.createLinearGradient(0, 0, w, h);
+  scheme.bg.forEach((c, i) => g.addColorStop(i / (scheme.bg.length - 1), c));
+  ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+  switch (scheme.mode) {
+    case "radial":   return radial(ctx,w,h,p,scheme);
+    case "soapfilm": return soapfilm(ctx,w,h,p,scheme);
+    case "thermal":  return thermal(ctx,w,h,p,scheme);
+    case "grain":    return grain(ctx,w,h,p,scheme);
+    case "bodies":   return bodies(ctx,w,h,p,scheme);
+    case "metal":    return metal(ctx,w,h,p,scheme);
+    case "steam":    return steam(ctx,w,h,p,scheme);
+  }
+}
+function radial(ctx,w,h,p,s){const cx=w*(0.5+0.15*Math.sin(p*1.2)),cy=h*(0.55+0.1*Math.cos(p*0.9));const r=Math.max(w,h)*(0.45+0.08*Math.sin(p*1.6));const g=ctx.createRadialGradient(cx,cy,0,cx,cy,r);g.addColorStop(0,s.bg[s.bg.length-1]);g.addColorStop(0.35,s.bg[Math.max(1,s.bg.length-2)]+"cc");g.addColorStop(1,"rgba(0,0,0,0)");ctx.globalCompositeOperation="screen";ctx.fillStyle=g;ctx.fillRect(0,0,w,h);ctx.globalCompositeOperation="source-over";}
+function soapfilm(ctx,w,h,p,s){
+  // thin-film interference — hue sweep across a ring-banded sphere
+  ctx.globalCompositeOperation = "screen";
+  const cx = w*(0.5 + 0.12*Math.sin(p*0.8));
+  const cy = h*(0.55 + 0.08*Math.cos(p*0.6));
+  const R = Math.min(w,h)*0.55;
+  for (let i = 0; i < 6; i++) {
+    const r0 = R * (i/6), r1 = R * ((i+1)/6);
+    const hue = (i*55 + p*80) % 360;
+    const g = ctx.createRadialGradient(cx,cy,r0, cx,cy,r1);
+    g.addColorStop(0, `hsla(${hue}, 55%, 62%, 0)`);
+    g.addColorStop(0.5, `hsla(${hue}, 55%, 62%, 0.22)`);
+    g.addColorStop(1, `hsla(${(hue+40)%360}, 55%, 62%, 0)`);
+    ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+  }
+  // specular
+  const sp = ctx.createRadialGradient(cx - R*0.25, cy - R*0.3, 0, cx - R*0.25, cy - R*0.3, R*0.22);
+  sp.addColorStop(0, "rgba(255,255,255,0.55)");
+  sp.addColorStop(1, "rgba(255,255,255,0)");
+  ctx.fillStyle = sp; ctx.fillRect(0,0,w,h);
+  ctx.globalCompositeOperation = "source-over";
+}
+function thermal(ctx,w,h,p,s){ctx.globalCompositeOperation="screen";for(let i=0;i<6;i++){const y=h*(0.2+i*0.12)+Math.sin(p*2+i)*8;const g=ctx.createLinearGradient(0,y-40,0,y+40);g.addColorStop(0,"rgba(0,0,0,0)");g.addColorStop(0.5,s.bg[2]+"55");g.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=g;ctx.fillRect(0,y-40,w,80);}const cx=w*(0.5+0.08*Math.sin(p)),cy=h*0.6;const g=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(w,h)*0.45);g.addColorStop(0,s.bg[3]+"aa");g.addColorStop(0.4,s.bg[2]+"66");g.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=g;ctx.fillRect(0,0,w,h);ctx.globalCompositeOperation="source-over";}
+function grain(ctx,w,h,p,s){ctx.globalCompositeOperation="overlay";const n=40;for(let i=0;i<n;i++){const x=(i/n)*w;const shift=Math.sin(p*0.6+i*0.4)*6;const a=0.04+0.04*Math.sin(p+i*0.3);ctx.fillStyle=`rgba(255,245,230,${a})`;ctx.fillRect(x+shift,0,(w/n)*0.6,h);}ctx.globalCompositeOperation="source-over";}
+function bodies(ctx,w,h,p,s){ctx.globalCompositeOperation="screen";for(let i=0;i<3;i++){const cx=w*(0.3+0.4*Math.sin(p*(0.8+i*0.2)+i));const cy=h*(0.5+0.25*Math.cos(p*(0.7+i*0.15)+i*2));const rx=Math.min(w,h)*(0.22+0.05*Math.sin(p*1.3+i));const ry=rx*1.4;const g=ctx.createRadialGradient(cx,cy,0,cx,cy,rx);g.addColorStop(0,s.bg[3]+"aa");g.addColorStop(0.6,s.bg[2]+"55");g.addColorStop(1,"rgba(0,0,0,0)");ctx.save();ctx.translate(cx,cy);ctx.scale(1,ry/rx);ctx.translate(-cx,-cy);ctx.fillStyle=g;ctx.fillRect(0,0,w,h);ctx.restore();}ctx.globalCompositeOperation="overlay";const veil=ctx.createLinearGradient(0,0,0,h);veil.addColorStop(0,"rgba(255,255,255,0.12)");veil.addColorStop(0.5,"rgba(255,255,255,0.02)");veil.addColorStop(1,"rgba(0,0,0,0.15)");ctx.fillStyle=veil;ctx.fillRect(0,0,w,h);ctx.globalCompositeOperation="source-over";}
+function metal(ctx,w,h,p,s){ctx.globalCompositeOperation="screen";const n=24;for(let i=0;i<n;i++){const y=(i/n)*h+Math.sin(p*1.4+i*0.6)*14;const a=0.06+0.08*(Math.sin(p*2+i*0.8)*0.5+0.5);const g=ctx.createLinearGradient(0,y-6,0,y+6);g.addColorStop(0,"rgba(0,0,0,0)");g.addColorStop(0.5,`rgba(232,226,220,${a})`);g.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=g;ctx.fillRect(0,y-6,w,12);}ctx.globalCompositeOperation="source-over";}
+function steam(ctx,w,h,p,s){ctx.globalCompositeOperation="screen";for(let i=0;i<5;i++){const cx=w*(0.2+0.6*((Math.sin(p*(0.5+i*0.2)+i*2)+1)/2));const cy=h*(0.2+0.6*((Math.cos(p*(0.6+i*0.15)+i)+1)/2));const r=Math.min(w,h)*(0.35+0.1*Math.sin(p+i));const g=ctx.createRadialGradient(cx,cy,0,cx,cy,r);g.addColorStop(0,s.bg[3]+"66");g.addColorStop(0.5,s.bg[2]+"22");g.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=g;ctx.fillRect(0,0,w,h);}ctx.globalCompositeOperation="source-over";}
+let running = true;
+function loop(t) {
+  if (!running) return;
+  tiles.forEach(tile => {
+    const r = tile.host.getBoundingClientRect();
+    if (r.bottom < -400 || r.top > window.innerHeight + 600 || r.right < -400 || r.left > window.innerWidth + 600) return;
+    paint(tile, t);
+  });
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+document.addEventListener("visibilitychange", () => { running = !document.hidden; if (running) requestAnimationFrame(loop); });
+
+document.querySelectorAll(".work .photo").forEach(img => {
+  img.addEventListener("error", () => { img.style.display = "none"; });
+});
+</script>
+
+</body>
+</html>

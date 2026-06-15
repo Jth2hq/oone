@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>oone — pilot 2 · Light Room (glass hierarchy)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shell.css">
+<style>
+  /* ── SCHEME 2 · LIGHT ROOM — milky glass hierarchy / lookbook ── */
+  :root{
+    --bg:#e9e2d6;             /* warm bone */
+    --ink:#1f1c17;
+    --ink2:rgba(31,28,23,.45);
+    --acc:#a98763;            /* amber glass */
+    --bar-bg:rgba(255,253,248,.55);
+  }
+  body{background:
+    radial-gradient(1200px 900px at 70% 20%,#f5efe2 0%,transparent 60%),
+    radial-gradient(900px 800px at 20% 80%,#e6dccc 0%,transparent 60%),
+    #e9e2d6}
+  /* glass hierarchy — 5 stops */
+  .g-clear   {background:rgba(255,255,255,.06);backdrop-filter:blur(2px) saturate(108%);  -webkit-backdrop-filter:blur(2px) saturate(108%)}
+  .g-frosted {background:rgba(255,255,255,.30);backdrop-filter:blur(14px) saturate(118%); -webkit-backdrop-filter:blur(14px) saturate(118%)}
+  .g-reeded  {background:repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0 6px,rgba(255,255,255,.32) 6px 12px);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .g-block   {background:rgba(255,255,255,.55);backdrop-filter:blur(28px) saturate(135%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.7),inset 0 0 80px rgba(255,255,255,.3)}
+  .g-amber   {background:linear-gradient(135deg,rgba(169,135,99,.45),rgba(214,184,138,.30));backdrop-filter:blur(18px) saturate(140%) brightness(1.04);-webkit-backdrop-filter:blur(18px) saturate(140%)}
+
+  /* override panels with glass tokens */
+  #panel-key,#panel-filter,.tc-panel,.tut-card,#drawer,#tip{background:rgba(255,253,248,.55);border-color:rgba(255,255,255,.7);backdrop-filter:blur(22px) saturate(140%);-webkit-backdrop-filter:blur(22px) saturate(140%);box-shadow:0 12px 40px rgba(31,28,23,.10),inset 0 0 0 1px rgba(255,255,255,.5)}
+  #drawer{background:rgba(255,253,248,.72)}
+  .nav-link,.dw-cat,.pk-lbl,.tut-skip{color:rgba(31,28,23,.55)}
+  .nav-link.on,.nav-link:hover{color:#1f1c17}
+
+  /* magnifying glass — the field */
+  #magnifier{position:fixed;width:260px;height:260px;border-radius:50%;border:1px solid rgba(31,28,23,.18);box-shadow:0 12px 40px rgba(31,28,23,.18),inset 0 0 0 6px rgba(255,255,255,.35);pointer-events:none;z-index:7;backdrop-filter:blur(0.5px) saturate(125%) brightness(1.05);-webkit-backdrop-filter:blur(0.5px) saturate(125%) brightness(1.05);transform:translate(-50%,-50%);transition:width .25s,height .25s;mix-blend-mode:multiply;opacity:.85}
+  #magnifier.zoomed{width:420px;height:420px;backdrop-filter:saturate(165%) brightness(1.08) contrast(1.1);-webkit-backdrop-filter:saturate(165%) brightness(1.08) contrast(1.1)}
+
+  /* lookbook tiles — coffee-table objects */
+  .lb-stage{position:fixed;inset:64px 0 32px 0;display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(8,1fr);gap:18px;padding:0 32px;z-index:5}
+  .lb-card{position:relative;border-radius:2px;overflow:hidden;cursor:pointer;transition:transform .35s cubic-bezier(.16,1,.3,1)}
+  .lb-card:hover{transform:translateY(-2px)}
+  .lb-card .cap{position:absolute;left:14px;bottom:12px;font-family:var(--ff-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#1f1c17;opacity:.55}
+  .lb-card .ttl{position:absolute;left:14px;top:14px;font-family:var(--ff-display);font-style:italic;font-size:clamp(18px,2vw,28px);color:#1f1c17;opacity:.85}
+  /* placement */
+  .a{grid-column:1/span 5;grid-row:1/span 5}
+  .b{grid-column:6/span 4;grid-row:1/span 3}
+  .c{grid-column:10/span 3;grid-row:1/span 4}
+  .d{grid-column:6/span 3;grid-row:4/span 4}
+  .e{grid-column:9/span 4;grid-row:5/span 4}
+  .f{grid-column:1/span 5;grid-row:6/span 3}
+  /* glass surface variations on tiles */
+  .a{background:linear-gradient(135deg,#d6c7a9,#bba07d)}
+  .b{background:linear-gradient(180deg,#c5b69b,#a88f6e)}
+  .c{background:linear-gradient(160deg,#efe6d5,#c5b69b)}
+  .d{background:linear-gradient(200deg,#a88f6e,#7a6448)}
+  .e{background:linear-gradient(180deg,#efe6d5,#d6c7a9)}
+  .f{background:linear-gradient(135deg,#bba07d,#8a7359)}
+</style>
+</head><body>
+
+<canvas id="cv"></canvas>
+<div id="cur"><svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="#1f1c17" stroke-width=".4" opacity=".4"/><circle cx="7" cy="7" r="1.2" fill="#a98763"/></svg></div>
+
+<div class="pilot-banner">scheme 02 · LIGHT ROOM — milky opacity, glass hierarchy, magnifier</div>
+
+<nav id="nav" class="vis">
+  <div class="nav-left">
+    <a class="nav-brand" onclick="closeDrawer()"><span class="oo-mark"><span class="o1">O</span><span class="o2">O</span></span><span style="margin-left:.4em;font-family:var(--ff-display);font-style:italic">ne</span></a>
+  </div>
+  <div class="nav-right">
+    <button class="nav-link" onclick="openDrawer('lookbook','collection 01','Frosted, reeded, block, amber. Six pieces. One light source.')">lookbook</button>
+    <button class="nav-link" onclick="openDrawer('about','about','A catalogue. A magnifying glass. Pan and zoom.')">about</button>
+    <button class="nav-link" onclick="document.getElementById('magnifier').classList.toggle('zoomed')">zoom</button>
+    <button class="tp-btn" onclick="openThemeChooser()">BONE · v2</button>
+  </div>
+</nav>
+
+<!-- the magnifying-glass field -->
+<div id="magnifier"></div>
+
+<!-- coffee-table lookbook -->
+<div class="lb-stage">
+  <div class="lb-card a g-frosted" onclick="openDrawer('object','reeded vessel','Polycarbonate with fibrous paper. 28×14×14cm.')"><div class="ttl">reeded vessel</div><div class="cap">obj 01 · polycarbonate · 2026</div></div>
+  <div class="lb-card b g-block"   onclick="openDrawer('object','glass block','Hollow cast. Internal mist.')"><div class="ttl">glass block</div><div class="cap">obj 02 · cast glass</div></div>
+  <div class="lb-card c g-clear"   onclick="openDrawer('object','wine glass study','Hand-cut. 11cm.')"><div class="ttl">wine study</div><div class="cap">obj 03 · cut crystal</div></div>
+  <div class="lb-card d g-amber"   onclick="openDrawer('object','amber bottle','Apothecary form. Pressed.')"><div class="ttl">amber bottle</div><div class="cap">obj 04 · amber glass</div></div>
+  <div class="lb-card e g-reeded"  onclick="openDrawer('object','venetian sheet','Drawn film. 220gsm.')"><div class="ttl">venetian sheet</div><div class="cap">obj 05 · venetian</div></div>
+  <div class="lb-card f g-frosted" onclick="openDrawer('object','dew study','Mylar over basalt.')"><div class="ttl">dew study</div><div class="cap">obj 06 · mylar</div></div>
+</div>
+
+<div id="panel-key">
+  <div class="pk-head">glass</div>
+  <div class="pk-row on"><span class="pk-dot" style="background:#a98763"></span><span class="pk-lbl">amber</span></div>
+  <div class="pk-row on"><span class="pk-dot" style="background:#d6c7a9"></span><span class="pk-lbl">frosted</span></div>
+  <div class="pk-row on"><span class="pk-dot" style="background:#efe6d5"></span><span class="pk-lbl">clear</span></div>
+</div>
+
+<div id="panel-filter">
+  <div class="pk-head">view</div>
+  <div class="pk-row on"><span class="pk-circ"></span><span class="pk-lbl">aerial</span></div>
+  <div class="pk-row on"><span class="pk-circ"></span><span class="pk-lbl">flat</span></div>
+</div>
+
+<div id="drawer">
+  <div class="dw-head"><span class="dw-cat" id="dw-cat"></span><div class="dw-acts"><button class="dw-btn" id="dw-expand-btn" onclick="toggleDrawerExpand()">expand</button><button class="dw-btn" onclick="closeDrawer()">×</button></div></div>
+  <div class="dw-body" id="dw-body"></div>
+</div>
+
+<div id="tip"><div class="t-cat" id="tip-cat"></div><div class="t-title" id="tip-title"></div><div class="t-sub" id="tip-sub"></div><div class="t-time" id="tip-time"></div></div>
+
+<div id="theme-chooser" onclick="if(event.target===this)closeThemeChooser()">
+  <div class="tc-panel">
+    <button class="tc-close" onclick="closeThemeChooser()">×</button>
+    <div class="tc-sec-lbl">glass</div>
+    <div class="tc-row-wrap">
+      <div class="tc-bub" title="clear" style="background:#efe6d5"></div>
+      <div class="tc-bub sel" title="frosted" style="background:#d6c7a9"></div>
+      <div class="tc-bub" title="reeded" style="background:#c5b69b"></div>
+      <div class="tc-bub" title="amber" style="background:#a98763"></div>
+      <div class="tc-bub" title="venetian" style="background:#7a6448"></div>
+    </div>
+  </div>
+</div>
+
+<div id="tut" class="on">
+  <div class="tut-dim" onclick="closeTut()"></div>
+  <div class="tut-card">
+    <div class="tut-title">Move the glass.</div>
+    <div class="tut-body">Six objects on a table. The lens follows the cursor. Hover to magnify; click anywhere to zoom; click a piece to read its card.</div>
+    <div class="tut-nav"><div></div><div style="display:flex;gap:8px"><button class="tut-skip" onclick="closeTut()">skip</button><button class="tut-btn" onclick="nextTut()">begin</button></div></div>
+  </div>
+</div>
+
+<div id="image-view"><div class="iv-grid" id="iv-grid"></div></div>
+
+<div id="feed-overlay"><div class="feed-ticker">collection 01 — clear · frosted · reeded · block · amber · venetian — six pieces — one light source — </div></div>
+
+<script src="_shell.js"></script>
+<script>
+  // SCHEME 2 — magnifier follows cursor; canvas provides ambient soft "dust on glass"
+  const mag = document.getElementById('magnifier');
+  document.addEventListener('mousemove', e=>{ mag.style.left=e.clientX+'px'; mag.style.top=e.clientY+'px'; });
+  window.drawField = function(ctx,T,MX,MY,VW,VH){
+    ctx.clearRect(0,0,VW,VH);
+    // dust motes — slow drifting Perlin-ish
+    ctx.globalAlpha = .22;
+    for(let i=0;i<60;i++){
+      const x = (Math.sin(i*1.3+T*.05)*.5+.5)*VW;
+      const y = (Math.cos(i*.7+T*.04)*.5+.5)*VH;
+      const r = 1.2 + Math.sin(i+T*.2)*.6;
+      ctx.fillStyle = '#1f1c17';
+      ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  };
+</script>
+</body></html>

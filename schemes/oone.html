@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>oone — vol. 02 · plate I [editorial]</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&family=Space+Mono:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="_shell.css">
+
+<style>
+/* ────────────────────────────────────────────────────────────────────
+   SCHEME 01 · OONE — vol. 02 · plate I
+   References observed: Herman Miller / Bauhaus-Ulm grid (IMG_3257),
+   Brockhaus "Licht" optical-physics plate w/ Newton rings (IMG_3258),
+   "mushroom and the world" cyanotype zine (IMG_3267).
+   Synthesis: warm-cream paper, 12-col grid, generous whitespace,
+   cyanotype duotone on photographs, Newton-ring marks REPLACE soap
+   bubbles, cherry red used as a single quiet stamp not as structure.
+   ──────────────────────────────────────────────────────────────────── */
+
+:root{
+  --paper:        #ebe4d4;
+  --paper-2:      #ddd4be;
+  --paper-edge:   #b6a684;
+  --ink:          #1a1612;
+  --ink-2:        rgba(26,22,18,.62);
+  --ink-3:        rgba(26,22,18,.30);
+  --ink-4:        rgba(26,22,18,.12);
+
+  /* hero color = cyanotype blue (mushroom zine) */
+  --cyano:        #1a3d8f;
+  --cyano-2:      #4366b3;
+  --cyano-3:      #95a8d0;
+
+  /* quiet accents — appear as small marks only */
+  --cherry:       #c41e3a;       /* page numbers, footnote stamps */
+  --green-1:      #2E5D3E;
+  --green-2:      #94B362;
+  --amber:        #C97D2A;
+  --charcoal:     #3a342e;
+  --cobalt:       #1B3A8C;
+
+  --acc:          var(--cherry);
+
+  --bg:           var(--paper);
+  --bar-bg:       rgba(235,228,212,.92);
+
+  --ff-display:   "Cormorant Garamond","Cormorant",Georgia,serif;
+  --ff-body:      "Inter","Helvetica Neue",sans-serif;
+  --ff-serif:     "Cormorant",Georgia,serif;
+  --ff-mono:      "Space Mono",monospace;
+  --ff-data:      "IBM Plex Mono",monospace;
+}
+
+html,body{ overflow:hidden; height:100%; }
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--ff-body);
+  font-size:14px; line-height:1.55;
+  font-weight:300;
+}
+
+/* ── PAPER GRAIN ─────────────────────────────────────────────────── */
+body::before{
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:1;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='320'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .42 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  background-size:320px 320px;
+  mix-blend-mode:multiply;
+  opacity:.14;
+}
+
+/* ── CANVAS — slow blue+amber riso flow under everything ─────────── */
+#cv{ z-index:2; mix-blend-mode:multiply; opacity:.55; }
+
+/* ── CURSOR — small, restrained ──────────────────────────────────── */
+#cur{ z-index:9999; }
+
+/* ── EDITORIAL FRAME / GRID ──────────────────────────────────────── */
+.frame{
+  position:fixed; inset:48px 56px 64px 56px; z-index:10;
+  pointer-events:none;
+  border-top:.5px solid var(--ink);
+  border-bottom:.5px solid var(--ink);
+}
+.frame::before, .frame::after{
+  content:''; position:absolute; top:0; bottom:0; width:.5px; background:var(--ink);
+}
+.frame::before{ left:0; }
+.frame::after{ right:0; }
+
+/* tiny corner glyphs (German plate referencing) */
+.corner-mark{
+  position:fixed; z-index:11; pointer-events:none;
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.20em;
+  color:var(--ink-3); text-transform:uppercase;
+}
+#cm-tl{ top:32px; left:56px; }
+#cm-tr{ top:32px; right:56px; text-align:right; }
+#cm-bl{ bottom:42px; left:56px; }
+#cm-br{ bottom:42px; right:56px; text-align:right; }
+
+/* ── NAV — flush left, restrained ────────────────────────────────── */
+#nav{
+  position:fixed; top:0; left:0; right:0;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:18px 56px;
+  z-index:600;
+  pointer-events:all;
+  background:transparent;
+}
+.nav-brand{
+  font-family:var(--ff-display); font-style:italic; font-weight:400;
+  font-size:18px; color:var(--ink); opacity:1;
+  display:inline-flex; align-items:baseline; gap:14px;
+  text-decoration:none; cursor:pointer;
+}
+.nav-brand .vol{
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.24em;
+  text-transform:uppercase; color:var(--ink-3);
+  font-style:normal;
+}
+.nav-links{ display:flex; gap:0; }
+.nav-link{
+  font-family:var(--ff-mono); font-size:10px; letter-spacing:.18em;
+  text-transform:lowercase; color:var(--ink-2);
+  padding:6px 14px; cursor:pointer; background:none; border:none;
+  transition:color .15s;
+}
+.nav-link:hover, .nav-link.on{ color:var(--ink); }
+.nav-link.on{ text-decoration:underline; text-underline-offset:5px; }
+
+.tp-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.20em;
+  text-transform:uppercase; color:var(--ink-2);
+  padding:5px 10px; background:transparent; border:.5px solid var(--ink-3);
+  cursor:pointer; transition:all .15s;
+}
+.tp-btn:hover{ color:var(--ink); border-color:var(--ink); }
+.tp-btn .swatch{
+  width:8px; height:8px; border-radius:50%; background:var(--acc);
+}
+
+/* ── EDITORIAL GRID (12 columns) ─────────────────────────────────── */
+.plate{
+  position:fixed; inset:90px 80px 90px 80px; z-index:20;
+  display:grid;
+  grid-template-columns:repeat(12, 1fr);
+  grid-template-rows:repeat(8, 1fr);
+  gap:18px;
+  pointer-events:none;
+}
+.plate > *{ pointer-events:auto; }
+
+/* MASTHEAD CELL */
+.cell-mast{
+  grid-column:1 / span 7;
+  grid-row:1 / span 4;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding-right:24px;
+}
+.eyebrow{
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.30em;
+  text-transform:uppercase; color:var(--ink-3);
+  margin-bottom:18px; display:flex; align-items:center; gap:14px;
+}
+.eyebrow::after{
+  content:''; flex:1; height:.5px; background:var(--ink-3);
+}
+.h-display{
+  font-family:var(--ff-display); font-style:italic; font-weight:300;
+  font-size:clamp(48px,7.6vw,108px);
+  line-height:.92; letter-spacing:-.018em;
+  color:var(--ink);
+}
+.h-display em{
+  font-style:italic; color:var(--ink);
+  text-decoration:underline;
+  text-decoration-color:var(--cherry);
+  text-decoration-thickness:1.5px;
+  text-underline-offset:8px;
+}
+.subline{
+  font-family:var(--ff-serif); font-style:italic;
+  font-size:clamp(13px,1.05vw,15px);
+  color:var(--ink-2);
+  margin-top:18px;
+  max-width:42ch;
+}
+
+/* PLATE PHOTOGRAPH (cyanotype duotone) */
+.cell-plate{
+  grid-column:8 / span 5;
+  grid-row:1 / span 5;
+  display:flex; flex-direction:column;
+}
+.cell-plate figure{
+  flex:1;
+  background:var(--paper-2) url('../assets/plates/plate-img_3257.jpg') center/cover no-repeat;
+  position:relative;
+}
+.cell-plate figure::after{
+  /* register marks at corners — like a press proof */
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:
+    linear-gradient(to right, var(--ink) 0 1px, transparent 1px) 0 0/12px 12px,
+    linear-gradient(to bottom, var(--ink) 0 1px, transparent 1px) 0 0/12px 12px;
+  background-position: 0 0, 0 0;
+  -webkit-mask:
+    linear-gradient(#000 0 0) 0 0 / 12px 1px no-repeat,
+    linear-gradient(#000 0 0) 0 0 / 1px 12px no-repeat,
+    linear-gradient(#000 0 0) 100% 0 / 12px 1px no-repeat,
+    linear-gradient(#000 0 0) 100% 0 / 1px 12px no-repeat,
+    linear-gradient(#000 0 0) 0 100% / 12px 1px no-repeat,
+    linear-gradient(#000 0 0) 0 100% / 1px 12px no-repeat,
+    linear-gradient(#000 0 0) 100% 100% / 12px 1px no-repeat,
+    linear-gradient(#000 0 0) 100% 100% / 1px 12px no-repeat;
+}
+.cap{
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ink-2);
+  padding-top:8px;
+  display:flex; justify-content:space-between;
+}
+
+/* PULL QUOTE */
+.cell-quote{
+  grid-column:1 / span 7;
+  grid-row:5 / span 2;
+  font-family:var(--ff-display); font-style:italic; font-weight:300;
+  font-size:clamp(20px,2.3vw,32px); line-height:1.30;
+  color:var(--ink);
+  padding-top:18px;
+  border-top:.5px solid var(--ink-3);
+  max-width:42ch;
+}
+.cell-quote .src{
+  display:block; margin-top:14px;
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--ink-3); font-style:normal;
+}
+
+/* RING-NAV — Newton-ring marks instead of soap-bubble tabs */
+.cell-rings{
+  grid-column:8 / span 5;
+  grid-row:6 / span 3;
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:14px;
+  align-content:start;
+  padding-top:8px;
+}
+.ring-nav{
+  position:relative;
+  display:flex; align-items:flex-start; gap:14px;
+  cursor:pointer;
+  padding:6px 4px 8px;
+  border-bottom:.5px solid var(--ink-3);
+  transition:background .15s;
+}
+.ring-nav:hover{ background:rgba(26,22,18,.03); }
+.ring-nav .achsen{
+  flex-shrink:0;
+  width:48px; height:48px;
+}
+.ring-nav .achsen circle{ fill:none; }
+.ring-nav .meta{
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--ink-3);
+  margin-bottom:4px;
+}
+.ring-nav .name{
+  font-family:var(--ff-display); font-style:italic; font-weight:400;
+  font-size:18px; line-height:1.1; color:var(--ink);
+}
+.ring-nav .name em{ color:var(--cherry); }
+
+/* CHERRY STAMP / FOOTNOTE — single quiet pop */
+.stamp-no{
+  position:fixed; bottom:46px; right:60px; z-index:30;
+  font-family:var(--ff-mono); font-size:10px; letter-spacing:.30em;
+  text-transform:uppercase; color:var(--cherry);
+  pointer-events:none;
+}
+
+.stamp-no::before{
+  content:'№ '; color:var(--cherry); font-weight:700;
+}
+
+/* ── KEY + FILTER PANELS — bottom strip, hairline cards ──────────── */
+#panel-key, #panel-filter{
+  background:var(--paper);
+  border:.5px solid var(--ink);
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+  box-shadow:none;
+  padding:12px 16px;
+  min-width:170px;
+}
+.pk-head{
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--ink-2);
+  border-bottom:.5px solid var(--ink-3);
+  padding-bottom:6px; margin-bottom:8px;
+  display:flex; align-items:center; gap:8px;
+}
+.pk-head::before{
+  content:''; width:8px; height:8px; border-radius:50%;
+  background:var(--cyano);
+}
+.pk-row{ padding:5px 0; gap:12px; }
+.pk-lbl{
+  color:var(--ink); font-family:var(--ff-mono); font-size:10px;
+  letter-spacing:.10em; text-transform:lowercase;
+}
+.pk-dot, .pk-circ{ width:9px; height:9px; border-radius:50%; }
+.pk-circ{ border:1px solid var(--ink); background:transparent; }
+.pk-row[data-cat="ideas"]      .pk-dot{ background:var(--cyano); }
+.pk-row[data-cat="artifacts"]  .pk-dot{ background:var(--amber); }
+.pk-row[data-cat="sensations"] .pk-dot{ background:var(--green-1); }
+
+/* ── DRAWER — clean white card with grid hairlines ──────────────── */
+#drawer{
+  background:var(--paper);
+  border-top:.5px solid var(--ink);
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+  box-shadow:0 -10px 30px rgba(26,22,18,.06);
+}
+.dw-head{
+  border-bottom:.5px solid var(--ink-3);
+  padding:14px 56px;
+}
+.dw-cat{
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.30em;
+  text-transform:uppercase; color:var(--ink-2);
+}
+.dw-cat::before{
+  content:''; display:inline-block; width:6px; height:6px;
+  background:var(--cherry); margin-right:10px; vertical-align:1px;
+}
+.dw-btn{
+  font-family:var(--ff-mono); font-size:9px; color:var(--ink-2);
+  letter-spacing:.18em; text-transform:lowercase;
+  padding:5px 8px; background:none; border:none;
+  cursor:pointer; transition:color .15s;
+}
+.dw-btn:hover{ color:var(--ink); }
+.dw-body{ padding:32px 56px; background:var(--paper); position:relative; }
+.dw-body h1{
+  font-family:var(--ff-display); font-style:italic; font-weight:300;
+  font-size:clamp(36px,5vw,68px); line-height:1; color:var(--ink);
+  margin-bottom:20px;
+}
+.dw-body h1 em{
+  text-decoration:underline;
+  text-decoration-color:var(--cherry);
+  text-decoration-thickness:1.5px;
+  text-underline-offset:6px;
+}
+.dw-body p{
+  font-family:var(--ff-serif); font-size:16px; line-height:1.7;
+  color:var(--ink-2); max-width:62ch;
+}
+.dw-body p strong{
+  color:var(--ink); font-weight:400; font-style:italic;
+}
+
+/* ── TIP — small flat label ─────────────────────────────────────── */
+#tip{
+  background:var(--paper);
+  border:.5px solid var(--ink);
+  box-shadow:0 4px 12px rgba(26,22,18,.10);
+  padding:10px 14px;
+  font-family:var(--ff-mono);
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+}
+.t-cat{
+  font-size:8px; letter-spacing:.30em; text-transform:uppercase;
+  color:var(--cherry); margin-bottom:4px;
+}
+.t-title{
+  font-family:var(--ff-display); font-style:italic; font-weight:400;
+  font-size:16px; color:var(--ink); margin-bottom:2px;
+}
+.t-sub{ color:var(--ink-2); font-size:10px; }
+.t-time{ color:var(--ink-3); font-size:9px; margin-top:4px; letter-spacing:.10em; }
+
+/* ── PALETTE PICKER — quiet column, fully functional ────────────── */
+#theme-chooser{
+  background:rgba(26,22,18,.32);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.tc-panel{
+  background:var(--paper);
+  border:.5px solid var(--ink);
+  box-shadow:0 20px 50px rgba(26,22,18,.18);
+  padding:32px 36px;
+  min-width:340px;
+  position:relative;
+}
+.tc-panel::before{
+  content:'plate · palette';
+  position:absolute; top:-1px; left:32px;
+  background:var(--paper);
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.30em;
+  text-transform:uppercase; color:var(--cherry);
+  padding:0 12px;
+  transform:translateY(-50%);
+}
+.tc-close{
+  position:absolute; top:14px; right:18px;
+  background:none; border:none; cursor:pointer;
+  font-family:var(--ff-mono); font-size:16px; color:var(--ink-2);
+}
+.tc-sec-lbl{
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--ink-2); margin-bottom:12px;
+  padding-bottom:6px; border-bottom:.5px solid var(--ink-3);
+}
+.tc-row-wrap{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px; }
+.tc-bub{
+  width:32px; height:32px; border-radius:50%; cursor:pointer;
+  border:.5px solid var(--ink-3); position:relative;
+  transition:transform .12s, border-color .15s;
+}
+.tc-bub:hover{ transform:scale(1.08); border-color:var(--ink); }
+.tc-bub.sel{
+  outline:1.5px solid var(--cherry); outline-offset:3px;
+}
+.tc-bub::after{
+  content:attr(title);
+  position:absolute; bottom:-18px; left:50%; transform:translateX(-50%);
+  font-family:var(--ff-mono); font-size:8px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-3); white-space:nowrap;
+  opacity:0; transition:opacity .15s;
+}
+.tc-bub:hover::after{ opacity:1; }
+
+/* ── TUT ────────────────────────────────────────────────────────── */
+#tut .tut-card{
+  background:var(--paper);
+  border:.5px solid var(--ink);
+  box-shadow:0 20px 50px rgba(26,22,18,.18);
+  padding:36px;
+  backdrop-filter:none; -webkit-backdrop-filter:none;
+  position:relative;
+}
+.tut-card::before{
+  content:'before we begin';
+  position:absolute; top:-1px; left:32px;
+  background:var(--paper);
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.30em;
+  text-transform:uppercase; color:var(--cherry);
+  padding:0 12px; transform:translateY(-50%);
+}
+.tut-title{
+  font-family:var(--ff-display); font-style:italic; font-weight:300;
+  font-size:clamp(28px,3.5vw,46px); color:var(--ink);
+  margin-bottom:14px; margin-top:6px;
+}
+.tut-title em{
+  text-decoration:underline;
+  text-decoration-color:var(--cherry);
+  text-decoration-thickness:1.5px;
+  text-underline-offset:5px;
+}
+.tut-body{
+  font-family:var(--ff-serif); font-style:italic; font-size:15px;
+  line-height:1.6; color:var(--ink-2);
+}
+.tut-skip, .tut-btn{
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.20em;
+  text-transform:lowercase; padding:8px 14px; cursor:pointer;
+  border:.5px solid var(--ink); background:transparent; color:var(--ink);
+  transition:all .12s;
+}
+.tut-skip:hover{ background:var(--ink-4); }
+.tut-btn{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.tut-btn:hover{ background:var(--cherry); border-color:var(--cherry); }
+
+/* ── GALLERY ────────────────────────────────────────────────────── */
+#image-view{ background:var(--paper); padding:90px 80px 80px; }
+.iv-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:18px;
+}
+.iv-tile{
+  aspect-ratio:1/1.18;
+  background:var(--paper-2);
+  border:.5px solid var(--ink-3);
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:border-color .15s;
+}
+.iv-tile:hover{ border-color:var(--ink); }
+.iv-tile img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+/* ── FEED TICKER (quiet bottom) ─────────────────────────────────── */
+#feed-overlay{
+  background:var(--paper); border-top:.5px solid var(--ink-3);
+  height:22px; z-index:90;
+}
+.feed-ticker{
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.24em;
+  text-transform:uppercase; color:var(--ink-3);
+  padding-left:100%;
+}
+
+/* ── PILOT BANNER ───────────────────────────────────────────────── */
+.pilot-banner{
+  position:fixed; bottom:38px; left:50%; transform:translateX(-50%);
+  z-index:90;
+  background:var(--paper); color:var(--ink-2);
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.30em;
+  text-transform:uppercase; padding:5px 14px;
+  border:.5px solid var(--ink-3);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .ring-nav .achsen circle{ animation:none !important; }
+}
+</style>
+</head><body>
+
+<canvas id="cv"></canvas>
+<div id="cur"><svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" fill="none" stroke="#1a1612" stroke-width=".6"/><circle cx="7" cy="7" r="1.2" fill="#c41e3a"/></svg></div>
+
+<!-- editorial frame -->
+<div class="frame"></div>
+<div class="corner-mark" id="cm-tl">oone · plate I</div>
+<div class="corner-mark" id="cm-tr">spring 2026 · vol. 02</div>
+<div class="corner-mark" id="cm-bl">brooklyn · ny</div>
+<div class="corner-mark" id="cm-br">printed on warm cream</div>
+
+<!-- NAV -->
+<nav id="nav" class="vis">
+  <a class="nav-brand" onclick="closeDrawer()">
+    <span style="font-style:italic">oone</span>
+    <span class="vol">vol. 02</span>
+  </a>
+  <div class="nav-links">
+    <button class="nav-link" onclick="openDrawer('about · 01','I notice <em>edges</em>.','Brooklyn architect. Schematic design, massing, space planning. <strong>The corner is the room\'s first decision.</strong>')">about</button>
+    <button class="nav-link" onclick="openDrawer('services · 02','what i do','Schematic design, massing studies, space planning, design development, construction documentation.')">services</button>
+    <button class="nav-link" onclick="openGallery()">gallery</button>
+    <button class="nav-link on" onclick="openDrawer('log · 04','what did you <em>notice</em>?','Empty log.')">log</button>
+    <button class="tp-btn" onclick="openThemeChooser()"><span class="swatch" id="palette-swatch"></span><span id="palette-name">cherry</span></button>
+  </div>
+</nav>
+
+<!-- EDITORIAL PLATE GRID -->
+<main class="plate">
+  <header class="cell-mast">
+    <div class="eyebrow">plate I — how a room becomes a feeling</div>
+    <h1 class="h-display">how a room<br>becomes <em>a feeling</em>.</h1>
+    <p class="subline">A field notebook caught in condensation. Schematic design, massing studies, and space planning, set against Newton rings — the optical record of light agreeing to bend.</p>
+  </header>
+
+  <figure class="cell-plate">
+    <div class="figure"></div>
+    <figcaption class="cap">
+      <span>fig. 01 · interior, study</span>
+      <span>cyanotype</span>
+    </figcaption>
+  </figure>
+
+  <blockquote class="cell-quote">
+    the corner is not the wall meeting the wall — it is the wall agreeing to meet.
+    <span class="src">— oone, on record</span>
+  </blockquote>
+
+  <nav class="cell-rings">
+    <a class="ring-nav" onclick="openDrawer('about · 01','I notice <em>edges</em>.','Brooklyn architect.')">
+      <svg class="achsen" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" stroke="#1a1612" stroke-width=".5"/><circle cx="24" cy="24" r="16" stroke="#1a3d8f" stroke-width=".6"/><circle cx="24" cy="24" r="10" stroke="#C97D2A" stroke-width=".7"/><circle cx="24" cy="24" r="4" fill="#c41e3a"/></svg>
+      <div><div class="meta">01 · achsenbild</div><div class="name"><em>about</em></div></div>
+    </a>
+    <a class="ring-nav" onclick="openDrawer('services · 02','what i do','Schematic design, massing studies, space planning.')">
+      <svg class="achsen" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" stroke="#1a1612" stroke-width=".5"/><circle cx="24" cy="24" r="17" stroke="#2E5D3E" stroke-width=".6"/><circle cx="24" cy="24" r="11" stroke="#1a3d8f" stroke-width=".7"/><circle cx="24" cy="24" r="5" fill="#1a1612"/></svg>
+      <div><div class="meta">02 · achsenbild</div><div class="name"><em>services</em></div></div>
+    </a>
+    <a class="ring-nav" onclick="openDrawer('log · 04','what did you <em>notice</em>?','Empty log. Click a category — ideas / artifacts / sensations — to add one.')">
+      <svg class="achsen" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" stroke="#1a1612" stroke-width=".5"/><circle cx="24" cy="24" r="18" stroke="#C97D2A" stroke-width=".6"/><circle cx="24" cy="24" r="12" stroke="#94B362" stroke-width=".7"/><circle cx="24" cy="24" r="6" stroke="#c41e3a" stroke-width=".8"/></svg>
+      <div><div class="meta">04 · achsenbild</div><div class="name"><em>log</em></div></div>
+    </a>
+    <a class="ring-nav" onclick="openGallery()">
+      <svg class="achsen" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" stroke="#1a1612" stroke-width=".5"/><circle cx="24" cy="24" r="15" stroke="#1B3A8C" stroke-width=".6"/><circle cx="24" cy="24" r="9" stroke="#94B362" stroke-width=".7"/><circle cx="24" cy="24" r="3" fill="#1B3A8C"/></svg>
+      <div><div class="meta">03 · achsenbild</div><div class="name"><em>gallery</em></div></div>
+    </a>
+  </nav>
+</main>
+
+<!-- single quiet cherry stamp -->
+<div class="stamp-no">06</div>
+
+<!-- KEY + FILTER -->
+<div id="panel-key">
+  <div class="pk-head">layers</div>
+  <div class="pk-row on" data-cat="ideas"><span class="pk-dot"></span><span class="pk-lbl">ideas</span></div>
+  <div class="pk-row on" data-cat="artifacts"><span class="pk-dot"></span><span class="pk-lbl">artifacts</span></div>
+  <div class="pk-row on" data-cat="sensations"><span class="pk-dot"></span><span class="pk-lbl">sensations</span></div>
+</div>
+
+<div id="panel-filter">
+  <div class="pk-head">filter</div>
+  <div class="pk-row on"><span class="pk-circ"></span><span class="pk-lbl">itself</span></div>
+  <div class="pk-row on"><span class="pk-circ"></span><span class="pk-lbl">orbit</span></div>
+</div>
+
+<!-- DRAWER -->
+<div id="drawer">
+  <div class="dw-head">
+    <span class="dw-cat" id="dw-cat"></span>
+    <div class="dw-acts">
+      <button class="dw-btn" id="dw-expand-btn" onclick="toggleDrawerExpand()">expand</button>
+      <button class="dw-btn" onclick="closeDrawer()">close</button>
+    </div>
+  </div>
+  <div class="dw-body" id="dw-body"></div>
+</div>
+
+<!-- TIP -->
+<div id="tip"><div class="t-cat" id="tip-cat"></div><div class="t-title" id="tip-title"></div><div class="t-sub" id="tip-sub"></div><div class="t-time" id="tip-time"></div></div>
+
+<!-- THEME CHOOSER -->
+<div id="theme-chooser" onclick="if(event.target===this)closeThemeChooser()">
+  <div class="tc-panel">
+    <button class="tc-close" onclick="closeThemeChooser()">×</button>
+    <div class="tc-sec-lbl">primary mark</div>
+    <div class="tc-row-wrap" id="tc-accents">
+      <div class="tc-bub sel" title="cherry"   data-name="cherry"   data-acc="#c41e3a" style="background:#c41e3a"></div>
+      <div class="tc-bub"      title="cobalt"   data-name="cobalt"   data-acc="#1B3A8C" style="background:#1B3A8C"></div>
+      <div class="tc-bub"      title="moss"     data-name="moss"     data-acc="#94B362" style="background:#94B362"></div>
+      <div class="tc-bub"      title="forest"   data-name="forest"   data-acc="#2E5D3E" style="background:#2E5D3E"></div>
+      <div class="tc-bub"      title="amber"    data-name="amber"    data-acc="#C97D2A" style="background:#C97D2A"></div>
+      <div class="tc-bub"      title="charcoal" data-name="charcoal" data-acc="#3a342e" style="background:#3a342e"></div>
+    </div>
+    <div class="tc-sec-lbl">paper</div>
+    <div class="tc-row-wrap" id="tc-papers">
+      <div class="tc-bub sel" title="cream"    data-name="cream"    data-paper="#ebe4d4" style="background:#ebe4d4"></div>
+      <div class="tc-bub"      title="bone"     data-name="bone"     data-paper="#eae0cd" style="background:#eae0cd"></div>
+      <div class="tc-bub"      title="mist"     data-name="mist"     data-paper="#dde2dd" style="background:#dde2dd"></div>
+      <div class="tc-bub"      title="ink"      data-name="ink"      data-paper="#1a1612" style="background:#1a1612"></div>
+    </div>
+    <div class="tc-sec-lbl">heat-flow</div>
+    <div class="tc-row-wrap" id="tc-flows">
+      <div class="tc-bub sel" title="cyano + amber"  data-flow="cyano-amber"  style="background:linear-gradient(135deg,#1a3d8f,#C97D2A)"></div>
+      <div class="tc-bub"      title="forest + amber" data-flow="forest-amber" style="background:linear-gradient(135deg,#2E5D3E,#C97D2A)"></div>
+      <div class="tc-bub"      title="cherry + cyano" data-flow="cherry-cyano" style="background:linear-gradient(135deg,#c41e3a,#1a3d8f)"></div>
+      <div class="tc-bub"      title="charcoal"       data-flow="charcoal"     style="background:#3a342e"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TUT -->
+<div id="tut" class="on">
+  <div class="tut-dim" onclick="closeTut()"></div>
+  <div class="tut-card">
+    <div class="tut-title"><em>before</em> we begin.</div>
+    <div class="tut-body">A field notebook caught in condensation. Open the palette to set the room. Hover the achsenbild marks at right; click any to read its plate.</div>
+    <div class="tut-nav" style="margin-top:24px;display:flex;justify-content:flex-end;gap:10px">
+      <button class="tut-skip" onclick="closeTut()">skip</button>
+      <button class="tut-btn" onclick="nextTut()">begin</button>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<div id="image-view"><div class="iv-grid">
+  <div class="iv-tile"><img src="../assets/plates/plate-img_3257.jpg" alt=""></div>
+  <div class="iv-tile"><img src="../assets/plates/plate-img_3258.jpg" alt=""></div>
+  <div class="iv-tile"><img src="../assets/plates/plate-img_3267.jpg" alt=""></div>
+  <div class="iv-tile"></div><div class="iv-tile"></div><div class="iv-tile"></div>
+</div></div>
+
+<!-- FEED TICKER -->
+<div id="feed-overlay"><div class="feed-ticker">vol. 02 · plate I · spring 2026 · oone · brooklyn · printed on warm cream — </div></div>
+
+<div class="pilot-banner">scheme 01 · OONE — vol. 02 · editorial plate</div>
+
+<script src="_shell.js"></script>
+<script>
+/* ──────────────────────────────────────────────────────────────────
+   HEAT-FLOW — quiet blue + amber, very slow, multiply over paper
+   ────────────────────────────────────────────────────────────────── */
+const FLOWS = {
+  'cyano-amber':  { a:'#1a3d8f', b:'#C97D2A' },
+  'forest-amber': { a:'#2E5D3E', b:'#C97D2A' },
+  'cherry-cyano': { a:'#c41e3a', b:'#1a3d8f' },
+  'charcoal':     { a:'#3a342e', b:'#1a3d8f' }
+};
+let FLOW = FLOWS['cyano-amber'];
+
+const SOURCES = [
+  { x:.18, y:.50, w:.85 },
+  { x:.42, y:.28, w:.65 },
+  { x:.68, y:.62, w:.90 },
+  { x:.82, y:.35, w:.55 },
+  { x:.30, y:.78, w:.70 }
+];
+
+window.drawField = function(ctx, T, MX, MY, VW, VH){
+  ctx.clearRect(0,0,VW,VH);
+  SOURCES.forEach((s,i)=>{
+    const phase = T*.04 + i;
+    const cx = (s.x + Math.sin(phase)*.03) * VW;
+    const cy = (s.y + Math.cos(phase*.9)*.03) * VH;
+    const r  = Math.max(VW,VH) * .42 * s.w;
+    const g = ctx.createRadialGradient(cx,cy,0,cx,cy,r);
+    g.addColorStop(0,   FLOW.a + '88');
+    g.addColorStop(.55, FLOW.a + '18');
+    g.addColorStop(1,   FLOW.a + '00');
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,VW,VH);
+  });
+  SOURCES.slice().reverse().forEach((s,i)=>{
+    const phase = T*.03 + i*1.7;
+    const cx = (s.x + Math.cos(phase)*.04) * VW;
+    const cy = (s.y + Math.sin(phase*.7)*.04) * VH;
+    const r  = Math.max(VW,VH) * .35 * s.w;
+    const g = ctx.createRadialGradient(cx,cy,0,cx,cy,r);
+    g.addColorStop(0,   FLOW.b + '70');
+    g.addColorStop(.55, FLOW.b + '14');
+    g.addColorStop(1,   FLOW.b + '00');
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,VW,VH);
+  });
+};
+
+/* ──────────────────────────────────────────────────────────────────
+   PALETTE PICKER — actually re-tints surfaces
+   ────────────────────────────────────────────────────────────────── */
+function setAccent(name, hex){
+  document.documentElement.style.setProperty('--acc', hex);
+  document.documentElement.style.setProperty('--cherry', hex);
+  document.getElementById('palette-name').textContent = name;
+  document.getElementById('palette-swatch').style.background = hex;
+}
+function setPaper(hex){
+  document.documentElement.style.setProperty('--paper', hex);
+  document.documentElement.style.setProperty('--bg', hex);
+  document.documentElement.style.setProperty('--paper-2', shade(hex, -8));
+  document.documentElement.style.setProperty('--bar-bg', hex);
+  const lum = relLum(hex);
+  if(lum < .35){
+    document.documentElement.style.setProperty('--ink',   '#ebe4d4');
+    document.documentElement.style.setProperty('--ink-2', 'rgba(235,228,212,.62)');
+    document.documentElement.style.setProperty('--ink-3', 'rgba(235,228,212,.32)');
+    document.documentElement.style.setProperty('--ink-4', 'rgba(235,228,212,.12)');
+  } else {
+    document.documentElement.style.setProperty('--ink',   '#1a1612');
+    document.documentElement.style.setProperty('--ink-2', 'rgba(26,22,18,.62)');
+    document.documentElement.style.setProperty('--ink-3', 'rgba(26,22,18,.30)');
+    document.documentElement.style.setProperty('--ink-4', 'rgba(26,22,18,.12)');
+  }
+}
+function setFlow(name){ FLOW = FLOWS[name] || FLOWS['cyano-amber']; }
+
+function shade(hex, amt){
+  const n = parseInt(hex.slice(1),16);
+  let r = (n>>16) + amt, g = ((n>>8)&255) + amt, b = (n&255) + amt;
+  r = Math.max(0, Math.min(255, r)); g = Math.max(0, Math.min(255, g)); b = Math.max(0, Math.min(255, b));
+  return '#' + ((1<<24) + (r<<16) + (g<<8) + b).toString(16).slice(1);
+}
+function relLum(hex){
+  const n = parseInt(hex.slice(1),16);
+  return .2126*((n>>16)/255) + .7152*(((n>>8)&255)/255) + .0722*((n&255)/255);
+}
+
+function selectInGroup(group, el){
+  group.querySelectorAll('.tc-bub').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+document.querySelectorAll('#tc-accents .tc-bub').forEach(el=>{
+  el.addEventListener('click', ()=>{ selectInGroup(document.getElementById('tc-accents'), el); setAccent(el.dataset.name, el.dataset.acc); });
+});
+document.querySelectorAll('#tc-papers .tc-bub').forEach(el=>{
+  el.addEventListener('click', ()=>{ selectInGroup(document.getElementById('tc-papers'), el); setPaper(el.dataset.paper); });
+});
+document.querySelectorAll('#tc-flows .tc-bub').forEach(el=>{
+  el.addEventListener('click', ()=>{ selectInGroup(document.getElementById('tc-flows'), el); setFlow(el.dataset.flow); });
+});
+
+/* set initial palette swatch */
+document.getElementById('palette-swatch').style.background = '#c41e3a';
+
+/* ──────────────────────────────────────────────────────────────────
+   ACHSENBILD HOVER — slow ring breathing
+   ────────────────────────────────────────────────────────────────── */
+document.querySelectorAll('.ring-nav').forEach(nav => {
+  const circles = nav.querySelectorAll('circle');
+  let t = 0, raf = null;
+  nav.addEventListener('mouseenter', ()=>{
+    function step(){
+      t += 1/60;
+      circles.forEach((c, i) => {
+        const baseR = parseFloat(c.getAttribute('r'));
+        const wob = Math.sin(t*1.4 + i*.7) * .6;
+        c.setAttribute('r', String(baseR + wob));
+        setTimeout(() => c.setAttribute('r', String(baseR)), 80);
+      });
+      raf = requestAnimationFrame(step);
+    }
+    step();
+  });
+  nav.addEventListener('mouseleave', ()=>{ if(raf) cancelAnimationFrame(raf); });
+});
+
+console.log('[oone vol.02 · plate I] editorial scheme active — palette swap is live');
+</script>
+</body></html>

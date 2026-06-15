@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Powder Room</title>
+<link rel="stylesheet" href="https://use.typekit.net/ifo7ejx.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;cursor:none;}
+#cur{position:fixed;pointer-events:none;z-index:9999;width:11px;height:11px;border-radius:50%;transform:translate(-50%,-50%);background:#fff;mix-blend-mode:difference;transition:width .18s,height .18s;}
+#cur.lg{width:44px;height:44px;}
+#bg{position:fixed;inset:0;z-index:0;width:100%;height:100%;}
+#ui{position:fixed;inset:0;z-index:10;pointer-events:none;display:grid;grid-template-rows:46px 1fr;grid-template-columns:218px 1fr 258px;grid-template-areas:"tp tp tp" "lf md rg";}
+#ui>*{pointer-events:all;}
+#tp{grid-area:tp;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid var(--ed);transition:background .4s;}
+.logo{font-family:'redaction',Georgia,serif;font-size:16px;color:var(--ink);letter-spacing:-.01em;}
+.tabs{display:flex;}
+.tab{font-family:'bitcount-mono-double','IBM Plex Mono',monospace;font-size:6px;letter-spacing:.12em;text-transform:uppercase;padding:0 12px;height:46px;line-height:46px;border:none;border-left:1px solid var(--ed);background:transparent;color:var(--i2);cursor:none;transition:color .3s,background .3s;position:relative;}
+.tab::after{content:'';position:absolute;bottom:0;left:0;right:100%;height:2px;background:var(--ac);transition:right .4s cubic-bezier(.16,1,.3,1);}
+.tab.on,.tab:hover{color:var(--ink);}.tab.on{background:var(--fn);}
+.tab.on::after,.tab:hover::after{right:0;}
+.vr{display:flex;gap:1px;}
+.vb{font-family:'bitcount-mono-double','IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;padding:0 13px;height:28px;line-height:26px;border:1px solid var(--ed);border-left:none;background:transparent;color:var(--i2);cursor:none;transition:color .2s,background .2s;}
+.vb:first-child{border-left:1px solid var(--ed);}
+.vb.on,.vb:hover{color:var(--ink);background:var(--fn);}
+.pnl{padding:20px 18px;overflow-y:auto;height:100%;display:flex;flex-direction:column;gap:15px;transition:background .4s;}
+.pnl::-webkit-scrollbar{width:0;}
+#lf{grid-area:lf;border-right:1px solid var(--ed);}
+#rg{grid-area:rg;border-left:1px solid var(--ed);}
+#md{grid-area:md;pointer-events:none;position:relative;}
+.lbl{font-family:'bitcount-mono-double','IBM Plex Mono',monospace;font-size:6.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--i2);}
+.nm{font-family:'redaction',Georgia,serif;font-size:clamp(38px,3.8vw,62px);line-height:.8;letter-spacing:-.02em;color:var(--ac);}
+.wd{font-family:'bebas-neue-pro','Arial Narrow',sans-serif;font-size:8.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--i2);margin-top:4px;}
+.nt{font-family:'libre-baskerville',Georgia,serif;font-style:italic;font-size:10px;line-height:1.9;color:var(--i2);border-top:1px solid var(--ed);padding-top:10px;}
+.rw{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--ed);}
+.ch{width:13px;height:13px;border-radius:2px;flex-shrink:0;}
+.hx{font-family:'bitcount-mono-double','IBM Plex Mono',monospace;font-size:8px;letter-spacing:.06em;color:var(--ink);opacity:.55;}
+.ro{font-family:'bitcount-mono-double','IBM Plex Mono',monospace;font-size:6px;letter-spacing:.12em;text-transform:uppercase;color:var(--i2);margin-left:auto;}
+.ss{display:flex;height:42px;gap:1px;}
+.sw{flex:1;position:relative;cursor:none;transition:flex .42s cubic-bezier(.16,1,.3,1);}
+.sw:hover{flex:5;}.sw:hover .sl{opacity:1;}
+.sl{position:absolute;bottom:4px;left:5px;font-family:'bitcount-mono-double','IBM Plex Mono',monospace;font-size:6px;letter-spacing:.08em;color:rgba(255,255,255,.65);opacity:0;transition:opacity .2s;white-space:nowrap;}
+.sl.dk{color:rgba(0,0,0,.55);}
+.pb{display:flex;gap:1px;height:3px;}
+.rf{display:flex;flex-wrap:wrap;gap:3px;margin-top:auto;}
+.ri{font-family:'bitcount-mono-double','IBM Plex Mono',monospace;font-size:6px;letter-spacing:.12em;text-transform:uppercase;padding:3px 7px;border:1px solid var(--ed);color:var(--i2);}
+.mh{font-family:'bebas-neue-pro','Arial Narrow',sans-serif;font-size:15px;letter-spacing:.06em;color:var(--ink);}
+.mb{font-family:'libre-baskerville',Georgia,serif;font-style:italic;font-size:10px;line-height:1.85;color:var(--i2);}
+.mk{padding:14px;cursor:none;transition:transform .35s cubic-bezier(.16,1,.3,1);}
+.mk:hover{transform:scale(1.013) rotate(-.35deg);}
+.me{font-family:'bitcount-mono-double','IBM Plex Mono',monospace;font-size:6.5px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:4px;}
+.mH{font-family:'redaction',Georgia,serif;line-height:.86;letter-spacing:-.02em;}
+.mB{font-family:'libre-baskerville',Georgia,serif;font-style:italic;font-size:8.5px;line-height:1.8;margin-top:4px;}
+.mC{display:inline-block;font-family:'bebas-neue-pro','Arial Narrow',sans-serif;font-size:9px;letter-spacing:.14em;padding:5px 10px;margin-top:6px;cursor:none;}
+#ml{position:absolute;bottom:26px;left:26px;pointer-events:none;}
+.mle{font-family:'bitcount-mono-double','IBM Plex Mono',monospace;font-size:7px;letter-spacing:.24em;text-transform:uppercase;color:var(--i2);margin-bottom:5px;}
+.mlh{font-family:'redaction',Georgia,serif;font-size:clamp(44px,5.2vw,78px);line-height:.82;letter-spacing:-.025em;color:var(--ink);}
+.mlh b{font-weight:400;color:var(--ac);}
+body{--ac:#E05828;--ink:#F4D0B0;--i2:rgba(244,208,176,.28);--fn:rgba(255,255,255,.04);--ed:rgba(224,88,40,.2);}
+body.orange{--ac:#E05828;--ink:#F4D0B0;--i2:rgba(244,208,176,.28);--fn:rgba(255,255,255,.04);--ed:rgba(224,88,40,.2);}
+body.silver{--ac:#A0A8AE;--ink:#1C1816;--i2:rgba(28,24,22,.32);--fn:rgba(0,0,0,.03);--ed:rgba(28,24,22,.1);}
+body.red{--ac:#C81010;--ink:#DCE0E4;--i2:rgba(220,224,228,.22);--fn:rgba(255,255,255,.03);--ed:rgba(200,16,16,.28);}
+body.reed{--ac:#8A7055;--ink:#2A1A0A;--i2:rgba(42,26,10,.32);--fn:rgba(0,0,0,.04);--ed:rgba(42,26,10,.1);}
+body.bloom{--ac:#C08888;--ink:#2A1C1C;--i2:rgba(42,28,28,.32);--fn:rgba(0,0,0,.04);--ed:rgba(42,28,28,.1);}
+body.orange #lf,body.orange #rg,body.orange #tp{background:rgba(38,14,6,.94);}
+body.silver #lf,body.silver #rg,body.silver #tp{background:rgba(245,242,239,.94);}
+body.red #lf,body.red #rg,body.red #tp{background:rgba(4,4,8,.96);}
+body.reed #lf,body.reed #rg,body.reed #tp{background:rgba(234,225,212,.93);}
+body.bloom #lf,body.bloom #rg,body.bloom #tp{background:rgba(250,246,241,.93);}
+</style>
+</head>
+<body class="orange">
+<div id="cur"></div>
+<canvas id="bg"></canvas>
+<div id="ui">
+  <header id="tp">
+    <div class="logo">oone · powder room</div>
+    <div class="tabs">
+      <button class="tab on" data-t="orange" onclick="sT('orange')">Orange</button>
+      <button class="tab" data-t="silver" onclick="sT('silver')">Silver</button>
+      <button class="tab" data-t="red" onclick="sT('red')">Red Room</button>
+      <button class="tab" data-t="reed" onclick="sT('reed')">Reed</button>
+      <button class="tab" data-t="bloom" onclick="sT('bloom')">Bloom</button>
+    </div>
+    <div class="vr">
+      <button class="vb on" data-v="0" onclick="sV(0)">I</button>
+      <button class="vb" data-v="1" onclick="sV(1)">II</button>
+      <button class="vb" data-v="2" onclick="sV(2)">III</button>
+    </div>
+  </header>
+  <aside id="lf" class="pnl"></aside>
+  <div id="md"><div id="ml"><div class="mle" id="mle"></div><div class="mlh" id="mlh"></div></div></div>
+  <aside id="rg" class="pnl"></aside>
+</div>
+<script>
+const canvas=document.getElementById('bg');
+const ctx=canvas.getContext('2d');
+let W=0,H=0,mx=600,my=400,T=0,theme='orange',variant=0;
+new ResizeObserver(()=>{W=canvas.width=innerWidth;H=canvas.height=innerHeight;fogReset=true;reedReset=true;}).observe(document.body);
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+const cur=document.getElementById('cur');
+let cx=600,cy=400;
+(function lc(){cx+=(mx-cx)*.14;cy+=(my-cy)*.14;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(lc);})();
+const addHov=el=>{el.addEventListener('mouseenter',()=>cur.classList.add('lg'));el.addEventListener('mouseleave',()=>cur.classList.remove('lg'));};
+
+/* FOG */
+let fogC=null,fogCtx2=null,fogKey='',fogReset=false;
+function fogInit(r,g,b,a){
+  fogC=document.createElement('canvas');fogC.width=W;fogC.height=H;
+  fogCtx2=fogC.getContext('2d');fogKey=theme+variant;fogReset=false;
+  fogCtx2.fillStyle='rgba('+r+','+g+','+b+','+a+')';fogCtx2.fillRect(0,0,W,H);
+}
+function fogFrame(r,g,b,a){
+  if(!fogC||fogReset||fogKey!==theme+variant)fogInit(r,g,b,a);
+  fogCtx2.fillStyle='rgba('+r+','+g+','+b+',.006)';fogCtx2.fillRect(0,0,W,H);
+  fogCtx2.save();fogCtx2.globalCompositeOperation='destination-out';
+  var g2=fogCtx2.createRadialGradient(mx,my,0,mx,my,72);
+  g2.addColorStop(0,'rgba(0,0,0,.3)');g2.addColorStop(1,'rgba(0,0,0,0)');
+  fogCtx2.fillStyle=g2;fogCtx2.fillRect(0,0,W,H);fogCtx2.restore();
+  ctx.drawImage(fogC,0,0);
+}
+
+/* REED BG */
+let reedBg=null,reedBgCtx=null,reedReset=false,reedV2=-1;
+function reedBuild(v){
+  if(!reedReset&&reedBg&&reedV2===v)return;
+  reedReset=false;reedV2=v;
+  if(!reedBg){reedBg=document.createElement('canvas');reedBgCtx=reedBg.getContext('2d');}
+  reedBg.width=W;reedBg.height=H;
+  var bg=REEDPALS[v];reedBgCtx.fillStyle=bg;reedBgCtx.fillRect(0,0,W,H);
+  reedBgCtx.save();reedBgCtx.filter='blur(5px)';
+  if(v===0){
+    /* stool */
+    reedBgCtx.fillStyle='rgba(188,148,95,.88)';reedBgCtx.beginPath();reedBgCtx.ellipse(W*.58,H*.42,W*.09,H*.04,0,0,Math.PI*2);reedBgCtx.fill();
+    reedBgCtx.fillStyle='rgba(172,130,80,.82)';reedBgCtx.beginPath();reedBgCtx.moveTo(W*.5,H*.45);reedBgCtx.bezierCurveTo(W*.48,H*.57,W*.5,H*.7,W*.54,H*.78);reedBgCtx.lineTo(W*.62,H*.78);reedBgCtx.bezierCurveTo(W*.66,H*.7,W*.68,H*.57,W*.66,H*.45);reedBgCtx.closePath();reedBgCtx.fill();
+    /* grain lines */
+    reedBgCtx.strokeStyle='rgba(148,108,58,.32)';reedBgCtx.lineWidth=.9;
+    for(var gi=0;gi<14;gi++){var gy=H*.45+gi*(H*.024);var ga=W*.078*(1-Math.abs(gi-7)/7);reedBgCtx.beginPath();reedBgCtx.moveTo(W*.58-ga,gy);for(var xi=0;xi<=20;xi++){var xp=W*.58-ga+xi*(ga*2/20);reedBgCtx.lineTo(xp,gy+Math.sin(xi/20*Math.PI)*ga*.15);}reedBgCtx.stroke();}
+    reedBgCtx.fillStyle='rgba(80,60,35,.14)';reedBgCtx.beginPath();reedBgCtx.ellipse(W*.58,H*.8,W*.1,H*.022,0,0,Math.PI*2);reedBgCtx.fill();
+  } else if(v===1){
+    /* figure + hand */
+    reedBgCtx.fillStyle='rgba(44,34,24,.8)';reedBgCtx.beginPath();reedBgCtx.ellipse(W*.52,H*.24,W*.066,H*.09,0,0,Math.PI*2);reedBgCtx.fill();
+    reedBgCtx.beginPath();reedBgCtx.moveTo(W*.36,H*.32);reedBgCtx.bezierCurveTo(W*.38,H*.38,W*.44,H*.36,W*.52,H*.36);reedBgCtx.bezierCurveTo(W*.6,H*.36,W*.66,H*.38,W*.68,H*.32);reedBgCtx.bezierCurveTo(W*.68,H*.7,W*.62,H*.84,W*.54,H*.9);reedBgCtx.lineTo(W*.5,H*.9);reedBgCtx.bezierCurveTo(W*.42,H*.84,W*.36,H*.7,W*.36,H*.32);reedBgCtx.fill();
+    reedBgCtx.fillStyle='rgba(44,34,24,.56)';reedBgCtx.beginPath();reedBgCtx.ellipse(W*.36,H*.5,W*.052,H*.062,-.14,0,Math.PI*2);reedBgCtx.fill();
+  } else {
+    /* flowers */
+    var fc=[['rgba(218,148,140,.82)',W*.42,H*.28,.082],['rgba(208,155,108,.78)',W*.56,H*.22,.072],['rgba(195,130,152,.75)',W*.64,H*.32,.066],['rgba(215,142,132,.7)',W*.37,H*.37,.06],['rgba(205,158,100,.68)',W*.5,H*.38,.058]];
+    fc.forEach(function(f){reedBgCtx.fillStyle=f[0];reedBgCtx.beginPath();reedBgCtx.arc(f[1],f[2],Math.min(W,H)*f[3],0,Math.PI*2);reedBgCtx.fill();});
+    reedBgCtx.strokeStyle='rgba(80,110,60,.62)';reedBgCtx.lineWidth=W*.011;reedBgCtx.lineCap='round';
+    reedBgCtx.beginPath();reedBgCtx.moveTo(W*.5,H*.46);reedBgCtx.bezierCurveTo(W*.48,H*.62,W*.52,H*.76,W*.5,H*.88);reedBgCtx.stroke();
+    reedBgCtx.beginPath();reedBgCtx.moveTo(W*.53,H*.48);reedBgCtx.bezierCurveTo(W*.57,H*.62,W*.55,H*.74,W*.52,H*.88);reedBgCtx.strokeStyle='rgba(80,110,60,.45)';reedBgCtx.lineWidth=W*.008;reedBgCtx.stroke();
+  }
+  reedBgCtx.restore();
+}
+const REEDPALS=['#E8E0D0','#E2D8CC','#EDE8DC'];
+
+/* ── ORANGE ── */
+var OP=[[52,20,8],[68,28,8],[36,14,5]];
+function drawOrange(t,v){
+  var c=OP[v];ctx.fillStyle='rgb('+c[0]+','+c[1]+','+c[2]+')';ctx.fillRect(0,0,W,H);
+  /* body — blurred dark mass */
+  ctx.save();ctx.filter='blur(30px)';
+  ctx.fillStyle='rgba(95,30,10,.9)';
+  ctx.beginPath();ctx.ellipse(W*.5,H*.26,W*.072,H*.1,0,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.moveTo(W*.28,H*.33);ctx.bezierCurveTo(W*.26,H*.52,W*.3,H*.7,W*.32,H*.84);ctx.lineTo(W*.68,H*.84);ctx.bezierCurveTo(W*.7,H*.7,W*.74,H*.52,W*.72,H*.33);ctx.quadraticCurveTo(W*.5,H*.3,W*.28,H*.33);ctx.fill();
+  ctx.restore();
+  var fr=[250,200,160];var fa=fr[0],fb2=fr[1],fc2=fr[2];
+  fogFrame(fa,fb2,fc2,.92);
+}
+
+/* ── SILVER ── */
+var SP=[[242,238,234],[238,234,230],[246,242,238]];
+function drawSilver(t,v){
+  var c=SP[v];ctx.fillStyle='rgb('+c[0]+','+c[1]+','+c[2]+')';ctx.fillRect(0,0,W,H);
+  ctx.save();ctx.filter='blur(24px)';
+  ctx.fillStyle='rgba(18,16,14,.84)';
+  ctx.beginPath();ctx.ellipse(W*.5,H*.25,W*.068,H*.092,0,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.moveTo(W*.33,H*.33);ctx.bezierCurveTo(W*.31,H*.52,W*.34,H*.7,W*.36,H*.84);ctx.lineTo(W*.64,H*.84);ctx.bezierCurveTo(W*.66,H*.7,W*.69,H*.52,W*.67,H*.33);ctx.quadraticCurveTo(W*.5,H*.3,W*.33,H*.33);ctx.fill();
+  /* hand */
+  ctx.fillStyle='rgba(18,16,14,.58)';ctx.beginPath();ctx.ellipse(W*.36,H*.5,W*.053,H*.063,-.14,0,Math.PI*2);ctx.fill();
+  [[-W*.12,-H*.17],[-W*.03,-H*.21],[W*.06,-H*.22],[W*.15,-H*.18],[W*.22,-H*.09]].forEach(function(f){ctx.beginPath();ctx.ellipse(W*.36+f[0],H*.5+f[1],W*.013,H*.048,f[0]/W*.35,0,Math.PI*2);ctx.fill();});
+  ctx.restore();
+  fogFrame(248,246,244,.9);
+}
+
+/* ── RED ROOM ── */
+var RP=[[210,12,12,40,4,4],[220,100,8,40,18,4],[80,80,240,8,8,28]];
+function drawRed(t,v){
+  var p=RP[v],nR=p[0],nG=p[1],nB=p[2],cR=p[3],cG=p[4],cB=p[5];
+  var pulse=.88+.12*Math.sin(t*.55);
+  /* walls */
+  ctx.fillStyle='#161820';ctx.fillRect(0,0,W,H);
+  /* wall specular */
+  var ws=ctx.createLinearGradient(0,H*.35,0,H*.58);ws.addColorStop(0,'transparent');ws.addColorStop(.5,'rgba(140,150,185,.13)');ws.addColorStop(1,'transparent');ctx.fillStyle=ws;ctx.fillRect(0,0,W,H);
+  /* floor */
+  ctx.fillStyle='#070810';ctx.fillRect(0,H*.76,W,H*.24);
+  var ts=W/22;ctx.strokeStyle='rgba(22,24,32,.8)';ctx.lineWidth=.4;
+  for(var x=0;x<W;x+=ts){ctx.beginPath();ctx.moveTo(x,H*.76);ctx.lineTo(x,H);ctx.stroke();}
+  for(var y=H*.76;y<H;y+=ts){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  /* ceiling base */
+  ctx.fillStyle='rgb('+cR+','+cG+','+cB+')';ctx.fillRect(0,0,W,H*.24);
+  /* neon grid */
+  var gC=12,gR2=5,cW=W/gC,cH=H*.24/gR2;
+  ctx.save();ctx.shadowColor='rgba('+nR+','+nG+','+nB+',.9)';ctx.shadowBlur=10;
+  ctx.strokeStyle='rgba('+(nR*pulse|0)+','+nG+','+nB+',.94)';ctx.lineWidth=1.5;
+  for(var c2=0;c2<=gC;c2++){ctx.beginPath();ctx.moveTo(c2*cW,0);ctx.lineTo(c2*cW,H*.24);ctx.stroke();}
+  for(var r2=0;r2<=gR2;r2++){ctx.beginPath();ctx.moveTo(0,r2*cH);ctx.lineTo(W,r2*cH);ctx.stroke();}
+  ctx.restore();
+  /* glass block fill */
+  for(var c3=0;c3<gC;c3++)for(var r3=0;r3<gR2;r3++)if((c3+r3)%2===0){ctx.fillStyle='rgba('+(nR*.42*pulse|0)+','+( nG*.28|0)+','+( nB*.28|0)+',.45)';ctx.fillRect(c3*cW+2,r3*cH+2,cW-4,cH-4);}
+  /* pendant */
+  var pg=ctx.createRadialGradient(W*.5,H*.26,0,W*.5,H*.26,Math.min(W,H)*.06);pg.addColorStop(0,'rgba(255,240,200,.92)');pg.addColorStop(.14,'rgba(255,215,155,.42)');pg.addColorStop(.55,'rgba(180,100,40,.08)');pg.addColorStop(1,'transparent');ctx.fillStyle=pg;ctx.fillRect(0,0,W,H);
+  /* mouse neon glow */
+  var mg=ctx.createRadialGradient(mx,my,0,mx,my,Math.min(W,H)*.22);mg.addColorStop(0,'rgba('+(nR*.55*pulse|0)+','+nG+','+nB+',.1)');mg.addColorStop(1,'transparent');ctx.fillStyle=mg;ctx.fillRect(0,0,W,H);
+}
+
+/* ── REED ── */
+function drawReed(t,v){
+  reedBuild(v);if(!reedBg)return;
+  var sw=3,amp=11,freq=.44,nS=Math.ceil(W/sw);
+  for(var s=0;s<nS;s++){var dx=s*sw,sx=Math.max(0,Math.min(W-sw,dx+Math.sin(s*freq)*amp));ctx.drawImage(reedBg,sx,0,sw,H,dx,0,sw,H);}
+  ctx.fillStyle='rgba(255,255,255,.46)';ctx.fillRect(0,0,W,H);
+  var cr=Math.min(W,H)*.09;ctx.save();ctx.beginPath();ctx.arc(mx,my,cr,0,Math.PI*2);ctx.clip();ctx.drawImage(reedBg,0,0);ctx.fillStyle='rgba(255,255,255,.1)';ctx.fillRect(0,0,W,H);ctx.restore();
+  var ef=ctx.createRadialGradient(mx,my,cr*.4,mx,my,cr*1.4);ef.addColorStop(0,'transparent');ef.addColorStop(1,'rgba(255,255,255,.42)');ctx.fillStyle=ef;ctx.fillRect(0,0,W,H);
+}
+
+/* ── BLOOM ── */
+var BP=[
+  [[220,154,146,.56],[210,136,114,.52],[228,170,138,.52],[178,194,166,.46],[214,163,143,.5],[195,182,155,.44]],
+  [[216,133,124,.62],[200,116,104,.58],[224,154,114,.58],[166,188,160,.5],[208,143,134,.56],[190,175,148,.48]],
+  [[183,204,184,.54],[162,190,168,.5],[195,178,190,.5],[210,188,184,.48],[168,198,178,.48],[185,174,160,.44]]
+];
+function drawBloom(t,v){
+  ctx.fillStyle='#FAF7F3';ctx.fillRect(0,0,W,H);
+  BP[v].forEach(function(b,i){
+    var bx=W*(.16+i*.13+.05*Math.sin(t*.018+i*1.1)),by=H*(.24+.2*Math.sin(i*1.4+t*.013+1));
+    var g=ctx.createRadialGradient(bx,by,0,bx,by,Math.min(W,H)*(.13+i*.013));
+    g.addColorStop(0,'rgba('+b[0]+','+b[1]+','+b[2]+','+b[3]+')');g.addColorStop(.48,'rgba('+b[0]+','+b[1]+','+b[2]+','+(b[3]*.52)+')');g.addColorStop(1,'transparent');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  });
+  ctx.fillStyle='rgba(255,255,255,.08)';ctx.fillRect(0,0,W,H);
+}
+
+/* LOOP */
+function frame(ts){
+  T=ts*.001;
+  if(W&&H){
+    if(theme==='orange')drawOrange(T,variant);
+    else if(theme==='silver')drawSilver(T,variant);
+    else if(theme==='red')drawRed(T,variant);
+    else if(theme==='reed')drawReed(T,variant);
+    else drawBloom(T,variant);
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* THEME DATA */
+const TD={
+  orange:{name:'Orange',word:'ORANGE',
+    note:'heat before the eyes adjust · the body in infrared · the orange of a sauna · wipe to find the shoulder · intimacy as temperature',
+    designers:['Sauna kultur','Hammam','Infrared'],
+    vars:[
+      {eye:'Orange · Ember',head:'Heat before<br><b>the eyes adjust.</b>',lbl:'I — Ember',
+       cols:[{h:'#341408',r:'Ember'},{h:'#782C10',r:'Sienna'},{h:'#E05828',r:'Flame'},{h:'#F4D0A0',r:'Skin'}],
+       pb:[{h:'#341408',f:5},{h:'#782C10',f:3},{h:'#E05828',f:2},{h:'#F4D0A0',f:1}],
+       sw:[{h:'#341408',l:'Ember'},{h:'#782C10',l:'Sienna'},{h:'#E05828',l:'Flame'},{h:'#F4D0A0',l:'Skin'}],
+       desc:'A body in orange heat. Everything monochrome warm. Wipe the steam to find the shoulder, the neck, the curve of the back. The fog reforms in seconds.',
+       mk:{bg:'#341408',ey:'rgba(224,88,40,.55)',eT:'Orange · Ember',hc:'#F4D0A0',hd:'Wipe to<br>find the form.',bd:'Orange heat body.',cB:'#E05828',cC:'#341408',cT:'Wipe →'},
+       refs:['Sauna','Infrared body','Steam wipe']},
+      {eye:'Orange · Amber',head:'Amber heat<br><b>against the skin.</b>',lbl:'II — Amber',
+       cols:[{h:'#3C1A06',r:'Dark'},{h:'#8C4010',r:'Amber'},{h:'#D06820',r:'Warm'},{h:'#F0C890',r:'Gold'}],
+       pb:[{h:'#3C1A06',f:5},{h:'#8C4010',f:3},{h:'#D06820',f:2},{h:'#F0C890',f:1}],
+       sw:[{h:'#3C1A06',l:'Dark'},{h:'#8C4010',l:'Amber'},{h:'#D06820',l:'Warm'},{h:'#F0C890',l:'Gold'}],
+       desc:'Amber shift — golden hour in a steam room. The warmth becomes gold. The body still dark against it.',
+       mk:{bg:'#3C1A06',ey:'rgba(208,104,32,.55)',eT:'Orange · Amber',hc:'#F0C890',hd:'Gold and<br>steam.',bd:'Amber body heat.',cB:'#8C4010',cC:'#F0C890',cT:'Feel →'},
+       refs:['Amber warmth','Golden hour steam','Bathhouse']},
+      {eye:'Orange · Ember Dark',head:'Deep heat<br><b>deep dark.</b>',lbl:'III — Dark Ember',
+       cols:[{h:'#240E04',r:'Near Black'},{h:'#5A1E08',r:'Deep Ember'},{h:'#C04818',r:'Burnt'},{h:'#E8B888',r:'Pale Skin'}],
+       pb:[{h:'#240E04',f:5},{h:'#5A1E08',f:3},{h:'#C04818',f:2},{h:'#E8B888',f:1}],
+       sw:[{h:'#240E04',l:'Near Black'},{h:'#5A1E08',l:'Deep Ember'},{h:'#C04818',l:'Burnt'},{h:'#E8B888',l:'Pale Skin'}],
+       desc:'Deeper, darker. The steam is thicker. The form barely present. Maximum contrast between void and skin.',
+       mk:{bg:'#240E04',ey:'rgba(192,72,24,.55)',eT:'Orange · Dark',hc:'#E8B888',hd:'Barely<br>visible.',bd:'Deep ember dark.',cB:'#5A1E08',cC:'#E8B888',cT:'Find →'},
+       refs:['Dark ember','Low light','Deep steam']}
+    ]},
+  silver:{name:'Silver',word:'SILVER',
+    note:'the fogged shower screen · a hand pressed flat · cool and intimate · wipe to find the fingers · the body held at glass distance',
+    designers:['Le corps en question(s)','Shower glass','Cool fog'],
+    vars:[
+      {eye:'Silver · White Fog',head:'The hand<br><b>pressed flat.</b>',lbl:'I — White',
+       cols:[{h:'#F4F2F0',r:'White'},{h:'#D4D0CC',r:'Silver Fog'},{h:'#ACACAA',r:'Veil'},{h:'#1A1816',r:'Figure'}],
+       pb:[{h:'#F4F2F0',f:5,dk:true},{h:'#D4D0CC',f:3,dk:true},{h:'#ACACAA',f:2,dk:true},{h:'#1A1816',f:1}],
+       sw:[{h:'#F4F2F0',l:'White',dk:true},{h:'#D4D0CC',l:'Silver',dk:true},{h:'#ACACAA',l:'Veil',dk:true},{h:'#1A1816',l:'Figure'}],
+       desc:'Cool white fog. A figure behind. Hand pressed to the glass. Wipe to see the fingers. The fog is always returning.',
+       mk:{bg:'#F4F2F0',ey:'rgba(28,24,22,.35)',eT:'Silver · White',hc:'#1A1816',hd:'Hand pressed<br>to the glass.',bd:'Wipe the screen.',cB:'#1A1816',cC:'#F4F2F0',cT:'Reveal →'},
+       refs:['Shower glass','Hand on glass','White fog']},
+      {eye:'Silver · Warm Grey',head:'The body<br><b>held at distance.</b>',lbl:'II — Warm Grey',
+       cols:[{h:'#EEE8E2',r:'Warm White'},{h:'#C8C0B8',r:'Sandy Fog'},{h:'#989088',r:'Warm Grey'},{h:'#201814',r:'Figure'}],
+       pb:[{h:'#EEE8E2',f:5,dk:true},{h:'#C8C0B8',f:3,dk:true},{h:'#989088',f:2,dk:true},{h:'#201814',f:1}],
+       sw:[{h:'#EEE8E2',l:'Warm White',dk:true},{h:'#C8C0B8',l:'Sandy',dk:true},{h:'#989088',l:'Warm Grey',dk:true},{h:'#201814',l:'Figure'}],
+       desc:'Warmer fog — sandy and close. The figure is darker, more defined. The veil is thinner.',
+       mk:{bg:'#EEE8E2',ey:'rgba(32,24,20,.35)',eT:'Silver · Warm Grey',hc:'#201814',hd:'Veil<br>thinner.',bd:'Sandy warm fog.',cB:'#201814',cC:'#EEE8E2',cT:'Touch →'},
+       refs:['Sandy fog','Warm veil','Body at distance']},
+      {eye:'Silver · Cool Grey',head:'Cold screen<br><b>warm body.</b>',lbl:'III — Cool Grey',
+       cols:[{h:'#F0F2F4',r:'Cool White'},{h:'#CED0D4',r:'Cool Fog'},{h:'#A0A4A8',r:'Steel Veil'},{h:'#161820',r:'Figure'}],
+       pb:[{h:'#F0F2F4',f:5,dk:true},{h:'#CED0D4',f:3,dk:true},{h:'#A0A4A8',f:2,dk:true},{h:'#161820',f:1}],
+       sw:[{h:'#F0F2F4',l:'Cool White',dk:true},{h:'#CED0D4',l:'Cool Fog',dk:true},{h:'#A0A4A8',l:'Steel',dk:true},{h:'#161820',l:'Figure'}],
+       desc:'Steel blue-grey fog. The cool of glass. The figure darkest here. Maximum veil.',
+       mk:{bg:'#F0F2F4',ey:'rgba(22,24,32,.35)',eT:'Silver · Cool',hc:'#161820',hd:'Steel cool<br>glass.',bd:'Blue-grey veil.',cB:'#A0A4A8',cC:'#F0F2F4',cT:'Clear →'},
+       refs:['Steel veil','Cool glass','Blue-grey']}
+    ]},
+  red:{name:'Red Room',word:'RED ROOM',
+    note:'glass block ceiling · red neon grid · gunmetal walls · dark tile · a pendant over chrome · discotheque architecture in a powder room',
+    designers:['Jean Nouvel','Neon interior','Glass block bathroom'],
+    vars:[
+      {eye:'Red Room · Red Grid',head:'The grid<br><b>above chrome.</b>',lbl:'I — Red',
+       cols:[{h:'#040508',r:'Void'},{h:'#3A0404',r:'Deep Red'},{h:'#C81010',r:'Neon'},{h:'#9098A8',r:'Chrome'}],
+       pb:[{h:'#040508',f:5},{h:'#3A0404',f:3},{h:'#C81010',f:2},{h:'#9098A8',f:1}],
+       sw:[{h:'#040508',l:'Void'},{h:'#3A0404',l:'Deep Red'},{h:'#C81010',l:'Neon'},{h:'#9098A8',l:'Chrome'}],
+       desc:'Red neon grid ceiling, gunmetal walls, black mosaic tile. A pendant glowing at center. The powder room as discotheque. Subversive and sacred.',
+       mk:{bg:'#040508',ey:'rgba(200,16,16,.55)',eT:'Red Room · Grid',hc:'#DCE0E4',hd:'Subversive<br>and sacred.',bd:'Grid ceiling, chrome wall.',cB:'#C81010',cC:'#040508',cT:'Enter →'},
+       refs:['Glass block','Red neon','Powder room drama']},
+      {eye:'Red Room · Amber Grid',head:'Orange heat<br><b>in dark chrome.</b>',lbl:'II — Amber',
+       cols:[{h:'#060402',r:'Deep'},{h:'#3A1804',r:'Dark Amber'},{h:'#C87010',r:'Amber Neon'},{h:'#907858',r:'Brass'}],
+       pb:[{h:'#060402',f:5},{h:'#3A1804',f:3},{h:'#C87010',f:2},{h:'#907858',f:1}],
+       sw:[{h:'#060402',l:'Deep'},{h:'#3A1804',l:'Dark Amber'},{h:'#C87010',l:'Amber Neon'},{h:'#907858',l:'Brass'}],
+       desc:'Amber neon grid — the corrugated room with warm back light. A corridor you shouldn’t be in. Warm brass note in the chrome.',
+       mk:{bg:'#060402',ey:'rgba(200,112,16,.55)',eT:'Red Room · Amber',hc:'#E0C880',hd:'A corridor<br>you shouldn’t.',bd:'Amber grid warmth.',cB:'#C87010',cC:'#060402',cT:'Stay →'},
+       refs:['Amber neon','Warm corridor','Brass note']},
+      {eye:'Red Room · Blue Grid',head:'Cold fire<br><b>blue neon.</b>',lbl:'III — Blue',
+       cols:[{h:'#04040C',r:'Night'},{h:'#0A0A24',r:'Deep Blue'},{h:'#5050E8',r:'Blue Neon'},{h:'#8890A8',r:'Steel'}],
+       pb:[{h:'#04040C',f:5},{h:'#0A0A24',f:3},{h:'#5050E8',f:2},{h:'#8890A8',f:1}],
+       sw:[{h:'#04040C',l:'Night'},{h:'#0A0A24',l:'Deep Blue'},{h:'#5050E8',l:'Blue Neon'},{h:'#8890A8',l:'Steel'}],
+       desc:'Cold blue grid. Chrome becomes steel-blue. The same geometry in a midnight key. The powder room after hours.',
+       mk:{bg:'#04040C',ey:'rgba(80,80,232,.55)',eT:'Red Room · Blue',hc:'#D0D8EC',hd:'After hours<br>blue.',bd:'Blue grid midnight.',cB:'#5050E8',cC:'#04040C',cT:'Midnight →'},
+       refs:['Blue grid','Cold chrome','Midnight']}
+    ]},
+  reed:{name:'Reed',word:'REED',
+    note:'corrugated glass panel · the form behind never resolving · move close to find the subject · stool · figure · flowers · always partially between you and it',
+    designers:['Reeded glass','Herzog & de Meuron','Corrugated panel'],
+    vars:[
+      {eye:'Reed · Wood Stool',head:'The grain<br><b>through the panel.</b>',lbl:'I — Stool',
+       cols:[{h:'#E8E0D0',r:'Travertine'},{h:'#C4A880',r:'Wood'},{h:'#8A6840',r:'Grain'},{h:'#2A1A0A',r:'Deep'}],
+       pb:[{h:'#E8E0D0',f:5,dk:true},{h:'#C4A880',f:3,dk:true},{h:'#8A6840',f:2,dk:true},{h:'#2A1A0A',f:1}],
+       sw:[{h:'#E8E0D0',l:'Travertine',dk:true},{h:'#C4A880',l:'Wood',dk:true},{h:'#8A6840',l:'Grain',dk:true},{h:'#2A1A0A',l:'Deep'}],
+       desc:'The wood stool through corrugated glass. Its topographic grain multiply-distorted. Move close to see the form resolve. The panel translates object to pattern.',
+       mk:{bg:'#E8E0D0',ey:'rgba(42,26,10,.35)',eT:'Reed · Stool',hc:'#2A1A0A',hd:'Grain through<br>glass.',bd:'Move close to resolve.',cB:'#8A6840',cC:'#E8E0D0',cT:'Reveal →'},
+       refs:['Reeded glass','Wood stool','Topographic grain']},
+      {eye:'Reed · Figure',head:'Present but<br><b>unresolved.</b>',lbl:'II — Figure',
+       cols:[{h:'#E2D8CC',r:'Warm White'},{h:'#B8A898',r:'Warm Grey'},{h:'#8A7868',r:'Taupe'},{h:'#3C2C20',r:'Dark'}],
+       pb:[{h:'#E2D8CC',f:5,dk:true},{h:'#B8A898',f:3,dk:true},{h:'#8A7868',f:2,dk:true},{h:'#3C2C20',f:1}],
+       sw:[{h:'#E2D8CC',l:'Warm White',dk:true},{h:'#B8A898',l:'Warm Grey',dk:true},{h:'#8A7868',l:'Taupe',dk:true},{h:'#3C2C20',l:'Dark'}],
+       desc:'A figure behind the reed panel. Arm raised. The body held at glass distance. Move close to find the raised arm, the shoulder.',
+       mk:{bg:'#E2D8CC',ey:'rgba(60,44,32,.35)',eT:'Reed · Figure',hc:'#3C2C20',hd:'Arm raised<br>behind glass.',bd:'Move to find it.',cB:'#3C2C20',cC:'#E2D8CC',cT:'Approach →'},
+       refs:['Figure behind glass','Raised arm','Taupe warmth']},
+      {eye:'Reed · Bloom',head:'Color through<br><b>the panel.</b>',lbl:'III — Bloom',
+       cols:[{h:'#EDE8DC',r:'Cream'},{h:'#E0B0A8',r:'Petal'},{h:'#C07870',r:'Rose'},{h:'#486038',r:'Stem'}],
+       pb:[{h:'#EDE8DC',f:5,dk:true},{h:'#E0B0A8',f:3,dk:true},{h:'#C07870',f:2,dk:true},{h:'#486038',f:1}],
+       sw:[{h:'#EDE8DC',l:'Cream',dk:true},{h:'#E0B0A8',l:'Petal',dk:true},{h:'#C07870',l:'Rose',dk:true},{h:'#486038',l:'Stem'}],
+       desc:'Flowers through frosted glass. Pinks and corals bleeding into cream. Move close — color arrives before form.',
+       mk:{bg:'#EDE8DC',ey:'rgba(72,96,56,.35)',eT:'Reed · Bloom',hc:'#2A1810',hd:'Color before<br>form.',bd:'Flowers behind glass.',cB:'#C07870',cC:'#EDE8DC',cT:'Uncover →'},
+       refs:['Frosted glass','Flowers behind','Color diffused']}
+    ]},
+  bloom:{name:'Bloom',word:'BLOOM',
+    note:'life not quite in focus · petals at the edge of resolution · the bouquet in the powder room · color as presence · the moment before the petals open',
+    designers:['Soft focus','Frosted glass','Impressionist bouquet'],
+    vars:[
+      {eye:'Bloom · Pale Pink',head:'Life not quite<br><b>in focus.</b>',lbl:'I — Pale Pink',
+       cols:[{h:'#FCF8F4',r:'Cream'},{h:'#E4B8B0',r:'Petal'},{h:'#C89090',r:'Rose'},{h:'#A8A890',r:'Sage Dust'}],
+       pb:[{h:'#FCF8F4',f:5,dk:true},{h:'#E4B8B0',f:3,dk:true},{h:'#C89090',f:2,dk:true},{h:'#A8A890',f:1,dk:true}],
+       sw:[{h:'#FCF8F4',l:'Cream',dk:true},{h:'#E4B8B0',l:'Petal',dk:true},{h:'#C89090',l:'Rose',dk:true},{h:'#A8A890',l:'Sage',dk:true}],
+       desc:'Pale petals at the edge of resolution. The bouquet in the powder room — intimate, soft. Color as presence.',
+       mk:{bg:'#FCF8F4',ey:'rgba(42,28,28,.3)',eT:'Bloom · Pale',hc:'#2A1C1C',hd:'Almost<br>in focus.',bd:'Petal at the edge.',cB:'#C89090',cC:'#FCF8F4',cT:'Reach →'},
+       refs:['Pale petals','Cream ground','Focus edge']},
+      {eye:'Bloom · Warm Rose',head:'Closer to<br><b>the glass.</b>',lbl:'II — Rose',
+       cols:[{h:'#FAF4F0',r:'Warm Cream'},{h:'#DC9888',r:'Coral Rose'},{h:'#C07868',r:'Deep Rose'},{h:'#98A888',r:'Sage'}],
+       pb:[{h:'#FAF4F0',f:5,dk:true},{h:'#DC9888',f:3,dk:true},{h:'#C07868',f:2,dk:true},{h:'#98A888',f:1,dk:true}],
+       sw:[{h:'#FAF4F0',l:'Warm Cream',dk:true},{h:'#DC9888',l:'Coral Rose',dk:true},{h:'#C07868',l:'Deep Rose',dk:true},{h:'#98A888',l:'Sage'}],
+       desc:'More saturation. Coral and rose with a note of sage. A summer arrangement, warm ground.',
+       mk:{bg:'#FAF4F0',ey:'rgba(42,24,24,.3)',eT:'Bloom · Rose',hc:'#2A1010',hd:'Color<br>presses forward.',bd:'Coral and sage.',cB:'#C07868',cC:'#FAF4F0',cT:'Sense →'},
+       refs:['Coral rose','Sage note','Warm ground']},
+      {eye:'Bloom · Sage',head:'Unexpected<br><b>in the room.</b>',lbl:'III — Sage',
+       cols:[{h:'#F8F8F4',r:'Pale'},{h:'#B8C8B8',r:'Sage'},{h:'#C8B0C0',r:'Mauve'},{h:'#A09088',r:'Stone'}],
+       pb:[{h:'#F8F8F4',f:5,dk:true},{h:'#B8C8B8',f:3,dk:true},{h:'#C8B0C0',f:2,dk:true},{h:'#A09088',f:1,dk:true}],
+       sw:[{h:'#F8F8F4',l:'Pale',dk:true},{h:'#B8C8B8',l:'Sage',dk:true},{h:'#C8B0C0',l:'Mauve',dk:true},{h:'#A09088',l:'Stone',dk:true}],
+       desc:'Sage and mauve. Cool, calming, unexpected. The moment just before the petals open.',
+       mk:{bg:'#F8F8F4',ey:'rgba(40,36,32,.3)',eT:'Bloom · Sage',hc:'#282422',hd:'Just before<br>it opens.',bd:'Sage and mauve.',cB:'#B8C8B8',cC:'#282422',cT:'Wait →'},
+       refs:['Sage green','Dusty mauve','Before bloom']}
+    ]}
+};
+
+/* RENDER */
+const LBG=new Set(['#F4F2F0','#EEE8E2','#F0F2F4','#E8E0D0','#E2D8CC','#EDE8DC','#FCF8F4','#FAF4F0','#F8F8F4']);
+function rL(t,v){const D=TD[t],V=D.vars[v];document.getElementById('lf').innerHTML='<div><div class="wd">'+D.word+'</div><div class="nm">'+D.name+'</div><div class="nt">'+D.note+'</div></div><div><div class="lbl" style="margin-bottom:7px;">Variant '+['I','II','III'][v]+' — '+V.lbl+'</div>'+V.cols.map(c=>'<div class="rw"><div class="ch" style="background:'+c.h+';"></div><div class="hx">'+c.h+'</div><div class="ro">'+c.r+'</div></div>').join('')+'</div><div><div class="lbl" style="margin-bottom:5px;">Proportion</div><div class="pb">'+V.pb.map(p=>'<div style="flex:'+p.f+';background:'+p.h+';border:1px solid rgba(128,128,128,.06);"></div>').join('')+'</div></div><div class="rf">'+D.designers.map(r=>'<span class="ri">'+r+'</span>').join('')+V.refs.map(r=>'<span class="ri">'+r+'</span>').join('')+'</div>';hookH();}
+function rR(t,v){const V=TD[t].vars[v],M=V.mk,il=LBG.has(M.bg);document.getElementById('rg').innerHTML='<div><div class="lbl" style="margin-bottom:7px;">'+V.eye+'</div><div class="mh">'+V.lbl+'</div></div><div class="ss">'+V.sw.map(s=>'<div class="sw" style="background:'+s.h+';"><div class="sl'+(s.dk?' dk':'')+'">'+(s.l||'')+'</div></div>').join('')+'</div><div class="mb">'+V.desc+'</div><div class="mk" style="background:'+M.bg+';border:1px solid rgba('+(il?'0,0,0':'255,255,255')+',.06);"><div class="me" style="color:'+M.ey+';">'+M.eT+'</div><div class="mH" style="font-size:22px;color:'+M.hc+';">'+M.hd+'</div><div class="mB" style="color:'+M.hc+';opacity:.7;">'+M.bd+'</div><div class="mC" style="background:'+M.cB+';color:'+M.cC+';">'+M.cT+'</div></div>';hookH();}
+function rML(t,v){const V=TD[t].vars[v];document.getElementById('mle').textContent=V.eye;document.getElementById('mlh').innerHTML=V.head;}
+function hookH(){document.querySelectorAll('.mk,.sw,.ri,.mC,.tab,.vb').forEach(addHov);}
+function sT(t){theme=t;variant=0;document.body.className=t;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));document.querySelectorAll('.vb').forEach(b=>b.classList.toggle('on',b.dataset.v==='0'));fogKey='';reedV2=-1;rL(t,0);rR(t,0);rML(t,0);}
+function sV(v){variant=v;document.querySelectorAll('.vb').forEach(b=>b.classList.toggle('on',+b.dataset.v===v));fogKey='';reedV2=-1;rL(theme,v);rR(theme,v);rML(theme,v);}
+hookH();rL('orange',0);rR('orange',0);rML('orange',0);
+</script>
+</body>
+</html>

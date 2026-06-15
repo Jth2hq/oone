@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Material Palette — oone</title>
+<link rel="stylesheet" href="https://use.typekit.net/ifo7ejx.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;cursor:none;}
+#cur{position:fixed;pointer-events:none;z-index:9999;width:11px;height:11px;border-radius:50%;transform:translate(-50%,-50%);background:#fff;mix-blend-mode:difference;transition:width .18s,height .18s;}
+#cur.lg{width:44px;height:44px;}
+#bg{position:fixed;inset:0;z-index:0;width:100%;height:100%;}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.035;mix-blend-mode:overlay;}
+#ui{position:fixed;inset:0;z-index:10;pointer-events:none;display:grid;
+  grid-template-rows:46px 1fr;grid-template-columns:218px 1fr 258px;
+  grid-template-areas:"tp tp tp" "lf md rg";}
+#ui>*{pointer-events:all;}
+#tp{grid-area:tp;display:flex;align-items:center;justify-content:space-between;
+  padding:0 26px;border-bottom:1px solid var(--ed);transition:background .5s,border-color .5s;
+  backdrop-filter:var(--blr,none);-webkit-backdrop-filter:var(--blr,none);}
+.logo{font-family:'redaction',serif;font-size:16px;color:var(--ink);letter-spacing:-.01em;}
+.tabs{display:flex;}
+.tab{font-family:'bitcount-mono-double','bitcount-mono','IBM Plex Mono',monospace;font-size:7px;
+  letter-spacing:.2em;text-transform:uppercase;padding:0 20px;height:46px;line-height:46px;
+  border:none;border-left:1px solid var(--ed);background:transparent;color:var(--i2);
+  cursor:none;transition:color .3s,background .3s;position:relative;}
+.tab::after{content:'';position:absolute;bottom:0;left:0;right:100%;height:2px;background:var(--ac);transition:right .4s cubic-bezier(.16,1,.3,1);}
+.tab.on,.tab:hover{color:var(--ink);}.tab.on{background:var(--fn);}
+.tab.on::after,.tab:hover::after{right:0;}
+.vr{display:flex;gap:1px;}
+.vb{font-family:'bitcount-mono-double','bitcount-mono','IBM Plex Mono',monospace;font-size:9px;
+  letter-spacing:.1em;padding:0 14px;height:28px;line-height:26px;
+  border:1px solid var(--ed);border-left:none;background:transparent;color:var(--i2);cursor:none;transition:color .2s,background .2s;}
+.vb:first-child{border-left:1px solid var(--ed);}
+.vb.on,.vb:hover{color:var(--ink);background:var(--fn);}
+.pnl{padding:20px 18px;overflow-y:auto;height:100%;display:flex;flex-direction:column;gap:15px;
+  transition:background .5s,border-color .5s;backdrop-filter:var(--pbl,none);-webkit-backdrop-filter:var(--pbl,none);}
+.pnl::-webkit-scrollbar{width:0;}
+#lf{grid-area:lf;border-right:1px solid var(--ed);}
+#rg{grid-area:rg;border-left:1px solid var(--ed);}
+#md{grid-area:md;pointer-events:none;position:relative;}
+.lbl{font-family:'bitcount-mono-double','bitcount-mono','IBM Plex Mono',monospace;font-size:6.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--i2);}
+.nm{font-family:'redaction',serif;font-size:clamp(40px,4vw,65px);line-height:.8;letter-spacing:-.02em;color:var(--ac);}
+.wd{font-family:'bebas-neue-pro',sans-serif;font-size:8.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--i2);margin-top:4px;}
+.nt{font-family:'libre-baskerville',serif;font-style:italic;font-size:10px;line-height:1.9;color:var(--i2);border-top:1px solid var(--ed);padding-top:10px;}
+.rw{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--ed);}
+.ch{width:13px;height:13px;border-radius:2px;flex-shrink:0;}
+.hx{font-family:'bitcount-mono-double','bitcount-mono','IBM Plex Mono',monospace;font-size:8px;letter-spacing:.06em;color:var(--ink);opacity:.55;}
+.ro{font-family:'bitcount-mono-double','bitcount-mono','IBM Plex Mono',monospace;font-size:6px;letter-spacing:.12em;text-transform:uppercase;color:var(--i2);margin-left:auto;}
+.ss{display:flex;height:42px;gap:1px;}
+.sw{flex:1;position:relative;cursor:none;transition:flex .42s cubic-bezier(.16,1,.3,1);}
+.sw:hover{flex:5;}.sw:hover .sl{opacity:1;}
+.sl{position:absolute;bottom:4px;left:5px;font-family:'bitcount-mono-double','bitcount-mono','IBM Plex Mono',monospace;font-size:6px;letter-spacing:.08em;color:rgba(255,255,255,.65);opacity:0;transition:opacity .2s;white-space:nowrap;}
+.sl.dk{color:rgba(0,0,0,.55);}
+.pb{display:flex;gap:1px;height:3px;}
+.rf{display:flex;flex-wrap:wrap;gap:3px;margin-top:auto;}
+.ri{font-family:'bitcount-mono-double','bitcount-mono','IBM Plex Mono',monospace;font-size:6px;letter-spacing:.12em;text-transform:uppercase;padding:3px 7px;border:1px solid var(--ed);color:var(--i2);}
+.mh{font-family:'bebas-neue-pro',sans-serif;font-size:15px;letter-spacing:.06em;color:var(--ink);}
+.mb{font-family:'libre-baskerville',serif;font-style:italic;font-size:10px;line-height:1.85;color:var(--i2);}
+.mk{padding:14px;cursor:none;transition:transform .35s cubic-bezier(.16,1,.3,1);}
+.mk:hover{transform:scale(1.013) rotate(-.35deg);}
+.me{font-family:'bitcount-mono-double','bitcount-mono','IBM Plex Mono',monospace;font-size:6.5px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:4px;}
+.mH{font-family:'redaction',serif;line-height:.86;letter-spacing:-.02em;}
+.mB{font-family:'libre-baskerville',serif;font-style:italic;font-size:8.5px;line-height:1.8;margin-top:4px;}
+.mC{display:inline-block;font-family:'bebas-neue-pro',sans-serif;font-size:9px;letter-spacing:.14em;padding:5px 10px;margin-top:6px;cursor:none;}
+#ml{position:absolute;bottom:26px;left:26px;pointer-events:none;}
+.mle{font-family:'bitcount-mono-double','bitcount-mono','IBM Plex Mono',monospace;font-size:7px;letter-spacing:.24em;text-transform:uppercase;color:var(--i2);margin-bottom:5px;}
+.mlh{font-family:'redaction',serif;font-size:clamp(48px,5.8vw,86px);line-height:.82;letter-spacing:-.025em;color:var(--ink);}
+.mlh b{font-weight:400;color:var(--ac);}
+/* Theme CSS vars */
+body{--ac:#8899A0;--ink:#EDE8E2;--i2:rgba(237,232,226,.28);--fn:rgba(255,255,255,.04);--ed:rgba(136,153,160,.15);--pbl:none;--blr:none;}
+body.wood{--ac:#7A9090;--ink:#E8E3DC;--i2:rgba(232,227,220,.28);--ed:rgba(122,144,144,.15);}
+body.acrylic{--ac:#E068A8;--ink:#F8F0FF;--i2:rgba(248,240,255,.28);--ed:rgba(220,80,168,.18);--pbl:blur(18px) saturate(1.3);--blr:blur(10px);}
+body.glycerin{--ac:#6A7E8E;--ink:#F4F0EC;--i2:rgba(244,240,236,.28);--ed:rgba(106,126,142,.2);}
+body.concrete{--ac:#C84828;--ink:#1E1A16;--i2:rgba(30,26,22,.38);--ed:rgba(30,26,22,.14);}
+body.wood #lf,body.wood #rg,body.wood #tp{background:rgba(10,9,7,.93);}
+body.acrylic #lf,body.acrylic #rg,body.acrylic #tp{background:rgba(14,6,24,.2);}
+body.glycerin #lf,body.glycerin #rg,body.glycerin #tp{background:rgba(2,3,6,.96);}
+body.concrete #lf,body.concrete #rg,body.concrete #tp{background:rgba(224,219,207,.92);}
+</style>
+</head>
+<body class="wood">
+<div id="cur"></div>
+<canvas id="bg"></canvas>
+<div id="ui">
+  <header id="tp">
+    <div class="logo">oone · material</div>
+    <div class="tabs">
+      <button class="tab on" data-t="wood" onclick="setTheme('wood')">Wood</button>
+      <button class="tab" data-t="acrylic" onclick="setTheme('acrylic')">Acrylic</button>
+      <button class="tab" data-t="glycerin" onclick="setTheme('glycerin')">Glycerin</button>
+      <button class="tab" data-t="concrete" onclick="setTheme('concrete')">Concrete</button>
+    </div>
+    <div class="vr">
+      <button class="vb on" data-v="0" onclick="setVar(0)">I</button>
+      <button class="vb" data-v="1" onclick="setVar(1)">II</button>
+      <button class="vb" data-v="2" onclick="setVar(2)">III</button>
+    </div>
+  </header>
+  <aside id="lf" class="pnl"></aside>
+  <div id="md"><div id="ml"><div class="mle" id="mle"></div><div class="mlh" id="mlh"></div></div></div>
+  <aside id="rg" class="pnl"></aside>
+</div>
+
+<script>
+/* ── UTILS ── */
+const rgb=c=>`rgb(${c[0]|0},${c[1]|0},${c[2]|0})`;
+const rgba=(c,a)=>`rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;
+const lerp=(a,b,t)=>a+(b-a)*Math.max(0,Math.min(1,t));
+const lrp=(a,b,t)=>[lerp(a[0],b[0],t),lerp(a[1],b[1],t),lerp(a[2],b[2],t)];
+const hsh=n=>{let x=Math.sin(n*127.1)*43758.5453;return x-Math.floor(x);};
+
+/* ── CANVAS ── */
+const canvas=document.getElementById('bg');
+const ctx=canvas.getContext('2d');
+let W=0,H=0,needsInit=true;
+new ResizeObserver(()=>{W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;needsInit=true;}).observe(document.body);
+
+/* ── CURSOR ── */
+const cur=document.getElementById('cur');
+let mx=600,my=400,cx=600,cy=400;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function lc(){cx+=(mx-cx)*.14;cy+=(my-cy)*.14;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(lc);})();
+const addHov=el=>{el.addEventListener('mouseenter',()=>cur.classList.add('lg'));el.addEventListener('mouseleave',()=>cur.classList.remove('lg'));};
+
+/* ── STATE ── */
+let theme='wood',variant=0,T=0,fN=0;
+
+/* ── GRAIN ── */
+let grOff=null,grCtx=null;
+function initGrain(){grOff=document.createElement('canvas');grOff.width=512;grOff.height=512;grCtx=grOff.getContext('2d');reGrain();}
+function reGrain(){if(!grCtx)return;const id=grCtx.createImageData(512,512);const d=id.data;for(let i=0;i<d.length;i+=4){const g=Math.random()*255|0;d[i]=d[i+1]=d[i+2]=g;d[i+3]=255;}grCtx.putImageData(id,0,0);}
+function overlayGrain(op,blend){if(!grOff||!W)return;ctx.save();ctx.globalAlpha=op;ctx.globalCompositeOperation=blend||'overlay';ctx.drawImage(grOff,0,0,512,512,0,0,W,H);ctx.restore();}
+
+/* ── BUBBLES (glycerin) ── */
+let bubbles=[];
+function initBubbles(){
+  if(!W)return;
+  bubbles=Array.from({length:7},(_,i)=>({
+    x:W*(0.12+(i%3)*0.3+hsh(i*10)*0.12),
+    y:H*(0.15+Math.floor(i/3)*0.42+hsh(i*10+1)*0.18),
+    r:Math.min(W,H)*(0.07+hsh(i*10+2)*0.11),
+    vx:(hsh(i*10+3)-.5)*.22,vy:(hsh(i*10+4)-.5)*.18,
+    ph:hsh(i*10+5)*Math.PI*2
+  }));
+}
+
+/* ── PRE-COMPUTED CONCRETE SHAPES ── */
+// Le Corbusier rectangular masses + ribbon windows (fenêtre en longueur)
+const LECORB=(function(){
+  const r=[];
+  // Ribbon windows — horizontal bands
+  [[.06,.20,.72,.055],[.06,.46,.60,.052],[.12,.72,.66,.058]].forEach(([x,y,w,h],i)=>{
+    r.push({x,y,w,h,ci:i,z:.04+i*.07,ribbon:true});
+  });
+  // Block masses
+  for(let i=0;i<8;i++){
+    r.push({x:hsh(i*30+200)*.78+.04,y:hsh(i*30+201)*.78+.04,
+      w:.09+hsh(i*30+202)*.2,h:.09+hsh(i*30+203)*.22,
+      ci:(i+3)%6,z:hsh(i*30+204),ribbon:false});
+  }
+  return r.sort((a,b)=>a.z-b.z);
+})();
+
+// Roberto Burle Marx biomorphic garden forms — smooth bezier, seeded
+const BURLE=(function(){
+  const sh=[];
+  for(let i=0;i<7;i++){
+    const np=6+Math.floor(hsh(i*50+10)*3);
+    const ccx=.1+hsh(i*50)*.8,ccy=.12+hsh(i*50+1)*.78;
+    const br=.09+hsh(i*50+2)*0.14;
+    const pts=Array.from({length:np},(_,j)=>{
+      const ang=j/np*Math.PI*2+hsh(i*50+j+3)*.9;
+      const rr=br*(.5+hsh(i*50+j+20)*.5);
+      return{x:ccx+Math.cos(ang)*rr,y:ccy+Math.sin(ang)*rr};
+    });
+    sh.push({pts,ci:i%3,z:hsh(i*50+40),op:.68+hsh(i*50+41)*.2});
+  }
+  return sh.sort((a,b)=>a.z-b.z);
+})();
+
+function drawBio(pts,col,op){
+  const n=pts.length;if(n<3)return;
+  const mid=(a,b)=>({x:(a.x+b.x)/2,y:(a.y+b.y)/2});
+  const s=mid(pts[n-1],pts[0]);
+  ctx.beginPath();ctx.moveTo(s.x*W,s.y*H);
+  for(let i=0;i<n;i++){const c2=pts[i],nx=pts[(i+1)%n],m=mid(c2,nx);ctx.quadraticCurveTo(c2.x*W,c2.y*H,m.x*W,m.y*H);}
+  ctx.closePath();ctx.globalAlpha=op;ctx.fillStyle=col;ctx.fill();ctx.globalAlpha=1;
+}
+
+/* ══════════════════════════════════════
+   1. WOOD — MOIRÉ
+   soundwaves · topography · earthworks · Smithson/Vasarely
+══════════════════════════════════════ */
+const WPALS=[
+  {bg:[10,9,7],A:[56,130,140],B:[190,74,58],C:[208,200,188],D:[18,16,13]},
+  {bg:[9,11,16],A:[38,98,162],B:[188,98,58],C:[204,196,184],D:[12,11,9]},
+  {bg:[10,13,10],A:[76,138,118],B:[176,88,88],C:[212,205,195],D:[14,13,11]}
+];
+function wCol(P,p){
+  const cols=[P.A,P.B,P.C,P.D];
+  const seg=Math.floor(((p%1)+1)%1*4)%4;
+  const f=(((p%1)+1)%1*4)%1;
+  return lrp(cols[seg],cols[(seg+1)%4],f);
+}
+function drawMoire(t,v){
+  const P=WPALS[v];
+  ctx.fillStyle=rgb(P.bg);ctx.fillRect(0,0,W,H);
+  const s=4.0,wA=5;
+  const mph=(mx/W-.5)*Math.PI*.6;
+  const n1=Math.ceil(H/s)+4;
+  for(let i=0;i<n1;i++){
+    const y0=(i*s+(t*55)%s-s*2);
+    const p=((i/n1+t*.038+mph*.08)%1+1)%1;
+    const c=wCol(P,p);
+    ctx.beginPath();
+    const st=48;
+    for(let j=0;j<=st;j++){
+      const x=j/st*W;
+      const dy=Math.sin(x*.019+y0*.011+t*.22+mph)*wA+Math.sin(x*.034-y0*.007+t*.14)*1.8;
+      j===0?ctx.moveTo(x,y0+dy):ctx.lineTo(x,y0+dy);
+    }
+    ctx.strokeStyle=rgba(c,.72);ctx.lineWidth=1.55;ctx.stroke();
+  }
+  const ang=0.031+Math.sin(t*.048)*.006+(mx/W-.5)*.018;
+  ctx.save();
+  ctx.translate(W*.5,H*.5);ctx.rotate(ang);
+  const Dl=Math.sqrt(W*W+H*H);
+  const s2=s*1.085;const n2=Math.ceil(Dl/s2)+4;
+  for(let i=0;i<n2;i++){
+    const y0=(-Dl*.5+i*s2-(t*42)%s2);
+    const p2=((i/n2+t*.026)%1+1)%1;
+    const c2=wCol(P,(p2+.3)%1);
+    ctx.beginPath();ctx.moveTo(-Dl,y0);ctx.lineTo(Dl,y0);
+    ctx.strokeStyle=rgba(c2,.38);ctx.lineWidth=.9;ctx.stroke();
+  }
+  ctx.restore();
+}
+
+/* ══════════════════════════════════════
+   2. ACRYLIC — TURRELL GANZFELD
+   no edge · atmospheric light · colored room · soft bloom
+══════════════════════════════════════ */
+const GPANZ=[
+  {bg:[10,5,12],c1:[225,105,138],c2:[175,72,215],c3:[118,72,192]}, // Breathing Light — warm pink
+  {bg:[7,7,20], c1:[235,138,72],c2:[55,78,218],c3:[95,55,175]},    // Skyspace — amber/blue
+  {bg:[5,12,18],c1:[72,178,198],c2:[95,52,200],c3:[195,112,55]}    // Roden Crater — sky/horizon
+];
+function drawGanzfeld(t,v){
+  const P=GPANZ[v];
+  ctx.fillStyle=rgb(P.bg);ctx.fillRect(0,0,W,H);
+  ctx.globalCompositeOperation='screen';
+  // Primary bloom — breathes slowly, centered
+  const breath=Math.sin(t*.075)*.08+1;
+  const bcx=W*.5+Math.sin(t*.038)*W*.05,bcy=H*.5+Math.cos(t*.031)*H*.042;
+  const r1=Math.min(W,H)*.68*breath;
+  const g1=ctx.createRadialGradient(bcx,bcy,0,bcx,bcy,r1);
+  g1.addColorStop(0,rgba(P.c1,.75));g1.addColorStop(.44,rgba(P.c1,.32));g1.addColorStop(1,'transparent');
+  ctx.fillStyle=g1;ctx.fillRect(0,0,W,H);
+  // Secondary bloom — offset, second color
+  const bcx2=W*(.5+Math.cos(t*.048)*.13),bcy2=H*(.44+Math.sin(t*.038)*.1);
+  const r2=Math.min(W,H)*.54;
+  const g2=ctx.createRadialGradient(bcx2,bcy2,0,bcx2,bcy2,r2);
+  g2.addColorStop(0,rgba(P.c2,.68));g2.addColorStop(.5,rgba(P.c2,.22));g2.addColorStop(1,'transparent');
+  ctx.fillStyle=g2;ctx.fillRect(0,0,W,H);
+  // Tertiary — low, wide, third color
+  const bcx3=W*(.38+Math.sin(t*.065)*.12),bcy3=H*.62;
+  const r3=Math.min(W,H)*.44;
+  const g3=ctx.createRadialGradient(bcx3,bcy3,0,bcx3,bcy3,r3);
+  g3.addColorStop(0,rgba(P.c3,.48));g3.addColorStop(1,'transparent');
+  ctx.fillStyle=g3;ctx.fillRect(0,0,W,H);
+  // Mouse bloom — very subtle
+  const mg=ctx.createRadialGradient(mx,my,0,mx,my,Math.min(W,H)*.3);
+  mg.addColorStop(0,rgba(P.c1,.2));mg.addColorStop(1,'transparent');
+  ctx.fillStyle=mg;ctx.fillRect(0,0,W,H);
+  ctx.globalCompositeOperation='source-over';
+  // Vignette — removes all edges, deepens the field
+  const vg=ctx.createRadialGradient(W*.5,H*.5,Math.min(W,H)*.28,W*.5,H*.5,Math.min(W,H)*.92);
+  vg.addColorStop(0,'transparent');vg.addColorStop(1,rgba(P.bg,.68));
+  ctx.fillStyle=vg;ctx.fillRect(0,0,W,H);
+}
+
+/* ══════════════════════════════════════
+   3. GLYCERIN — SOAP BUBBLE / ELIASSON
+   thin film · silver · iridescent edge · heavy film grain
+══════════════════════════════════════ */
+const GPALS=[
+  {bg:[3,4,6], C1:[62,78,92],C2:[82,92,78],C3:[78,78,98]},   // cool silver
+  {bg:[4,4,9], C1:[78,82,108],C2:[92,78,102],C3:[68,88,98]}, // platinum
+  {bg:[5,3,7], C1:[58,98,108],C2:[88,108,92],C3:[78,82,112]} // ice
+];
+function drawSphere(bx,by,br,t,P,idx){
+  ctx.save();
+  ctx.beginPath();ctx.arc(bx,by,br,0,Math.PI*2);ctx.clip();
+  // Glassy dark shell — not metal, transparent
+  const g1=ctx.createRadialGradient(bx+br*.1,by-br*.12,0,bx,by,br);
+  g1.addColorStop(0,rgba([75,88,100],.22));
+  g1.addColorStop(.4,rgba([35,45,58],.42));
+  g1.addColorStop(.82,rgba([14,18,26],.72));
+  g1.addColorStop(1,rgba([3,5,9],.98));
+  ctx.fillStyle=g1;ctx.fillRect(bx-br,by-br,br*2,br*2);
+  // Thin film iridescence — edge only, low saturation (soap, not metal)
+  const fh=((t*.07+idx*.65)%1*360+idx*55)%360;
+  const g2=ctx.createRadialGradient(bx,by,br*.68,bx,by,br);
+  g2.addColorStop(0,'transparent');
+  g2.addColorStop(.62,`hsla(${fh},42%,60%,.09)`);
+  g2.addColorStop(.82,`hsla(${(fh+68)%360},48%,66%,.16)`);
+  g2.addColorStop(1,`hsla(${(fh+136)%360},38%,56%,.07)`);
+  ctx.fillStyle=g2;ctx.fillRect(bx-br,by-br,br*2,br*2);
+  // Primary specular — crisp white, mouse-reactive (soap bubble has sharp highlight)
+  const sxO=(mx/W-bx/W)*br*.52,syO=(my/H-by/H)*br*.52;
+  const sx=bx-br*.3+sxO*.26,sy=by-br*.38+syO*.26;
+  const g3=ctx.createRadialGradient(sx,sy,0,sx,sy,br*.36);
+  g3.addColorStop(0,'rgba(255,255,255,.98)');g3.addColorStop(.18,'rgba(255,255,255,.65)');
+  g3.addColorStop(.55,'rgba(255,255,255,.12)');g3.addColorStop(1,'transparent');
+  ctx.fillStyle=g3;ctx.fillRect(bx-br,by-br,br*2,br*2);
+  // Secondary specular (bottom)
+  const g4=ctx.createRadialGradient(bx+br*.26,by+br*.36,0,bx+br*.26,by+br*.36,br*.16);
+  g4.addColorStop(0,'rgba(255,255,255,.28)');g4.addColorStop(1,'transparent');
+  ctx.fillStyle=g4;ctx.fillRect(bx-br,by-br,br*2,br*2);
+  ctx.restore();
+}
+function drawGlycerin(t,v){
+  const P=GPALS[v];
+  ctx.fillStyle=rgb(P.bg);ctx.fillRect(0,0,W,H);
+  if(!bubbles.length)initBubbles();
+  // Subtle ambient glow around each bubble
+  bubbles.forEach((b,i)=>{
+    const gA=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r*1.4);
+    gA.addColorStop(0,rgba(i%2===0?P.C1:P.C2,.05));gA.addColorStop(1,'transparent');
+    ctx.fillStyle=gA;ctx.fillRect(0,0,W,H);
+  });
+  // Update physics + draw
+  bubbles.forEach((b,i)=>{
+    b.x+=b.vx;b.y+=b.vy;
+    if(b.x-b.r<0||b.x+b.r>W)b.vx*=-1;if(b.y-b.r<0||b.y+b.r>H)b.vy*=-1;
+    const dx=b.x-mx,dy=b.y-my,d=Math.sqrt(dx*dx+dy*dy)||1;
+    if(d<b.r*2.5){b.vx+=dx/d*.32;b.vy+=dy/d*.32;}
+    b.vx+=Math.sin(t*.052+b.ph)*.022;b.vy+=Math.cos(t*.042+b.ph+1)*.018;
+    b.vx*=.968;b.vy*=.968;
+  });
+  const sorted=[...bubbles].sort((a,bv)=>bv.r-a.r);
+  sorted.forEach((b,i)=>drawSphere(b.x,b.y,b.r,t+b.ph,P,i));
+  // Heavy film grain — the key photographic quality
+  overlayGrain(.12,'overlay');
+  overlayGrain(.06,'multiply');
+}
+
+/* ══════════════════════════════════════
+   4. CONCRETE — LE CORBUSIER + ROBERTO BURLE MARX
+   polychromie blocks · biomorphic garden plan · béton aggregate
+══════════════════════════════════════ */
+const ARCPALS=[
+  // V0: Natural palette — ochre/slate, quieter Corbusier
+  {bg:'#D6D1C7',B:['#BDB08A','#6A7A92','#C84828','#2E4A7A','#1E1A16','#EEE8DC'],bio:['#7A9058','#A07048']},
+  // V1: Full polychromie — red dynamic, blue dynamic, ochre, green
+  {bg:'#D0CBC1',B:['#D83820','#2448A0','#C09828','#2A5828','#1A1816','#EEE8D8'],bio:['#D83820','#2A9048']},
+  // V2: Burle Marx tropical — cobalt, coral, viridian
+  {bg:'#DCD7CD',B:['#B83028','#1848A0','#C0A218','#206830','#782828','#EEE8D0'],bio:['#3A9858','#C04020']}
+];
+function drawArchitectural(t,v){
+  const P=ARCPALS[v];
+  ctx.fillStyle=P.bg;ctx.fillRect(0,0,W,H);
+  // Le Corbusier rectangular grid masses
+  LECORB.forEach(r=>{
+    ctx.save();
+    ctx.shadowColor='rgba(0,0,0,.18)';ctx.shadowBlur=4;ctx.shadowOffsetY=2;
+    ctx.fillStyle=P.B[r.ci%P.B.length];
+    ctx.fillRect(r.x*W,r.y*H,r.w*W,r.h*H);
+    ctx.shadowColor='transparent';ctx.shadowBlur=0;
+    if(r.ribbon){// fenêtre en longueur — top highlight
+      ctx.fillStyle='rgba(255,255,255,.22)';ctx.fillRect(r.x*W,r.y*H,r.w*W,2);
+    }
+    ctx.restore();
+  });
+  // Roberto Burle Marx biomorphic garden forms
+  BURLE.forEach(s=>{drawBio(s.pts,P.bio[s.ci%P.bio.length],s.op);});
+  // Thin Le Corbusier modulor grid
+  const mu=Math.min(W,H)/11;
+  ctx.strokeStyle='rgba(24,20,16,.055)';ctx.lineWidth=.4;
+  for(let x2=mu;x2<W;x2+=mu){ctx.beginPath();ctx.moveTo(x2,0);ctx.lineTo(x2,H);ctx.stroke();}
+  for(let y2=mu;y2<H;y2+=mu){ctx.beginPath();ctx.moveTo(0,y2);ctx.lineTo(W,y2);ctx.stroke();}
+  // Béton aggregate grain
+  overlayGrain(.1,'multiply');
+  for(let i=0;i<700;i++){
+    const gx=Math.random()*W,gy=Math.random()*H;
+    ctx.fillStyle=`rgba(20,18,14,${Math.random()*.08})`;
+    ctx.fillRect(gx,gy,1+Math.random(),1);
+  }
+}
+
+/* ── MAIN LOOP ── */
+function frame(ts){
+  T=ts*.001;fN++;
+  if(fN%3===0)reGrain();
+  if(needsInit&&W){initBubbles();needsInit=false;}
+  if(W&&H){
+    if(theme==='wood')drawMoire(T,variant);
+    else if(theme==='acrylic')drawGanzfeld(T,variant);
+    else if(theme==='glycerin')drawGlycerin(T,variant);
+    else drawArchitectural(T,variant);
+  }
+  requestAnimationFrame(frame);
+}
+initGrain();
+requestAnimationFrame(frame);
+
+/* ── THEME DATA ── */
+const TD={
+  wood:{name:'Wood',word:'WOOD',
+    note:'soundwave interference · topographic contour · moiré earthwork · Smithson land scale · Vasarely optical textile · fault and stratum',
+    designers:['Robert Smithson','Victor Vasarely','Michael Heizer'],
+    vars:[
+      {eye:'Wood · Moiré I · Raw Ash',head:'Sound in<br><b>the grain.</b>',lbl:'I — Raw Ash',
+       cols:[{h:'#0A0907',r:'Ground'},{h:'#385C5C',r:'Teal'},{h:'#BC4A3A',r:'Brick'},{h:'#D0C8B4',r:'Cream'}],
+       pb:[{h:'#0A0907',f:5},{h:'#385C5C',f:2.5},{h:'#BC4A3A',f:1.5},{h:'#D0C8B4',f:1}],
+       sw:[{h:'#0A0907',l:'Ground'},{h:'#385C5C',l:'Teal'},{h:'#BC4A3A',l:'Brick'},{h:'#D0C8B4',l:'Cream'}],
+       desc:'Two overlapping line sets at 3° offset — the interference IS the topographic record. Each band a contour. Mouse shifts the fault line.',
+       mk:{bg:'#0A0907',ey:'rgba(56,92,92,.7)',eT:'Earthwork · Smithson',hc:'#E0D8CC',hd:'The contour<br>holds form.',bd:'Soundwave as grain.',cB:'#385C5C',cC:'#E0D8CC',cT:'Survey →'},
+       refs:['Robert Smithson','Spiral Jetty','Optical textile']},
+      {eye:'Wood · Moiré II · Charred',head:'Fault and<br><b>stratum.</b>',lbl:'II — Charred',
+       cols:[{h:'#090B10',r:'Deep'},{h:'#265062',r:'Steel'},{h:'#BC6238',r:'Terra'},{h:'#CCC0A8',r:'Linen'}],
+       pb:[{h:'#090B10',f:5},{h:'#265062',f:2.5},{h:'#BC6238',f:2},{h:'#CCC0A8',f:.5}],
+       sw:[{h:'#090B10',l:'Deep'},{h:'#265062',l:'Steel'},{h:'#BC6238',l:'Terra'},{h:'#CCC0A8',l:'Linen'}],
+       desc:'Steel and terracotta through the moiré lens. The interference reads as geological stratum — sediment compressed into optical fabric.',
+       mk:{bg:'#090B10',ey:'rgba(38,80,98,.7)',eT:'Heizer · Double Negative',hc:'#CCC0A8',hd:'Two cuts<br>in the mesa.',bd:'Interference at land scale.',cB:'#BC6238',cC:'#090B10',cT:'View →'},
+       refs:['Michael Heizer','Double Negative','Stratum']},
+      {eye:'Wood · Moiré III · Lacquered',head:'The wave<br><b>is the grain.</b>',lbl:'III — Lacquered',
+       cols:[{h:'#0A0808',r:'Ebony'},{h:'#4C8080',r:'Slate'},{h:'#B05050',r:'Signal'},{h:'#D0C8C0',r:'Chalk'}],
+       pb:[{h:'#0A0808',f:6},{h:'#4C8080',f:2},{h:'#B05050',f:1.5},{h:'#D0C8C0',f:.5}],
+       sw:[{h:'#0A0808',l:'Ebony'},{h:'#4C8080',l:'Slate'},{h:'#B05050',l:'Red'},{h:'#D0C8C0',l:'Chalk'}],
+       desc:'Eileen Gray E-1027 — lacquer over the soundwave. Red as the single note in the interference field. The moiré is wood grain abstracted to pure optic.',
+       mk:{bg:'#0A0808',ey:'#B05050',eT:'E-1027 · Eileen Gray',hc:'#D0C8C0',hd:'Form and<br>the wave.',bd:'One signal in the field.',cB:'#B05050',cC:'#D0C8C0',cT:'Catalog →'},
+       refs:['Eileen Gray','E-1027','Lacquer']}
+    ]
+  },
+  acrylic:{name:'Acrylic',word:'ACRYLIC',
+    note:'Turrell ganzfeld · no edge anywhere · the room is the color · Breathing Light · Skyspace · Roden Crater · atmospheric presence',
+    designers:['James Turrell','Ganzfeld experience','Perceptual art'],
+    vars:[
+      {eye:'Acrylic · Ganzfeld I · Breathing Light',head:'No edge.<br><b>All light.</b>',lbl:'I — Breathing Light',
+       cols:[{h:'#0A0508',r:'Void'},{h:'#E1697A',r:'Coral'},{h:'#AF4FD5',r:'Violet'},{h:'#7348BE',r:'Deep'}],
+       pb:[{h:'#0A0508',f:5},{h:'#E1697A',f:2.5},{h:'#AF4FD5',f:1.5},{h:'#7348BE',f:1}],
+       sw:[{h:'#0A0508',l:'Void'},{h:'#E1697A',l:'Coral'},{h:'#AF4FD5',l:'Violet'},{h:'#7348BE',l:'Deep'}],
+       desc:'Turrell\'s LACMA Breathing Light — warm salmon fills the entire room. You cannot locate the edge. The light is the architecture.',
+       mk:{bg:'#0A0508',ey:'rgba(225,105,122,.55)',eT:'Turrell · Breathing Light',hc:'#F8F0FF',hd:'The room<br>fills with<br>light.',bd:'No edge. Pure color.',cB:'#E1697A',cC:'#0A0508',cT:'Enter →'},
+       refs:['James Turrell','LACMA','Breathing Light']},
+      {eye:'Acrylic · Ganzfeld II · Skyspace',head:'Sky through<br><b>aperture.</b>',lbl:'II — Skyspace',
+       cols:[{h:'#070714',r:'Night'},{h:'#EB8A4B',r:'Amber'},{h:'#374ED6',r:'Blue'},{h:'#6239AF',r:'Dusk'}],
+       pb:[{h:'#070714',f:5},{h:'#EB8A4B',f:2.5},{h:'#374ED6',f:2},{h:'#6239AF',f:.5}],
+       sw:[{h:'#070714',l:'Night'},{h:'#EB8A4B',l:'Amber'},{h:'#374ED6',l:'Blue'},{h:'#6239AF',l:'Dusk'}],
+       desc:'Skyspace at dawn — amber warm field meets cool blue. Two blends of light competing for the room. You watch the sky change inside the aperture.',
+       mk:{bg:'#070714',ey:'rgba(55,78,214,.55)',eT:'Turrell · Skyspace',hc:'#F8F0FF',hd:'Amber and<br>cool blue.',bd:'Dawn inside the aperture.',cB:'#374ED6',cC:'#EB8A4B',cT:'Observe →'},
+       refs:['Turrell','Skyspace','Aperture']},
+      {eye:'Acrylic · Ganzfeld III · Roden Crater',head:'Crater and<br><b>horizon.</b>',lbl:'III — Roden Crater',
+       cols:[{h:'#050C12',r:'Crater'},{h:'#4BB2C6',r:'Sky'},{h:'#6237C8',r:'Zenith'},{h:'#C6733A',r:'Horizon'}],
+       pb:[{h:'#050C12',f:4},{h:'#4BB2C6',f:3},{h:'#6237C8',f:2},{h:'#C6733A',f:1}],
+       sw:[{h:'#050C12',l:'Crater'},{h:'#4BB2C6',l:'Sky'},{h:'#6237C8',l:'Zenith'},{h:'#C6733A',l:'Horizon'}],
+       desc:'Roden Crater — blue from zenith bleeds into terracotta at the horizon. The volcanic cone as naked-eye observatory. Light architecture at planetary scale.',
+       mk:{bg:'#050C12',ey:'rgba(75,178,198,.55)',eT:'Turrell · Roden Crater',hc:'#F8F0FF',hd:'Blue to<br>horizon red.',bd:'Sky as material.',cB:'#4BB2C6',cC:'#050C12',cT:'Ascend →'},
+       refs:['Roden Crater','Arizona','Sky observatory']}
+    ]
+  },
+  glycerin:{name:'Glycerin',word:'GLYCERIN',
+    note:'soap bubble · thin film interference · Eliasson light through matter · photographic film grain · surface tension · excited iridescence',
+    designers:['Olafur Eliasson','Soap film physics','Thin film optics'],
+    vars:[
+      {eye:'Glycerin · Soap I · Silver Cool',head:'Surface<br><b>tension.</b>',lbl:'I — Silver Cool',
+       cols:[{h:'#030406',r:'Void'},{h:'#3E4E5C',r:'Silver'},{h:'#525C4E',r:'Sage'},{h:'#4E4E62',r:'Slate'}],
+       pb:[{h:'#030406',f:6},{h:'#3E4E5C',f:2.5},{h:'#525C4E',f:1.5},{h:'#4E4E62',f:1}],
+       sw:[{h:'#030406',l:'Void'},{h:'#3E4E5C',l:'Silver'},{h:'#525C4E',l:'Sage'},{h:'#4E4E62',l:'Slate'}],
+       desc:'Cool soap bubble — mostly transparent, iridescence only at the edge. Heavy photographic grain. Mouse repels the surfaces. Excitable.',
+       mk:{bg:'#030406',ey:'rgba(62,78,92,.55)',eT:'Soap · Surface Study',hc:'#F4F0EC',hd:'Film at the<br>edge.',bd:'Thin film. Film grain.',cB:'#3E4E5C',cC:'#F4F0EC',cT:'Study →'},
+       refs:['Thin film optics','Soap physics','Film grain']},
+      {eye:'Glycerin · Soap II · Platinum',head:'Platinum<br><b>membrane.</b>',lbl:'II — Platinum',
+       cols:[{h:'#040409',r:'Deep'},{h:'#4E5270',r:'Platinum'},{h:'#5C4E66',r:'Violet'},{h:'#445860',r:'Steel'}],
+       pb:[{h:'#040409',f:6},{h:'#4E5270',f:2.5},{h:'#5C4E66',f:1.5},{h:'#445860',f:1}],
+       sw:[{h:'#040409',l:'Deep'},{h:'#4E5270',l:'Platinum'},{h:'#5C4E66',l:'Violet'},{h:'#445860',l:'Steel'}],
+       desc:'Platinum membrane — iridescence leans violet. Eliasson\'s Contact installation — layered glass sphere, each layer catching light differently.',
+       mk:{bg:'#040409',ey:'rgba(78,82,112,.55)',eT:'Eliasson · Contact',hc:'#F4F0EC',hd:'Layer by<br>layer.',bd:'Platinum. Violet trace.',cB:'#4E5270',cC:'#F4F0EC',cT:'Sense →'},
+       refs:['Olafur Eliasson','Contact 2014','Layered glass']},
+      {eye:'Glycerin · Soap III · Ice',head:'Ice and<br><b>excitement.</b>',lbl:'III — Ice',
+       cols:[{h:'#050307',r:'Void'},{h:'#3A6270',r:'Ice'},{h:'#586C5C',r:'Seafoam'},{h:'#4E5270',r:'Depth'}],
+       pb:[{h:'#050307',f:6},{h:'#3A6270',f:2.5},{h:'#586C5C',f:1.5},{h:'#4E5270',f:1}],
+       sw:[{h:'#050307',l:'Void'},{h:'#3A6270',l:'Ice'},{h:'#586C5C',l:'Seafoam'},{h:'#4E5270',l:'Depth'}],
+       desc:'Ice and seafoam — the cold excitement of a soap bubble about to pop. Grain at maximum. Specular sharpest here. Mouse repulsion most energetic.',
+       mk:{bg:'#050307',ey:'rgba(58,98,112,.55)',eT:'Ice · Film',hc:'#F4F0EC',hd:'About to<br>break.',bd:'Ice surface. Max grain.',cB:'#3A6270',cC:'#F4F0EC',cT:'Watch →'},
+       refs:['Surface tension','Fragile','Photographic']}
+    ]
+  },
+  concrete:{name:'Concrete',word:'CONCRETE',
+    note:'Le Corbusier polychromie architecturale · Roberto Burle Marx biomorphic garden · modular grid · béton brut aggregate ground · plan as palette',
+    designers:['Le Corbusier','Roberto Burle Marx','Purist + Organic'],
+    vars:[
+      {eye:'Concrete · I · Natural Polychromie',head:'Plane and<br><b>form.</b>',lbl:'I — Natural',
+       cols:[{h:'#D6D1C7',r:'Béton'},{h:'#BDB08A',r:'Ochre'},{h:'#6A7A92',r:'Slate'},{h:'#C84828',r:'Red'}],
+       pb:[{h:'#D6D1C7',f:5},{h:'#BDB08A',f:2},{h:'#6A7A92',f:1.5},{h:'#C84828',f:1.5}],
+       sw:[{h:'#D6D1C7',l:'Béton',dk:true},{h:'#BDB08A',l:'Ochre',dk:true},{h:'#6A7A92',l:'Slate'},{h:'#C84828',l:'Red'}],
+       desc:'Le Corbusier Natural 1932 — ochre, slate, red on béton ground. Burle Marx biomorphic color fields overlaid on the grid. Seen from above: plan as palette.',
+       mk:{bg:'#D6D1C7',ey:'rgba(106,122,146,.55)',eT:'Unité · Chandigarh',hc:'#1E1A16',hd:'Plan as<br>palette.',bd:'Grid + biomorphic form.',cB:'#C84828',cC:'#EEE8DC',cT:'Specify →'},
+       refs:['Le Corbusier','Polychromie 1932','Site plan']},
+      {eye:'Concrete · II · Full Polychromie',head:'Color as<br><b>structure.</b>',lbl:'II — Polychromie',
+       cols:[{h:'#D0CBC1',r:'Ground'},{h:'#D83820',r:'Red Dynamic'},{h:'#2448A0',r:'Blue Dynamic'},{h:'#C09828',r:'Ochre'}],
+       pb:[{h:'#D0CBC1',f:5},{h:'#D83820',f:2},{h:'#2448A0',f:2},{h:'#C09828',f:1}],
+       sw:[{h:'#D0CBC1',l:'Ground',dk:true},{h:'#D83820',l:'Red Dyn.'},{h:'#2448A0',l:'Blue Dyn.'},{h:'#C09828',l:'Ochre',dk:true}],
+       desc:'Full polychromie — red dynamic, blue dynamic, ochre. The Burle Marx biomorphs run forest green and terracotta across the Corbusier grid.',
+       mk:{bg:'#D0CBC1',ey:'rgba(36,72,160,.55)',eT:'Polychromie Architecturale',hc:'#1A1816',hd:'Dynamic red.<br>Dynamic blue.',bd:'The system applied.',cB:'#D83820',cC:'#EEE8D8',cT:'System →'},
+       refs:['Polychromie 63 colors','Purist painting','Corbusier']},
+      {eye:'Concrete · III · Burle Marx Tropical',head:'Garden as<br><b>abstraction.</b>',lbl:'III — Burle Marx',
+       cols:[{h:'#DCD7CD',r:'Ground'},{h:'#B83028',r:'Coral Red'},{h:'#1848A0',r:'Cobalt'},{h:'#206830',r:'Viridian'}],
+       pb:[{h:'#DCD7CD',f:5},{h:'#B83028',f:2},{h:'#1848A0',f:2},{h:'#206830',f:1}],
+       sw:[{h:'#DCD7CD',l:'Ground',dk:true},{h:'#B83028',l:'Coral Red'},{h:'#1848A0',l:'Cobalt'},{h:'#206830',l:'Viridian'}],
+       desc:'Burle Marx — Copacabana mosaic and Ibirapuera gardens as palette. Cobalt, coral, viridian. Abstract expressionist garden seen from above.',
+       mk:{bg:'#DCD7CD',ey:'rgba(24,72,160,.55)',eT:'Burle Marx · Ibirapuera',hc:'#1A1816',hd:'The garden<br>from above.',bd:'Cobalt tile. Coral stone.',cB:'#B83028',cC:'#DCD7CD',cT:'Plan →'},
+       refs:['Roberto Burle Marx','Copacabana','Ibirapuera']}
+    ]
+  }
+};
+
+/* ── RENDER PANELS ── */
+function rL(t,v){
+  const D=TD[t],V=D.vars[v];
+  document.getElementById('lf').innerHTML=`
+    <div><div class="wd">${D.word}</div><div class="nm">${D.name}</div><div class="nt">${D.note}</div></div>
+    <div>
+      <div class="lbl" style="margin-bottom:7px;">Variant ${['I','II','III'][v]} — ${V.lbl}</div>
+      ${V.cols.map(c=>`<div class="rw"><div class="ch" style="background:${c.h};"></div><div class="hx">${c.h}</div><div class="ro">${c.r}</div></div>`).join('')}
+    </div>
+    <div><div class="lbl" style="margin-bottom:5px;">Proportion</div>
+    <div class="pb">${V.pb.map(p=>`<div style="flex:${p.f};background:${p.h};border:1px solid rgba(128,128,128,.06);"></div>`).join('')}</div></div>
+    <div class="rf">${D.designers.map(r=>`<span class="ri">${r}</span>`).join('')}${V.refs.map(r=>`<span class="ri">${r}</span>`).join('')}</div>`;
+  hookH();
+}
+function rR(t,v){
+  const V=TD[t].vars[v],M=V.mk;
+  const il=['#D6D1C7','#D0CBC1','#DCD7CD'].includes(M.bg);
+  document.getElementById('rg').innerHTML=`
+    <div><div class="lbl" style="margin-bottom:7px;">${V.eye}</div><div class="mh">${V.lbl}</div></div>
+    <div class="ss">${V.sw.map(s=>`<div class="sw" style="background:${s.h};"><div class="sl${s.dk?' dk':''}">${s.l}</div></div>`).join('')}</div>
+    <div class="mb">${V.desc}</div>
+    <div class="mk" style="background:${M.bg};border:1px solid rgba(${il?'0,0,0':'255,255,255'},.06);">
+      <div class="me" style="color:${M.ey};">${M.eT}</div>
+      <div class="mH" style="font-size:22px;color:${M.hc};">${M.hd}</div>
+      <div class="mB" style="color:${M.hc};opacity:.7;">${M.bd}</div>
+      <div class="mC" style="background:${M.cB};color:${M.cC};">${M.cT}</div>
+    </div>`;
+  hookH();
+}
+function rML(t,v){const V=TD[t].vars[v];document.getElementById('mle').textContent=V.eye;document.getElementById('mlh').innerHTML=V.head;}
+function hookH(){document.querySelectorAll('.mk,.sw,.ri,.mC,.tab,.vb').forEach(addHov);}
+
+/* ── SET THEME / VARIANT ── */
+function setTheme(t){
+  theme=t;variant=0;
+  document.body.className=t;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  document.querySelectorAll('.vb').forEach(b=>b.classList.toggle('on',b.dataset.v==='0'));
+  if(t==='glycerin'){bubbles=[];needsInit=true;}
+  rL(t,0);rR(t,0);rML(t,0);
+}
+function setVar(v){
+  variant=v;
+  document.querySelectorAll('.vb').forEach(b=>b.classList.toggle('on',+b.dataset.v===v));
+  rL(theme,v);rR(theme,v);rML(theme,v);
+}
+
+/* ── INIT ── */
+hookH();
+rL('wood',0);rR('wood',0);rML('wood',0);
+</script>
+</body>
+</html>

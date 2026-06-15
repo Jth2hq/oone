@@ -1,0 +1,35 @@
+/* Scheme B — print / digital mood: press sheet, spot ink, kinetic type */
+:root {
+  --font-display: "Unbounded", system-ui, sans-serif;
+  --font-body: "Literata", "Georgia", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-mono-alt: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-bg: #e8e4db;
+  --color-bg-elevated: #f2efe8;
+  --color-surface: #dcd7cc;
+  --color-ink: #0a0a0a;
+  --color-fg: var(--color-ink);
+  --color-fg-muted: rgba(10, 10, 10, 0.58);
+  --color-fg-subtle: rgba(10, 10, 10, 0.38);
+  --color-border: rgba(10, 10, 10, 0.14);
+  --color-accent: #0f3460;
+  --color-accent-2: #c41e3a;
+  --color-accent-soft: rgba(15, 52, 96, 0.1);
+  --color-spot-yellow: #e8c547;
+
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --shadow-card: none;
+  --space-unit: clamp(11px, 1.3vw, 15px);
+  --nav-blur: none;
+  --hero-overlay: none;
+  --texture-hero: none;
+  --letter-nav: 0.12em;
+  --weight-display: 700;
+  --style-display: normal;
+
+  /* Variable font axis (Unbounded) — animated in scheme-b.css */
+  --vf-wght: 500;
+}
