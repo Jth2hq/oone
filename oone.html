@@ -50,7 +50,11 @@
      small screens, mirroring World's own breakpoint behavior. */
   --tile-gap:22px;
   --marquee-off:clamp(10px, 1.6vw, 18px);
-  --label-off:clamp(34px, 4.6vw, 52px);
+  /* Plain px (not clamp) so the JS positioner's parseFloat resolves the SAME
+     value the CSS uses — otherwise the circles paint at the CSS inset, then
+     snap to the JS fallback (28) once positionPerimeterLabels runs. Keeping
+     them equal means the intro buttons sit exactly where they finally rest. */
+  --label-off:28px;
   --hit:44px;
   --circle-d:32px;
   /* ── CORNER FILLET SCALE ──────────────────────────────────────────
@@ -81,6 +85,23 @@
     inset 0 1px 0 color-mix(in srgb, var(--zink, var(--ink)) 22%, transparent),
     inset 0 -1px 0 color-mix(in srgb, #000 42%, transparent),
     0 2px 7px color-mix(in srgb, #000 34%, transparent);
+
+  /* ── BUTTON ELEVATION ─────────────────────────────────────────────
+     One drop-shadow language for every actual button (CTA / pill / FAB /
+     nav), so they all read as the same lifted control. Built on #000 +
+     --zink mixes so it sits correctly on light AND dark zone surfaces.
+     Rest = grounded lift; hover = floats higher; active = pressed in. */
+  --btn-shadow:
+    0 1px 0 color-mix(in srgb, var(--zink, var(--ink)) 16%, transparent),
+    0 2px 5px color-mix(in srgb, #000 24%, transparent),
+    0 7px 16px color-mix(in srgb, #000 16%, transparent);
+  --btn-shadow-hover:
+    0 2px 0 color-mix(in srgb, var(--zink, var(--ink)) 20%, transparent),
+    0 6px 14px color-mix(in srgb, #000 30%, transparent),
+    0 14px 30px color-mix(in srgb, #000 20%, transparent);
+  --btn-shadow-active:
+    0 1px 2px color-mix(in srgb, #000 30%, transparent),
+    inset 0 2px 4px color-mix(in srgb, #000 26%, transparent);
 
   /* Surfaces — neutral landing */
   --bg:#E8E4DC; --bg-2:#DAD6CF;
@@ -336,33 +357,10 @@ body.night .balloon-bed::after{
    speak only as form, not catalog. */
 
 /* 5 · MYSTICAL EDGE — the cardinal pills are the structural nodes
-   (rational depressions). When the field is at rest, let a single
-   slow specular sweep cross all four every ~40s, as if light moved
-   through the whole cathedral at once. Never colored — just light. */
-@keyframes nodeSweep{
-  0%,84%,100%{box-shadow:
-    inset 0 1.5px 3px rgba(26,26,26,.16),
-    inset 0 -1px 0 rgba(255,255,255,.40),
-    0 1px 0 rgba(255,255,255,.35)}
-  92%{box-shadow:
-    inset 0 1.5px 3px rgba(26,26,26,.16),
-    inset 0 -1px 0 rgba(255,255,255,.55),
-    0 1px 0 rgba(255,255,255,.35)}
-}
-body:not(.in-zone):not(.night) .zlabel:not(.pressing) .circ{
-  animation:nodeSweep 16s ease-in-out infinite}
-@keyframes nodeSweepN{
-  0%,84%,100%{box-shadow:
-    inset 0 1.5px 3px rgba(0,0,0,.46),
-    inset 0 -1px 0 rgba(246,243,238,.07),
-    0 1px 0 rgba(246,243,238,.05)}
-  92%{box-shadow:
-    inset 0 1.5px 3px rgba(0,0,0,.46),
-    inset 0 -1px 0 rgba(246,243,238,.07),
-    0 1px 0 rgba(246,243,238,.05)}
-}
-body:not(.in-zone).night .zlabel:not(.pressing) .circ{
-  animation:nodeSweepN 16s ease-in-out infinite}
+   (rational depressions). The pills rest identically in every location
+   (landing and sub-pages); no idle animation, so behavior never differs
+   by where you are. Color lives only in the transient press glow, which
+   is clipped inside the circle. */
 @media (prefers-reduced-motion:reduce){
   .zlabel .circ{animation:none!important}
 }
@@ -384,58 +382,16 @@ body:not(.in-zone).night .zlabel:not(.pressing) .circ{
 /* While the cloud is up, raise the pills above it and show their words. */
 body:not(.fog-cleared) .zlabel{z-index:200}
 body:not(.fog-cleared) .zlabel .tip{opacity:.9 !important}
-body:not(.fog-cleared) .zlabel .circ{
-  box-shadow:
-    inset 0 1.5px 3px rgba(26,26,26,.12),
-    inset 0 -1px 0 rgba(255,255,255,.5),
-    0 0 0 1px rgba(255,255,255,.4);
-}
-body.night:not(.fog-cleared) .zlabel .circ{
-  box-shadow:
-    inset 0 1.5px 3px rgba(0,0,0,.4),
-    inset 0 -1px 0 rgba(246,243,238,.08),
-    0 0 0 1px rgba(246,243,238,.30);
-}
+/* During the cloud the pills are the SAME discs as everywhere else (base
+   .circ rules apply); only their words are raised. */
 body:not(.fog-cleared) .zlabel .tip{color:#4A4639}
 body.night:not(.fog-cleared) .zlabel .tip{color:#C9C2D6}
 
-/* ENTRY PULSE — while the cloud is up, all four directional keys breathe
-   their heat from within (contained by the pill), calling attention to
-   the keys you'll use. Staggered around the compass. */
-body:not(.fog-cleared) .zlabel .glow{
-  animation:keyPulse 2.1s ease-in-out infinite;
-}
-body:not(.fog-cleared) .zlabel[data-edge="right"]  .glow{animation-delay:.18s}
-body:not(.fog-cleared) .zlabel[data-edge="bottom"] .glow{animation-delay:.36s}
-body:not(.fog-cleared) .zlabel[data-edge="left"]   .glow{animation-delay:.54s}
-@keyframes keyPulse{
-  0%,100%{opacity:0}
-  50%{opacity:.72}
-}
-@media (prefers-reduced-motion:reduce){
-  body:not(.fog-cleared) .zlabel .glow{animation:none;opacity:.4}
-}
-
-/* ANNOUNCE — first arrival only. Each pill pulses + holds its word,
-   staggered, then settles to the quiet depression. Driven by .orienting
-   on <body>, added once after the cloud lifts and removed when done. */
+/* ANNOUNCE — first arrival only: the words simply hold, then fade. No
+   pulsing/scaling of the pills (kept deliberately quiet). */
 body.orienting .zlabel .tip{opacity:.92 !important;transition:opacity .4s}
-body.orienting .zlabel[data-edge="top"]    .circ{animation:announce 3.4s ease-out .0s 1}
-body.orienting .zlabel[data-edge="right"]  .circ{animation:announce 3.4s ease-out .35s 1}
-body.orienting .zlabel[data-edge="bottom"] .circ{animation:announce 3.4s ease-out .7s 1}
-body.orienting .zlabel[data-edge="left"]   .circ{animation:announce 3.4s ease-out 1.05s 1}
-@keyframes announce{
-  0%   {transform:scale(1)}
-  10%  {transform:scale(1.32)}
-  26%  {transform:scale(1.1)}
-  100% {transform:scale(1)}
-}
 body.night.orienting .zlabel .tip{color:#C9C2D6}
-/* the word fades out as the announce completes */
 body.orienting.orient-done .zlabel .tip{opacity:0 !important}
-@media (prefers-reduced-motion:reduce){
-  body.orienting .zlabel .circ{animation:none}
-}
 
 /* Cursor dot */
 #cur{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--ink);z-index:10000;pointer-events:none;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:background .35s, box-shadow .35s}
@@ -780,10 +736,33 @@ body.in-zone .panel-brand .slash{color:var(--zink)}
 body.in-zone .panel-brand .tag{color:var(--zink)}
 
 /* Mark glyph */
-.mark{display:inline-block;width:.72em;height:.72em;vertical-align:0;line-height:1;margin-right:.04em;position:relative}
-.mark svg{display:block;width:100%;height:100%;overflow:visible}
-.mark .glyph,.mark .ring{fill:currentColor}
-.wm{font-family:var(--ff-head);font-weight:800;font-stretch:75%;letter-spacing:-.025em;text-transform:uppercase;line-height:.92}
+/* Logomark stretched to the cap-height of the wordmark beside it (the glyph
+   fills the box; preserveAspectRatio="none" lets it run as tall as the
+   letters). */
+/* The logomark is the SAME letter as the wordmark beside it (the heavy
+   condensed "O"/"C"), with a thin, slanted calligraphic ring orbiting it —
+   the ring carries the Gratia-italic lean so O+ring reads "OO", C+ring "CO".
+   Inner glyph reuses the .wm styling so it tracks the wordmark exactly in
+   every context (brand row, hero, giant zone titles). */
+.mark{display:inline-block;position:relative;line-height:1;margin:0;font-style:normal;vertical-align:baseline}
+.mark .mg{position:relative;z-index:2;display:inline-block}
+/* The orbit is centered on the mark letter — horizontally (left:50%) and on the
+   letter's horizontal axis (top:50%) — then tilts; it sweeps over the
+   neighbouring letters, so mark + wordmark read as one fused glyph. Em-based, so
+   it stays centered at every size: brand row, hero, giant zone titles. */
+.mark .mark-ring{position:absolute;left:50%;top:50%;width:1.34em;height:.6em;transform:translate(-50%,-50%) rotate(-12deg);overflow:visible;pointer-events:none}
+.mark .mark-ring.ring-front{z-index:3}
+.mark .mark-ring.ring-back{z-index:1}
+/* Orbital "O" ring kept at the same width/height (rx/ry) but drawn as thin as
+   possible — a non-scaling hairline so it stays a crisp ~0.75px at every mark
+   size instead of thickening on the larger lockups. */
+.mark .rstroke{fill:none;stroke:currentColor;stroke-width:.75;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
+/* Fuse mark to the wordmark — cancel the flex gap so they touch and the ring
+   sweeps over the first letters. (Inline contexts already sit flush.) */
+.panel-brand .mark + .wm{margin-left:-10px}
+.of-kick .mark + .wm{margin-left:-6px}
+/* ONE / TANNER read UPRIGHT everywhere, even inside an italic line. */
+.wm{font-family:var(--ff-head);font-weight:800;font-stretch:75%;letter-spacing:-.025em;text-transform:uppercase;line-height:.92;font-style:normal}
 .panel-brand .mark{font-size:20px;color:var(--ink);align-self:baseline}
 .panel-brand .wm{font-size:20px;color:var(--ink);align-self:baseline}
 body.in-zone .panel-brand .mark{color:var(--zink)}
@@ -955,14 +934,23 @@ body.fog-cleared .fog-veil{opacity:0;filter:blur(30px) saturate(.7);-webkit-back
 .fog-enter{display:flex;flex-direction:column;align-items:center;gap:8px;
   font-family:var(--ff-serif);color:#5A5346}
 body.night .fog-enter{color:#C2BCD0}
-.fog-enter .fe-line{display:block;line-height:1.22}
-.fog-enter .fe-1{font-size:clamp(17px,2.2vw,24px);font-weight:400;opacity:.78}
-.fog-enter .fe-2{font-style:italic;font-weight:600;font-size:clamp(24px,3.4vw,38px);letter-spacing:.005em}
-.fog-enter .fe-3{margin-top:16px;font-family:var(--ff-ui);font-size:11px;font-weight:500;
-  letter-spacing:.22em;text-transform:uppercase;opacity:.6;
-  animation:fePressPulse 2.6s ease-in-out infinite}
+.fog-enter .fe-line{display:block;line-height:1.22;opacity:0}
+/* Staggered reveal — the instruction rises first, then the keys line,
+   and only last does "press anywhere to enter" arrive (and begin pulsing).
+   Each line holds its resting opacity via --fe-final after it lands. */
+@keyframes feRise{from{opacity:0;transform:translateY(10px) scale(.99)}to{opacity:var(--fe-final);transform:none}}
+.fog-enter .fe-1{--fe-final:.78;font-size:clamp(17px,2.2vw,24px);font-weight:400;
+  animation:feRise .8s cubic-bezier(.2,.7,.2,1) .15s both}
+.fog-enter .fe-2{--fe-final:1;font-style:italic;font-weight:600;font-size:clamp(24px,3.4vw,38px);letter-spacing:.005em;
+  animation:feRise .8s cubic-bezier(.2,.7,.2,1) .9s both}
+.fog-enter .fe-3{--fe-final:.6;margin-top:16px;font-family:var(--ff-ui);font-size:11px;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;
+  animation:feRise .7s cubic-bezier(.2,.7,.2,1) 1.75s both,
+            fePressPulse 2.6s ease-in-out 2.55s infinite}
 @keyframes fePressPulse{0%,100%{opacity:.38}50%{opacity:.82}}
-@media (prefers-reduced-motion:reduce){.fog-enter .fe-3{animation:none}}
+@media (prefers-reduced-motion:reduce){
+  .fog-enter .fe-line{opacity:var(--fe-final);animation:none}
+}
 
 /* Markers replicate the nav circles beyond — same circle + chrome ring,
    holding a triangle that points to that edge. Positioned by JS so they
@@ -1008,99 +996,61 @@ body.night .fog-enter{color:#C2BCD0}
   touch-action:none;
   -webkit-user-select:none;user-select:none;
 }
+/* Default CSS placement so the four pills paint in their correct edge
+   positions on the FIRST frame — JS only refines on resize. (Previously
+   JS positioned them after paint, so they flashed stacked at top-left.) */
+.zlabel[data-edge="top"]   {left:50%;                       top:var(--label-off);            transform:translate(-50%,-50%)}
+.zlabel[data-edge="bottom"]{left:50%;                       top:calc(100% - var(--label-off));transform:translate(-50%,-50%)}
+.zlabel[data-edge="left"]  {left:var(--label-off);          top:50%;                          transform:translate(-50%,-50%)}
+.zlabel[data-edge="right"] {left:calc(100% - var(--label-off));top:50%;                       transform:translate(-50%,-50%)}
 .zlabel:focus-visible{outline:none}
-.zlabel:focus-visible .circ{
-  box-shadow:0 0 0 1.5px var(--ink), inset 0 1.5px 3px rgba(26,26,26,.16);
-}
+.zlabel:focus-visible .circ{box-shadow:
+  inset 0 1.5px 3px rgba(0,0,0,.28),
+  inset 0 -1px 1px rgba(255,255,255,.5),
+  0 0 0 2px rgba(120,120,120,.35)}
+body.night .zlabel:focus-visible .circ{box-shadow:
+  inset 0 1.5px 3px rgba(0,0,0,.6),
+  inset 0 -1px 1px rgba(255,255,255,.08),
+  0 0 0 2px rgba(200,200,200,.28)}
 
-/* Pill → circle. Frame matches the panel exactly (chrome ring + inset
-   highlights). On press the circle's radius expands outward like a heat
-   fingerprint spreading from the contact, then settles back. */
+/* THE BUTTON — iOS-style. Just the panel surface with a subtle inlay
+   (inset) shadow so you can tell it's there. No fill, no color, no glow.
+   On press it presses in a touch deeper. Identical in every location. */
 .zlabel .circ{
   position:relative;
-  /* a DEPRESSION in the panel — same surface, pressed in */
-  background:color-mix(in srgb, var(--ink) 4%, var(--bg));
+  background:transparent;
   border-radius:50%;
   display:inline-flex;align-items:center;justify-content:center;
-  overflow:hidden;
   width:30px;height:30px;
   box-shadow:
-    inset 0 1.5px 3px rgba(26,26,26,.16),
-    inset 0 -1px 0 rgba(255,255,255,.40),
-    0 1px 0 rgba(255,255,255,.35);
-  transition:transform .55s cubic-bezier(.22,1,.36,1), box-shadow .35s, background .35s;
+    inset 0 1.5px 3px rgba(0,0,0,.20),
+    inset 0 -1px 1px rgba(255,255,255,.45);
+  transition:box-shadow .25s, transform .25s cubic-bezier(.22,1,.36,1);
   transform:scale(1);
 }
-.zlabel{--heat:#E8821C}
-.zlabel[data-zone="author"]{--heat:#E8821C}
-.zlabel[data-zone="tanner"]{--heat:#2F62C4}
-.zlabel[data-zone="log"]   {--heat:#8A7BCC}
-.zlabel[data-zone="world"] {--heat:#D8443A}
-body.night .zlabel[data-zone="author"]{--heat:#FF9A00}
-body.night .zlabel[data-zone="tanner"]{--heat:#3B82FF}
-body.night .zlabel[data-zone="log"]   {--heat:#C8B8FF}
-body.night .zlabel[data-zone="world"] {--heat:#FF5046}
-/* Color is a TOUCH HAPTIC only — it lives on the transient .glow flash,
-   never on the resting circle. At rest (incl. the pill's own sub-page)
-   the pill is just a depression with a drop shadow. */
 body.night .zlabel .circ{
-  background:color-mix(in srgb, #F6F3EE 3%, var(--bg));
   box-shadow:
-    inset 0 1.5px 3px rgba(0,0,0,.46),
-    inset 0 -1px 0 rgba(246,243,238,.07),
-    0 1px 0 rgba(246,243,238,.05);
+    inset 0 1.5px 3px rgba(0,0,0,.55),
+    inset 0 -1px 1px rgba(255,255,255,.07);
 }
-body.night .zlabel .circ-LEGACY{
-  background:var(--bg-2);
-  box-shadow:
-    0 0 0 1px rgba(246,243,238,.18),
-    0 0 0 2px #5a5a5a,
-    inset 0 1px 0 rgba(246,243,238,.10),
-    inset 0 -1px 0 rgba(0,0,0,.30);
-}
-/* All four pills are identical circles now — edge no longer changes shape */
 .zlabel[data-edge="top"]    .circ,
 .zlabel[data-edge="bottom"] .circ,
 .zlabel[data-edge="left"]   .circ,
 .zlabel[data-edge="right"]  .circ{width:30px;height:30px}
 
-/* Heat-fingerprint glow — a warm radial bloom that spreads on press.
-   Each pill glows in its destination zone's color. */
-.zlabel[data-zone="author"] .glow{ --heat:#E8821C }
-.zlabel[data-zone="tanner"] .glow{ --heat:#2F62C4 }
-.zlabel[data-zone="log"]    .glow{ --heat:#8A7BCC }
-.zlabel[data-zone="world"]  .glow{ --heat:#D8443A }
-.zlabel .glow{
-  position:absolute;inset:0;
-  border-radius:50%;
-  pointer-events:none;
-  background:radial-gradient(circle at 50% 50%,
-    color-mix(in srgb, var(--heat, #E8821C) 90%, transparent) 0%,
-    color-mix(in srgb, var(--heat, #E8821C) 72%, transparent) 52%,
-    color-mix(in srgb, var(--heat, #E8821C) 44%, transparent) 80%,
-    color-mix(in srgb, var(--heat, #E8821C) 14%, transparent) 100%);
-  opacity:0;
-  transform:scale(1);
-  transition:opacity .45s ease-out;
+/* Press = a slightly deeper press-in. No bloom. */
+.zlabel.pressing .circ,
+.zlabel:active .circ{
+  transform:scale(.94);
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.30), inset 0 -1px 1px rgba(255,255,255,.4);
 }
-
-/* Pressed: the pill fills with heat from within — contained by the
-   circle's own edge (overflow:hidden), like a Touch-ID button warming.
-   No outward scale, no colored halo beyond the pill. */
-.zlabel.pressing .circ{
-  transform:scale(1.04);
-  transition:transform .18s cubic-bezier(.2,.9,.3,1.1), box-shadow .18s;
+body.night .zlabel.pressing .circ,
+body.night .zlabel:active .circ{
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.7), inset 0 -1px 1px rgba(255,255,255,.06);
 }
-.zlabel.pressing .glow{
-  opacity:1;
-  transform:scale(1);
-  transition:opacity .14s ease-out;
-}
-/* the glow is ONLY ever a press/entry flash — never a sticky :active
-   left behind by a tap/click once inside the site */
-body.fog-cleared .zlabel:not(.pressing) .glow{opacity:0 !important}
-
-.zlabel:hover .circ{transform:scale(1.08)}
+.zlabel:hover .circ{transform:scale(1.06)}
+/* the .glow element is retired — keep it inert if any markup remains */
+.zlabel .glow{display:none}
 
 /* Tooltip — lowercase liquida, extends TOWARD panel center */
 .zlabel .tip{
@@ -1140,16 +1090,23 @@ body.fog-cleared .zlabel:not(.pressing) .glow{opacity:0 !important}
    Others hidden. Visible one inherits zone ink. */
 body.in-zone .zlabel{opacity:0;pointer-events:none;visibility:hidden}
 body.in-zone .zlabel.return{opacity:.95;pointer-events:auto;visibility:visible;color:var(--zink)}
-body.in-zone .zlabel.return .circ{background:color-mix(in srgb, var(--ink) 5%, var(--bg))}
+/* The return pill is the same disc as a landing key (day white / night dark
+   disc, monochrome press bloom) — it inherits the base .circ + night rules,
+   so behavior is identical everywhere. */
 body.in-zone .zlabel.return .arr{color:color-mix(in srgb, var(--zbg) 88%, var(--zink) 12%)}
 body.in-zone .zlabel.return .tip{color:var(--zink)}
-body.in-zone .zlabel.return:focus-visible .circ{box-shadow:0 0 0 2px color-mix(in srgb, var(--zink) 50%, transparent)}
 
 /* ════════════════════════════════════════════════════════════════
    ZONES
 ════════════════════════════════════════════════════════════════ */
 .zone{position:absolute;inset:0;z-index:10;opacity:0;pointer-events:none;display:flex;flex-direction:column;transition:opacity 1.1s;border-radius:var(--fillet-frame);overflow:hidden}
 body.in-zone .zone.active{opacity:1;pointer-events:auto}
+/* A zone that isn't the active one must be fully inert — otherwise its
+   children that opt back into pointer-events (e.g. the Field Log's grid
+   tiles) stay clickable as an invisible overlay across the whole panel,
+   intercepting clicks like the Story · Author tab. */
+.zone:not(.active),
+.zone:not(.active) *{pointer-events:none!important}
 
 /* The zone-content has reserved padding so it can't overlap with the
    four cardinal-center reserved label bands.
@@ -1186,12 +1143,14 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
 .zone-title{
   font-family:var(--ff-head);font-weight:900;font-stretch:75%;
   font-size:clamp(52px,9.5vw,120px);line-height:.86;letter-spacing:-.03em;
-  color:var(--zink);margin-top:6px;display:flex;align-items:baseline;gap:.14em;
-  text-transform:uppercase;
+  color:var(--zink);margin-top:6px;display:flex;align-items:baseline;gap:0;
+  text-transform:uppercase;letter-spacing:.01em;
 }
-/* The mark falls into the left gutter so the wordmark sits flush-left,
-   aligned with the eyebrow, sub, and body text beneath it. */
-.zone-title .mark{width:.6em;height:.6em;flex:0 0 auto;margin-left:calc(-1 * (.6em + .14em))}
+/* The orbital letter is the first letter of the lockup — flush in size and
+   baseline with the rest. It sits on the page's left text line; the ring is
+   centered on it and sweeps into the gutter on the left and over the next
+   letter on the right. A little trailing space keeps that next letter clear. */
+.zone-title .mark{margin:0 .06em 0 0}
 .zone-title .wm{font-weight:900;font-stretch:75%}
 .zone-sub{font-family:var(--ff-serif);font-style:italic;font-weight:600;font-size:17px;letter-spacing:0;text-transform:none;color:color-mix(in srgb,var(--zink) 90%, transparent);margin-top:14px}
 
@@ -1252,6 +1211,11 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
 .zproj-title{font-family:var(--ff-head);font-weight:700;font-size:22px;letter-spacing:-.01em;color:var(--zink);margin-bottom:5px}
 .zproj-tag{font-family:var(--ff-mono);font-size:12.5px;line-height:1.55;color:color-mix(in srgb,var(--zink) 78%, transparent);margin-bottom:10px;letter-spacing:.01em}
 .zproj-yr{font-family:var(--ff-ui);font-weight:400;font-size:13px;letter-spacing:.04em;color:color-mix(in srgb,var(--zink) 78%, transparent);text-align:right}
+/* Résumé company names link out to their sites. */
+.cv-link{color:inherit;text-decoration:none;display:inline-flex;align-items:center;gap:5px;border-bottom:1px solid color-mix(in srgb,var(--zink) 28%, transparent);transition:border-color .2s,opacity .2s}
+.cv-link:hover{border-bottom-color:var(--zglow)}
+.cv-link .cv-arr{font-family:var(--ff-head);font-size:.7em;opacity:.6;transition:transform .2s}
+.cv-link:hover .cv-arr{transform:translate(2px,-2px);opacity:1;color:var(--zglow)}
 
 /* ── DESIGN PRACTICE — warm/cool + MOTION (mirrors the World .wt rule) ──
    Lead/solo authorship (role Designer or Author) = warm, breathing.
@@ -1263,10 +1227,12 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
 }
 .zproj.is-lead{
   /* Warm signal is now carried entirely by the breathing halo (no
-     border-bottom to tint since cards are gap-separated, not ruled). */
+     border-bottom to tint since cards are gap-separated, not ruled). The
+     title color is NOT overridden — every project header reads in the same
+     zone ink (lead vs supporting is signalled by the halo/ring only), so
+     headers stay uniform in day and night. */
   animation:zprojBreathe 3s ease-in-out infinite;
 }
-.zproj.is-lead .zproj-title{ color:#fff }
 .zproj.is-ref{
   /* Cool signal carried by the steady ring (border-bottom tint removed). */
   box-shadow:
@@ -1311,7 +1277,13 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
 /* FIELD layer — drifting paper planes behind the World grid. The grid's
    own content sits above via z-index; planes are light, slow, ambient. */
 .world-field{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.zone[data-zone="world"] > .zone-content{position:relative;z-index:1}
+/* World content (title block) rides ABOVE the full-bleed stage but lets
+   pointer events fall through to the stage so the scene stays draggable and
+   its object hotspots stay clickable. */
+.zone[data-zone="world"] > .zone-content{position:relative;z-index:2;pointer-events:none}
+.zone[data-zone="world"] > .zone-content a,
+.zone[data-zone="world"] > .zone-content button{pointer-events:auto}
+.zone[data-zone="world"] > .world-stage{z-index:1}
 .wf-plane{position:absolute;width:64px;height:auto;opacity:0;
   --pA:rgba(245,240,228,.5);--pB:rgba(224,217,200,.42);--pE:rgba(255,255,255,.32);--pF:rgba(255,255,255,.18);
   filter:drop-shadow(0 4px 10px rgba(0,0,0,.25));
@@ -1329,67 +1301,188 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
 .wf-p5{top:80%;width:54px;animation-duration:38s;animation-delay:-9s}
 @media (prefers-reduced-motion:reduce){.wf-plane{animation:none;opacity:.28}}
 
+/* WORLD — a brandless catalogue. Every object is sealed in clear plastic and
+   laid out at its TRUE relative scale (not one grid cell): a tall wine bottle
+   towers over folded sunglasses. Items flow left→right and wrap like a contact
+   sheet, resting on a shared baseline per row. The drifting paper planes are
+   retired here so the surface stays clean. */
+.world-field{display:none}
+/* WORLD — a FIELD of generic objects, each sealed in clear plastic, floating and
+   drifting at its own pace. No grid lines, no brands on the surface: just wrapped
+   things adrift, sized to their true relative scale, captioned by category on
+   hover. The field flows and wraps, so it stays responsive and never clips. */
 .world-grid{
-  display:grid;grid-template-columns:repeat(3, 1fr);grid-auto-rows:1fr;gap:var(--tile-gap);
-  margin-top:24px;
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
+  gap:clamp(34px,4.4vw,72px) clamp(28px,3.4vw,58px);
+  margin:30px auto 0;
   width:100%;
-  padding:8px 0 18px;
+  padding:36px 0 54px;
   overflow:visible;
 }
-.world-grid .wt{aspect-ratio:1 / 1.06}
-@media (max-width:768px){.world-grid{grid-template-columns:repeat(2, 1fr);padding:8px 0 14px}}
-@media (max-width:480px){.world-grid{grid-template-columns:repeat(2, 1fr)}}
+@media (max-width:600px){.world-grid{gap:30px 24px}}
 
-.wt{
-  --led:var(--zglow);
-  --led-dim:color-mix(in srgb, var(--zglow) 50%, var(--zdeep, var(--zglow)));
-  position:relative;
-  background:transparent;
-  border:none;
-  text-decoration:none;color:var(--zink);
-  display:block;
-  cursor:pointer;
-  min-height:var(--hit);
-  transition:transform .4s cubic-bezier(.2,.8,.3,1);
+/* ONE WRAPPED OBJECT — a generic object floating inside a clear plastic pouch.
+   width/height come inline from true scale; --off scatters it vertically; each
+   bobs on its own --fdur/--fdelay so the field never marches in lockstep. */
+.ww{
+  position:relative;flex:0 0 auto;
+  background:none;border:none;padding:0;margin-top:var(--off,0px);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  animation:wwFloat var(--fdur,7s) ease-in-out var(--fdelay,0s) infinite alternate;
 }
-.wt:hover{transform:translateY(-5px) scale(1.015)}
+@keyframes wwFloat{from{transform:translateY(-7px) rotate(-.7deg)}to{transform:translateY(9px) rotate(.7deg)}}
+.ww:hover,.ww:focus-visible{outline:none;animation-play-state:paused}
+.ww-obj{position:relative;width:auto;height:var(--h);display:inline-flex;align-items:center;justify-content:center}
+/* REAL PHOTO — the wrapped object itself, sized by height so each keeps its
+   true photographic aspect and the field still reads relative scale (a tall
+   wine bottle towers over folded sunglasses). Shown once the file loads. */
+.ww-photo{position:relative;z-index:2;display:block;height:100%;width:auto;max-width:none;
+  object-fit:contain;
+  filter:drop-shadow(0 16px 22px rgba(0,0,0,.30))}
+/* SVG silhouette — the fallback shown ONLY while a photo file is absent, so
+   the field is never empty before/while assets/world/ is populated. */
+.ww .wo-svg{display:none}
+.ww.no-photo .wo-svg{display:block}
+.ww.no-photo .ww-photo{display:none}
+.ww-obj svg{position:relative;z-index:2;
+  color:#6f6c77;                       /* the object's body tone, read through the film */
+  filter:drop-shadow(0 16px 22px rgba(0,0,0,.30))}
+body.night .ww-obj svg{color:#8d8a96}
 
-/* OBJECT CELL — frosted card; the object floats above one general label.
-   No who/blurb/price on the cell — those live in the popup on click. */
-.wt-face{
-  position:absolute;inset:0;
-  border-radius:var(--tile-fillet);
-  overflow:hidden;
-  display:flex;flex-direction:column;justify-content:flex-end;align-items:center;
-  padding:14px 12px;
-  z-index:2;
-  background:linear-gradient(160deg,
-    color-mix(in srgb, var(--zink) 14%, #0a0303) 0%,
-    color-mix(in srgb, var(--zbg) 30%, #0a0303) 60%,
-    color-mix(in srgb, var(--zink) 24%, #0a0303) 100%);
-  border:1px solid color-mix(in srgb, var(--led-dim) 36%, transparent);
-  transition:border-color .3s, box-shadow .3s;
+/* PLASTIC POUCH — a crinkled clear shrink-wrap skin a touch larger than the
+   object, with sealed bright edges and sliding highlights. */
+.ww-plastic{position:absolute;inset:-13% -15%;z-index:3;pointer-events:none;
+  border-radius:46% 40% 48% 42% / 33% 30% 35% 31%;
+  background:
+    linear-gradient(122deg, rgba(255,255,255,.30) 0%, rgba(255,255,255,0) 20%, rgba(255,255,255,0) 56%, rgba(255,255,255,.20) 70%, rgba(255,255,255,0) 86%),
+    linear-gradient(58deg, rgba(255,255,255,0) 44%, rgba(255,255,255,.22) 50%, rgba(255,255,255,0) 56%),
+    radial-gradient(120% 92% at 30% 8%, rgba(255,255,255,.24), rgba(255,255,255,0) 44%);
+  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.26),
+             inset 0 8px 20px rgba(255,255,255,.12),
+             inset 0 -10px 22px rgba(0,0,0,.10);
+  mix-blend-mode:screen;opacity:.66;
+  filter:url(#wwCrinkleA);
 }
-.wt:hover .wt-face{
-  border-color:color-mix(in srgb, var(--led) 60%, transparent);
-  box-shadow:0 0 0 1px color-mix(in srgb, var(--led) 40%, transparent),
-             0 0 26px 4px color-mix(in srgb, var(--led) 26%, transparent);
+/* heat-sealed crinkled selvedge around the pouch */
+.ww-plastic::before{content:"";position:absolute;inset:0;border-radius:inherit;
+  border:2.5px solid rgba(255,255,255,.22);
+  box-shadow:0 0 8px rgba(255,255,255,.24), inset 0 0 12px rgba(255,255,255,.18);
+  filter:url(#wwCrinkleB);}
+/* faint print-dot tooth on the film */
+.ww-plastic::after{content:"";position:absolute;inset:0;border-radius:inherit;
+  background-image:radial-gradient(rgba(255,255,255,.5) .6px, transparent .7px);background-size:6px 6px;
+  opacity:.10;mix-blend-mode:overlay;}
+.ww:nth-child(3n) .ww-plastic{filter:url(#wwCrinkleC)}
+.ww:nth-child(3n+1) .ww-plastic{filter:url(#wwCrinkleB)}
+.ww:hover .ww-plastic,.ww:focus-visible .ww-plastic{opacity:.92}
+
+/* CATEGORY CAPTION — brandless; the kind only, on hover so the field stays clean. */
+.ww-cap{position:absolute;top:calc(100% + 7px);left:50%;transform:translateX(-50%);
+  font-family:var(--ff-ui);font-weight:600;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--zink);white-space:nowrap;opacity:0;transition:opacity .25s;z-index:4}
+.ww:hover .ww-cap,.ww:focus-visible .ww-cap{opacity:.82}
+@media (prefers-reduced-motion:reduce){.ww{animation:none}}
+
+/* ── WORLD STAGE — full-bleed, edge-dyed, pannable still life ───────────
+   The scene covers the whole panel and FADES into all four edges, so it
+   reads as wallpaper concentrated in the center. .world-pan is sized in JS
+   to cover the stage with overscan, then dragged horizontally. The red
+   grade rides the live zone tokens (tracks day/night); each object on the
+   table is a .wh hotspot layered above the grade. */
+.world-stage{
+  position:absolute; inset:0; z-index:0; overflow:hidden;
+  cursor:grab; touch-action:pan-y; user-select:none;
+  background:var(--zbg,#2A0606);
+  /* dye into the edges: feathered rectangular vignette (two linear masks
+     intersected) keeps the center fully visible, fades the last ~14%. */
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, #000 13%, #000 87%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 11%, #000 89%, transparent 100%);
+  -webkit-mask-composite:source-in; -webkit-mask-repeat:no-repeat;
+  mask-image:
+    linear-gradient(to right, transparent 0%, #000 13%, #000 87%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, #000 11%, #000 89%, transparent 100%);
+  mask-composite:intersect; mask-repeat:no-repeat;
 }
-/* Halftone-dot overlay nods to the reference print */
-.wt-face::after{
-  content:"";position:absolute;inset:0;
-  background-image:radial-gradient(rgba(255,255,255,.5) .7px, transparent .8px);
-  background-size:5px 5px;
-  opacity:.10;mix-blend-mode:overlay;pointer-events:none;
+.world-stage.is-panning{cursor:grabbing}
+.world-pan{
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%) translateX(var(--panx,0px));
+  will-change:transform; isolation:isolate;
 }
-/* one centered object per cell — the image of the thing */
-.wt-thumb{position:absolute;left:12px;right:12px;top:14px;bottom:42px;
-  display:flex;align-items:center;justify-content:center;z-index:3;pointer-events:none}
-.wt-bottle{display:block;height:100%;width:auto;max-width:100%;
-  filter:drop-shadow(0 6px 18px rgba(255,255,255,.14))}
-.wt-label{position:relative;z-index:3;font-family:var(--ff-ui);font-weight:600;
-  font-size:10px;letter-spacing:.18em;text-transform:uppercase;text-align:center;
-  color:color-mix(in srgb, var(--led) 88%, #fff);text-shadow:0 1px 8px rgba(0,0,0,.55)}
+/* WRAPPED (default) state is deliberately ABSTRACT — the whole table is
+   "draped": softened and frosted so you read forms and categories, not
+   literal products (no legible titles, no brand of speaker). Detail only
+   returns where an object is unwrapped (the .wh-lens, which is sharp). */
+.world-scene-img{
+  display:block; width:100%; height:auto; -webkit-user-drag:none; user-select:none;
+  filter:blur(7px) contrast(1.04) brightness(1.06) saturate(.42);
+}
+/* recolor to World red, KEEPING luminance */
+.world-pan::before{
+  content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:var(--zglow,#D8443A); mix-blend-mode:color; opacity:.82;
+}
+/* maroon depth vignette toward the table edges */
+.world-pan::after{
+  content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:radial-gradient(135% 120% at 50% 40%, transparent 48%, var(--zdeep,#871F1A) 100%);
+  mix-blend-mode:multiply; opacity:.55;
+}
+/* PLASTIC SHEET — a translucent frosted drape over everything: milky body +
+   sliding bright highlights, like furniture under a dust/plastic cover. */
+.world-wrap{
+  position:absolute; inset:0; z-index:3; pointer-events:none;
+  background:
+    linear-gradient(122deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,0) 18%, rgba(255,255,255,0) 54%, rgba(255,255,255,.12) 68%, rgba(255,255,255,0) 84%),
+    linear-gradient(58deg, rgba(255,255,255,0) 42%, rgba(255,255,255,.10) 50%, rgba(255,255,255,0) 58%),
+    radial-gradient(120% 90% at 32% 6%, rgba(255,255,255,.14), rgba(255,255,255,0) 46%);
+  mix-blend-mode:screen; opacity:.9;
+}
+/* faint plastic tooth so the drape reads as a sheet, not a wash */
+.world-wrap::after{
+  content:""; position:absolute; inset:0;
+  background-image:radial-gradient(rgba(255,255,255,.5) .6px, transparent .7px);
+  background-size:5px 5px; opacity:.05; mix-blend-mode:overlay;
+}
+.world-hotspots{position:absolute; inset:0; z-index:4}
+
+/* ONE OBJECT — an invisible round hit area in image space. Hover/active
+   lifts a clearer "unwrapped" lens of just that object, a coral halo, and a
+   one-word category name. The lens is a window onto the same photo, sharper
+   and un-graded, soft-masked to a disc (set in JS to align with the object). */
+.wh{position:absolute; transform:translate(-50%,-50%);
+  border:none; background:none; padding:0; margin:0; cursor:pointer; pointer-events:auto;}
+.wh-lens{position:absolute; inset:0; border-radius:50%; pointer-events:none;
+  background-repeat:no-repeat;
+  /* "visible" but never literal — clearer than the wrap, still soft/abstract */
+  filter:blur(2px) brightness(1.14) saturate(1.08) contrast(1.04);
+  -webkit-mask-image:radial-gradient(circle at 50% 50%, #000 40%, transparent 72%);
+  mask-image:radial-gradient(circle at 50% 50%, #000 40%, transparent 72%);
+  opacity:0; transition:opacity .3s ease;}
+.wh-halo{position:absolute; inset:-6%; border-radius:50%; pointer-events:none;
+  box-shadow:0 0 0 1.5px color-mix(in srgb,var(--zglow,#FF5046) 75%, transparent),
+             0 0 24px 7px color-mix(in srgb,var(--zglow,#FF5046) 45%, transparent);
+  opacity:0; transform:scale(.86); transition:opacity .3s ease, transform .3s cubic-bezier(.2,1,.36,1);}
+.wh-label{position:absolute; left:50%; bottom:-30px; transform:translate(-50%,4px);
+  font-family:var(--ff-ui); font-weight:600; font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+  white-space:nowrap; color:var(--zink,#FFD0CC);
+  background:color-mix(in srgb,var(--zdeep,#5A0D0A) 82%, transparent);
+  -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px);
+  padding:4px 10px; border-radius:var(--fillet-inset,6px);
+  opacity:0; transition:opacity .25s ease, transform .25s ease; pointer-events:none;}
+.wh:hover .wh-lens, .wh.is-active .wh-lens{opacity:1}
+.wh:hover .wh-halo, .wh:focus-visible .wh-halo, .wh.is-active .wh-halo{opacity:1; transform:scale(1)}
+.wh:hover .wh-label, .wh:focus-visible .wh-label, .wh.is-active .wh-label{opacity:1; transform:translate(-50%,0)}
+.wh:focus-visible{outline:none}
+body.in-zone.is-panning .wh{pointer-events:none}   /* don't fight a drag */
+
+.world-stage-hint{position:absolute; left:50%; bottom:14px; transform:translateX(-50%);
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase;
+  color:color-mix(in srgb,var(--zink,#FFD0CC) 62%, transparent); pointer-events:none; z-index:4;
+  opacity:.72; transition:opacity .5s;}
+.world-stage.has-panned .world-stage-hint{opacity:0}
 
 /* ════════════════════════════════════════════════════════════════
    FIELD LOG — depth field with organic scatter.
@@ -1762,23 +1855,21 @@ body.log-view-grid .log-obj.filtered-out{
   width:180px;max-width:220px;
   font-family:var(--ff-mono);font-size:11.5px;line-height:1.5;color:var(--zink);
   padding:13px 15px;
-  background:color-mix(in srgb,var(--zbg) 14%, transparent);
+  background:color-mix(in srgb,var(--zbg) 60%, transparent);
   border-left:2px solid var(--zglow);
   border-top:1px solid color-mix(in srgb,var(--zink) 14%, transparent);
   border-right:1px solid color-mix(in srgb,var(--zink) 14%, transparent);
   border-bottom:1px solid color-mix(in srgb,var(--zink) 14%, transparent);
   border-radius:var(--tile-fillet);
-  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
 }
 .log-obj.idea .meta{display:block;font-family:var(--ff-ui);font-weight:500;font-size:9px;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin-top:11px;color:var(--zglow)}
 .log-obj.sensation{
   width:150px;height:58px;
   display:flex;align-items:center;justify-content:center;gap:2px;
   padding:11px 13px;
-  background:color-mix(in srgb,var(--zbg) 14%, transparent);
+  background:color-mix(in srgb,var(--zbg) 60%, transparent);
   border:1px solid color-mix(in srgb,var(--zink) 22%, transparent);
   border-radius:var(--tile-fillet);
-  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
 }
 .log-obj.sensation .wave{display:flex;align-items:center;gap:2px;height:34px;flex:1}
 .log-obj.sensation .wave .bar{width:1.5px;background:var(--zglow);animation:waveBar 1.6s ease-in-out infinite;opacity:.9}
@@ -1816,7 +1907,6 @@ body.log-view-grid .log-obj.filtered-out{
    Story and Design Practice: no backdrop-blur, no hairline box borders,
    no fixed pixel widths. Tonal zone-color accents only. */
 .log-grid .log-obj.grid-tile{
-  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
   filter:none!important;
   max-width:none;
   animation:none!important;
@@ -1996,10 +2086,30 @@ body.lc-open .log-composer{opacity:1;pointer-events:auto;transform:translateY(0)
 }
 .zform button:hover{background:var(--zink);color:var(--zbg)}
 
+/* SERVICES — a quiet definition list. First item (Scenario Planning) reads
+   as the lead; the rest follow at the same weight. */
+.svc-list{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column}
+.svc{padding:18px 0;border-top:1px solid color-mix(in srgb,var(--zink) 16%, transparent)}
+.svc:first-child{border-top:none;padding-top:6px}
+.svc-name{font-family:var(--ff-head);font-weight:700;font-size:18px;letter-spacing:-.01em;color:var(--zink);margin:0 0 6px}
+.svc:first-child .svc-name{font-size:22px}
+.svc-desc{font-family:var(--ff-serif);font-size:14px;line-height:1.62;color:color-mix(in srgb,var(--zink) 86%, transparent);margin:0;max-width:52ch}
+/* Scenario Planning reads as a quip list, not prose — short, second-person,
+   the unexpected asks a friend would actually bring. */
+.svc-lede{font-family:var(--ff-serif);font-style:italic;font-size:14px;line-height:1.55;color:color-mix(in srgb,var(--zink) 74%, transparent);margin:0 0 12px;max-width:48ch}
+.svc-quips{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;max-width:46ch}
+.svc-quips li{position:relative;padding-left:20px;font-family:var(--ff-head);font-weight:600;font-size:15.5px;letter-spacing:-.005em;line-height:1.3;color:var(--zink)}
+.svc-quips li::before{content:"→";position:absolute;left:0;top:0;font-family:var(--ff-mono);font-weight:400;font-size:13px;color:color-mix(in srgb,var(--zink) 52%, transparent)}
+.svc-quips li em{font-style:italic;font-family:var(--ff-serif);font-weight:500}
+
 /* Log overlay — entry detail modal */
 .log-overlay{position:absolute;inset:0;z-index:200;background:color-mix(in srgb,var(--zbg) 46%, transparent);display:none;align-items:center;justify-content:center;padding:6% 7%;border-radius:var(--fillet-frame);-webkit-backdrop-filter:blur(9px) saturate(1.04);backdrop-filter:blur(9px) saturate(1.04)}
 .log-overlay.open{display:flex}
-.log-overlay-card{max-width:720px;width:100%;background:color-mix(in srgb,var(--zbg) 80%, transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid color-mix(in srgb,var(--zink) 14%, transparent);border-radius:var(--frame-radius);box-shadow:var(--frame-shadow);padding:36px 40px;position:relative;color:var(--zink);max-height:88%;overflow-y:auto}
+.log-overlay-card{max-width:640px;width:100%;background:color-mix(in srgb,var(--zbg) 80%, transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid color-mix(in srgb,var(--zink) 14%, transparent);border-radius:var(--frame-radius);box-shadow:var(--frame-shadow);padding:0;position:relative;color:var(--zink);max-height:84%;overflow:hidden;display:flex;flex-direction:column}
+/* SHARED — every popup is a fixed shell with one scrolling body so the
+   card stays put (pinned close/nav) and the CONTENT scrolls inside it. */
+.modal-body{overflow-y:auto;min-height:0;flex:1 1 auto;padding:34px 38px;-webkit-overflow-scrolling:touch}
+.log-overlay-card .lo-nav{margin:0;padding:16px 38px;flex:0 0 auto;background:transparent;border-top:1px solid color-mix(in srgb,var(--zink) 18%, transparent)}
 .log-overlay-close{position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;width:var(--hit);height:var(--hit);font-family:var(--ff-mono);font-size:9px;letter-spacing:.18em;color:var(--zink);opacity:.6;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center}
 .log-overlay-close:hover{opacity:1}
 .lo-cat{font-family:var(--ff-ui);font-weight:500;font-size:11px;letter-spacing:.10em;text-transform:uppercase;color:color-mix(in srgb,var(--zink) 70%, transparent);margin-bottom:12px}
@@ -2050,13 +2160,41 @@ body.lc-open .log-composer{opacity:1;pointer-events:auto;transform:translateY(0)
 /* World preview card modal */
 .world-modal{position:absolute;inset:0;z-index:200;background:color-mix(in srgb,var(--zbg) 46%, transparent);display:none;align-items:center;justify-content:center;padding:6% 7%;border-radius:var(--fillet-frame);-webkit-backdrop-filter:blur(9px) saturate(1.04);backdrop-filter:blur(9px) saturate(1.04)}
 .world-modal.open{display:flex}
-.wm-card{max-width:560px;width:100%;background:color-mix(in srgb,var(--zbg) 80%, transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid color-mix(in srgb,var(--zink) 14%, transparent);border-radius:var(--frame-radius);box-shadow:var(--frame-shadow);padding:32px 36px;position:relative;color:var(--zink);max-height:88%;overflow-y:auto}
+.wm-card{max-width:640px;width:100%;background:color-mix(in srgb,var(--zbg) 80%, transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid color-mix(in srgb,var(--zink) 14%, transparent);border-radius:var(--frame-radius);box-shadow:var(--frame-shadow);padding:0;position:relative;color:var(--zink);max-height:84%;overflow:hidden;display:flex;flex-direction:column}
 .wm-close{position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;width:var(--hit);height:var(--hit);font-family:var(--ff-mono);font-size:9px;letter-spacing:.18em;color:var(--zink);opacity:.6;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center}
 .wm-card .wm-kind{font-family:var(--ff-ui);font-weight:500;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:color-mix(in srgb,var(--zink) 70%, transparent);margin-bottom:8px}
 .wm-card .wm-title{font-family:var(--ff-head);font-weight:700;font-size:28px;line-height:1.05;letter-spacing:-.015em;color:var(--zink);margin-bottom:14px}
 .wm-card .wm-blurb{font-family:var(--ff-mono);font-size:13px;line-height:1.6;color:color-mix(in srgb,var(--zink) 88%, transparent);margin-bottom:20px}
 .wm-card .wm-visit{display:inline-flex;align-items:center;gap:8px;background:var(--zink);color:var(--zbg);text-decoration:none;border:none;font-family:var(--ff-ui);font-weight:500;font-size:11px;letter-spacing:.10em;text-transform:uppercase;padding:12px 22px;min-height:var(--hit);cursor:pointer;border-radius:var(--fillet-inset);transition:transform .2s}
 .wm-card .wm-visit:hover{transform:translateY(-2px)}
+
+/* ── UNIFIED BUTTON ELEVATION ──────────────────────────────────────
+   Every real button (Send · visit site · log prev/next) now shares ONE
+   drop-shadow language: grounded lift at rest, floats on hover, presses
+   in on active. Placed after each button's own rules so it wins, and
+   built on #000 + --zink so it holds up in every zone, day and night. */
+.zform button,
+.wm-card .wm-visit,
+.lo-nav-btn{
+  box-shadow:var(--btn-shadow);
+  border-radius:var(--fillet-inset);
+  transition:background .25s, color .25s,
+    box-shadow .22s cubic-bezier(.2,.8,.3,1),
+    transform .16s cubic-bezier(.2,.85,.3,1.1);
+}
+.zform button:hover,
+.wm-card .wm-visit:hover,
+.lo-nav-btn:not(:disabled):hover{
+  box-shadow:var(--btn-shadow-hover);
+  transform:translateY(-2px);
+}
+.zform button:active,
+.wm-card .wm-visit:active,
+.lo-nav-btn:not(:disabled):active{
+  box-shadow:var(--btn-shadow-active);
+  transform:translateY(0) scale(.985);
+}
+.lo-nav-btn:disabled{box-shadow:none}
 
 /* Project detail modal */
 .proj-modal{position:absolute;inset:0;z-index:200;background:color-mix(in srgb,var(--zbg) 46%, transparent);display:none;align-items:center;justify-content:center;padding:6% 7%;border-radius:var(--fillet-frame);-webkit-backdrop-filter:blur(9px) saturate(1.04);backdrop-filter:blur(9px) saturate(1.04)}
@@ -2065,66 +2203,79 @@ body.lc-open .log-composer{opacity:1;pointer-events:auto;transform:translateY(0)
    The landing's --zbg is near-black, so the milky glass would read black.
    Give landing popups their own frosted fog — warm milk in day, smoky
    (never black) at night — same iOS frosted-glass feel as the zones. */
+/* MILK GLASS — translucent opal white, frosted by a strong backdrop blur.
+   The card is deliberately NOT opaque so the blur reads as real glass
+   rather than a solid card. Day = milk; night = smoked milk (never black). */
 body:not(.in-zone) .log-overlay,
 body:not(.in-zone) .world-modal,
 body:not(.in-zone) .proj-modal,
 body:not(.in-zone) .mf-scrim{
-  --zink:#26221A;
-  background:color-mix(in srgb, var(--warm) 9%, rgba(236,230,219,.40));
+  --zink:#221F18;
+  background:rgba(228,225,219,.26);
 }
 body:not(.in-zone) .log-overlay-card,
 body:not(.in-zone) .wm-card,
 body:not(.in-zone) .pm-card,
 body:not(.in-zone) .mf-panel{
-  background:color-mix(in srgb, var(--warm) 7%, rgba(245,241,233,.90));
-  color:#211E16; border-color:rgba(33,30,22,.12);
+  background:linear-gradient(150deg, rgba(255,254,252,.74), rgba(246,244,240,.58));
+  -webkit-backdrop-filter:blur(26px) saturate(1.1);backdrop-filter:blur(26px) saturate(1.1);
+  color:#221F18; border-color:rgba(255,255,255,.6);
+  box-shadow:var(--frame-shadow), inset 0 1px 0 rgba(255,255,255,.7);
 }
 body.night:not(.in-zone) .log-overlay,
 body.night:not(.in-zone) .world-modal,
 body.night:not(.in-zone) .proj-modal,
 body.night:not(.in-zone) .mf-scrim{
-  --zink:#E8E4DC;
-  background:color-mix(in srgb, var(--warm) 12%, rgba(25,23,31,.46));
+  --zink:#ECE9E3;
+  background:rgba(18,17,21,.42);
 }
 body.night:not(.in-zone) .log-overlay-card,
 body.night:not(.in-zone) .wm-card,
 body.night:not(.in-zone) .pm-card,
 body.night:not(.in-zone) .mf-panel{
-  background:color-mix(in srgb, var(--warm) 9%, rgba(36,33,44,.90));
-  color:#E8E4DC; border-color:rgba(255,255,255,.13);
+  background:linear-gradient(150deg, rgba(74,72,80,.52), rgba(52,50,58,.44));
+  -webkit-backdrop-filter:blur(26px) saturate(1.05);backdrop-filter:blur(26px) saturate(1.05);
+  color:#ECE9E3; border-color:rgba(255,255,255,.18);
+  box-shadow:var(--frame-shadow), inset 0 1px 0 rgba(255,255,255,.16);
 }
-.pm-card{max-width:680px;width:100%;background:color-mix(in srgb,var(--zbg) 80%, transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid color-mix(in srgb,var(--zink) 14%, transparent);border-radius:var(--frame-radius);box-shadow:var(--frame-shadow);padding:36px 40px;position:relative;color:var(--zink);max-height:88%;overflow-y:auto}
+.pm-card{max-width:640px;width:100%;background:color-mix(in srgb,var(--zbg) 80%, transparent);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid color-mix(in srgb,var(--zink) 14%, transparent);border-radius:var(--frame-radius);box-shadow:var(--frame-shadow);padding:0;position:relative;color:var(--zink);max-height:84%;overflow:hidden;display:flex;flex-direction:column}
 .pm-close{position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;width:var(--hit);height:var(--hit);font-family:var(--ff-mono);font-size:9px;letter-spacing:.18em;color:var(--zink);opacity:.6;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center}
 .pm-card .pm-eyebrow{font-family:var(--ff-ui);font-weight:500;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:color-mix(in srgb,var(--zink) 70%, transparent);margin-bottom:6px}
 .pm-card .pm-title{font-family:var(--ff-head);font-weight:800;font-size:36px;line-height:1.05;letter-spacing:-.018em;color:var(--zink);margin-bottom:16px}
 .pm-card .pm-meta{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:18px;font-family:var(--ff-mono);font-size:11px;letter-spacing:.06em;color:color-mix(in srgb,var(--zink) 75%, transparent)}
 .pm-card .pm-body{font-family:var(--ff-mono);font-size:13.5px;line-height:1.7;color:color-mix(in srgb,var(--zink) 92%, transparent)}
-.pm-card .pm-figure{margin:0 0 18px;border-radius:var(--fillet-inset,8px);overflow:hidden;background:color-mix(in srgb,var(--zink) 8%, transparent);box-shadow:0 6px 22px color-mix(in srgb,var(--zink) 18%, transparent)}
-.pm-card .pm-figure[hidden]{display:none}
-.pm-card .pm-figure img{display:block;width:100%;height:auto;max-height:42vh;object-fit:cover}
 
 </style>
 <style id="manifesto-style">
 /* Manifesto opens in the SAME popup shell as every other object — frosted
    zone glass, zone ink, frame radius/shadow — so it reads as one of the
    site's universal detail popups, not a separate paper sheet. */
-.mf-scrim{position:fixed;inset:0;z-index:1200;display:none;align-items:flex-start;justify-content:center;
+.mf-scrim{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;
   background:color-mix(in srgb,var(--zbg) 46%, transparent);
   -webkit-backdrop-filter:blur(9px) saturate(1.04);backdrop-filter:blur(9px) saturate(1.04);
-  overflow-y:auto;padding:6vh 20px;opacity:0;transition:opacity .4s ease;}
+  padding:6% 7%;opacity:0;transition:opacity .4s ease;}
 .mf-scrim.on{display:flex;opacity:1;}
-.mf-panel{position:relative;width:min(680px,94vw);
+.mf-panel{position:relative;width:min(640px,94vw);max-height:84%;overflow:hidden;
+  display:flex;flex-direction:column;
   background:color-mix(in srgb,var(--zbg) 80%, transparent);
   -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
   border:1px solid color-mix(in srgb,var(--zink) 14%, transparent);
   box-shadow:var(--frame-shadow);color:var(--zink);
-  padding:46px clamp(24px,5vw,52px) 52px;border-radius:var(--frame-radius);
-  font-family:var(--ff-serif,"gratia",Georgia,serif);transform:translateY(14px);transition:transform .4s ease;}
+  padding:0;border-radius:var(--frame-radius);
+  /* Body is a clean, READABLE serif. gratia (the calligraphic display face)
+     is reserved for the single neogothic drop cap + the signature. */
+  font-family:Georgia,"Times New Roman",serif;transform:translateY(14px);transition:transform .4s ease;}
 .mf-scrim.on .mf-panel{transform:none;}
+.mf-panel .modal-body{padding:46px clamp(24px,5vw,52px) 52px}
 .mf-kicker{font-family:var(--ff-mono,ui-monospace,monospace);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:color-mix(in srgb,var(--zink) 60%, transparent);margin:0 0 6px;}
-.mf-title{font-family:var(--ff-serif,"gratia",Georgia,serif);font-style:italic;font-size:clamp(26px,4.4vw,38px);line-height:1.04;margin:0 0 26px;color:var(--zink);}
-.mf-panel p{font-size:15.5px;line-height:1.72;margin:0 0 16px;color:color-mix(in srgb,var(--zink) 92%, transparent);}
-.mf-lead::first-letter{font-size:2.9em;line-height:.8;float:left;padding:6px 10px 0 0;font-style:italic;}
+.mf-title{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:600;font-size:clamp(27px,4.4vw,40px);line-height:1.06;margin:0 0 24px;color:var(--zink);letter-spacing:-.01em;}
+.mf-panel p{font-size:15.5px;line-height:1.74;margin:0 0 16px;color:color-mix(in srgb,var(--zink) 92%, transparent);}
+/* The one piece of gratia: an oversized neogothic initial that drops far
+   enough to overlap even the line that returns to full width after the
+   indent — pure drama. */
+.mf-lead::first-letter{font-family:var(--ff-serif),"gratia",serif;font-size:8.4em;line-height:.6;float:left;padding:0 .1em 0 0;margin:.04em -.02em -.22em 0;font-style:normal;font-weight:400;color:var(--zink);}
+.mf-sign{font-family:var(--ff-serif),"gratia",serif;font-style:italic;font-size:30px;line-height:1;margin:30px 0 4px;color:var(--zink);text-align:right;}
+.mf-sign small{display:block;font-family:var(--ff-mono,ui-monospace,monospace);font-style:normal;font-size:10px;letter-spacing:.18em;text-transform:uppercase;margin-top:8px;color:color-mix(in srgb,var(--zink) 55%, transparent);}
 .mf-imps{list-style:none;counter-reset:imp;padding:0;margin:24px 0 8px;border-top:1px solid color-mix(in srgb,var(--zink) 16%, transparent);}
 .mf-imps li{counter-increment:imp;position:relative;padding:14px 0 14px 44px;border-bottom:1px solid color-mix(in srgb,var(--zink) 10%, transparent);font-size:14.5px;line-height:1.6;color:color-mix(in srgb,var(--zink) 92%, transparent);}
 .mf-imps li::before{content:counter(imp,decimal-leading-zero);position:absolute;left:0;top:15px;font-family:var(--ff-mono,ui-monospace,monospace);font-size:11px;letter-spacing:.1em;color:color-mix(in srgb,var(--zink) 55%, transparent);}
@@ -2134,10 +2285,20 @@ body.night:not(.in-zone) .mf-panel{
 .mf-close:hover{opacity:1;}
 .manifesto-link{color:inherit;text-decoration:none;border:none;border-bottom:1px solid currentColor;background:none;padding:0;font:inherit;font-style:italic;cursor:pointer;}
 .manifesto-link:hover{opacity:.6;}
-@media (max-width:768px){.mf-panel{padding:40px 22px 46px;}}
+@media (max-width:768px){.mf-panel .modal-body{padding:40px 22px 46px;}}
 </style>
 </head>
 <body>
+<script>
+/* Set day/night BEFORE first paint so the site never flashes the wrong mode
+   and then "re-registers". applyAutoMode() later confirms the same value. */
+(function(){try{
+  var night=false;
+  if(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches){night=true;}
+  else{var h=parseInt(new Date().toLocaleString('en-US',{timeZone:'America/New_York',hour:'2-digit',hour12:false}),10);night=(h<7||h>=19);}
+  if(night)document.body.classList.add('night');
+}catch(e){}})();
+</script>
 
 <div id="cur"></div>
 
@@ -2317,12 +2478,12 @@ body.night:not(.in-zone) .mf-panel{
           <div class="zone-sub">a world in itself, in orbit</div>
         </header>
 
-        <nav class="tabs-row" role="tablist" aria-label="story sections">
+        <nav class="tabs-row" role="tablist" data-group="story" aria-label="story sections">
           <button role="tab" class="on" data-tab="philosophy" onclick="setTab('story','philosophy')" aria-selected="true">Philosophy</button>
           <button role="tab" data-tab="author" onclick="setTab('story','author')" aria-selected="false">Author</button>
         </nav>
 
-        <div class="tab-pane on" data-tab="philosophy">
+        <div class="tab-pane on" data-group="story" data-tab="philosophy">
           <section class="zsec">
             <div class="story-block">
               <h3>The hero brand — <span data-mark="O"></span><span class="wm">ONE</span></h3>
@@ -2336,12 +2497,12 @@ body.night:not(.in-zone) .mf-panel{
             <ol class="footnotes">
               <li><span class="fn-n">1</span> in itself — the work as an object.</li>
               <li><span class="fn-n">2</span> in orbit — the work in its context.</li>
-              <li><span class="fn-n">3</span> ONE is the brand; TANNER is the practice.</li>
+              <li><span class="fn-n">3</span> <span data-mark="O"></span><span class="wm">ONE</span> is the brand; <span data-mark="C"></span><span class="wm">TANNER</span> is the practice.</li>
             </ol>
           </section>
         </div>
 
-        <div class="tab-pane" data-tab="author">
+        <div class="tab-pane" data-group="story" data-tab="author">
           <section class="zsec">
             <div class="story-block">
               <h3>Josh Harrison</h3>
@@ -2365,15 +2526,80 @@ body.night:not(.in-zone) .mf-panel{
           <h1 class="zone-title"><span data-mark="C"></span><span class="wm">TANNER</span></h1>
           <div class="zone-sub">design practice within <span data-mark="O"></span><span class="wm">ONE</span></div>
         </header>
-        <section class="zsec">
-          <div class="zsec-head">Manifesto</div>
-          <p class="zpara" id="practice-p1"><span data-mark="C"></span><span class="wm">TANNER</span> is the design practice within <span data-mark="O"></span><span class="wm">ONE</span>. Architecture, interiors, and visual systems for clients who want their place to think.</p>
-          <p class="zpara" id="practice-p2">Where <span data-mark="O"></span><span class="wm">ONE</span> is the editorial and lifestyle brand, <span data-mark="C"></span><span class="wm">TANNER</span> is where the work gets made.</p>
-        </section>
-        <section class="zsec">
-          <div class="zsec-head">Selected Projects</div>
-          <div id="tanner-proj-list"></div>
-        </section>
+
+        <nav class="tabs-row" role="tablist" data-group="practice" aria-label="practice sections">
+          <button role="tab" class="on" data-tab="practice" onclick="setTab('practice','practice')" aria-selected="true">Practice</button>
+          <button role="tab" data-tab="services" onclick="setTab('practice','services')" aria-selected="false">Services</button>
+          <button role="tab" data-tab="contact" onclick="setTab('practice','contact')" aria-selected="false">Contact</button>
+        </nav>
+
+        <div class="tab-pane on" data-group="practice" data-tab="practice">
+          <section class="zsec">
+            <div class="zsec-head">Manifesto</div>
+            <p class="zpara" id="practice-p1"><span data-mark="C"></span><span class="wm">TANNER</span> is the design practice within <span data-mark="O"></span><span class="wm">ONE</span>. Architecture, interiors, and visual systems for clients who want their place to think.</p>
+            <p class="zpara" id="practice-p2">Where <span data-mark="O"></span><span class="wm">ONE</span> is the editorial and lifestyle brand, <span data-mark="C"></span><span class="wm">TANNER</span> is where the work gets made.</p>
+          </section>
+          <section class="zsec">
+            <div class="zsec-head">Selected Projects</div>
+            <div id="tanner-proj-list"></div>
+          </section>
+        </div>
+
+        <div class="tab-pane" data-group="practice" data-tab="services">
+          <section class="zsec">
+            <div class="zsec-head">Services</div>
+            <p class="zpara">Engagements scale from a single room to a whole brand. Most begin with one of these.</p>
+            <ul class="svc-list">
+              <li class="svc">
+                <h3 class="svc-name">Scenario Planning</h3>
+                <p class="svc-lede">The stuff friends actually text me about — usually not what they think they're hiring an architect for:</p>
+                <ul class="svc-quips">
+                  <li>Sign the lease, or walk?</li>
+                  <li>Gut it, or just move?</li>
+                  <li>Where does the wall <em>want</em> to go?</li>
+                  <li>Which of the three apartments is the one.</li>
+                  <li>What's your storefront saying to the street?</li>
+                  <li>Make the place feel twice the size — without building.</li>
+                  <li>What to do with the weird back room.</li>
+                </ul>
+              </li>
+              <li class="svc">
+                <h3 class="svc-name">Architecture &amp; Space</h3>
+                <p class="svc-desc">Ground-up and adaptive re-use — from visioning through construction administration. Systems thinking at the scale of the body.</p>
+              </li>
+              <li class="svc">
+                <h3 class="svc-name">Interiors</h3>
+                <p class="svc-desc">Material, light, and detail for places that have to be lived in. Concept, FF&amp;E, and on-site direction.</p>
+              </li>
+              <li class="svc">
+                <h3 class="svc-name">Visual Systems</h3>
+                <p class="svc-desc">Identity, wayfinding, and the editorial layer — the way a place names and explains itself across print and screen.</p>
+              </li>
+            </ul>
+          </section>
+        </div>
+
+        <div class="tab-pane" data-group="practice" data-tab="contact">
+          <section class="zsec">
+            <div class="zsec-head">Contact</div>
+            <p class="zpara">Have a place that needs to think? Tell me about it.</p>
+            <form class="zform" id="contact-form" onsubmit="submitContact(event)">
+              <div class="field" data-required="true">
+                <input type="text" name="name" placeholder="Name" required oninput="syncDots(this.form)">
+              </div>
+              <div class="field" data-required="true">
+                <input type="email" name="email" placeholder="Email" required oninput="syncDots(this.form)">
+              </div>
+              <div class="field">
+                <input type="text" name="subject" placeholder="Project / subject (optional)">
+              </div>
+              <div class="field" data-required="true">
+                <textarea name="message" placeholder="Tell me about the place." required oninput="syncDots(this.form)"></textarea>
+              </div>
+              <button type="submit">Send →</button>
+            </form>
+          </section>
+        </div>
       </div>
     </section>
 
@@ -2457,13 +2683,28 @@ body.night:not(.in-zone) .mf-panel{
         <svg class="wf-plane wf-p4" viewBox="0 0 100 60"><use href="#of-plane"/></svg>
         <svg class="wf-plane wf-p5" viewBox="0 0 100 60"><use href="#of-plane"/></svg>
       </div>
+      <!-- WORLD STAGE — the still life full-bleeds the panel, dyes into the
+           edges, and pans horizontally. Every object on the table is a hotspot
+           (built from WORLD_HOTSPOTS in JS): by default everything's "draped"
+           in the red wrap; hover haloes + names an object and lifts its wrap,
+           click unwraps it and opens its destination. -->
+      <div class="world-stage" id="world-stage">
+        <div class="world-pan" id="world-pan">
+          <img class="world-scene-img" id="world-scene-img" src="assets/world/scene.jpg"
+               alt="A late-night table — a still life of the things, places and people in my world."
+               decoding="async" draggable="false">
+          <div class="world-wrap" aria-hidden="true"></div>
+          <div class="world-hotspots" id="world-hotspots"></div>
+        </div>
+        <div class="world-stage-hint" id="world-stage-hint">drag to pan · click an object</div>
+      </div>
       <div class="zone-content">
         <header class="zone-head">
           <div class="zone-eyebrow">← WORLD</div>
           <h1 class="zone-title">WORLD</h1>
           <div class="zone-sub">studios · makers · places · objects in orbit</div>
         </header>
-        <p class="zpara world-intro">Lorem ipsum dolor sit amet, consectetur adipiscing elit. <em>Click to preview.</em></p>
+        <p class="zpara world-intro">A table of the things, places and people in my life — drag to wander it, point at what's covered, pick what you want to know.</p>
         <!-- WORLD THUMBNAIL ICONS — one general icon per subject/category.
              Line-drawn to sit on the dark tiles. The perfume bottle borrows
              the landing daisy as its stopper (Liza Pittard). -->
@@ -2543,7 +2784,121 @@ body.night:not(.in-zone) .mf-panel{
             <path d="M12 6.2c2.2-1.5 5.6-1.5 8-.5v12.8c-2.4-1-5.8-1-8 .5"/>
           </symbol>
         </defs></svg>
-        <div class="world-grid" id="world-grid" role="list"></div>
+        <!-- GENERIC OBJECT ICONS — clean, defined silhouettes (not the soft
+             metaball blobs). One per category; viewBox encodes true proportions
+             so the field sizes each object to real relative scale. -->
+        <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+          <symbol id="wo-wine" viewBox="0 0 44 170">
+            <path d="M16 6h12v13c0 4 1 6 4 9 4 4 5 8 5 14v110a8 8 0 0 1-8 8H15a8 8 0 0 1-8-8V42c0-6 1-10 5-14 3-3 4-5 4-9z"/>
+            <rect x="9" y="94" width="26" height="34" rx="2" fill="rgba(0,0,0,.16)"/>
+          </symbol>
+          <symbol id="wo-press" viewBox="0 0 90 150">
+            <rect x="18" y="40" width="54" height="100" rx="8"/>
+            <rect x="14" y="27" width="62" height="16" rx="5"/>
+            <rect x="40" y="9" width="10" height="20" rx="4"/><circle cx="45" cy="9" r="7"/>
+            <path d="M72 60c15 2 16 30 0 40" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"/>
+            <rect x="20" y="92" width="50" height="48" rx="6" fill="rgba(0,0,0,.18)"/>
+          </symbol>
+          <symbol id="wo-mug" viewBox="0 0 120 95">
+            <rect x="14" y="14" width="66" height="70" rx="12"/>
+            <path d="M80 30c22-6 30 6 30 18s-10 24-30 18" fill="none" stroke="currentColor" stroke-width="11"/>
+            <ellipse cx="47" cy="18" rx="33" ry="7" fill="rgba(0,0,0,.18)"/>
+          </symbol>
+          <symbol id="wo-candle" viewBox="0 0 80 120">
+            <rect x="18" y="40" width="44" height="76" rx="8"/>
+            <ellipse cx="40" cy="40" rx="22" ry="6" fill="rgba(0,0,0,.14)"/>
+            <path d="M40 12c7 7 7 16 0 22-7-6-7-15 0-22z"/>
+          </symbol>
+          <symbol id="wo-perfume" viewBox="0 0 70 130">
+            <rect x="16" y="40" width="38" height="80" rx="7"/>
+            <rect x="27" y="20" width="16" height="22" rx="3"/>
+            <rect x="22" y="8" width="26" height="15" rx="4"/>
+            <rect x="20" y="74" width="30" height="30" rx="3" fill="rgba(0,0,0,.16)"/>
+          </symbol>
+          <symbol id="wo-speaker" viewBox="0 0 130 100">
+            <rect x="12" y="22" width="106" height="70" rx="12"/>
+            <rect x="26" y="36" width="78" height="44" rx="6" fill="rgba(0,0,0,.22)"/>
+            <circle cx="100" cy="14" r="6"/>
+          </symbol>
+          <symbol id="wo-books" viewBox="0 0 150 90">
+            <rect x="14" y="62" width="124" height="22" rx="4"/>
+            <rect x="22" y="40" width="112" height="22" rx="4"/>
+            <rect x="16" y="18" width="120" height="22" rx="4"/>
+            <path d="M124 62v22M118 40v22M122 18v22" stroke="rgba(0,0,0,.2)" stroke-width="3"/>
+          </symbol>
+          <symbol id="wo-shades" viewBox="0 0 170 70">
+            <circle cx="48" cy="38" r="26"/><circle cx="122" cy="38" r="26"/>
+            <rect x="70" y="31" width="30" height="10" rx="5"/>
+            <rect x="6" y="22" width="20" height="9" rx="4"/><rect x="144" y="22" width="20" height="9" rx="4"/>
+            <circle cx="48" cy="38" r="15" fill="rgba(0,0,0,.24)"/><circle cx="122" cy="38" r="15" fill="rgba(0,0,0,.24)"/>
+          </symbol>
+          <symbol id="wo-pizza" viewBox="0 0 130 120">
+            <path d="M65 8 118 104a8 8 0 0 1-7 12H19a8 8 0 0 1-7-12z"/>
+            <path d="M22 106h86" stroke="rgba(0,0,0,.22)" stroke-width="12" stroke-linecap="round"/>
+            <circle cx="60" cy="72" r="7" fill="rgba(0,0,0,.22)"/><circle cx="82" cy="58" r="6" fill="rgba(0,0,0,.22)"/><circle cx="54" cy="94" r="6" fill="rgba(0,0,0,.22)"/>
+          </symbol>
+          <symbol id="wo-cake" viewBox="0 0 130 110">
+            <path d="M22 92h86l-56-58z"/>
+            <rect x="22" y="80" width="86" height="14" fill="rgba(0,0,0,.18)"/>
+            <path d="M52 34c6-8 16-6 14 4" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+          </symbol>
+          <symbol id="wo-grapes" viewBox="0 0 130 120">
+            <path d="M18 72a47 32 0 0 0 94 0z"/>
+            <ellipse cx="65" cy="72" rx="47" ry="9"/>
+            <g fill="rgba(0,0,0,.2)"><circle cx="55" cy="58" r="8"/><circle cx="72" cy="56" r="8"/><circle cx="63" cy="71" r="8"/><circle cx="80" cy="69" r="8"/><circle cx="48" cy="71" r="8"/></g>
+          </symbol>
+          <symbol id="wo-vase" viewBox="0 0 90 150">
+            <path d="M28 72c-6 18-6 50 0 66a6 6 0 0 0 6 4h22a6 6 0 0 0 6-4c6-16 6-48 0-66z"/>
+            <rect x="30" y="62" width="30" height="12" rx="3"/>
+            <path d="M46 62C50 42 56 34 58 22" fill="none" stroke="currentColor" stroke-width="5"/>
+            <circle cx="60" cy="18" r="11"/>
+          </symbol>
+          <symbol id="wo-hoodie" viewBox="0 0 150 120">
+            <rect x="18" y="42" width="114" height="62" rx="14"/>
+            <path d="M42 44c10-22 56-22 66 0z"/>
+            <path d="M18 72h114" stroke="rgba(0,0,0,.18)" stroke-width="5"/>
+            <path d="M72 44v40" stroke="rgba(0,0,0,.18)" stroke-width="5"/>
+          </symbol>
+          <symbol id="wo-clippers" viewBox="0 0 70 150">
+            <path d="M20 16h30v18l-4 96a14 14 0 0 1-22 0l-4-96z"/>
+            <g stroke="currentColor" stroke-width="4"><path d="M21 16v-7M29 16v-7M37 16v-7M45 16v-7"/></g>
+            <rect x="22" y="42" width="26" height="40" rx="3" fill="rgba(0,0,0,.18)"/>
+          </symbol>
+          <symbol id="wo-needle" viewBox="0 0 30 160">
+            <path d="M13.5 60 15 150 16.5 60z"/>
+            <g fill="currentColor"><circle cx="11" cy="54" r="5"/><circle cx="19" cy="46" r="5"/><circle cx="11" cy="38" r="5"/><circle cx="19" cy="30" r="5"/><circle cx="15" cy="22" r="5"/></g>
+          </symbol>
+          <symbol id="wo-silk" viewBox="0 0 140 110">
+            <rect x="20" y="30" width="100" height="64" rx="10"/>
+            <path d="M30 30c20-16 60-16 80 0z"/>
+            <path d="M20 54h100M20 74h100" stroke="rgba(0,0,0,.16)" stroke-width="5"/>
+          </symbol>
+          <symbol id="wo-yoga" viewBox="0 0 100 140">
+            <circle cx="50" cy="30" r="14"/>
+            <path d="M50 44c-14 4-18 28-10 44h40c8-16 4-40-10-44z"/>
+            <path d="M30 112a40 16 0 0 1 40 0 40 14 0 0 1-40 0z"/>
+            <path d="M40 56C24 44 24 30 36 22" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
+            <path d="M60 56C76 44 76 30 64 22" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/>
+          </symbol>
+        </defs></svg>
+        <!-- Shrink-wrap crinkle — fractal-noise displacement gives each plastic
+             pouch its own irregular wrinkled sheen. Three seeds, rotated per item. -->
+        <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+          <filter id="wwCrinkleA" x="-25%" y="-25%" width="150%" height="150%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.018 0.03" numOctaves="2" seed="4" result="n"/>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="9" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+          <filter id="wwCrinkleB" x="-25%" y="-25%" width="150%" height="150%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.022 0.026" numOctaves="2" seed="11" result="n"/>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="11" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+          <filter id="wwCrinkleC" x="-25%" y="-25%" width="150%" height="150%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.015 0.034" numOctaves="2" seed="19" result="n"/>
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G"/>
+          </filter>
+        </defs></svg>
+        <!-- Still life moved to the full-bleed .world-stage above; the old
+             icon-pouch grid is retired (symbols/JS remain unused below). -->
       </div>
     </section>
 
@@ -2551,10 +2906,12 @@ body.night:not(.in-zone) .mf-panel{
     <div class="log-overlay" id="log-overlay" onclick="if(event.target===this)closeLogOverlay()" role="dialog" aria-modal="true" aria-labelledby="lo-title">
       <div class="log-overlay-card">
         <button class="log-overlay-close" onclick="closeLogOverlay()" aria-label="close">close ×</button>
-        <div class="lo-cat" id="lo-cat"></div>
-        <h2 class="lo-title" id="lo-title"></h2>
-        <div class="lo-photo" id="lo-photo" style="display:none"><img id="lo-img" src="" alt=""></div>
-        <div class="lo-body" id="lo-body"></div>
+        <div class="modal-body">
+          <div class="lo-cat" id="lo-cat"></div>
+          <h2 class="lo-title" id="lo-title"></h2>
+          <div class="lo-photo" id="lo-photo" style="display:none"><img id="lo-img" src="" alt=""></div>
+          <div class="lo-body" id="lo-body"></div>
+        </div>
         <div class="lo-nav">
           <button class="lo-nav-btn" onclick="logEntryPrev()" id="lo-prev">← prev</button>
           <div class="lo-progress" id="lo-progress"></div>
@@ -2566,21 +2923,24 @@ body.night:not(.in-zone) .mf-panel{
     <div class="world-modal" id="world-modal" onclick="if(event.target===this)closeWorldModal()" role="dialog" aria-modal="true" aria-labelledby="wm-title">
       <div class="wm-card">
         <button class="wm-close" onclick="closeWorldModal()" aria-label="close">close ×</button>
-        <div class="wm-kind" id="wm-kind"></div>
-        <h2 class="wm-title" id="wm-title"></h2>
-        <div class="wm-blurb" id="wm-blurb"></div>
-        <a class="wm-visit" id="wm-visit" href="#" target="_blank" rel="noopener">visit site ↗</a>
+        <div class="modal-body">
+          <div class="wm-kind" id="wm-kind"></div>
+          <h2 class="wm-title" id="wm-title"></h2>
+          <div class="wm-blurb" id="wm-blurb"></div>
+          <a class="wm-visit" id="wm-visit" href="#" target="_blank" rel="noopener">visit site ↗</a>
+        </div>
       </div>
     </div>
 
     <div class="proj-modal" id="proj-modal" onclick="if(event.target===this)closeProjModal()" role="dialog" aria-modal="true" aria-labelledby="pm-title">
       <div class="pm-card">
         <button class="pm-close" onclick="closeProjModal()" aria-label="close">close ×</button>
-        <div class="pm-eyebrow" id="pm-eyebrow">Project</div>
-        <h2 class="pm-title" id="pm-title"></h2>
-        <figure class="pm-figure" id="pm-figure" hidden><img id="pm-img" alt="" loading="lazy" draggable="false"></figure>
-        <div class="pm-meta" id="pm-meta"></div>
-        <div class="pm-body" id="pm-body"></div>
+        <div class="modal-body">
+          <div class="pm-eyebrow" id="pm-eyebrow">Project</div>
+          <h2 class="pm-title" id="pm-title"></h2>
+          <div class="pm-meta" id="pm-meta"></div>
+          <div class="pm-body" id="pm-body"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -2595,18 +2955,21 @@ body.night:not(.in-zone) .mf-panel{
 ════════════════════════════════════════════════════════════════ */
 function markGlyph(letter){
   const L = (letter||'O').toUpperCase();
-  const path = L === 'O'
-    ? `M 52 12 C 70 12,82 30,82 50 C 82 70,70 88,52 88 C 34 88,22 70,22 50 C 22 30,34 12,52 12 Z M 52 28 C 42 28,35 38,35 50 C 35 62,42 72,52 72 C 62 72,69 62,69 50 C 69 38,62 28,52 28 Z`
-    : `M 52 12 C 70 12,82 30,82 46 L 69 46 C 69 36,62 28,52 28 C 42 28,35 38,35 50 C 35 62,42 72,52 72 C 62 72,69 64,69 54 L 82 54 C 82 70,70 88,52 88 C 34 88,22 70,22 50 C 22 30,34 12,52 12 Z`;
-  return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-    <g transform="rotate(-6 50 50)"><path class="ring" d="M 1 50 C 1 41.5,22 34.5,50 34.5 C 78 34.5,99 41.5,99 50 C 99 58.5,78 65.5,50 65.5 C 22 65.5,1 58.5,1 50 Z M 7 50 C 7 56.5,26 64.5,50 64.5 C 74 64.5,93 56.5,93 50 C 93 43.5,74 35.5,50 35.5 C 26 35.5,7 43.5,7 50 Z" fill-rule="evenodd"/></g>
-    <path class="glyph" d="${path}" fill-rule="evenodd"/>
-  </svg>`;
+  // Inner glyph = the wordmark's own letter (class .wm tracks the heavy
+  // condensed face beside it). Two ring layers give the orbit a 3D pass:
+  // the full ellipse rides BEHIND the letter, the front (lower) arc crosses
+  // in FRONT — like a planet ring. Tilt comes from the CSS rotate.
+  return `<span class="mg wm">${escapeHtml(L)}</span>`+
+    `<svg class="mark-ring ring-back" viewBox="0 0 120 70" aria-hidden="true">`+
+      `<ellipse class="rstroke" cx="60" cy="35" rx="56" ry="20"/></svg>`+
+    `<svg class="mark-ring ring-front" viewBox="0 0 120 70" aria-hidden="true">`+
+      `<path class="rstroke" d="M5 35 A 56 20 0 0 0 115 35"/></svg>`;
 }
 function hydrateMarks(root){
   (root||document).querySelectorAll('[data-mark]').forEach(el => {
     if (el.dataset.markHydrated) return;
     el.classList.add('mark');
+    el.setAttribute('aria-hidden','true');   // decorative; brand is labelled on its container
     el.innerHTML = markGlyph(el.dataset.mark);
     el.dataset.markHydrated = '1';
   });
@@ -2649,15 +3012,15 @@ const PROJECTS = [
 
 /* Curriculum vitae — rendered into the Story · Author tab; editable via the register. */
 const EXPERIENCE = [
-  {title:'Ralph Lauren',     note:'Project Manager, Store Design — store environments.',     year:'2026 –'},
-  {title:'Wesley Moon Inc.', note:'Designer — interiors, detailing, finish integration.',     year:'2024–26'},
-  {title:'Hart Howerton',    note:'Designer — resort, residential, master planning.',         year:'2022–24'},
-  {title:'Bedrock Detroit',  note:'Architecture Coordinator — urban development, place-making.',year:'2017–20'},
+  {title:'Ralph Lauren',     note:'Project Manager, Store Design — store environments.',     year:'2026 –',  url:'https://www.ralphlauren.com'},
+  {title:'Wesley Moon Inc.', note:'Designer — interiors, detailing, finish integration.',     year:'2024–26', url:'https://wesleymoon.com'},
+  {title:'Hart Howerton',    note:'Designer — resort, residential, master planning.',         year:'2022–24', url:'https://www.harthowerton.com'},
+  {title:'Bedrock Detroit',  note:'Architecture Coordinator — urban development, place-making.',year:'2017–20', url:'https://www.bedrockdetroit.com'},
 ];
 const EDUCATION = [
-  {title:'University of Virginia', note:'M.Arch · Student Instructor.',                         year:'2020–23'},
-  {title:'Venture for America',    note:'Fellow — venture creation, Detroit.',                   year:'2017–20'},
-  {title:'University of Virginia', note:'B.S. Architecture + American Visual & Pop Culture.',    year:'2013–17'},
+  {title:'University of Virginia', note:'M.Arch · Student Instructor.',                         year:'2020–23', url:'https://www.arch.virginia.edu'},
+  {title:'Venture for America',    note:'Fellow — venture creation, Detroit.',                   year:'2017–20', url:'https://ventureforamerica.org'},
+  {title:'University of Virginia', note:'B.S. Architecture + American Visual & Pop Culture.',    year:'2013–17', url:'https://www.virginia.edu'},
 ];
 
 const PHOTOS = {
@@ -2690,8 +3053,8 @@ const LOG_ENTRIES = [
 ];
 
 const WORLD_FEED = [
-  {kind:'studio',size:'2x2',who:'Wesley Moon Inc.',blurb:'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',href:'https://wesleymoon.com'},
-  {kind:'reference',size:'1x1',who:'Are.na',blurb:'Lorem ipsum dolor sit amet.',href:'https://www.are.na/josh-harrison-tzcbbdxiro8'},
+  {kind:'studio',size:'2x2',who:'Wesley Moon Inc.',blurb:'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',obj:'mug',href:'https://wesleymoon.com'},
+  {kind:'reference',size:'1x1',who:'Are.na',blurb:'Lorem ipsum dolor sit amet.',obj:'candle',href:'https://www.are.na/josh-harrison-tzcbbdxiro8'},
   {kind:'scent',size:'1x1',who:'Liza Pittard',blurb:'Lorem ipsum dolor sit amet.',obj:'perfume',href:'https://lizapittard.com'},
   {kind:'wine',size:'1x2',who:'Irving Bottle',blurb:'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',obj:'wine',href:'https://irvingbottle.com'},
   {kind:'olive oil cake',size:'1x1',who:'Love Song',blurb:'Lorem ipsum dolor sit amet.',obj:'cake',href:'https://lovesongva.com'},
@@ -2699,15 +3062,20 @@ const WORLD_FEED = [
   {kind:'acupuncture',size:'1x1',who:'TAP Acupuncture',blurb:'Lorem ipsum dolor sit amet.',obj:'needle',href:'https://tapacupuncture.com'},
   {kind:'textile',size:'2x1',who:'Cidney Cher',blurb:'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',obj:'silk',href:'https://cidneycher.com'},
   {kind:'shop',size:'1x2',who:'Signal pin · v1',blurb:'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',price:'$18',href:'#'},
-  {kind:'past life',size:'1x1',who:'Hart Howerton',blurb:'Lorem ipsum dolor sit amet.',href:'https://harthowerton.com'},
+  {kind:'past life',size:'1x1',who:'Hart Howerton',blurb:'Lorem ipsum dolor sit amet.',obj:'grapes',href:'https://harthowerton.com'},
   {kind:'past life',size:'1x1',who:'Bedrock Detroit',blurb:'Lorem ipsum dolor sit amet.',href:'https://bedrockdetroit.com'},
   {kind:'shop',size:'2x1',who:'Thesis print',blurb:'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',price:'$45',href:'#'},
   {kind:'school',size:'1x1',who:'UVA Architecture',blurb:'Lorem ipsum dolor sit amet.',href:'https://www.arch.virginia.edu'},
-  {kind:'place',size:'1x1',who:'Pier 35 Eco Park',blurb:'Lorem ipsum dolor sit amet.',href:'#'},
+  {kind:'place',size:'1x1',who:'Pier 35 Eco Park',blurb:'Lorem ipsum dolor sit amet.',obj:'vase',href:'#'},
   {kind:'type',size:'1x1',who:'Klim Type Foundry',blurb:'Lorem ipsum dolor sit amet.',href:'https://klim.co.nz'},
   {kind:'shop',size:'1x1',who:'OO sticker',blurb:'Lorem ipsum dolor sit amet.',price:'$4',href:'#'},
-  {kind:'friend',size:'2x1',who:'Out of Office Studio',blurb:'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',href:'#'},
-  {kind:'reading',size:'1x1',who:'Bachelard',blurb:'Lorem ipsum dolor sit amet.',href:'#'},
+  {kind:'sound',size:'2x1',who:'Pocket Speaker',blurb:'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',obj:'speaker',href:'#'},
+  {kind:'reading',size:'1x1',who:'Bachelard',blurb:'Lorem ipsum dolor sit amet.',obj:'books',href:'#'},
+  {kind:'wear',size:'2x1',who:'House Hoodie',blurb:'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',obj:'hoodie',href:'#'},
+  {kind:'slice',size:'1x1',who:'Corner Slice',blurb:'Lorem ipsum dolor sit amet.',obj:'pizza',href:'#'},
+  {kind:'coffee',size:'1x1',who:'Morning Press',blurb:'Lorem ipsum dolor sit amet.',obj:'press',href:'#'},
+  {kind:'eyewear',size:'1x1',who:'Tortoise',blurb:'Lorem ipsum dolor sit amet.',obj:'shades',href:'#'},
+  {kind:'practice',size:'1x1',who:'Studio Flow',blurb:'Lorem ipsum dolor sit amet.',obj:'yoga',href:'#'},
 ];
 
 /* ════════════════════════════════════════════════════════════════
@@ -2735,12 +3103,43 @@ function loadRegister(){
   try { return JSON.parse(localStorage.getItem(REGISTER_KEY)) || {}; }
   catch(e){ return {}; }
 }
+/* World tablescape — the canonical object roster. The `obj` (shape) for each
+   maker is owned by the CODE, never by a saved content-register, so the
+   tablescape always shows the current set even if an older register is cached
+   in localStorage. Missing entries are appended; matches are re-stamped. */
+const WORLD_OBJ_SPEC = [
+  {who:'Wesley Moon Inc.',     kind:'studio',         obj:'mug',     href:'https://wesleymoon.com'},
+  {who:'Are.na',               kind:'reference',      obj:'candle',  href:'https://www.are.na/josh-harrison-tzcbbdxiro8'},
+  {who:'Liza Pittard',         kind:'scent',          obj:'perfume', href:'https://lizapittard.com'},
+  {who:'Irving Bottle',        kind:'wine',           obj:'wine',    href:'https://irvingbottle.com'},
+  {who:'Love Song',            kind:'olive oil cake', obj:'cake',    href:'https://lovesongva.com'},
+  {who:'Trios for Hair',       kind:'barber',         obj:'clippers',href:'https://triosforhair.com'},
+  {who:'TAP Acupuncture',      kind:'acupuncture',    obj:'needle',  href:'https://tapacupuncture.com'},
+  {who:'Cidney Cher',          kind:'textile',        obj:'silk',    href:'https://cidneycher.com'},
+  {who:'Hart Howerton',        kind:'past life',      obj:'grapes',  href:'https://harthowerton.com'},
+  {who:'Pier 35 Eco Park',     kind:'place',          obj:'vase',    href:'#'},
+  {who:'Pocket Speaker',       kind:'sound',          obj:'speaker', href:'#'},
+  {who:'Bachelard',            kind:'reading',        obj:'books',   href:'#'},
+  {who:'House Hoodie',         kind:'wear',           obj:'hoodie',  href:'#'},
+  {who:'Corner Slice',         kind:'slice',          obj:'pizza',   href:'#'},
+  {who:'Morning Press',        kind:'coffee',         obj:'press',   href:'#'},
+  {who:'Tortoise',             kind:'eyewear',        obj:'shades',  href:'#'},
+  {who:'Studio Flow',          kind:'practice',       obj:'yoga',    href:'#'},
+];
+function ensureWorldObjects(){
+  WORLD_OBJ_SPEC.forEach(s => {
+    const e = WORLD_FEED.find(w => w.who === s.who);
+    if (e) e.obj = s.obj;
+    else WORLD_FEED.push({kind:s.kind, who:s.who, blurb:'Lorem ipsum dolor sit amet.', obj:s.obj, href:s.href});
+  });
+}
 function applyRegisterData(){
   const R = loadRegister();
   const replace = (arr, data) => { if(Array.isArray(data)){ arr.length=0; data.forEach(d=>arr.push(d)); } };
   replace(PROJECTS, R.projects);
   replace(LOG_ENTRIES, R.log);
   replace(WORLD_FEED, R.world);
+  ensureWorldObjects();   // code owns the object roster, register can't drop it
   replace(EXPERIENCE, R.experience);
   replace(EDUCATION, R.education);
   if (Array.isArray(R.marquee)) window.__MARQUEE_OVERRIDE = R.marquee;
@@ -3253,6 +3652,9 @@ function pushSteamFrom(nx, ny){
 function paintSteam(){
   requestAnimationFrame(paintSteam);
   if (!steamCv) return;
+  /* PERF: steam is faded to 0 inside a zone — stop repainting the
+     full-panel canvas while it can't be seen. */
+  if (document.body.classList.contains('in-zone')) return;
   resizeSteam();
   const w = parseFloat(steamCv.style.width), h = parseFloat(steamCv.style.height);
   if (!w) return;
@@ -3423,8 +3825,8 @@ function enterZone(zoneId, skipHash){
     logScrollZ = 0; populateLogField();
     setLogView('grid');   // FIELD is the LOG experience on every device
   }
-  if (zoneId === 'world' && typeof paintWorldObjects === 'function'){
-    _worldPaintTries = 0; requestAnimationFrame(paintWorldObjects);
+  if (zoneId === 'world' && typeof initWorldStage === 'function'){
+    requestAnimationFrame(initWorldStage);
   }
   // Reset all labels to default state. The SVG triangle inside .arr stays as-is
   // (direction is CSS-driven by [data-edge]); we just update tooltip + aria.
@@ -3928,26 +4330,52 @@ function logEntryPrev(){ if (currentLogIdx > 0) openLogEntry(currentLogIdx-1); }
 function logEntryNext(){ if (currentLogIdx < LOG_ENTRIES.length-1) openLogEntry(currentLogIdx+1); }
 function closeLogOverlay(){ document.getElementById('log-overlay').classList.remove('open'); currentLogIdx = -1; }
 
-/* World grid + preview modal.
-   World is a FIELD of objects: only the physical makers/objects appear
-   (no jobs, no shop, no schools). Each cell shows the rendered object and
-   one piece of general text — its kind ("scent", "olive oil cake",
-   "barber"). The detail (who + blurb + visit) lives in the popup, which
-   opens on click before sending the visitor onward to the site. */
+/* World field + preview modal.
+   World is a FIELD of GENERIC objects, each sealed in clear plastic and floating
+   — no grid, no brands on the surface. Items are sized to their true relative
+   scale (h = BASE·real, w = h·aspect), scattered vertically, and each drifts on
+   its own timing. The caption is the category only, shown on hover; the brand +
+   visit live in the popup that opens on click. */
 const WORLD_OBJECTS = WORLD_FEED.filter(it => it.obj);
+/* aspect = icon viewBox width/height (keeps the box matched to the silhouette so
+   nothing letterboxes); real = true real-world height weight. */
+const WOBJ_ASPECT = {wine:0.259,press:0.600,mug:1.263,candle:0.667,perfume:0.538,
+  speaker:1.300,books:1.667,shades:2.429,pizza:1.083,cake:1.182,grapes:1.083,
+  vase:0.600,hoodie:1.250,clippers:0.467,needle:0.188,silk:1.273,yoga:0.714};
+const WOBJ_REAL = {wine:1.00,press:0.82,vase:0.72,pizza:0.70,hoodie:0.66,yoga:0.66,
+  grapes:0.64,silk:0.62,speaker:0.62,clippers:0.55,books:0.55,perfume:0.52,cake:0.50,
+  mug:0.50,needle:0.50,candle:0.46,shades:0.36};
 function renderWorldGrid(){
   const el = document.getElementById('world-grid'); if (!el) return;
-  el.innerHTML = WORLD_OBJECTS.map((it, i) => `
-      <button class="wt" role="listitem" data-i="${i}" aria-label="${escapeHtml(it.kind)} — ${escapeHtml(it.who)}, open">
-        <div class="wt-face">
-          <div class="wt-thumb"><canvas class="wt-bottle" data-obj="${it.obj}" aria-hidden="true"></canvas></div>
-          <div class="wt-label">${escapeHtml(it.kind)}</div>
-        </div>
-      </button>`).join('');
-  el.querySelectorAll('.wt').forEach(b => {
+  const BASE = 188;
+  el.innerHTML = WORLD_OBJECTS.map((it, i) => {
+    const a = WOBJ_ASPECT[it.obj] || 1;
+    const h = Math.round(BASE * (WOBJ_REAL[it.obj] || 0.55));
+    const w = Math.round(h * a);
+    const off = ((i * 37) % 5) * 20;                 // vertical scatter 0–80px
+    const fdur = (6.4 + (i % 4) * 0.9).toFixed(1) + 's';
+    const fdelay = (-(i % 5) * 1.3).toFixed(1) + 's';
+    // Photo file convention: assets/world/<obj>.png (e.g. assets/world/mug.png).
+    // Starts on the SVG fallback (.no-photo); flips to the photo on load, stays
+    // on the silhouette if the file isn't there yet.
+    const photo = `assets/world/${it.obj}.png`;
+    return `
+      <button type="button" class="ww no-photo" role="listitem" data-i="${i}"
+         style="--off:${off}px;--fdur:${fdur};--fdelay:${fdelay}"
+         aria-label="${escapeHtml(it.kind)} — ${escapeHtml(it.who)}, open">
+        <span class="ww-obj" style="--h:${h}px">
+          <img class="ww-photo" src="${photo}" alt="" decoding="async"
+               onload="this.closest('.ww').classList.remove('no-photo')"
+               onerror="this.remove()">
+          <svg class="wo-svg" style="width:${w}px;height:${h}px" aria-hidden="true"><use href="#wo-${it.obj}"></use></svg>
+          <span class="ww-plastic" aria-hidden="true"></span>
+        </span>
+        <span class="ww-cap">${escapeHtml(it.kind)}</span>
+      </button>`;
+  }).join('');
+  el.querySelectorAll('.ww').forEach(b => {
     b.addEventListener('click', () => openWorldModal(parseInt(b.dataset.i,10)));
   });
-  paintWorldObjects();
 }
 /* Render every shader object into its world tile, using the same WebGL
    pipeline as the landing flowers. Retries until tiles have measured size. */
@@ -3974,7 +4402,7 @@ function openWorldModal(i){
   const it = WORLD_OBJECTS[i]; if (!it) return;
   document.getElementById('wm-kind').textContent = it.kind.toUpperCase() + (it.price ? ' · ' + it.price : '');
   document.getElementById('wm-title').textContent = it.who;
-  document.getElementById('wm-blurb').textContent = it.blurb;
+  document.getElementById('wm-blurb').textContent = it.blurb || '';
   const visit = document.getElementById('wm-visit');
   visit.href = it.href;
   visit.textContent = (it.href === '#') ? 'coming soon' : 'visit site ↗';
@@ -3984,9 +4412,140 @@ function openWorldModal(i){
 }
 function closeWorldModal(){ document.getElementById('world-modal').classList.remove('open'); }
 
+/* ════════════════════════════════════════════════════════════════
+   WORLD STAGE — full-bleed, pannable still life with clickable objects.
+   Each hotspot is placed in normalized image space (nx,ny = object center
+   as a fraction of the photo; r = radius as a fraction of photo WIDTH), so
+   it stays pinned to its object at any size or pan offset. Hover/active
+   lifts a clearer "unwrapped" lens of that object + a halo + a one-word
+   category name; click opens its destination.
+
+   NOTE: these coordinates are eyeballed on the current scene.jpg and are
+   placeholders — swap the photo and/or hand over the exact object map and
+   destinations and this list is the only thing that changes.
+════════════════════════════════════════════════════════════════ */
+const WORLD_SCENE_SRC = 'assets/world/scene.jpg';
+const WORLD_HOTSPOTS = [
+  {nx:.555, ny:.165, r:.060, label:'sound',   href:'#', note:'a playlist'},
+  {nx:.470, ny:.190, r:.034, label:'scent',   href:'#'},
+  {nx:.635, ny:.235, r:.050, label:'wine',    href:'#'},
+  {nx:.738, ny:.135, r:.058, label:'garden',  href:'#'},
+  {nx:.848, ny:.290, r:.050, label:'coffee',  href:'#'},
+  {nx:.865, ny:.430, r:.045, label:'studio',  href:'#'},
+  {nx:.505, ny:.265, r:.062, label:'reading', href:'#'},
+  {nx:.420, ny:.520, r:.075, label:'album',   href:'#', note:'a photo album'},
+  {nx:.748, ny:.555, r:.050, label:'eyes',    href:'#'},
+  {nx:.600, ny:.560, r:.052, label:'needle',  href:'#'},
+  {nx:.500, ny:.640, r:.050, label:'ticket',  href:'#'},
+  {nx:.205, ny:.520, r:.085, label:'wear',    href:'#'},
+];
+
+let _worldStageBuilt = false, _worldPanX = 0, _worldMaxPanX = 0, _worldStageRO = null;
+function buildWorldHotspots(){
+  const layer = document.getElementById('world-hotspots');
+  if (!layer) return;
+  layer.innerHTML = WORLD_HOTSPOTS.map((h,i) => `
+    <button type="button" class="wh" data-i="${i}"
+      aria-label="${escapeHtml(h.label)}${h.note ? ' — ' + escapeHtml(h.note) : ''}">
+      <span class="wh-lens" aria-hidden="true"></span>
+      <span class="wh-halo" aria-hidden="true"></span>
+      <span class="wh-label">${escapeHtml(h.label)}</span>
+    </button>`).join('');
+  layer.querySelectorAll('.wh').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      const h = WORLD_HOTSPOTS[+btn.dataset.i];
+      // reveal this one, dim the rest
+      layer.querySelectorAll('.wh').forEach(o => o.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      if (h.href && h.href !== '#') window.open(h.href, '_blank', 'noopener');
+    });
+  });
+  _worldStageBuilt = true;
+}
+function layoutWorldStage(){
+  const stage = document.getElementById('world-stage');
+  const pan   = document.getElementById('world-pan');
+  const img   = document.getElementById('world-scene-img');
+  if (!stage || !pan || !img) return;
+  const W = stage.clientWidth, H = stage.clientHeight;
+  const iw = img.naturalWidth, ih = img.naturalHeight;
+  if (!W || !H || !iw || !ih) return;        // not visible / not loaded yet
+  const OVERSCAN = 1.18;                       // room to pan + bleed past edges
+  const scale = Math.max(W / iw, H / ih) * OVERSCAN;
+  const trackW = iw * scale, trackH = ih * scale;
+  pan.style.width = trackW + 'px';             // height follows via img aspect
+  // place + size each hotspot, and aim its reveal lens at its object
+  WORLD_HOTSPOTS.forEach((h,i) => {
+    const el = pan.querySelector(`.wh[data-i="${i}"]`); if (!el) return;
+    const d = 2 * h.r * trackW;                // diameter scales with the image
+    const cx = h.nx * trackW, cy = h.ny * trackH;
+    el.style.left = cx + 'px'; el.style.top = cy + 'px';
+    el.style.width = d + 'px'; el.style.height = d + 'px';
+    const lens = el.querySelector('.wh-lens');
+    if (lens){
+      lens.style.backgroundImage = `url(${WORLD_SCENE_SRC})`;
+      lens.style.backgroundSize = trackW + 'px ' + trackH + 'px';
+      lens.style.backgroundPosition = `-${cx - d/2}px -${cy - d/2}px`;
+    }
+  });
+  _worldMaxPanX = Math.max(0, (trackW - W) / 2);
+  _worldPanX = Math.max(-_worldMaxPanX, Math.min(_worldMaxPanX, _worldPanX));
+  pan.style.setProperty('--panx', _worldPanX + 'px');
+}
+function setWorldPan(x){
+  _worldPanX = Math.max(-_worldMaxPanX, Math.min(_worldMaxPanX, x));
+  const pan = document.getElementById('world-pan');
+  if (pan) pan.style.setProperty('--panx', _worldPanX + 'px');
+}
+function initWorldStage(){
+  const stage = document.getElementById('world-stage');
+  const img   = document.getElementById('world-scene-img');
+  if (!stage || !img) return;
+  if (!_worldStageBuilt){
+    buildWorldHotspots();
+    // ── pan: pointer drag (distinguishes click from drag via a threshold) ──
+    let down = false, moved = false, startX = 0, startPan = 0;
+    stage.addEventListener('pointerdown', e => {
+      down = true; moved = false; startX = e.clientX; startPan = _worldPanX;
+      stage.setPointerCapture(e.pointerId);
+    });
+    stage.addEventListener('pointermove', e => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (!moved && Math.abs(dx) > 5){ moved = true; stage.classList.add('is-panning','has-panned'); document.body.classList.add('is-panning'); }
+      if (moved) setWorldPan(startPan + dx);
+    });
+    const end = () => { down = false; stage.classList.remove('is-panning'); document.body.classList.remove('is-panning'); };
+    stage.addEventListener('pointerup', end);
+    stage.addEventListener('pointercancel', end);
+    // horizontal wheel / shift-wheel pans
+    stage.addEventListener('wheel', e => {
+      const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
+      if (d){ e.preventDefault(); stage.classList.add('has-panned'); setWorldPan(_worldPanX - d); }
+    }, {passive:false});
+    // arrow keys pan while World is the active zone
+    window.addEventListener('keydown', e => {
+      const onWorld = document.querySelector('.zone[data-zone="world"].active');
+      if (!onWorld) return;
+      if (e.key === 'ArrowLeft'){ stage.classList.add('has-panned'); setWorldPan(_worldPanX + 60); }
+      else if (e.key === 'ArrowRight'){ stage.classList.add('has-panned'); setWorldPan(_worldPanX - 60); }
+    });
+    _worldStageRO = new ResizeObserver(() => layoutWorldStage());
+    _worldStageRO.observe(stage);
+  }
+  if (img.complete && img.naturalWidth) layoutWorldStage();
+  else img.addEventListener('load', layoutWorldStage, {once:true});
+}
+
 /* Curriculum vitae rows (Story · Author tab) */
 function renderCV(){
-  const row = r => `<div class="zproj"><div><div class="zproj-title">${escapeHtml(r.title)}</div><div class="zproj-tag">${escapeHtml(r.note)}</div></div><div class="zproj-yr">${escapeHtml(r.year)}</div></div>`;
+  const row = r => {
+    const titleHtml = r.url
+      ? `<a class="cv-link" href="${escapeHtml(r.url)}" target="_blank" rel="noopener">${escapeHtml(r.title)} <span class="cv-arr" aria-hidden="true">↗</span></a>`
+      : escapeHtml(r.title);
+    return `<div class="zproj"><div><div class="zproj-title">${titleHtml}</div><div class="zproj-tag">${escapeHtml(r.note)}</div></div><div class="zproj-yr">${escapeHtml(r.year)}</div></div>`;
+  };
   const exp = document.getElementById('cv-exp'); if (exp) exp.innerHTML = EXPERIENCE.map(row).join('');
   const edu = document.getElementById('cv-edu'); if (edu) edu.innerHTML = EDUCATION.map(row).join('');
 }
@@ -4018,9 +4577,6 @@ function openProjModal(i){
   const p = PROJECTS[i]; if (!p) return;
   document.getElementById('pm-eyebrow').textContent = p.client + ' · ' + p.year;
   document.getElementById('pm-title').textContent = p.title;
-  const fig = document.getElementById('pm-figure'), img = document.getElementById('pm-img');
-  if (p.img){ img.src = p.img; img.alt = p.title; fig.hidden = false; }
-  else { img.removeAttribute('src'); fig.hidden = true; }
   const place = p.place ? `<span><strong>Place:</strong> ${escapeHtml(p.place)}</span>` : '';
   document.getElementById('pm-meta').innerHTML = `<span><strong>Role:</strong> ${escapeHtml(p.role)}</span>${place}<span><strong>Type:</strong> ${escapeHtml(p.tag)}</span>`;
   document.getElementById('pm-body').textContent = p.desc;
@@ -4030,15 +4586,30 @@ function closeProjModal(){ document.getElementById('proj-modal').classList.remov
 
 /* Tabs (Story zone) */
 function setTab(group, name){
-  // group is currently only 'story' but we keep the pattern
-  document.querySelectorAll('.tabs-row button').forEach(b => {
+  // Scope to the tab group so Story and Practice tabs don't toggle each other.
+  document.querySelectorAll(`.tabs-row[data-group="${group}"] button`).forEach(b => {
     const on = b.dataset.tab === name;
     b.classList.toggle('on', on);
     b.setAttribute('aria-selected', on ? 'true' : 'false');
   });
-  document.querySelectorAll('.tab-pane').forEach(p => {
+  document.querySelectorAll(`.tab-pane[data-group="${group}"]`).forEach(p => {
     p.classList.toggle('on', p.dataset.tab === name);
   });
+}
+
+/* Contact — no backend; compose a mailto so the message actually sends
+   through the visitor's own mail client. */
+function submitContact(e){
+  e.preventDefault();
+  const f = e.target;
+  const name = (f.name.value||'').trim();
+  const email = (f.email.value||'').trim();
+  const subject = (f.subject.value||'').trim();
+  const message = (f.message.value||'').trim();
+  const subjLine = subject ? `TANNER — ${subject}` : 'TANNER — inquiry';
+  const body = `${message}\n\n— ${name}\n${email}`;
+  window.location.href = `mailto:harrisonjt95@gmail.com?subject=${encodeURIComponent(subjLine)}&body=${encodeURIComponent(body)}`;
+  f.reset(); syncDots(f);
 }
 
 function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -4049,33 +4620,8 @@ function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;',
    Extends the zlabel heat-fingerprint to the whole surface; tuned to
    feel alive on iOS (pointer events cover touch + pen + mouse).
 ════════════════════════════════════════════════════════════════ */
-(function heatTouch(){
-  const panel = document.querySelector('.panel');
-  if (!panel) return;
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const layer = document.createElement('div');
-  layer.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:60;overflow:hidden;border-radius:var(--fillet-frame)';
-  panel.appendChild(layer);
-  let last = 0;
-  panel.addEventListener('pointerdown', e => {
-    if (!document.body.classList.contains('in-zone')) return;
-    if (document.querySelector('.log-overlay.open, .world-modal.open, .proj-modal.open')) return;
-    const now = performance.now();
-    if (now - last < 60) return; // de-dupe rapid synthetic events
-    last = now;
-    const r = layer.getBoundingClientRect();
-    const s = document.createElement('span');
-    s.className = 'heat-spark';
-    s.style.left = (e.clientX - r.left) + 'px';
-    s.style.top  = (e.clientY - r.top)  + 'px';
-    // slight size variance so repeated taps feel organic, not mechanical
-    const scale = 0.82 + Math.random() * 0.5;
-    s.style.width = s.style.height = (130 * scale) + 'px';
-    s.style.margin = (-65 * scale) + 'px 0 0 ' + (-65 * scale) + 'px';
-    layer.appendChild(s);
-    s.addEventListener('animationend', () => s.remove());
-  }, { passive:true });
-})();
+/* Removed: the tap "heat spark" illumination. It lit up on every click and
+   competed with the buttons — simpler without it. */
 </script>
 <script>
 /* Touch devices have no keyboard — swap key-centric copy for tap language.
@@ -4241,6 +4787,9 @@ function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;',
   const TOUCH=matchMedia('(hover:none)').matches;
   function tick(ts){
     const dt=lastTs?Math.min((ts-lastTs)*.001,.05):0; lastTs=ts;
+    /* PERF: the field is hidden inside a zone — don't transform 100+ DOM
+       items or rebuild chunks every frame while nobody can see them. */
+    if(document.body.classList.contains('in-zone')){ requestAnimationFrame(tick); return; }
     if(flightOn)flightT+=dt;                 /* ⏸ freezes the sky's traffic */
     const r=stage.getBoundingClientRect();
     const halfW=r.width/2, halfH=r.height/2;
@@ -4250,14 +4799,9 @@ function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;',
     stage.style.pointerEvents = susp ? 'none' : '';
     if(susp){ vel.x=vel.y=tVel.x=tVel.y=0; scrollAccum=0; focus=null; }
 
-    /* NO drift — the canvas is still until you move it */
-    if(focus){
-      cam.x=lerp(cam.x,focus.x,.12); cam.y=lerp(cam.y,focus.y,.12);
-      vel.x=vel.y=tVel.x=tVel.y=0;
-      if(Math.hypot(cam.x-focus.x,cam.y-focus.y)<6 || ts-focus.t0>700){
-        const card=focus.card; focus=null; openSurface(card);
-      }
-    } else if(!dragging){
+    /* NO drift — the canvas is still until you move it. Clicks open the
+       surface immediately (see beginFocus), so there's no glide to run. */
+    if(!dragging){
       vel.x=lerp(vel.x,tVel.x,.12); vel.y=lerp(vel.y,tVel.y,.12);
       cam.x+=vel.x; cam.y+=vel.y;
       tVel.x*=.94; tVel.y*=.94;
@@ -4285,7 +4829,9 @@ function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;',
     if(ts-lastChunkUpdate>throttle){
       lastChunkUpdate=ts;
       const ccx=Math.round(cam.x/CHUNK), ccy=Math.round(cam.y/CHUNK);
-      const span=Math.ceil((Math.max(r.width,r.height)/zoom)/CHUNK/2)+2;
+      /* PERF: span+1 (was +2) — one ring of off-screen chunks is plenty of
+         pre-load; +2 roughly doubled the live DOM/canvas count for no gain. */
+      const span=Math.ceil((Math.max(r.width,r.height)/zoom)/CHUNK/2)+1;
       const want=new Set();
       for(let dx=-span;dx<=span;dx++)for(let dy=-span;dy<=span;dy++)
         want.add((ccx+dx)+','+(ccy+dy));
@@ -4406,15 +4952,10 @@ function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;',
   /* ── click-to-focus: camera glides to the body's CURRENT position ── */
   function beginFocus(card){
     if (typeof tapHaptic==='function') tapHaptic();
-    if(card.dataset.act==='world'){ openSurface(card); return; }
-    const it=card.closest('.of-it');
-    if(REDUCED||!it){ openSurface(card); return; }
-    let fx=it._wx, fy=it._wy;
-    if(it._fly){
-      const F=it._fly, run=Math.sin(F.w*flightT+F.ph)*F.span;
-      fx+=F.dx*run; fy+=F.dy*run+Math.sin(F.bobW*flightT+F.ph)*F.bobA;
-    }
-    focus={x:fx,y:fy,card,t0:performance.now()};
+    /* A click should ALWAYS land its popup. The old camera-glide-then-open
+       could chase a moving plane and feel like nothing happened — open the
+       detail surface immediately instead. */
+    openSurface(card);
   }
   function openSurface(card){
     const act=card.dataset.act;
@@ -4492,10 +5033,8 @@ body.night .guf-w.guf-far{ --far-b:.92 }
   from{ transform:rotate(var(--g-a0,-.6deg)) }
   to  { transform:rotate(var(--g-a1, .6deg)) }
 }
-.guf-w canvas{ position:absolute; inset:0; width:100%; height:100%;
-  animation:guf-pulse calc(var(--g-dur,16s)*.5) ease-in-out infinite alternate;
-  animation-delay:var(--g-delay,0s); transform-origin:50% 60% }
-@keyframes guf-pulse{ from{transform:scale(1)} to{transform:scale(1.011)} }
+.guf-w canvas{ position:absolute; inset:0; width:100%; height:100%; transform-origin:50% 60% }
+/* (breathing pulse removed — the field stays still) */
 .guf-sh{ display:none !important }
 /* SUNLIT CAST — each flower throws a soft, low-opacity shadow off to one
    side, like a low sun. Shape-accurate (respects the canvas alpha), so it
@@ -4511,14 +5050,12 @@ body.night .balloon-bed{ filter:brightness(.9) saturate(1.02) }
    only the zone's own flower remains, framing the subpage edge. */
 body.in-zone .balloon-bed{ z-index:40 }
 body.in-zone .guf-w, body.in-zone .guf-sh{ opacity:0; transition:opacity .6s }
-body[data-zone="world"]  [data-fz="world"],
 body[data-zone="author"] [data-fz="author"],
 body[data-zone="log"]    [data-fz="log"],
 body[data-zone="tanner"] [data-fz="tanner"]{ opacity:1 }
-/* WORLD = a field of objects: half the flower bed stays as ambient
-   scenery, dropped BEHIND the object grid so the grid reads on top. */
-body[data-zone="world"] .balloon-bed{ z-index:5 }
-body[data-zone="world"] .guf-half{ opacity:.4; transition:opacity .9s }
+/* WORLD is its own composed object scene (the depth still-life) — no frame
+   flower here; the bed stays fully hidden so nothing covers the objects. */
+body[data-zone="world"] .balloon-bed{ z-index:0 }
 @media (prefers-reduced-motion:reduce){
   .guf-w,.guf-w canvas{ animation:none } }
 </style>
@@ -4893,7 +5430,8 @@ body[data-zone="world"] .guf-half{ opacity:.4; transition:opacity .9s }
 
   flower('biggie',[10,30,400,786],19,.6,(P,C)=>{
     stemPrims(P,C,[260,816, 230,560, 198,400, 200,310],46,COL.forest,COL.sage);
-    branchPrims(P,C,222,580,-172,92,30,COL.mossg);
+    /* the bare side-branch read as a broken/dangling stub — removed so this
+       is a clean single bloom on its stem */
     daisy(P,C,196,206,150,0,COL.world,COL.cream,8);
   });
   flower('wilt',[300,440,240,376],15,.45,(P,C)=>{
@@ -4928,9 +5466,11 @@ body[data-zone="world"] .guf-half{ opacity:.4; transition:opacity .9s }
     stemPrims(P,C,[1180,816, 1170,720, 1150,630, 1138,588],26,COL.mossg,COL.sage);
     daisy(P,C,1130,536,72,-14,COL.cherry,COL.cream,8);
   });
-  flower('pal',[1180,95,280,721],18,.35,(P,C)=>{
-    stemPrims(P,C,[1336,816, 1352,640, 1376,460, 1384,348],36,COL.pine,COL.mossg);
-    muscari(P,C,1384,330,1,COL.practice);
+  /* Rebuilt: was a muscari that read broken at this scale/position — now a
+     clean radial daisy, centered in its box so no petals clip the frame. */
+  flower('pal',[1180,95,280,721],18,.4,(P,C)=>{
+    stemPrims(P,C,[1330,816, 1332,620, 1326,430, 1322,332],34,COL.pine,COL.mossg);
+    daisy(P,C,1320,300,110,-7,COL.practice,COL.cream,10);
   });
 
   /* ---------- GL ---------- */
@@ -4971,14 +5511,17 @@ body[data-zone="world"] .guf-half{ opacity:.4; transition:opacity .9s }
     const w=document.createElement('div'); w.className='guf-w';
     if(f.name.startsWith('far')) w.classList.add('guf-far');
     if(f.name.startsWith('mid')) w.classList.add('guf-mid');
-    /* ~half the bed stays as ambient field behind the World grid */
-    if(fi%2===1) w.classList.add('guf-half');
     /* growth period: 100–240s, staggered by flower */
     w.style.setProperty('--grow-d',(100+((fi*53)%140))+'s');
-    w.style.setProperty('--g-dur',f.dur+'s');
+    /* Wildflower, not a Disney show: each stem holds a STILL asymmetric
+       lean, with only a slow, shallow drift around it (other-planet calm,
+       barely animated). */
+    var tilt=((fi*47)%2?1:-1)*(3+((fi*29)%8));      /* ±3..10° fixed lean */
+    var amp=f.amp*0.3;
+    w.style.setProperty('--g-dur',(f.dur*1.9).toFixed(1)+'s');
     w.style.setProperty('--g-delay',(-(f.dur*.4)).toFixed(1)+'s');
-    w.style.setProperty('--g-a0',(-f.amp)+'deg');
-    w.style.setProperty('--g-a1',(f.amp*1.15).toFixed(2)+'deg');
+    w.style.setProperty('--g-a0',(tilt-amp).toFixed(2)+'deg');
+    w.style.setProperty('--g-a1',(tilt+amp).toFixed(2)+'deg');
     const cv=document.createElement('canvas'); w.appendChild(cv);
     const sh=document.createElement('div'); sh.className='guf-sh';
     if(f.fz){w.dataset.fz=f.fz; sh.dataset.fz=f.fz;}
@@ -5106,6 +5649,119 @@ body[data-zone="world"] .guf-half{ opacity:.4; transition:opacity .9s }
         }
       }
       return {box:[0,0,360,340],P,C,CV,kMul:1.2}; })(),
+
+    /* BACHELARD — a short stack of design monographs (Live Beautiful / Kinfolk),
+       three flat rounded slabs, warm paper tones, slightly offset. */
+    books:(()=>{ const P=[],C=[],CV=[];
+      const a=SRGB('#E7DECB'), b=SRGB('#CFC6B2'), c=SRGB('#B3A992');
+      stack(P,C,70,206,366,206,26,26,14,a);    // bottom volume — dense overlap = flat slab
+      stack(P,C,88,160,352,160,24,24,14,b);    // middle
+      stack(P,C,104,116,330,116,23,23,14,c);   // top
+      return {box:[0,0,432,250],P,C,CV,kMul:0.92}; })(),
+
+    /* POCKET SPEAKER — Marshall-style portable speaker: smooth rounded box,
+       a recessed grille panel, a brass control knob on top. */
+    speaker:(()=>{ const P=[],C=[],CV=[];
+      const body=SRGB('#3A3630'), face=SRGB('#26231F'), brass=SRGB('#C49A4A');
+      // rounded-box body: dense overlapping spheres so it reads solid
+      for(let y=118;y<=288;y+=22)for(let x=72;x<=228;x+=22){P.push([x,y,0,24]);C.push(body);}
+      // grille — a darker inset panel sitting just proud of the face
+      for(let y=146;y<=262;y+=20)for(let x=100;x<=200;x+=20){P.push([x,y,16,15]);C.push(face);}
+      P.push([150,104,8,13]);C.push(brass);                                 // top knob
+      return {box:[0,0,300,326],P,C,CV,kMul:1.0}; })(),
+
+    /* WESLEY MOON — speckled ceramic mug: cylinder body, open rim, side handle. */
+    mug:(()=>{ const P=[],C=[],CV=[];
+      const cer=SRGB('#D9D0BF');
+      stack(P,C,138,236,138,108,70,70,20,cer);   // body
+      P.push([138,100,0,72]); C.push(cer);          // rim ring
+      CV.push([138,94,58,24]);                       // hollow the rim
+      [[222,128],[244,150],[250,178],[242,204],[221,220]].forEach(p=>{P.push([p[0],p[1],0,16]);C.push(cer);}); // handle
+      return {box:[0,0,300,272],P,C,CV,kMul:0.72}; })(),
+
+    /* ARE.NA — Byredo-style candle in an amber glass, pale wax, a lit flame. */
+    candle:(()=>{ const P=[],C=[],CV=[];
+      const glass=SRGB('#C5852F'), wax=SRGB('#ECDFC2'), fl=SRGB('#FF9038'), fl2=SRGB('#FFD27A');
+      stack(P,C,120,260,120,150,66,66,18,glass);  // jar
+      P.push([120,142,0,66]); C.push(wax);           // wax surface
+      CV.push([120,140,42,15]);                       // wick well
+      P.push([120,122,0,11]); C.push(fl);             // flame body
+      P.push([120,104,0,7]);  C.push(fl2);            // flame tip
+      return {box:[0,0,240,300],P,C,CV,kMul:0.7}; })(),
+
+    /* HART HOWERTON — a footed bowl of grapes, red + green clusters. */
+    grapes:(()=>{ const P=[],C=[],CV=[];
+      const bowl=SRGB('#9AA08A'), red=SRGB('#7E3B4E'), grn=SRGB('#8C8C4C');
+      stack(P,C,86,232,286,232,40,40,24,bowl);   // bowl rim
+      P.push([186,252,0,58]); C.push(bowl);          // bowl belly
+      CV.push([186,214,86,24]);                       // hollow
+      P.push([186,288,0,16],[186,300,16,22]); C.push(bowl,bowl);  // foot
+      [[148,150,red],[178,140,red],[208,150,grn],[158,176,grn],[192,174,red],[224,160,grn],
+       [170,202,red],[206,200,grn],[136,176,grn],[234,150,red]].forEach(g=>{P.push([g[0],g[1],16,22]);C.push(g[2]);});
+      return {box:[0,0,372,326],P,C,CV,kMul:0.6}; })(),
+
+    /* PIER 35 — a ceramic vase holding a single protea bloom on a green stem. */
+    vase:(()=>{ const P=[],C=[],CV=[];
+      const ce=SRGB('#D7CBB4'), st=SRGB('#5C6B3A'), bl=SRGB('#A8404F'), bl2=SRGB('#C8605A');
+      stack(P,C,150,302,150,184,58,46,20,ce);   // tapered body
+      P.push([150,174,0,40]); C.push(ce);          // mouth
+      CV.push([150,170,30,12]);
+      stack(P,C,150,184,178,74,7,7,14,st);        // stem leaning out
+      [[178,64,30,bl],[160,52,22,bl2],[196,52,22,bl2],[178,38,20,bl2],
+       [166,32,14,bl],[190,32,14,bl]].forEach(p=>{P.push([p[0],p[1],10,p[2]]);C.push(p[3]);}); // protea cone
+      return {box:[0,0,300,326],P,C,CV,kMul:0.58}; })(),
+
+    /* HOUSE HOODIE — folded grey sweatshirt: two soft flat folds + a hood lump. */
+    hoodie:(()=>{ const P=[],C=[],CV=[];
+      const g=SRGB('#6E6A66'), g2=SRGB('#605C58');
+      stack(P,C,74,208,300,208,40,40,16,g);    // bottom fold
+      stack(P,C,90,150,284,150,36,36,16,g2);   // top fold
+      P.push([300,150,0,36],[296,196,0,30]); C.push(g2,g);  // hood + sleeve roll
+      return {box:[0,0,372,256],P,C,CV,kMul:0.88}; })(),
+
+    /* CORNER SLICE — a pizza slice resting on a pale plate. */
+    pizza:(()=>{ const P=[],C=[],CV=[];
+      const plate=SRGB('#D8D0C0'), crust=SRGB('#C99A58'), sauce=SRGB('#C0492F'), basil=SRGB('#5C7A3A');
+      for(let a=0;a<6.28;a+=0.45){P.push([180+118*Math.cos(a),196+38*Math.sin(a),0,26]);C.push(plate);} // plate ring
+      P.push([180,196,0,54]); C.push(plate);                                     // plate centre
+      [[120,150,crust],[186,146,crust],[248,152,crust]].forEach(p=>{P.push([p[0],p[1],16,28]);C.push(p[2]);}); // back crust
+      [[150,176,sauce],[210,176,sauce],[182,202,sauce]].forEach(p=>{P.push([p[0],p[1],20,24]);C.push(p[2]);}); // cheesy body to tip
+      P.push([168,178,30,8],[206,170,30,8]); C.push(basil,basil);                // basil dots
+      return {box:[0,0,360,260],P,C,CV,kMul:0.62}; })(),
+
+    /* MORNING PRESS — french press: glass carafe, dark coffee, steel lid + handle. */
+    press:(()=>{ const P=[],C=[],CV=[];
+      const glass=SRGB('#CFC8BC'), coffee=SRGB('#3C2616'), steel=SRGB('#AEA89C');
+      stack(P,C,134,300,134,248,64,64,18,coffee);  // coffee
+      stack(P,C,134,246,134,150,64,64,18,glass);    // glass above
+      P.push([134,138,0,72]); C.push(steel);          // lid
+      P.push([134,112,0,15]); C.push(steel);          // knob
+      [[206,166],[222,206],[208,244]].forEach(p=>{P.push([p[0],p[1],0,15]);C.push(steel);}); // handle
+      return {box:[0,0,300,360],P,C,CV,kMul:0.72}; })(),
+
+    /* TORTOISE — sunglasses: two lens rings, a bridge, folded arms. */
+    shades:(()=>{ const P=[],C=[],CV=[];
+      const fr=SRGB('#6E4A26');
+      for(let a=0;a<6.28;a+=0.8){P.push([148+40*Math.cos(a),118+34*Math.sin(a),0,15]);C.push(fr);} // left lens
+      CV.push([148,118,46,18]);
+      for(let a=0;a<6.28;a+=0.8){P.push([292+40*Math.cos(a),118+34*Math.sin(a),0,15]);C.push(fr);} // right lens
+      CV.push([292,118,46,18]);
+      P.push([220,102,0,14]); C.push(fr);                                   // bridge
+      P.push([106,116,0,13],[76,112,0,12]); C.push(fr,fr);                  // left arm
+      P.push([334,116,0,13],[364,112,0,12]); C.push(fr,fr);                 // right arm
+      return {box:[0,0,440,206],P,C,CV,kMul:0.5}; })(),
+
+    /* STUDIO FLOW — a seated yoga figurine, arms raised overhead. */
+    yoga:(()=>{ const P=[],C=[],CV=[];
+      const st=SRGB('#C9BCA2');
+      stack(P,C,68,332,192,332,32,32,18,st);   // crossed-legs base
+      P.push([130,328,0,46]); C.push(st);
+      stack(P,C,130,308,130,176,38,28,16,st);   // torso taper
+      P.push([130,146,0,32]); C.push(st);         // head
+      [[102,206],[86,176],[96,148],[114,128]].forEach(p=>{P.push([p[0],p[1],0,13]);C.push(st);}); // left arm up
+      [[158,206],[174,176],[164,148],[146,128]].forEach(p=>{P.push([p[0],p[1],0,13]);C.push(st);}); // right arm up
+      P.push([130,118,0,12]); C.push(st);         // hands meeting overhead
+      return {box:[0,0,260,392],P,C,CV,kMul:0.6}; })(),
   };
   const BOTTLE = OBJECTS.perfume;
 
@@ -5266,9 +5922,10 @@ body[data-zone="world"] .guf-half{ opacity:.4; transition:opacity .9s }
 <div class="mf-scrim" id="mfScrim" role="dialog" aria-modal="true" aria-label="A Manifesto" onclick="if(event.target===this)closeManifesto()">
   <article class="mf-panel">
     <button type="button" class="mf-close" aria-label="Close" onclick="closeManifesto()">close &times;</button>
-    <p class="mf-kicker">A Manifesto &middot; Josh Harrison &middot; December 2021</p>
+    <div class="modal-body">
+    <p class="mf-kicker">A Manifesto</p>
     <h2 class="mf-title">Home as Possibility</h2>
-    <p class="mf-lead">I write this with an acknowledgment of my privilege as both a white gay male within the Queer community and as someone that has always had a shelter over their head. I write this from the perspective of having grown up with a single mother raising two children, from having watched her make sacrificial life decisions in order to keep us within a dwelling, from having moved so many times while simultaneously staying in place. I know that, because of this, I walk with both an inability to settle and an understanding of home as the overwhelming, all-encompassing emotion of arrival.</p>
+    <p class="mf-lead">I write this with an acknowledgment of my privilege as both a white gay male within the Queer community and as someone that has always had a shelter over their head. I write this from the perspective of having grown up with a single mother raising two children, from having watched her make sacrificial life decisions in order to keep us within a dwelling, from having relocated so many times that growth was never to be held in one place. I know that, because of this, I walk with both an inability to settle and an understanding of home as the overwhelming, all-encompassing emotion of arrival.</p>
     <p>We choose to adhere to traditions of the past as our rate of change increases exponentially. We&rsquo;re taught Monopoly in order to play the game of capitalism. We clothe our bodies with the market as if it is embedded within our DNA. We assume wealth is interchangeable with value. We accept fiction as fact. We find meaning in that which we orient ourselves to. For those of us born into a world disoriented, it is in our reorientation that greater truths emerge. The reorientation process is a hunt for meaning and quest for acceptance. To consider existence is to consider the inevitable opposite: not existing. The greatest fear and truth does not discriminate, nor do natural and chance occurrences that are forceful enough to take one&rsquo;s existence away. We discriminate. We establish and reinforce structural systems that continue to marginalize, oppress, lessen, and shorten the existence of the others. Finding truth and value in one&rsquo;s existence is a constant survey of place-based fitness. It requires guarding our own sacredly-private while searching for and fabricating a collection of liberating publics. The closeted Queer body is perceived to be in a constant surveillance state of most private and most public, where heightened are performances of harsh stoicism and supercharged eruption.</p>
     <p>Consider the closet: a room, ubiquitously understood, embedded with spatial implications. To come out of the closet is to shed the first layer of a thickened skin. Delayering the Queer body is non-linear and lifelong; it is a constant shedding of skins at varying intervals dictated by a spectrum of climate conditions one must snake through on their quest for home. &ldquo;Coming out&rdquo; does not rid the closet of what&rsquo;s inside, nor does it imply that layers once worn can&rsquo;t be put back on. The Queer body is Bachelard&rsquo;s casket; delayering (coming out) breaks the dialectics of inside and outside; the most private and most public become one.</p>
     <p>Consider the house: a collection of rooms, one being a bedroom encompassing a closet. If the closet is acceptance within one&rsquo;s skin, the bedroom is acceptance within one&rsquo;s space, becoming the second most sacred layer. Now we have two layers that one must come out from, each bound by four walls, each with spatial implications, one within the other as a nesting doll.</p>
@@ -5283,15 +5940,24 @@ body[data-zone="world"] .guf-half{ opacity:.4; transition:opacity .9s }
       <li><b>Enable spatial autonomy</b> by prescribing the unscripted, embedding an aesthetics of access.</li>
       <li><b>Consider the skin on your back.</b> Elevate the invisible preconditions of the site; celebrate and orient towards every edge.</li>
     </ol>
+    <p class="mf-sign">Josh Harrison<small>December 2021</small></p>
     <p class="mf-cite">Selected references &mdash; Ahmed, Queer Phenomenology &middot; Bachelard, The Poetics of Space &middot; Colomina &amp; Bloomer, Sexuality &amp; Space &middot; Foucault, Of Other Spaces &middot; McHarg, Design with Nature &middot; Pallasmaa, The Eyes of the Skin &middot; Potvin, Bachelors of a Different Sort &middot; Solnit, Wanderlust</p>
+    </div>
   </article>
 </div>
 <script>
 (function(){
   var prevOverflow='';
-  window.openManifesto=function(){var s=document.getElementById('mfScrim');if(!s)return;prevOverflow=document.body.style.overflow;document.body.style.overflow='hidden';s.classList.add('on');s.scrollTop=0;};
+  window.openManifesto=function(e){if(e&&e.preventDefault)e.preventDefault();var s=document.getElementById('mfScrim');if(!s)return;prevOverflow=document.body.style.overflow;document.body.style.overflow='hidden';s.classList.add('on');var b=s.querySelector('.modal-body');if(b)b.scrollTop=0;};
   window.closeManifesto=function(){var s=document.getElementById('mfScrim');if(!s)return;s.classList.remove('on');document.body.style.overflow=prevOverflow;};
   document.addEventListener('keydown',function(e){if(e.key==='Escape'||e.keyCode===27)window.closeManifesto();});
+  /* Bulletproof trigger — works even if the editable content register
+     rewrites the cue and drops the inline onclick. Any .manifesto-link
+     (or [data-manifesto]) opens the manifesto and nothing else. */
+  document.addEventListener('click',function(e){
+    var t=e.target.closest&&e.target.closest('.manifesto-link,[data-manifesto]');
+    if(t){e.preventDefault();e.stopPropagation();window.openManifesto();}
+  },true);
 })();
 </script>
 
