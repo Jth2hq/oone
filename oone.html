@@ -332,13 +332,8 @@ body.night .balloon-bed::after{
   stroke:color-mix(in srgb, var(--ink) 8%, transparent);stroke-width:.3px;
 }
 
-/* 4 · ORNAMENT AS ORGANISM — the flower captions ("no. 07 · the
-   anchor") are the catalog's rational voice. Let them breathe: a
-   slow, barely-there opacity tide so the label feels like it's alive
-   rather than printed. Pure CSS, no JS. */
-@keyframes beingTide{0%,100%{opacity:.34}50%{opacity:.82}}
-.guf-being{animation:beingTide 9s ease-in-out infinite}
-.guf-being::before{content:"";}
+/* 4 · ORNAMENT AS ORGANISM — flower captions removed; flowers
+   speak only as form, not catalog. */
 
 /* 5 · MYSTICAL EDGE — the cardinal pills are the structural nodes
    (rational depressions). When the field is at rest, let a single
@@ -352,8 +347,7 @@ body.night .balloon-bed::after{
   92%{box-shadow:
     inset 0 1.5px 3px rgba(26,26,26,.16),
     inset 0 -1px 0 rgba(255,255,255,.55),
-    0 1px 0 rgba(255,255,255,.35),
-    0 0 16px 3px color-mix(in srgb, var(--ink) 26%, transparent)}
+    0 1px 0 rgba(255,255,255,.35)}
 }
 body:not(.in-zone):not(.night) .zlabel:not(.pressing) .circ{
   animation:nodeSweep 16s ease-in-out infinite}
@@ -365,14 +359,12 @@ body:not(.in-zone):not(.night) .zlabel:not(.pressing) .circ{
   92%{box-shadow:
     inset 0 1.5px 3px rgba(0,0,0,.46),
     inset 0 -1px 0 rgba(246,243,238,.07),
-    0 1px 0 rgba(246,243,238,.05),
-    0 0 16px 3px rgba(246,243,238,.30)}
+    0 1px 0 rgba(246,243,238,.05)}
 }
 body:not(.in-zone).night .zlabel:not(.pressing) .circ{
   animation:nodeSweepN 16s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){
   .zlabel .circ{animation:none!important}
-  .guf-being{animation:none}
 }
 
 /* 6 · EDITORIAL SPINE — the wordmark is the fashion-house mark. Let
@@ -396,15 +388,13 @@ body:not(.fog-cleared) .zlabel .circ{
   box-shadow:
     inset 0 1.5px 3px rgba(26,26,26,.12),
     inset 0 -1px 0 rgba(255,255,255,.5),
-    0 0 0 1px rgba(255,255,255,.4),
-    0 0 14px 2px rgba(255,255,255,.5);
+    0 0 0 1px rgba(255,255,255,.4);
 }
 body.night:not(.fog-cleared) .zlabel .circ{
   box-shadow:
     inset 0 1.5px 3px rgba(0,0,0,.4),
     inset 0 -1px 0 rgba(246,243,238,.08),
-    0 0 0 1px rgba(246,243,238,.30),
-    0 0 14px 2px rgba(246,243,238,.34);
+    0 0 0 1px rgba(246,243,238,.30);
 }
 body:not(.fog-cleared) .zlabel .tip{color:#4A4639}
 body.night:not(.fog-cleared) .zlabel .tip{color:#C9C2D6}
@@ -566,9 +556,9 @@ body.night .of-pp{--pA:#D6D1C4;--pB:#B3AD9F}
 body.night .of-bird{--pA:#B5AF9F;--pB:#968F7D;--pE:#5C5749}
 .of-it:nth-child(even) .of-paper{filter:url(#ofTear2) drop-shadow(0 2px 3px color-mix(in srgb,var(--ink) 16%, transparent))}
 .of-pp{width:62px;height:38px;margin-bottom:8px}
-/* PIXEL PLANE — canvas body of sand-grains; keeps .of-pp so flight/depth/day-night apply.
+/* PAPER PLANE — canvas body of solid wings + grain overlay; keeps .of-pp so flight/depth/day-night apply.
    id-scoped width+filter so they beat the per-species sizing/glow rules below. */
-.of-pix{--gl:transparent;display:block;pointer-events:none;image-rendering:pixelated}
+.of-pix{--gl:transparent;display:block;pointer-events:none;image-rendering:auto}
 #ofWorld .of-pix.of-pp{width:74px;height:46px;
   filter:drop-shadow(0 0 5px color-mix(in srgb,var(--gl) 50%, transparent))
          drop-shadow(0 1px 2px color-mix(in srgb,var(--ink) 26%, transparent))}
@@ -1020,7 +1010,7 @@ body.night .fog-enter{color:#C2BCD0}
 }
 .zlabel:focus-visible{outline:none}
 .zlabel:focus-visible .circ{
-  box-shadow:0 0 0 1px var(--ink), 0 0 12px 2px color-mix(in srgb, var(--ink) 45%, transparent);
+  box-shadow:0 0 0 1.5px var(--ink), inset 0 1.5px 3px rgba(26,26,26,.16);
 }
 
 /* Pill → circle. Frame matches the panel exactly (chrome ring + inset
@@ -1196,9 +1186,12 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
 .zone-title{
   font-family:var(--ff-head);font-weight:900;font-stretch:75%;
   font-size:clamp(52px,9.5vw,120px);line-height:.86;letter-spacing:-.03em;
-  color:var(--zink);margin-top:6px;display:flex;align-items:baseline;gap:.04em;
+  color:var(--zink);margin-top:6px;display:flex;align-items:baseline;gap:.14em;
   text-transform:uppercase;
 }
+/* The mark falls into the left gutter so the wordmark sits flush-left,
+   aligned with the eyebrow, sub, and body text beneath it. */
+.zone-title .mark{width:.6em;height:.6em;flex:0 0 auto;margin-left:calc(-1 * (.6em + .14em))}
 .zone-title .wm{font-weight:900;font-stretch:75%}
 .zone-sub{font-family:var(--ff-serif);font-style:italic;font-weight:600;font-size:17px;letter-spacing:0;text-transform:none;color:color-mix(in srgb,var(--zink) 90%, transparent);margin-top:14px}
 
@@ -1315,25 +1308,42 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
    buy-direct = full red glow, breathing. external-link = a dimmer tone
    of the same red, steady, with ↗ corner glyph. Both accents are tonal
    variations of the zone color — no complementary hue. */
+/* FIELD layer — drifting paper planes behind the World grid. The grid's
+   own content sits above via z-index; planes are light, slow, ambient. */
+.world-field{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.zone[data-zone="world"] > .zone-content{position:relative;z-index:1}
+.wf-plane{position:absolute;width:64px;height:auto;opacity:0;
+  --pA:rgba(245,240,228,.5);--pB:rgba(224,217,200,.42);--pE:rgba(255,255,255,.32);--pF:rgba(255,255,255,.18);
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,.25));
+  animation:wfDrift linear infinite}
+@keyframes wfDrift{
+  0%{transform:translateX(-16vw) translateY(0) rotate(-3deg);opacity:0}
+  12%{opacity:.5}
+  88%{opacity:.5}
+  100%{transform:translateX(120vw) translateY(-46px) rotate(-3deg);opacity:0}
+}
+.wf-p1{top:18%;width:58px;animation-duration:42s;animation-delay:-4s}
+.wf-p2{top:34%;width:80px;animation-duration:55s;animation-delay:-22s}
+.wf-p3{top:52%;width:48px;animation-duration:48s;animation-delay:-12s;opacity:0}
+.wf-p4{top:68%;width:70px;animation-duration:62s;animation-delay:-36s}
+.wf-p5{top:80%;width:54px;animation-duration:38s;animation-delay:-9s}
+@media (prefers-reduced-motion:reduce){.wf-plane{animation:none;opacity:.28}}
+
 .world-grid{
-  display:grid;grid-template-columns:repeat(3, 1fr);grid-auto-rows:160px;gap:var(--tile-gap);
+  display:grid;grid-template-columns:repeat(3, 1fr);grid-auto-rows:1fr;gap:var(--tile-gap);
   margin-top:24px;
   width:100%;
   padding:8px 0 18px;
-  /* extra room so glows don't clip at grid edges */
   overflow:visible;
 }
+.world-grid .wt{aspect-ratio:1 / 1.06}
 @media (max-width:768px){.world-grid{grid-template-columns:repeat(2, 1fr);padding:8px 0 14px}}
-@media (max-width:480px){
-  .world-grid{grid-template-columns:1fr;grid-auto-rows:140px}
-  .wt{grid-column:span 1!important;grid-row:span 1!important}
-}
+@media (max-width:480px){.world-grid{grid-template-columns:repeat(2, 1fr)}}
 
 .wt{
-  --led:var(--zglow);                          /* buy-direct: the zone's own glow (World = red) */
-  --led-dim:color-mix(in srgb, var(--zglow) 50%, var(--zdeep, var(--zglow)));   /* external-link: dimmer tone of the SAME hue */
+  --led:var(--zglow);
+  --led-dim:color-mix(in srgb, var(--zglow) 50%, var(--zdeep, var(--zglow)));
   position:relative;
-  /* NOT overflow:hidden — glow must bleed outside. Inner .wt-face clips. */
   background:transparent;
   border:none;
   text-decoration:none;color:var(--zink);
@@ -1343,25 +1353,27 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
   transition:transform .4s cubic-bezier(.2,.8,.3,1);
 }
 .wt:hover{transform:translateY(-5px) scale(1.015)}
-.wt.size-1x1{grid-column:span 1;grid-row:span 1}
-.wt.size-2x1{grid-column:span 2;grid-row:span 1}
-.wt.size-1x2{grid-column:span 1;grid-row:span 2}
-.wt.size-2x2{grid-column:span 2;grid-row:span 2}
-@media (max-width:600px){.wt.size-2x2{grid-column:span 2;grid-row:span 1}.wt.size-1x2{grid-row:span 1}}
 
-/* The clipped face that holds content + texture */
+/* OBJECT CELL — frosted card; the object floats above one general label.
+   No who/blurb/price on the cell — those live in the popup on click. */
 .wt-face{
   position:absolute;inset:0;
   border-radius:var(--tile-fillet);
   overflow:hidden;
-  display:flex;flex-direction:column;justify-content:flex-end;
-  padding:12px;
+  display:flex;flex-direction:column;justify-content:flex-end;align-items:center;
+  padding:14px 12px;
   z-index:2;
   background:linear-gradient(160deg,
-    color-mix(in srgb, var(--zink) 16%, #0a0303) 0%,
+    color-mix(in srgb, var(--zink) 14%, #0a0303) 0%,
     color-mix(in srgb, var(--zbg) 30%, #0a0303) 60%,
-    color-mix(in srgb, var(--zink) 28%, #0a0303) 100%);
-  border:1px solid color-mix(in srgb, var(--led-dim) 30%, transparent);
+    color-mix(in srgb, var(--zink) 24%, #0a0303) 100%);
+  border:1px solid color-mix(in srgb, var(--led-dim) 36%, transparent);
+  transition:border-color .3s, box-shadow .3s;
+}
+.wt:hover .wt-face{
+  border-color:color-mix(in srgb, var(--led) 60%, transparent);
+  box-shadow:0 0 0 1px color-mix(in srgb, var(--led) 40%, transparent),
+             0 0 26px 4px color-mix(in srgb, var(--led) 26%, transparent);
 }
 /* Halftone-dot overlay nods to the reference print */
 .wt-face::after{
@@ -1370,55 +1382,14 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
   background-size:5px 5px;
   opacity:.10;mix-blend-mode:overlay;pointer-events:none;
 }
-
-/* ── BUY-DIRECT: faint accent fill, printed (no glow) ── */
-.wt.is-buy{
-  border-radius:var(--tile-fillet);
-}
-.wt.is-buy .wt-face{
-  border-color:color-mix(in srgb, var(--led) 58%, transparent);
-  background:linear-gradient(160deg,
-    color-mix(in srgb, var(--led) 22%, #0a0303) 0%,
-    color-mix(in srgb, var(--zbg) 32%, #0a0303) 72%,
-    color-mix(in srgb, var(--led) 14%, #0a0303) 100%);
-}
-@keyframes wtBreathe{
-  0%,100%{box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--led) 50%, transparent),
-    0 0 18px 4px color-mix(in srgb, var(--led) 50%, transparent),
-    0 0 52px 14px color-mix(in srgb, var(--led) 28%, transparent)}
-  50%{box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--led) 70%, transparent),
-    0 0 30px 7px color-mix(in srgb, var(--led) 72%, transparent),
-    0 0 76px 22px color-mix(in srgb, var(--led) 40%, transparent)}
-}
-
-/* ── EXTERNAL-LINK: clean keyline outline, printed (no glow) ── */
-.wt.is-link{
-  border-radius:var(--tile-fillet);
-}
-.wt.is-link .wt-face{border-color:color-mix(in srgb, var(--led) 48%, transparent)}
-
-.wt-content{position:relative;z-index:3}
-/* one centered object per tile — the image of the thing, not a corner icon */
-.wt-thumb{position:absolute;left:12px;right:12px;top:12px;bottom:42%;
+/* one centered object per cell — the image of the thing */
+.wt-thumb{position:absolute;left:12px;right:12px;top:14px;bottom:42px;
   display:flex;align-items:center;justify-content:center;z-index:3;pointer-events:none}
-.wt-obj{height:80%;max-height:152px;width:auto;color:rgba(255,255,255,.84)}
-.wt.is-buy .wt-obj{color:color-mix(in srgb, var(--led) 78%, #fff)}
-.wt-obj.is-perfume{height:92%;filter:drop-shadow(0 5px 16px rgba(255,255,255,.16))}
-.wt-bottle{display:block;height:100%;aspect-ratio:300/684;width:auto;
+.wt-bottle{display:block;height:100%;width:auto;max-width:100%;
   filter:drop-shadow(0 6px 18px rgba(255,255,255,.14))}
-.wt-kind{font-family:var(--ff-ui);font-weight:600;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px}
-.wt.is-buy .wt-kind{color:var(--led)}
-.wt.is-link .wt-kind{color:var(--led-dim)}
-.wt-who{font-family:var(--ff-serif,Georgia,serif);font-style:italic;font-weight:600;font-size:18px;letter-spacing:-.01em;color:#fff;line-height:1.15;margin-bottom:4px;text-shadow:0 1px 8px rgba(0,0,0,.6)}
-.wt-blurb{font-family:var(--ff-mono);font-size:11px;line-height:1.45;color:rgba(255,255,255,.8);max-width:280px}
-.wt-price{font-family:var(--ff-mono);font-size:11px;color:var(--led);font-weight:600;margin-top:6px}
-/* ↗ glyph only on external-link tiles */
-.wt-arrow{position:absolute;top:11px;right:12px;font-family:var(--ff-head);font-size:15px;color:var(--led-dim);transition:transform .25s, color .25s;z-index:4;opacity:0}
-
-.wt.is-link .wt-arrow{opacity:.9}
-.wt.is-link:hover .wt-arrow{transform:translate(3px,-3px);color:#fff}
+.wt-label{position:relative;z-index:3;font-family:var(--ff-ui);font-weight:600;
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;text-align:center;
+  color:color-mix(in srgb, var(--led) 88%, #fff);text-shadow:0 1px 8px rgba(0,0,0,.55)}
 
 /* ════════════════════════════════════════════════════════════════
    FIELD LOG — depth field with organic scatter.
@@ -2096,25 +2067,29 @@ body.lc-open .log-composer{opacity:1;pointer-events:auto;transform:translateY(0)
    (never black) at night — same iOS frosted-glass feel as the zones. */
 body:not(.in-zone) .log-overlay,
 body:not(.in-zone) .world-modal,
-body:not(.in-zone) .proj-modal{
+body:not(.in-zone) .proj-modal,
+body:not(.in-zone) .mf-scrim{
   --zink:#26221A;
   background:color-mix(in srgb, var(--warm) 9%, rgba(236,230,219,.40));
 }
 body:not(.in-zone) .log-overlay-card,
 body:not(.in-zone) .wm-card,
-body:not(.in-zone) .pm-card{
+body:not(.in-zone) .pm-card,
+body:not(.in-zone) .mf-panel{
   background:color-mix(in srgb, var(--warm) 7%, rgba(245,241,233,.90));
   color:#211E16; border-color:rgba(33,30,22,.12);
 }
 body.night:not(.in-zone) .log-overlay,
 body.night:not(.in-zone) .world-modal,
-body.night:not(.in-zone) .proj-modal{
+body.night:not(.in-zone) .proj-modal,
+body.night:not(.in-zone) .mf-scrim{
   --zink:#E8E4DC;
   background:color-mix(in srgb, var(--warm) 12%, rgba(25,23,31,.46));
 }
 body.night:not(.in-zone) .log-overlay-card,
 body.night:not(.in-zone) .wm-card,
-body.night:not(.in-zone) .pm-card{
+body.night:not(.in-zone) .pm-card,
+body.night:not(.in-zone) .mf-panel{
   background:color-mix(in srgb, var(--warm) 9%, rgba(36,33,44,.90));
   color:#E8E4DC; border-color:rgba(255,255,255,.13);
 }
@@ -2124,29 +2099,39 @@ body.night:not(.in-zone) .pm-card{
 .pm-card .pm-title{font-family:var(--ff-head);font-weight:800;font-size:36px;line-height:1.05;letter-spacing:-.018em;color:var(--zink);margin-bottom:16px}
 .pm-card .pm-meta{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:18px;font-family:var(--ff-mono);font-size:11px;letter-spacing:.06em;color:color-mix(in srgb,var(--zink) 75%, transparent)}
 .pm-card .pm-body{font-family:var(--ff-mono);font-size:13.5px;line-height:1.7;color:color-mix(in srgb,var(--zink) 92%, transparent)}
+.pm-card .pm-figure{margin:0 0 18px;border-radius:var(--fillet-inset,8px);overflow:hidden;background:color-mix(in srgb,var(--zink) 8%, transparent);box-shadow:0 6px 22px color-mix(in srgb,var(--zink) 18%, transparent)}
+.pm-card .pm-figure[hidden]{display:none}
+.pm-card .pm-figure img{display:block;width:100%;height:auto;max-height:42vh;object-fit:cover}
 
 </style>
 <style id="manifesto-style">
+/* Manifesto opens in the SAME popup shell as every other object — frosted
+   zone glass, zone ink, frame radius/shadow — so it reads as one of the
+   site's universal detail popups, not a separate paper sheet. */
 .mf-scrim{position:fixed;inset:0;z-index:1200;display:none;align-items:flex-start;justify-content:center;
-  background:rgba(20,16,12,.46);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  background:color-mix(in srgb,var(--zbg) 46%, transparent);
+  -webkit-backdrop-filter:blur(9px) saturate(1.04);backdrop-filter:blur(9px) saturate(1.04);
   overflow-y:auto;padding:6vh 20px;opacity:0;transition:opacity .4s ease;}
 .mf-scrim.on{display:flex;opacity:1;}
-.mf-panel{position:relative;width:min(680px,94vw);background:#F4EFE6;color:#1B1714;
-  border:1px solid rgba(27,23,20,.18);box-shadow:0 30px 80px rgba(0,0,0,.42);
-  padding:46px clamp(24px,5vw,60px) 54px;border-radius:2px;
+.mf-panel{position:relative;width:min(680px,94vw);
+  background:color-mix(in srgb,var(--zbg) 80%, transparent);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  border:1px solid color-mix(in srgb,var(--zink) 14%, transparent);
+  box-shadow:var(--frame-shadow);color:var(--zink);
+  padding:46px clamp(24px,5vw,52px) 52px;border-radius:var(--frame-radius);
   font-family:var(--ff-serif,"gratia",Georgia,serif);transform:translateY(14px);transition:transform .4s ease;}
 .mf-scrim.on .mf-panel{transform:none;}
-.mf-kicker{font-family:var(--ff-mono,ui-monospace,monospace);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(27,23,20,.55);margin:0 0 6px;}
-.mf-title{font-family:var(--ff-serif,"gratia",Georgia,serif);font-style:italic;font-size:clamp(26px,4.4vw,38px);line-height:1.04;margin:0 0 26px;}
-.mf-panel p{font-size:15.5px;line-height:1.72;margin:0 0 16px;}
+.mf-kicker{font-family:var(--ff-mono,ui-monospace,monospace);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:color-mix(in srgb,var(--zink) 60%, transparent);margin:0 0 6px;}
+.mf-title{font-family:var(--ff-serif,"gratia",Georgia,serif);font-style:italic;font-size:clamp(26px,4.4vw,38px);line-height:1.04;margin:0 0 26px;color:var(--zink);}
+.mf-panel p{font-size:15.5px;line-height:1.72;margin:0 0 16px;color:color-mix(in srgb,var(--zink) 92%, transparent);}
 .mf-lead::first-letter{font-size:2.9em;line-height:.8;float:left;padding:6px 10px 0 0;font-style:italic;}
-.mf-imps{list-style:none;counter-reset:imp;padding:0;margin:24px 0 8px;border-top:1px solid rgba(27,23,20,.16);}
-.mf-imps li{counter-increment:imp;position:relative;padding:14px 0 14px 44px;border-bottom:1px solid rgba(27,23,20,.10);font-size:14.5px;line-height:1.6;}
-.mf-imps li::before{content:counter(imp,decimal-leading-zero);position:absolute;left:0;top:15px;font-family:var(--ff-mono,ui-monospace,monospace);font-size:11px;letter-spacing:.1em;color:rgba(27,23,20,.5);}
+.mf-imps{list-style:none;counter-reset:imp;padding:0;margin:24px 0 8px;border-top:1px solid color-mix(in srgb,var(--zink) 16%, transparent);}
+.mf-imps li{counter-increment:imp;position:relative;padding:14px 0 14px 44px;border-bottom:1px solid color-mix(in srgb,var(--zink) 10%, transparent);font-size:14.5px;line-height:1.6;color:color-mix(in srgb,var(--zink) 92%, transparent);}
+.mf-imps li::before{content:counter(imp,decimal-leading-zero);position:absolute;left:0;top:15px;font-family:var(--ff-mono,ui-monospace,monospace);font-size:11px;letter-spacing:.1em;color:color-mix(in srgb,var(--zink) 55%, transparent);}
 .mf-imps b{font-style:italic;font-weight:600;}
-.mf-cite{font-family:var(--ff-mono,ui-monospace,monospace);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(27,23,20,.5);line-height:2;margin-top:24px;border-top:1px solid rgba(27,23,20,.16);padding-top:16px;}
-.mf-close{position:absolute;top:14px;right:16px;width:34px;height:34px;border:1px solid rgba(27,23,20,.3);background:transparent;border-radius:50%;font-family:var(--ff-mono,ui-monospace,monospace);font-size:16px;color:#1B1714;cursor:pointer;line-height:1;}
-.mf-close:hover{background:rgba(27,23,20,.08);}
+.mf-cite{font-family:var(--ff-mono,ui-monospace,monospace);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:color-mix(in srgb,var(--zink) 55%, transparent);line-height:2;margin-top:24px;border-top:1px solid color-mix(in srgb,var(--zink) 16%, transparent);padding-top:16px;}
+.mf-close{position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;width:var(--hit);height:var(--hit);font-family:var(--ff-mono);font-size:9px;letter-spacing:.18em;color:var(--zink);opacity:.6;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center;line-height:1;}
+.mf-close:hover{opacity:1;}
 .manifesto-link{color:inherit;text-decoration:none;border:none;border-bottom:1px solid currentColor;background:none;padding:0;font:inherit;font-style:italic;cursor:pointer;}
 .manifesto-link:hover{opacity:.6;}
 @media (max-width:768px){.mf-panel{padding:40px 22px 46px;}}
@@ -2360,15 +2345,12 @@ body.night:not(.in-zone) .pm-card{
           <section class="zsec">
             <div class="story-block">
               <h3>Josh Harrison</h3>
-              <p class="zpara">Brooklyn-based designer working across architecture, interiors, urban design, and photography. Currently <em>Ralph Lauren</em>, store design; previously <em>Wesley Moon Inc.</em>, <em>Hart Howerton</em>, and <em>Bedrock Detroit</em>. M.Arch, University of Virginia.</p>
+              <p class="zpara" id="about-bio">Brooklyn-based designer working across architecture, interiors, and brand systems. I carry projects from visioning through construction — thinking in systems while designing for bodies, and protecting narrative integrity at every scale. Currently <em>Ralph Lauren</em> — Project Manager, Store Design; previously <em>Wesley Moon Inc.</em>, <em>Hart Howerton</em>, and <em>Bedrock Detroit</em>. M.Arch, University of Virginia.</p>
               <p class="zpara manifesto-cue">From the <button type="button" class="manifesto-link" onclick="openManifesto()">manifesto</button> — <em>“…an understanding of home as the overwhelming, all-encompassing emotion of arrival.”</em></p>
               <h4>Experience</h4>
-              <div class="zproj"><div><div class="zproj-title">Ralph Lauren</div><div class="zproj-tag">Store Design — project manager, store environments.</div></div><div class="zproj-yr">2026 –</div></div>
-              <div class="zproj"><div><div class="zproj-title">Wesley Moon Inc.</div><div class="zproj-tag">Designer — architecture, interiors, urban design.</div></div><div class="zproj-yr">2022–26</div></div>
-              <div class="zproj"><div><div class="zproj-title">Hart Howerton</div><div class="zproj-tag">Architectural Designer — resort, residential, master planning.</div></div><div class="zproj-yr">2020–22</div></div>
-              <div class="zproj"><div><div class="zproj-title">Bedrock Detroit</div><div class="zproj-tag">Architecture Coordinator — urban development, place-making.</div></div><div class="zproj-yr">2017–20</div></div>
-              <h4>Education</h4>
-              <div class="zproj"><div><div class="zproj-title">University of Virginia</div><div class="zproj-tag">M.Arch · Venture for America Fellow.</div></div><div class="zproj-yr">2020–23</div></div>
+              <div id="cv-exp"></div>
+              <h4>Education &amp; Fellowship</h4>
+              <div id="cv-edu"></div>
             </div>
           </section>
         </div>
@@ -2385,8 +2367,8 @@ body.night:not(.in-zone) .pm-card{
         </header>
         <section class="zsec">
           <div class="zsec-head">Manifesto</div>
-          <p class="zpara"><span data-mark="C"></span><span class="wm">TANNER</span> is the design practice within <span data-mark="O"></span><span class="wm">ONE</span>. Architecture, interiors, and visual systems for clients who want their place to think.</p>
-          <p class="zpara">Where <span data-mark="O"></span><span class="wm">ONE</span> is the editorial and lifestyle brand, <span data-mark="C"></span><span class="wm">TANNER</span> is where the work gets made.</p>
+          <p class="zpara" id="practice-p1"><span data-mark="C"></span><span class="wm">TANNER</span> is the design practice within <span data-mark="O"></span><span class="wm">ONE</span>. Architecture, interiors, and visual systems for clients who want their place to think.</p>
+          <p class="zpara" id="practice-p2">Where <span data-mark="O"></span><span class="wm">ONE</span> is the editorial and lifestyle brand, <span data-mark="C"></span><span class="wm">TANNER</span> is where the work gets made.</p>
         </section>
         <section class="zsec">
           <div class="zsec-head">Selected Projects</div>
@@ -2466,6 +2448,15 @@ body.night:not(.in-zone) .pm-card{
 
     <!-- WORLD ZONE -->
     <section class="zone" data-zone="world">
+      <!-- FIELD — paper planes drift behind the object grid, so World reads
+           as objects in a field (half the flower bed rises behind too). -->
+      <div class="world-field" aria-hidden="true">
+        <svg class="wf-plane wf-p1" viewBox="0 0 100 60"><use href="#of-plane"/></svg>
+        <svg class="wf-plane wf-p2" viewBox="0 0 100 60"><use href="#of-plane"/></svg>
+        <svg class="wf-plane wf-p3" viewBox="0 0 100 60"><use href="#of-plane"/></svg>
+        <svg class="wf-plane wf-p4" viewBox="0 0 100 60"><use href="#of-plane"/></svg>
+        <svg class="wf-plane wf-p5" viewBox="0 0 100 60"><use href="#of-plane"/></svg>
+      </div>
       <div class="zone-content">
         <header class="zone-head">
           <div class="zone-eyebrow">← WORLD</div>
@@ -2587,6 +2578,7 @@ body.night:not(.in-zone) .pm-card{
         <button class="pm-close" onclick="closeProjModal()" aria-label="close">close ×</button>
         <div class="pm-eyebrow" id="pm-eyebrow">Project</div>
         <h2 class="pm-title" id="pm-title"></h2>
+        <figure class="pm-figure" id="pm-figure" hidden><img id="pm-img" alt="" loading="lazy" draggable="false"></figure>
         <div class="pm-meta" id="pm-meta"></div>
         <div class="pm-body" id="pm-body"></div>
       </div>
@@ -2640,12 +2632,32 @@ const ZONES = {
 };
 
 const PROJECTS = [
-  {id:'spa',title:'Cellar Spa',tag:'Detailing the charm that brings the clients home.',year:'2024–26',role:'Designer',client:'Wesley Moon Inc',desc:'Reworked the schematic design of a cellar-floor lap pool and spa — composing a new wood flooring pattern, modeling a wall-mounted carved stone sink, and developing a language for the pool’s mosaic markings.'},
-  {id:'bigsky',title:'Stargazer Compound',tag:'Bringing the spa to the slopes of a short-term stay.',year:'2024–26',role:'Designer',client:'Wesley Moon Inc',desc:'From schematic design to 100% DD, detailed the main and guest houses of two residential-style ski compounds within a large-scale hospitality masterplan. In the spa, aperiodic tongue-and-groove reveals map the constellations overhead — a nod to the site’s Dark Sky setting.'},
-  {id:'troub',title:'Troubadour Club',tag:'A new-construction community fitness center.',year:'2023',role:'Designer',client:'Hart Howerton',desc:'Developed the construction set in Revit from DD to CD — reflected ceiling plans, interior elevations, and millwork details — for a new-construction community fitness center in College Grove, Tennessee.'},
-  {id:'ranch',title:'Covert Ranch',tag:'Amenity buildings for a residential community.',year:'2023',role:'Designer',client:'Hart Howerton',desc:'Drew plans, sections, and elevations in AutoCAD and Photoshop toward a look-and-feel package for the amenity buildings of a private working ranch in the Texas Hill Country.'},
-  {id:'wtto',title:'When Time Takes Over',tag:'Camp, queer space, and the heterotopia.',year:'2022–23',role:'Author',client:'UVA',desc:'A design-research investigation into camp sensibility, queer space, and the gay bathhouse as heterotopia — built as editorial spreads and artifacts on nightlife, ritual, and the experience economy.'},
-  {id:'cor',title:'COR Wellness Center',tag:'Renovating and re-branding a fitness center.',year:'2018–20',role:'Design Direction',client:'Bedrock Detroit',desc:'As owner’s representative, gave creative teams ongoing design direction — concept through construction administration — for the renovation and re-branding of a Detroit fitness center.'},
+  {id:'spa',title:'Cellar Spa',tag:'Detailing the charm that brings the clients home.',year:'2024–26',role:'Designer',client:'Wesley Moon Inc.',place:'New York, NY',desc:'Reworked the schematic design of a cellar-floor lap pool and spa at 18E74th — composing a new wood flooring pattern, modeling a wall-mounted carved stone sink, and developing a language for the pool’s mosaic markings.'},
+  {id:'bigsky',title:'Stargazer Compound',tag:'Bringing the spa to the slopes of a short-term stay.',year:'2024–26',role:'Designer',client:'Wesley Moon Inc.',place:'Big Sky, MT',desc:'From schematic design to 100% DD, detailed the main and guest houses of two residential-style ski compounds within a large-scale hospitality masterplan (the Kircher Collection), reconfiguring a bedroom suite in each main villa into an indoor/outdoor private spa.'},
+  {id:'troub',title:'Troubadour Club',tag:'A new-construction community fitness center.',year:'2023',role:'Designer',client:'Hart Howerton',place:'Nashville, TN',desc:'Developed the drawing set in Revit from DD to CD — reflected ceiling plans, interior elevations, and millwork details — for a new-construction community fitness center.'},
+  {id:'ranch',title:'Covert Ranch',tag:'Amenity buildings for a residential community.',year:'2023',role:'Designer',client:'Hart Howerton',place:'Austin, TX',desc:'Drew plans, sections, and elevations in AutoCAD and Photoshop toward an overall look-and-feel package for the supporting amenity buildings of a residential community.'},
+  {id:'nyhousing',title:'Housing Dual Neighbors',tag:'Two towers that bind an institution with the city.',year:'2021',role:'Author',client:'UVA · ARCH 7010',place:'New York, NY',desc:'Two residential towers that mediate systems working in opposition — the city grid and true north, the elevated and the at-grade, the private and public sectors — to better bind a university with its city. Foundation Studio III, advised by Evan Sheih.'},
+  {id:'boyle',title:'Boyle Heights Pantry for the Arts',tag:'An arts center for Latino cultural heritage.',year:'2022',role:'Author',client:'UVA · ARCH 7020',place:'Los Angeles, CA',desc:'An arts education center that pays homage to California mid-century modernism and celebrates Latino cultural heritage — where utilitarian art objects support cultural production and food anchors the experience economy. Foundation Studio IV.'},
+  {id:'montjuic',title:'The Meeting Line',tag:'A path that redefines arrival to Barcelona.',year:'2022',role:'Author',client:'UVA · ARCH 8010',place:'Barcelona, Spain',desc:'A path and a place that redefines the port and point of arrival to Barcelona, reconciling three competing orientations of north — true north, the Eixample grid, and the contours of Montjuïc and the sea — to return a placeless waterfront to the pedestrian. Advanced Research Studio, advised by Manuel Bailo.'},
+  {id:'wtto',title:'When Time Takes Over',tag:'Camp, queer space, and the heterotopia.',year:'2022–23',role:'Author',client:'UVA',place:'Charlottesville, VA',desc:'A design-research investigation into camp sensibility, queer space, and the gay bathhouse as heterotopia — built as editorial spreads and artifacts on nightlife, ritual, and the experience economy.'},
+  {id:'cor',title:'COR Wellness Center',tag:'Renovating and re-branding a fitness center.',year:'2018–20',role:'Design Direction',client:'Bedrock Detroit',place:'Detroit, MI',desc:'As owner’s representative, gave creative teams ongoing design direction — concept through construction administration — for the renovation and re-branding of a Detroit fitness center.'},
+  {id:'detroit139',title:'Detroit Design 139',tag:'Design initiatives in and for the City of Detroit.',year:'2017–19',role:'Design Direction',client:'Bedrock Detroit',place:'Detroit, MI',desc:'Led vision-document creation and assisted in exhibition design — installation, print, and digital media — for a coalition of design advocates organizing exhibitions, events, and publications toward a future Detroit.'},
+  {id:'themay',title:'The May',tag:'Staging two units of a new residential development.',year:'2019–20',role:'Design Direction',client:'Bedrock Detroit',place:'Cleveland, OH',desc:'Led the staging process from vision and product selection through budget revisions, procurement, and installation for two units of a newly-completed residential development.'},
+  {id:'harvard',title:'Harvard Square Centre',tag:'Repositioning a 1925 Beaux-Arts landmark.',year:'2020',role:'Design Direction',client:'Bedrock Detroit',place:'Detroit, MI',desc:'A building-and-context study for the twelve-story Harvard Square Centre (1925), a Beaux-Arts Romanesque tower and contributing property to the Broadway Avenue Historic District.'},
+  {id:'woodward',title:'Woodward Streetscape',tag:'A streetscape for the avenue that built Detroit.',year:'2017–19',role:'Design Direction',client:'Bedrock Detroit',place:'Detroit, MI',desc:'A streetscape vision for Woodward Avenue — the nation’s first paved road and the site of the first three-color traffic light — reconnecting the corridor’s automotive history to contemporary pedestrian life.'},
+];
+
+/* Curriculum vitae — rendered into the Story · Author tab; editable via the register. */
+const EXPERIENCE = [
+  {title:'Ralph Lauren',     note:'Project Manager, Store Design — store environments.',     year:'2026 –'},
+  {title:'Wesley Moon Inc.', note:'Designer — interiors, detailing, finish integration.',     year:'2024–26'},
+  {title:'Hart Howerton',    note:'Designer — resort, residential, master planning.',         year:'2022–24'},
+  {title:'Bedrock Detroit',  note:'Architecture Coordinator — urban development, place-making.',year:'2017–20'},
+];
+const EDUCATION = [
+  {title:'University of Virginia', note:'M.Arch · Student Instructor.',                         year:'2020–23'},
+  {title:'Venture for America',    note:'Fellow — venture creation, Detroit.',                   year:'2017–20'},
+  {title:'University of Virginia', note:'B.S. Architecture + American Visual & Pop Culture.',    year:'2013–17'},
 ];
 
 const PHOTOS = {
@@ -2682,7 +2694,7 @@ const WORLD_FEED = [
   {kind:'reference',size:'1x1',who:'Are.na',blurb:'Lorem ipsum dolor sit amet.',href:'https://www.are.na/josh-harrison-tzcbbdxiro8'},
   {kind:'scent',size:'1x1',who:'Liza Pittard',blurb:'Lorem ipsum dolor sit amet.',obj:'perfume',href:'https://lizapittard.com'},
   {kind:'wine',size:'1x2',who:'Irving Bottle',blurb:'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',obj:'wine',href:'https://irvingbottle.com'},
-  {kind:'cake',size:'1x1',who:'Love Song',blurb:'Lorem ipsum dolor sit amet.',obj:'cake',href:'https://lovesongva.com'},
+  {kind:'olive oil cake',size:'1x1',who:'Love Song',blurb:'Lorem ipsum dolor sit amet.',obj:'cake',href:'https://lovesongva.com'},
   {kind:'barber',size:'1x1',who:'Trios for Hair',blurb:'Lorem ipsum dolor sit amet.',obj:'clippers',href:'https://triosforhair.com'},
   {kind:'acupuncture',size:'1x1',who:'TAP Acupuncture',blurb:'Lorem ipsum dolor sit amet.',obj:'needle',href:'https://tapacupuncture.com'},
   {kind:'textile',size:'2x1',who:'Cidney Cher',blurb:'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',obj:'silk',href:'https://cidneycher.com'},
@@ -2697,6 +2709,79 @@ const WORLD_FEED = [
   {kind:'friend',size:'2x1',who:'Out of Office Studio',blurb:'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',href:'#'},
   {kind:'reading',size:'1x1',who:'Bachelard',blurb:'Lorem ipsum dolor sit amet.',href:'#'},
 ];
+
+/* ════════════════════════════════════════════════════════════════
+   CONTENT REGISTER — load-time overrides
+   The editable register (see end of <body>) saves all section content
+   to localStorage under REGISTER_KEY. We apply it here, BEFORE any
+   render or field-init runs, by mutating the data arrays in place so
+   every downstream consumer sees the edited content. Text-only About
+   fields are patched after DOM is ready (patchAboutFields).
+════════════════════════════════════════════════════════════════ */
+const REGISTER_KEY = 'oone_register_v1';
+// Selector map for free-text About / voice fields. Each key maps to a
+// unique element; value is edited as plain text (or HTML when html:true).
+const ABOUT_FIELDS = [
+  {key:'hero',        sel:'.enter-cue .h',            label:'Hero line', html:true},
+  {key:'introProse',  sel:'.intro-prose',             label:'Hero — TANNER lockup', html:true},
+  {key:'introWelcome',sel:'.intro-welcome',           label:'Hero — welcome'},
+  {key:'introSign',   sel:'.intro-sign',              label:'Hero — signature'},
+  {key:'bio',         sel:'#about-bio',               label:'About — bio', html:true},
+  {key:'manifestoCue',sel:'.manifesto-cue',           label:'About — manifesto cue', html:true},
+  {key:'practice1',   sel:'#practice-p1',             label:'Practice — paragraph 1', html:true},
+  {key:'practice2',   sel:'#practice-p2',             label:'Practice — paragraph 2', html:true},
+];
+function loadRegister(){
+  try { return JSON.parse(localStorage.getItem(REGISTER_KEY)) || {}; }
+  catch(e){ return {}; }
+}
+function applyRegisterData(){
+  const R = loadRegister();
+  const replace = (arr, data) => { if(Array.isArray(data)){ arr.length=0; data.forEach(d=>arr.push(d)); } };
+  replace(PROJECTS, R.projects);
+  replace(LOG_ENTRIES, R.log);
+  replace(WORLD_FEED, R.world);
+  replace(EXPERIENCE, R.experience);
+  replace(EDUCATION, R.education);
+  if (Array.isArray(R.marquee)) window.__MARQUEE_OVERRIDE = R.marquee;
+}
+function patchAboutFields(){
+  const R = loadRegister();
+  if (!R.about) return;
+  ABOUT_FIELDS.forEach(f => {
+    const v = R.about[f.key];
+    if (v == null) return;
+    const el = document.querySelector(f.sel);
+    if (!el) return;
+    if (f.html) el.innerHTML = v; else el.textContent = v;
+  });
+  if (typeof hydrateMarks === 'function') hydrateMarks(document);
+}
+applyRegisterData();
+
+/* Capture About-field source HTML BEFORE marks are hydrated to inline SVG,
+   so the editor shows clean, editable markup (e.g. <span data-mark="O"></span>). */
+window.__ABOUT_DEFAULTS = (function(){
+  const o = {};
+  ABOUT_FIELDS.forEach(f => { const el = document.querySelector(f.sel); if (el) o[f.key] = (f.html ? el.innerHTML : el.textContent).trim(); });
+  return o;
+})();
+
+/* Expose the live data + helpers to the register editor (separate scope). */
+window.REGISTER = {
+  KEY: REGISTER_KEY,
+  load: loadRegister,
+  fields: ABOUT_FIELDS,
+  data: () => ({
+    projects: PROJECTS, log: LOG_ENTRIES, world: WORLD_FEED,
+    experience: EXPERIENCE, education: EDUCATION,
+  }),
+  photoKeys: () => (typeof PHOTOS === 'object' ? Object.keys(PHOTOS) : []),
+  aboutCurrent: () => Object.assign({}, window.__ABOUT_DEFAULTS || {}),
+  marqueeCurrent: () => (Array.isArray(window.__MARQUEE_OVERRIDE) && window.__MARQUEE_OVERRIDE.length)
+    ? window.__MARQUEE_OVERRIDE.slice()
+    : (window.__MARQUEE_DEFAULT ? window.__MARQUEE_DEFAULT.slice() : []),
+};
 
 /* ════════════════════════════════════════════════════════════════
    STATE
@@ -2732,6 +2817,8 @@ window.addEventListener('DOMContentLoaded', () => {
   setupSnakeMarquee();
   setupScroll();
   renderTannerProjects();
+  renderCV();
+  patchAboutFields();
   renderWorldGrid();
   populateLogField();
   computeAndRenderDensity();
@@ -2920,7 +3007,11 @@ function setupSnakeMarquee(){
     'Our eyes do not divide us from the world, but unite us with it — McHarg',
   ];
   // Marquee = the literary braid (quotes only; log titles rejoin here once written).
-  const braid = MARQUEE_STRAYS.slice();
+  // Register override (if the editor saved a custom quote list) wins.
+  window.__MARQUEE_DEFAULT = MARQUEE_STRAYS.slice();   // expose defaults to the register editor
+  const braid = (Array.isArray(window.__MARQUEE_OVERRIDE) && window.__MARQUEE_OVERRIDE.length)
+    ? window.__MARQUEE_OVERRIDE.slice()
+    : MARQUEE_STRAYS.slice();
   const phrase = braid.join('   ·   ') + '   ·   ';
   const long = phrase.repeat(20); // safe upper bound
   snake = {svg, pathEl, charsG, strand:long, pathLen:0, t0:performance.now(), built:false};
@@ -3837,27 +3928,22 @@ function logEntryPrev(){ if (currentLogIdx > 0) openLogEntry(currentLogIdx-1); }
 function logEntryNext(){ if (currentLogIdx < LOG_ENTRIES.length-1) openLogEntry(currentLogIdx+1); }
 function closeLogOverlay(){ document.getElementById('log-overlay').classList.remove('open'); currentLogIdx = -1; }
 
-/* World grid + preview modal */
+/* World grid + preview modal.
+   World is a FIELD of objects: only the physical makers/objects appear
+   (no jobs, no shop, no schools). Each cell shows the rendered object and
+   one piece of general text — its kind ("scent", "olive oil cake",
+   "barber"). The detail (who + blurb + visit) lives in the popup, which
+   opens on click before sending the visitor onward to the site. */
+const WORLD_OBJECTS = WORLD_FEED.filter(it => it.obj);
 function renderWorldGrid(){
   const el = document.getElementById('world-grid'); if (!el) return;
-  el.innerHTML = WORLD_FEED.map((it, i) => {
-    const sizeClass = `size-${it.size || '1x1'}`;
-    const isBuy = !!it.price;
-    const typeClass = isBuy ? 'is-buy' : 'is-link';
-    return `
-      <button class="wt ${sizeClass} ${typeClass}" role="listitem" data-i="${i}" aria-label="${escapeHtml(it.who)}${isBuy ? ' — buy' : ' — external link'}">
-        <div class="wt-arrow" aria-hidden="true">↗</div>
+  el.innerHTML = WORLD_OBJECTS.map((it, i) => `
+      <button class="wt" role="listitem" data-i="${i}" aria-label="${escapeHtml(it.kind)} — ${escapeHtml(it.who)}, open">
         <div class="wt-face">
-          ${it.obj ? `<div class="wt-thumb"><canvas class="wt-bottle" data-obj="${it.obj}" aria-hidden="true"></canvas></div>` : ''}
-          <div class="wt-content">
-            <div class="wt-kind">${isBuy ? '● ' : ''}${escapeHtml(it.kind)}</div>
-            <div class="wt-who">${escapeHtml(it.who)}</div>
-            <div class="wt-blurb">${escapeHtml(it.blurb)}</div>
-            ${it.price ? `<div class="wt-price">${escapeHtml(it.price)}</div>` : ''}
-          </div>
+          <div class="wt-thumb"><canvas class="wt-bottle" data-obj="${it.obj}" aria-hidden="true"></canvas></div>
+          <div class="wt-label">${escapeHtml(it.kind)}</div>
         </div>
-      </button>`;
-  }).join('');
+      </button>`).join('');
   el.querySelectorAll('.wt').forEach(b => {
     b.addEventListener('click', () => openWorldModal(parseInt(b.dataset.i,10)));
   });
@@ -3885,7 +3971,7 @@ function paintWorldObjects(){
 }
 window.addEventListener('resize', () => { _worldPaintTries = 0; paintWorldObjects(); });
 function openWorldModal(i){
-  const it = WORLD_FEED[i]; if (!it) return;
+  const it = WORLD_OBJECTS[i]; if (!it) return;
   document.getElementById('wm-kind').textContent = it.kind.toUpperCase() + (it.price ? ' · ' + it.price : '');
   document.getElementById('wm-title').textContent = it.who;
   document.getElementById('wm-blurb').textContent = it.blurb;
@@ -3897,6 +3983,13 @@ function openWorldModal(i){
   document.getElementById('world-modal').classList.add('open');
 }
 function closeWorldModal(){ document.getElementById('world-modal').classList.remove('open'); }
+
+/* Curriculum vitae rows (Story · Author tab) */
+function renderCV(){
+  const row = r => `<div class="zproj"><div><div class="zproj-title">${escapeHtml(r.title)}</div><div class="zproj-tag">${escapeHtml(r.note)}</div></div><div class="zproj-yr">${escapeHtml(r.year)}</div></div>`;
+  const exp = document.getElementById('cv-exp'); if (exp) exp.innerHTML = EXPERIENCE.map(row).join('');
+  const edu = document.getElementById('cv-edu'); if (edu) edu.innerHTML = EDUCATION.map(row).join('');
+}
 
 /* Tanner projects + project detail modal */
 function renderTannerProjects(){
@@ -3925,7 +4018,11 @@ function openProjModal(i){
   const p = PROJECTS[i]; if (!p) return;
   document.getElementById('pm-eyebrow').textContent = p.client + ' · ' + p.year;
   document.getElementById('pm-title').textContent = p.title;
-  document.getElementById('pm-meta').innerHTML = `<span><strong>Role:</strong> ${escapeHtml(p.role)}</span><span><strong>Type:</strong> ${escapeHtml(p.tag)}</span>`;
+  const fig = document.getElementById('pm-figure'), img = document.getElementById('pm-img');
+  if (p.img){ img.src = p.img; img.alt = p.title; fig.hidden = false; }
+  else { img.removeAttribute('src'); fig.hidden = true; }
+  const place = p.place ? `<span><strong>Place:</strong> ${escapeHtml(p.place)}</span>` : '';
+  document.getElementById('pm-meta').innerHTML = `<span><strong>Role:</strong> ${escapeHtml(p.role)}</span>${place}<span><strong>Type:</strong> ${escapeHtml(p.tag)}</span>`;
   document.getElementById('pm-body').textContent = p.desc;
   document.getElementById('proj-modal').classList.add('open');
 }
@@ -4388,14 +4485,6 @@ body.night .guf-w.guf-far{ --far-b:.92 }
   animation-direction:normal,alternate;
   animation-fill-mode:both,none}
 @media (prefers-reduced-motion:reduce){.guf-w{animation:none;scale:1}}
-/* BEINGS — each flower is a thing or person in the field (rename freely
-   in the BEINGS map below). Faint catalog caption at the stem's foot. */
-.guf-being{position:absolute;left:50%;bottom:2px;transform:translateX(-50%);
-  font-family:var(--ff-mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;
-  color:color-mix(in srgb,var(--ink) 46%, transparent);white-space:nowrap;pointer-events:none}
-body.night .guf-being{color:color-mix(in srgb,#DAD6CF 40%, transparent)}
-.guf-far .guf-being{display:none}
-body.in-zone .guf-being{opacity:0}
 .guf-w{ position:absolute; transform-origin:50% 100%;
   animation:guf-lean var(--g-dur,16s) ease-in-out infinite alternate;
   animation-delay:var(--g-delay,0s) }
@@ -4426,6 +4515,10 @@ body[data-zone="world"]  [data-fz="world"],
 body[data-zone="author"] [data-fz="author"],
 body[data-zone="log"]    [data-fz="log"],
 body[data-zone="tanner"] [data-fz="tanner"]{ opacity:1 }
+/* WORLD = a field of objects: half the flower bed stays as ambient
+   scenery, dropped BEHIND the object grid so the grid reads on top. */
+body[data-zone="world"] .balloon-bed{ z-index:5 }
+body[data-zone="world"] .guf-half{ opacity:.4; transition:opacity .9s }
 @media (prefers-reduced-motion:reduce){
   .guf-w,.guf-w canvas{ animation:none } }
 </style>
@@ -4731,15 +4824,17 @@ body[data-zone="tanner"] [data-fz="tanner"]{ opacity:1 }
   }
   /* MUSCARI — grape-hyacinth spire: cone cluster of small florets. */
   function muscari(P,C,hx,hy,sc,col){
-    const rows=[[3,1.0],[3,.94],[2,.86],[2,.76],[1,.64],[1,.5]];
+    /* Tighter vertical pitch + larger top florets so the smooth-union
+       merges every floret into one continuous cone — no detached top bud. */
+    const rows=[[3,1.0],[3,.95],[2,.88],[2,.80],[1,.72],[1,.64]];
     let y=0;
     rows.forEach(([n,m],ri)=>{
       const rr=27*m*sc;
       for(let i=0;i<n;i++){
-        const x=(i-(n-1)/2)*rr*1.55 + (ri%2?rr*.2:-rr*.2);
+        const x=(i-(n-1)/2)*rr*1.5 + (ri%2?rr*.2:-rr*.2);
         P.push([hx+x, hy+y, 8+(ri%3)*6, rr]); C.push(col);
       }
-      y-=rr*1.6;
+      y-=rr*1.28;
     });
   }
   /* BLUEBELL — hanging bell, flared scalloped mouth. */
@@ -4872,25 +4967,14 @@ body[data-zone="tanner"] [data-fz="tanner"]{ opacity:1 }
 
   /* ---------- DOM + layout ---------- */
   const DW=1400,DH=780;
-  /* BEINGS — abstract stand-ins for the people and things of this field.
-     EDIT THESE: each key is a flower, each value its caption. */
-  const BEINGS={
-    biggie:'lorem ipsum', lean:'dolor sit', pal:'amet',
-    dot:'consectetur',   wilt:'adipiscing',  moss:'sed do',
-    pip:'eiusmod',       bee:'tempor',       fern:'incididunt',
-    juno:'ut labore',
-  };
   const items=FLOWERS.map((f,fi)=>{
     const w=document.createElement('div'); w.className='guf-w';
     if(f.name.startsWith('far')) w.classList.add('guf-far');
     if(f.name.startsWith('mid')) w.classList.add('guf-mid');
+    /* ~half the bed stays as ambient field behind the World grid */
+    if(fi%2===1) w.classList.add('guf-half');
     /* growth period: 100–240s, staggered by flower */
     w.style.setProperty('--grow-d',(100+((fi*53)%140))+'s');
-    if(BEINGS[f.name]){
-      const cap=document.createElement('div'); cap.className='guf-being';
-      cap.textContent='no. '+String(fi+1).padStart(2,'0')+' · '+BEINGS[f.name];
-      w.appendChild(cap);
-    }
     w.style.setProperty('--g-dur',f.dur+'s');
     w.style.setProperty('--g-delay',(-(f.dur*.4)).toFixed(1)+'s');
     w.style.setProperty('--g-a0',(-f.amp)+'deg');
@@ -5092,69 +5176,68 @@ body[data-zone="tanner"] [data-fz="tanner"]{ opacity:1 }
 </script>
 
 <script>
-/* PIXEL PLANES — a folded paper dart drawn in grains of sand. Two wings split by
-   a center crease: upper wing lit, lower wing in shadow, crease darkest, so it
-   reads as folded paper. Grains are fine + jittered (size/alpha/scatter) rather
-   than a grid. Static: the field's flight carries each plane in from an edge.
-   Redrawn only on day/night toggle. Tune Wl,Hl (size) or GS (grain spacing). */
+/* PAPER PLANES — a folded paper dart, rendered as two solid wings split by
+   a center crease, with a faint grain overlay for paper fiber. Earlier
+   stipple-only version was illegible at 74×46. Now the silhouette reads
+   first: solid fills + edge stroke + crease, then sparse grains on top.
+   Redrawn only on day/night toggle. */
 (function(){
   var reg=[];
   var DPR=Math.min(window.devicePixelRatio||1,2);
-  var GS=2.4*DPR;                         /* grain spacing → density */
   function tones(){
     return document.body.classList.contains('night')
-      ? {lit:'#E2DCCE', shadow:'#A49C8B', crease:'#7E7666'}
-      : {lit:'#FBF8F1', shadow:'#D8D0BE', crease:'#B9AE95'};
+      ? {lit:'#E8E2D4', shadow:'#9C9484', crease:'#6E6656', edge:'#574F40', grain:'#3C3528'}
+      : {lit:'#FAF6EC', shadow:'#D2C9B4', crease:'#9C907A', edge:'#7A6F58', grain:'#6E6248'};
   }
-  function tri(A,B,C,tn,out){
+  function geom(W,H){
+    var padX=W*0.06, padY=H*0.10;
+    function S(x,y){return [padX+x/100*(W-2*padX), padY+y/60*(H-2*padY)];}
+    return {
+      NOSE:S(98,30), TT:S(4,6), NOTCH:S(32,30), TB:S(8,54)
+    };
+  }
+  function fillTri(ctx,A,B,C,fill,edge){
+    ctx.beginPath();
+    ctx.moveTo(A[0],A[1]); ctx.lineTo(B[0],B[1]); ctx.lineTo(C[0],C[1]); ctx.closePath();
+    ctx.fillStyle=fill; ctx.fill();
+    if(edge){ctx.strokeStyle=edge; ctx.lineJoin='round'; ctx.lineWidth=1*DPR; ctx.stroke();}
+  }
+  function grainTri(ctx,A,B,C,color){
+    /* sparse grain — paper fiber, NOT silhouette */
     var area=Math.abs((B[0]-A[0])*(C[1]-A[1])-(C[0]-A[0])*(B[1]-A[1]))/2;
-    var n=Math.max(10,Math.round(area/(GS*GS)));
+    var n=Math.max(8,Math.round(area/(38*DPR*DPR)));
+    ctx.fillStyle=color;
     for(var i=0;i<n;i++){
       var r1=Math.sqrt(Math.random()), r2=Math.random();
-      out.push({
-        x:(1-r1)*A[0]+r1*(1-r2)*B[0]+r1*r2*C[0],
-        y:(1-r1)*A[1]+r1*(1-r2)*B[1]+r1*r2*C[1],
-        sz:(Math.random()<0.18?1.5:1.0)*DPR,
-        a:0.74+Math.random()*0.26, tn:tn });
-    }
-  }
-  function line(A,B,tn,out){
-    var len=Math.hypot(B[0]-A[0],B[1]-A[1]), n=Math.max(6,Math.round(len/(1.5*DPR)));
-    for(var i=0;i<=n;i++){var t=i/n;
-      out.push({
-        x:A[0]+(B[0]-A[0])*t+(Math.random()-0.5)*1.3*DPR,
-        y:A[1]+(B[1]-A[1])*t+(Math.random()-0.5)*1.3*DPR,
-        sz:(Math.random()<0.3?1.5:1.0)*DPR,
-        a:0.85+Math.random()*0.15, tn:tn });
-    }
-  }
-  function build(W,H){
-    var padX=W*0.08, padY=H*0.12;
-    function S(x,y){return [padX+x/100*(W-2*padX), padY+y/60*(H-2*padY)];}
-    var NOSE=S(100,30), TT=S(2,6), NOTCH=S(30,30), TB=S(2,54);  /* nose right */
-    var g=[];
-    tri(NOSE,TT,NOTCH,0,g);     /* upper wing — lit */
-    tri(NOSE,NOTCH,TB,1,g);     /* lower wing — shadow */
-    line(NOSE,NOTCH,2,g);       /* center crease */
-    g.sort(function(a,b){return a.tn-b.tn;});
-    return g;
-  }
-  function draw(o){
-    var ctx=o.ctx, cw=o.canvas.width, ch=o.canvas.height, P=o.P, T=tones();
-    var col=[T.lit,T.shadow,T.crease], last=-1;
-    ctx.clearRect(0,0,cw,ch);
-    for(var j=0;j<P.length;j++){var p=P[j];
-      if(p.tn!==last){ctx.fillStyle=col[p.tn]; last=p.tn;}
-      ctx.globalAlpha=p.a; ctx.fillRect(p.x-p.sz/2,p.y-p.sz/2,p.sz,p.sz);
+      var x=(1-r1)*A[0]+r1*(1-r2)*B[0]+r1*r2*C[0];
+      var y=(1-r1)*A[1]+r1*(1-r2)*B[1]+r1*r2*C[1];
+      var s=(Math.random()<0.22?1.3:0.8)*DPR;
+      ctx.globalAlpha=0.10+Math.random()*0.18;
+      ctx.fillRect(x-s/2,y-s/2,s,s);
     }
     ctx.globalAlpha=1;
+  }
+  function draw(o){
+    var ctx=o.ctx, cw=o.canvas.width, ch=o.canvas.height, T=tones();
+    var G=geom(cw,ch);
+    ctx.clearRect(0,0,cw,ch);
+    /* solid wings — silhouette reads first */
+    fillTri(ctx,G.NOSE,G.TT,G.NOTCH, T.lit,    T.edge); /* upper wing — lit */
+    fillTri(ctx,G.NOSE,G.NOTCH,G.TB, T.shadow, T.edge); /* lower wing — shadow */
+    /* center crease — the spine */
+    ctx.beginPath();
+    ctx.moveTo(G.NOSE[0],G.NOSE[1]); ctx.lineTo(G.NOTCH[0],G.NOTCH[1]);
+    ctx.strokeStyle=T.crease; ctx.lineWidth=1.4*DPR; ctx.lineCap='round'; ctx.stroke();
+    /* paper grain — sparse, alpha-low, over the fills only */
+    grainTri(ctx,G.NOSE,G.TT,G.NOTCH, T.grain);
+    grainTri(ctx,G.NOSE,G.NOTCH,G.TB, T.grain);
   }
   function add(canvas){
     if(canvas._pix)return;
     var Wl=74,Hl=46;
     canvas.width=Math.round(Wl*DPR); canvas.height=Math.round(Hl*DPR);
-    var ctx=canvas.getContext('2d'); ctx.imageSmoothingEnabled=false;
-    var o={canvas:canvas,ctx:ctx,P:build(canvas.width,canvas.height)};
+    var ctx=canvas.getContext('2d'); ctx.imageSmoothingEnabled=true;
+    var o={canvas:canvas,ctx:ctx};
     canvas._pix=o; reg.push(o); draw(o);
   }
   function redrawAll(){
@@ -5182,7 +5265,7 @@ body[data-zone="tanner"] [data-fz="tanner"]{ opacity:1 }
 </script>
 <div class="mf-scrim" id="mfScrim" role="dialog" aria-modal="true" aria-label="A Manifesto" onclick="if(event.target===this)closeManifesto()">
   <article class="mf-panel">
-    <button type="button" class="mf-close" aria-label="Close" onclick="closeManifesto()">&times;</button>
+    <button type="button" class="mf-close" aria-label="Close" onclick="closeManifesto()">close &times;</button>
     <p class="mf-kicker">A Manifesto &middot; Josh Harrison &middot; December 2021</p>
     <h2 class="mf-title">Home as Possibility</h2>
     <p class="mf-lead">I write this with an acknowledgment of my privilege as both a white gay male within the Queer community and as someone that has always had a shelter over their head. I write this from the perspective of having grown up with a single mother raising two children, from having watched her make sacrificial life decisions in order to keep us within a dwelling, from having moved so many times while simultaneously staying in place. I know that, because of this, I walk with both an inability to settle and an understanding of home as the overwhelming, all-encompassing emotion of arrival.</p>
@@ -5209,6 +5292,221 @@ body[data-zone="tanner"] [data-fz="tanner"]{ opacity:1 }
   window.openManifesto=function(){var s=document.getElementById('mfScrim');if(!s)return;prevOverflow=document.body.style.overflow;document.body.style.overflow='hidden';s.classList.add('on');s.scrollTop=0;};
   window.closeManifesto=function(){var s=document.getElementById('mfScrim');if(!s)return;s.classList.remove('on');document.body.style.overflow=prevOverflow;};
   document.addEventListener('keydown',function(e){if(e.key==='Escape'||e.keyCode===27)window.closeManifesto();});
+})();
+</script>
+
+<!-- ════════════════════════════════════════════════════════════════
+     CONTENT REGISTER — editable form for every section.
+     Open with ⌘/Ctrl + E, the ✎ button (bottom-left), or ?edit=1.
+     Saves to localStorage and reloads so edits apply everywhere.
+════════════════════════════════════════════════════════════════ -->
+<style>
+  #reg-fab{position:fixed;left:14px;bottom:14px;z-index:9998;width:34px;height:34px;border-radius:50%;
+    border:1px solid rgba(140,140,140,.5);background:rgba(20,20,20,.55);color:#eee;font-size:15px;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:.35;transition:opacity .2s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+  #reg-fab:hover{opacity:1}
+  #reg-ov{position:fixed;inset:0;z-index:9999;display:none;background:rgba(10,10,12,.62);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);overflow:auto;padding:28px 16px}
+  #reg-ov.on{display:block}
+  #reg-panel{max-width:920px;margin:0 auto;background:#15161a;color:#e8e6e0;border:1px solid #2c2e36;border-radius:14px;
+    box-shadow:0 20px 60px rgba(0,0,0,.5);font-family:ui-sans-serif,-apple-system,Segoe UI,Roboto,sans-serif}
+  #reg-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    padding:16px 20px;background:#15161a;border-bottom:1px solid #2c2e36;border-radius:14px 14px 0 0}
+  #reg-head h2{font-size:15px;letter-spacing:.04em;margin:0;flex:1;font-weight:600}
+  #reg-head .sub{font-size:11px;color:#8d909b;width:100%;margin-top:-4px}
+  .reg-btn{font:inherit;font-size:12px;padding:7px 12px;border-radius:8px;border:1px solid #3a3d47;background:#23252c;color:#e8e6e0;cursor:pointer}
+  .reg-btn:hover{background:#2c2f37}
+  .reg-btn.primary{background:#3b6ea5;border-color:#3b6ea5;color:#fff}
+  .reg-btn.danger{color:#ff9b93;border-color:#5a3330}
+  #reg-body{padding:8px 20px 28px}
+  .reg-sec{border:1px solid #262830;border-radius:10px;margin:14px 0;overflow:hidden}
+  .reg-sec>summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:13px;background:#1b1d23;list-style:none;display:flex;align-items:center;gap:8px}
+  .reg-sec>summary::-webkit-details-marker{display:none}
+  .reg-sec>summary .count{color:#8d909b;font-weight:400;font-size:11px}
+  .reg-inner{padding:12px 16px}
+  .reg-card{border:1px solid #2a2c34;border-radius:9px;padding:12px;margin:10px 0;background:#191b21}
+  .reg-card .reg-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .reg-card .reg-card-top b{font-size:12px;color:#b9bcc6}
+  .reg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .reg-f{display:flex;flex-direction:column;gap:3px}
+  .reg-f.full{grid-column:1 / -1}
+  .reg-f label{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#8d909b}
+  .reg-f input,.reg-f textarea,.reg-f select{font:inherit;font-size:13px;background:#0f1014;color:#e8e6e0;border:1px solid #313440;border-radius:6px;padding:7px 9px;width:100%}
+  .reg-f textarea{min-height:64px;resize:vertical;line-height:1.5}
+  .reg-add{margin-top:6px}
+  .reg-note{font-size:11px;color:#8d909b;margin:2px 0 0}
+  @media(max-width:560px){.reg-grid{grid-template-columns:1fr}}
+</style>
+<button id="reg-fab" title="Edit content (⌘/Ctrl+E)" aria-label="Edit content">✎</button>
+<div id="reg-ov" role="dialog" aria-modal="true" aria-label="Content register">
+  <div id="reg-panel">
+    <div id="reg-head">
+      <h2>Content Register</h2>
+      <button class="reg-btn primary" id="reg-save">Save &amp; reload</button>
+      <button class="reg-btn" id="reg-export">Export JSON</button>
+      <button class="reg-btn" id="reg-copy">Copy JSON</button>
+      <button class="reg-btn danger" id="reg-reset">Reset all</button>
+      <button class="reg-btn" id="reg-close">Close</button>
+      <div class="sub">Edits save to this browser and reload the page. Use Export to keep a copy or hand back to bake into the source.</div>
+    </div>
+    <div id="reg-body"></div>
+  </div>
+</div>
+<script>
+(function(){
+  const API = window.REGISTER; if(!API) return;
+  const ov = document.getElementById('reg-ov');
+  const body = document.getElementById('reg-body');
+  const esc = s => String(s==null?'':s);
+  const SCHEMAS = {
+    experience:[{k:'title',t:'text',l:'Place'},{k:'note',t:'text',l:'Role / note'},{k:'year',t:'text',l:'Year'}],
+    education :[{k:'title',t:'text',l:'School / program'},{k:'note',t:'text',l:'Detail'},{k:'year',t:'text',l:'Year'}],
+    projects  :[{k:'title',t:'text',l:'Title'},{k:'year',t:'text',l:'Year'},{k:'role',t:'text',l:'Role'},
+                {k:'client',t:'text',l:'Client'},{k:'place',t:'text',l:'Place'},{k:'tag',t:'text',l:'Tagline',full:1},
+                {k:'img',t:'text',l:'Image path',full:1},{k:'desc',t:'textarea',l:'Description',full:1},{k:'id',t:'text',l:'ID (slug)'}],
+    log       :[{k:'date',t:'text',l:'Date (YYYY-MM-DD)'},{k:'title',t:'text',l:'Title'},
+                {k:'cat',t:'select',l:'Category',opts:['idea','artifact','sensation']},
+                {k:'rel',t:'select',l:'Relation',opts:['itself','orbit']},
+                {k:'photo',t:'photo',l:'Photo'},{k:'id',t:'text',l:'ID'},
+                {k:'text',t:'textarea',l:'Text',full:1}],
+    world     :[{k:'who',t:'text',l:'Name'},{k:'kind',t:'text',l:'Kind'},
+                {k:'size',t:'select',l:'Tile size',opts:['1x1','1x2','2x1','2x2']},
+                {k:'href',t:'text',l:'Link (href)'},{k:'obj',t:'text',l:'Object icon (optional)'},
+                {k:'price',t:'text',l:'Price (optional)'},{k:'blurb',t:'textarea',l:'Blurb',full:1}],
+  };
+  const SECTIONS = [
+    {key:'about',      title:'Voice & About',  kind:'about'},
+    {key:'experience', title:'Experience',     kind:'list', noun:'role'},
+    {key:'education',  title:'Education & Fellowship', kind:'list', noun:'entry'},
+    {key:'projects',   title:'Projects',       kind:'list', noun:'project'},
+    {key:'log',        title:'Field Log',      kind:'list', noun:'entry'},
+    {key:'world',      title:'World',          kind:'list', noun:'item'},
+    {key:'marquee',    title:'Marquee quotes', kind:'lines'},
+  ];
+  let model = null;
+
+  function buildModel(){
+    const d = API.data();
+    const saved = API.load();
+    model = {
+      about: Object.assign({}, API.aboutCurrent(), saved.about||{}),
+      experience: JSON.parse(JSON.stringify(d.experience)),
+      education : JSON.parse(JSON.stringify(d.education)),
+      projects  : JSON.parse(JSON.stringify(d.projects)),
+      log       : JSON.parse(JSON.stringify(d.log)),
+      world     : JSON.parse(JSON.stringify(d.world)),
+      marquee   : API.marqueeCurrent(),
+    };
+  }
+  function blank(type){
+    const o = {}; (SCHEMAS[type]||[]).forEach(f=>o[f.k]='');
+    if(type==='log'){o.cat='idea';o.rel='itself';o.id='l'+Date.now();}
+    if(type==='world'){o.size='1x1';o.href='#';}
+    if(type==='projects'){o.id='p'+Date.now();o.role='Designer';}
+    return o;
+  }
+  function fieldEl(type, rec, f, idx){
+    const wrap=document.createElement('div'); wrap.className='reg-f'+(f.full?' full':'');
+    const lab=document.createElement('label'); lab.textContent=f.l||f.k; wrap.appendChild(lab);
+    let inp;
+    if(f.t==='textarea'){inp=document.createElement('textarea');}
+    else if(f.t==='select'){inp=document.createElement('select');
+      f.opts.forEach(o=>{const op=document.createElement('option');op.value=o;op.textContent=o;inp.appendChild(op);});}
+    else if(f.t==='photo'){inp=document.createElement('select');
+      const opts=[''].concat(API.photoKeys());
+      opts.forEach(o=>{const op=document.createElement('option');op.value=o;op.textContent=o||'(none)';inp.appendChild(op);});}
+    else {inp=document.createElement('input');inp.type='text';}
+    inp.value=esc(rec[f.k]);
+    inp.addEventListener('input',()=>{ rec[f.k]=inp.value; });
+    wrap.appendChild(inp); return wrap;
+  }
+  function renderListSection(sec, host){
+    const arr = model[sec.key];
+    const inner=document.createElement('div'); inner.className='reg-inner';
+    function redraw(){
+      inner.innerHTML='';
+      arr.forEach((rec,idx)=>{
+        const card=document.createElement('div'); card.className='reg-card';
+        const top=document.createElement('div'); top.className='reg-card-top';
+        const b=document.createElement('b'); b.textContent=(rec.title||rec.who||rec.id||sec.noun)+'  ·  #'+(idx+1);
+        const del=document.createElement('button'); del.className='reg-btn danger'; del.textContent='Delete';
+        del.onclick=()=>{arr.splice(idx,1);redraw();};
+        top.appendChild(b); top.appendChild(del); card.appendChild(top);
+        const grid=document.createElement('div'); grid.className='reg-grid';
+        SCHEMAS[sec.key].forEach(f=>grid.appendChild(fieldEl(sec.key,rec,f,idx)));
+        card.appendChild(grid); inner.appendChild(card);
+      });
+      const add=document.createElement('button'); add.className='reg-btn reg-add'; add.textContent='+ Add '+sec.noun;
+      add.onclick=()=>{arr.push(blank(sec.key));redraw();};
+      inner.appendChild(add);
+      const cnt=host.querySelector('.count'); if(cnt) cnt.textContent=arr.length+' '+sec.noun+(arr.length===1?'':'s');
+    }
+    redraw(); host.appendChild(inner);
+  }
+  function renderAboutSection(sec, host){
+    const inner=document.createElement('div'); inner.className='reg-inner';
+    API.fields.forEach(f=>{
+      const wrap=document.createElement('div'); wrap.className='reg-f full';
+      const lab=document.createElement('label'); lab.textContent=f.label+(f.html?'  (HTML allowed)':''); wrap.appendChild(lab);
+      const ta=document.createElement('textarea'); ta.value=esc(model.about[f.key]);
+      ta.addEventListener('input',()=>{model.about[f.key]=ta.value;});
+      wrap.appendChild(ta); inner.appendChild(wrap);
+    });
+    host.appendChild(inner);
+  }
+  function renderLinesSection(sec, host){
+    const inner=document.createElement('div'); inner.className='reg-inner';
+    const note=document.createElement('p'); note.className='reg-note'; note.textContent='One quote per line. Keep them short — they ride the perimeter.';
+    inner.appendChild(note);
+    const ta=document.createElement('textarea'); ta.style.minHeight='220px'; ta.style.width='100%';
+    ta.style.cssText+='font:13px ui-monospace,monospace;background:#0f1014;color:#e8e6e0;border:1px solid #313440;border-radius:6px;padding:10px';
+    ta.value=model.marquee.join('\n');
+    ta.addEventListener('input',()=>{model.marquee=ta.value.split('\n').map(s=>s.trim()).filter(Boolean);});
+    inner.appendChild(ta); host.appendChild(inner);
+  }
+  function render(){
+    buildModel(); body.innerHTML='';
+    SECTIONS.forEach((sec,i)=>{
+      const det=document.createElement('details'); det.className='reg-sec'; if(i<2) det.open=true;
+      const sum=document.createElement('summary');
+      sum.innerHTML='<span>'+sec.title+'</span> <span class="count"></span>';
+      det.appendChild(sum);
+      if(sec.kind==='about') renderAboutSection(sec,det);
+      else if(sec.kind==='lines') renderLinesSection(sec,det);
+      else renderListSection(sec,det);
+      body.appendChild(det);
+    });
+  }
+  function collect(){
+    return {
+      about:model.about, experience:model.experience, education:model.education,
+      projects:model.projects, log:model.log, world:model.world, marquee:model.marquee,
+    };
+  }
+  function open(){ render(); ov.classList.add('on'); document.body.style.overflow='hidden'; }
+  function close(){ ov.classList.remove('on'); document.body.style.overflow=''; }
+  function save(){ localStorage.setItem(API.KEY, JSON.stringify(collect())); location.reload(); }
+  function reset(){ if(confirm('Reset all content to the built-in defaults? Your saved edits in this browser will be cleared.')){ localStorage.removeItem(API.KEY); location.reload(); } }
+  function exportJSON(){
+    const blob=new Blob([JSON.stringify(collect(),null,2)],{type:'application/json'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='oone-content.json'; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  }
+  function copyJSON(){ navigator.clipboard.writeText(JSON.stringify(collect(),null,2)).then(()=>{
+    const b=document.getElementById('reg-copy'); const t=b.textContent; b.textContent='Copied ✓'; setTimeout(()=>b.textContent=t,1200);
+  }); }
+
+  document.getElementById('reg-fab').onclick=open;
+  document.getElementById('reg-close').onclick=close;
+  document.getElementById('reg-save').onclick=save;
+  document.getElementById('reg-reset').onclick=reset;
+  document.getElementById('reg-export').onclick=exportJSON;
+  document.getElementById('reg-copy').onclick=copyJSON;
+  ov.addEventListener('click',e=>{ if(e.target===ov) close(); });
+  window.addEventListener('keydown',e=>{
+    if((e.metaKey||e.ctrlKey) && (e.key==='e'||e.key==='E')){ e.preventDefault(); e.stopPropagation(); ov.classList.contains('on')?close():open(); }
+    else if(e.key==='Escape' && ov.classList.contains('on')){ close(); }
+  }, true);
+  if(/[?&]edit=1\b/.test(location.search)) open();
 })();
 </script>
 
