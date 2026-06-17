@@ -137,6 +137,15 @@ button{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 *{scrollbar-width:none;-ms-overflow-style:none}
 *::-webkit-scrollbar{display:none;width:0;height:0}
 html{height:100%;height:100svh}
+
+/* ── BOOT COVER ────────────────────────────────────────────────────
+   A blank fill (matching the resolved mode, set pre-paint) covers the whole
+   viewport on load so the user sees NOTHING — no half-painted chrome, no font
+   swap — until fonts are ready and the centre gate text can appear. Lifts once
+   `html.booted` is set (on document.fonts.ready). */
+#boot{position:fixed;inset:0;z-index:99999;background:var(--bg);opacity:1;transition:opacity .7s ease}
+html.booted #boot{opacity:0;pointer-events:none}
+
 body{
   margin:0;background:var(--bg);color:var(--ink);
   font-family:var(--ff-mono);font-size:13px;-webkit-font-smoothing:antialiased;
@@ -202,17 +211,20 @@ body.night.in-zone .panel{
 /* AURORA RIBBONS — persistent, behind everything in the panel.
    Day: pastel breath. Night: full northern lights. */
 .panel::before{
-  content:"";position:absolute;inset:-18%;z-index:0;pointer-events:none;
+  content:"";position:absolute;inset:-30%;z-index:0;pointer-events:none;
+  /* Broad, single-peak washes (not narrow bands) under a heavy blur, so the
+     aurora drifts as soft colour rather than the hard diagonal streaks the
+     old narrow stops produced. */
   background:
-    linear-gradient(112deg, transparent 30%, rgba(232,130,28,.08) 42%, rgba(138,123,204,.06) 50%, transparent 62%),
-    linear-gradient(68deg,  transparent 36%, rgba(47,98,196,.05) 48%, rgba(216,68,58,.04) 56%, transparent 68%);
-  filter:blur(30px);
+    linear-gradient(112deg, transparent 8%, rgba(232,130,28,.05) 50%, transparent 92%),
+    linear-gradient(68deg,  transparent 12%, rgba(138,123,204,.04) 52%, transparent 88%);
+  filter:blur(90px);
   animation:auroraLive 26s ease-in-out infinite alternate;
 }
 body.night .panel::before{
   background:
-    linear-gradient(112deg, transparent 28%, rgba(200,184,255,.10) 41%, rgba(59,130,255,.07) 50%, transparent 63%),
-    linear-gradient(68deg,  transparent 34%, rgba(255,154,0,.05) 47%, rgba(200,184,255,.06) 56%, transparent 70%);
+    linear-gradient(112deg, transparent 8%, rgba(200,184,255,.07) 50%, transparent 92%),
+    linear-gradient(68deg,  transparent 12%, rgba(59,130,255,.05) 52%, transparent 88%);
 }
 @keyframes auroraLive{
   from{transform:translateX(-6%) skewY(-1.6deg)}
@@ -399,7 +411,9 @@ body.in-zone #cur{background:var(--zglow,var(--ink));box-shadow:0 0 14px 2px col
 @media (hover:none){#cur{display:none}}
 
 /* Bloom canvas — spherical aura + entry-edge wash */
-#bloom{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;display:block;border-radius:var(--fillet-frame)}
+/* a light blur dissolves the canvas gradients' 8-bit banding (the "streaky"
+   look) without changing the bloom's shape or hue. */
+#bloom{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;display:block;border-radius:var(--fillet-frame);filter:blur(12px)}
 
 /* Paper-fiber + film-grain overlay on the whole panel — risograph feel */
 .paper{
@@ -657,19 +671,27 @@ body.night .of-bird{--pA:#B5AF9F;--pB:#968F7D;--pE:#5C5749}
 }
 body.fog-cleared:not(.in-zone) .of-ctl{opacity:1;pointer-events:auto}
 .of-ctl button,.of-filter button{
-  background:color-mix(in srgb,var(--bg) 60%, transparent);
-  border:1px solid color-mix(in srgb,var(--ink) 28%, transparent);
-  border-radius:999px;cursor:pointer;color:color-mix(in srgb,var(--ink) 72%, transparent);
+  /* opaque, defined pill so it reads on any background, with the shared
+     button elevation. */
+  background:color-mix(in srgb,var(--bg) 82%, var(--ink) 18%);
+  border:1px solid color-mix(in srgb,var(--ink) 55%, transparent);
+  border-radius:999px;cursor:pointer;color:var(--ink);
   font-family:var(--ff-mono);font-size:9.5px;letter-spacing:.1em;
   min-width:26px;height:26px;padding:0 9px;
   display:inline-flex;align-items:center;justify-content:center;
+  box-shadow:var(--btn-shadow);
+  transition:background .2s, color .2s, border-color .2s, box-shadow .2s, transform .16s cubic-bezier(.2,.85,.3,1.1);
 }
-.of-ctl button:hover,.of-filter button:hover{color:var(--ink);border-color:color-mix(in srgb,var(--ink) 52%, transparent)}
+.of-ctl button:hover,.of-filter button:hover{
+  color:var(--bg);background:var(--ink);border-color:var(--ink);
+  box-shadow:var(--btn-shadow-hover);transform:translateY(-1px);
+}
+.of-ctl button:active,.of-filter button:active{box-shadow:var(--btn-shadow-active);transform:translateY(0) scale(.97)}
 .of-pos{font-family:var(--ff-mono);font-size:8.5px;letter-spacing:.12em;
-  color:color-mix(in srgb,var(--ink) 42%, transparent);margin-left:6px;min-width:118px;text-align:left}
+  color:color-mix(in srgb,var(--ink) 62%, transparent);margin-left:6px;min-width:118px;text-align:left}
 @media (max-width:600px){.of-pos{display:none}}
 .of-ctl .of-lbl{font-family:var(--ff-mono);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;
-  color:color-mix(in srgb,var(--ink) 42%, transparent);margin-right:2px}
+  color:color-mix(in srgb,var(--ink) 62%, transparent);margin-right:2px}
 @media (max-width:600px){.of-pos{font-family:var(--ff-mono);font-size:8.5px;letter-spacing:.12em;
   color:color-mix(in srgb,var(--ink) 42%, transparent);margin-left:6px;min-width:118px;text-align:left}
 @media (max-width:600px){.of-pos{display:none}}
@@ -1166,7 +1188,7 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
 .tabs-row button{
   background:transparent;border:none;cursor:pointer;
   font-family:var(--ff-ui);font-weight:500;font-size:11.5px;letter-spacing:.10em;text-transform:uppercase;
-  color:color-mix(in srgb,var(--zink) 60%, transparent);
+  color:color-mix(in srgb,var(--zink) 76%, transparent);
   padding:12px 22px 12px 0;margin-right:24px;
   border-bottom:2px solid transparent;
   min-height:var(--hit);
@@ -1277,13 +1299,12 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
 /* FIELD layer — drifting paper planes behind the World grid. The grid's
    own content sits above via z-index; planes are light, slow, ambient. */
 .world-field{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-/* World content (title block) rides ABOVE the full-bleed stage but lets
-   pointer events fall through to the stage so the scene stays draggable and
-   its object hotspots stay clickable. */
-.zone[data-zone="world"] > .zone-content{position:relative;z-index:2;pointer-events:none}
+/* World title block rides above the full-bleed orbit field but passes pointer
+   events through to the object nodes underneath. */
+.zone[data-zone="world"] > .zone-content{position:relative;z-index:3;pointer-events:none}
 .zone[data-zone="world"] > .zone-content a,
 .zone[data-zone="world"] > .zone-content button{pointer-events:auto}
-.zone[data-zone="world"] > .world-stage{z-index:1}
+.zone[data-zone="world"] > .world-orbit{z-index:1}
 .wf-plane{position:absolute;width:64px;height:auto;opacity:0;
   --pA:rgba(245,240,228,.5);--pB:rgba(224,217,200,.42);--pE:rgba(255,255,255,.32);--pF:rgba(255,255,255,.18);
   filter:drop-shadow(0 4px 10px rgba(0,0,0,.25));
@@ -1301,188 +1322,111 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
 .wf-p5{top:80%;width:54px;animation-duration:38s;animation-delay:-9s}
 @media (prefers-reduced-motion:reduce){.wf-plane{animation:none;opacity:.28}}
 
-/* WORLD — a brandless catalogue. Every object is sealed in clear plastic and
-   laid out at its TRUE relative scale (not one grid cell): a tall wine bottle
-   towers over folded sunglasses. Items flow left→right and wrap like a contact
-   sheet, resting on a shared baseline per row. The drifting paper planes are
-   retired here so the surface stays clean. */
 .world-field{display:none}
-/* WORLD — a FIELD of generic objects, each sealed in clear plastic, floating and
-   drifting at its own pace. No grid lines, no brands on the surface: just wrapped
-   things adrift, sized to their true relative scale, captioned by category on
-   hover. The field flows and wraps, so it stays responsive and never clips. */
-.world-grid{
-  display:flex;flex-wrap:wrap;align-items:center;justify-content:center;
-  gap:clamp(34px,4.4vw,72px) clamp(28px,3.4vw,58px);
-  margin:30px auto 0;
-  width:100%;
-  padding:36px 0 54px;
-  overflow:visible;
-}
-@media (max-width:600px){.world-grid{gap:30px 24px}}
 
-/* ONE WRAPPED OBJECT — a generic object floating inside a clear plastic pouch.
-   width/height come inline from true scale; --off scatters it vertically; each
-   bobs on its own --fdur/--fdelay so the field never marches in lockstep. */
-.ww{
-  position:relative;flex:0 0 auto;
-  background:none;border:none;padding:0;margin-top:var(--off,0px);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;-webkit-tap-highlight-color:transparent;
-  animation:wwFloat var(--fdur,7s) ease-in-out var(--fdelay,0s) infinite alternate;
-}
-@keyframes wwFloat{from{transform:translateY(-7px) rotate(-.7deg)}to{transform:translateY(9px) rotate(.7deg)}}
-.ww:hover,.ww:focus-visible{outline:none;animation-play-state:paused}
-.ww-obj{position:relative;width:auto;height:var(--h);display:inline-flex;align-items:center;justify-content:center}
-/* REAL PHOTO — the wrapped object itself, sized by height so each keeps its
-   true photographic aspect and the field still reads relative scale (a tall
-   wine bottle towers over folded sunglasses). Shown once the file loads. */
-.ww-photo{position:relative;z-index:2;display:block;height:100%;width:auto;max-width:none;
-  object-fit:contain;
-  filter:drop-shadow(0 16px 22px rgba(0,0,0,.30))}
-/* SVG silhouette — the fallback shown ONLY while a photo file is absent, so
-   the field is never empty before/while assets/world/ is populated. */
-.ww .wo-svg{display:none}
-.ww.no-photo .wo-svg{display:block}
-.ww.no-photo .ww-photo{display:none}
-.ww-obj svg{position:relative;z-index:2;
-  color:#6f6c77;                       /* the object's body tone, read through the film */
-  filter:drop-shadow(0 16px 22px rgba(0,0,0,.30))}
-body.night .ww-obj svg{color:#8d8a96}
+/* ═══ WORLD ORBIT FIELD ═══════════════════════════════════════════════
+   A layered, buildable system (never a flattened image): bloom (CSS) · orbit
+   paths (SVG) · object nodes (the same plastic shader as the landing flowers,
+   to <canvas>) · live-HTML annotations · an active relational panel. Every
+   layer rides the zone tokens, so day/night is just a variable swap. */
+.world-orbit{position:absolute; inset:0; z-index:0; overflow:hidden; border-radius:var(--fillet-frame)}
 
-/* PLASTIC POUCH — a crinkled clear shrink-wrap skin a touch larger than the
-   object, with sealed bright edges and sliding highlights. */
-.ww-plastic{position:absolute;inset:-13% -15%;z-index:3;pointer-events:none;
-  border-radius:46% 40% 48% 42% / 33% 30% 35% 31%;
+/* 1 · BACKGROUND BLOOM — pure CSS gradient pools over the zone bg, no image. */
+.wo-bloom{
+  position:absolute; inset:0; pointer-events:none;
   background:
-    linear-gradient(122deg, rgba(255,255,255,.30) 0%, rgba(255,255,255,0) 20%, rgba(255,255,255,0) 56%, rgba(255,255,255,.20) 70%, rgba(255,255,255,0) 86%),
-    linear-gradient(58deg, rgba(255,255,255,0) 44%, rgba(255,255,255,.22) 50%, rgba(255,255,255,0) 56%),
-    radial-gradient(120% 92% at 30% 8%, rgba(255,255,255,.24), rgba(255,255,255,0) 44%);
-  box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.26),
-             inset 0 8px 20px rgba(255,255,255,.12),
-             inset 0 -10px 22px rgba(0,0,0,.10);
-  mix-blend-mode:screen;opacity:.66;
-  filter:url(#wwCrinkleA);
+    radial-gradient(48% 52% at 80% 24%, color-mix(in srgb,var(--zglow,#D8443A) 48%, transparent), transparent 64%),
+    radial-gradient(54% 58% at 15% 80%, color-mix(in srgb,var(--zdeep,#871F1A) 52%, transparent), transparent 66%),
+    radial-gradient(120% 120% at 50% 46%, transparent 38%, color-mix(in srgb,var(--zdeep,#871F1A) 28%, transparent) 100%),
+    var(--zbg,#F0A29B);
 }
-/* heat-sealed crinkled selvedge around the pouch */
-.ww-plastic::before{content:"";position:absolute;inset:0;border-radius:inherit;
-  border:2.5px solid rgba(255,255,255,.22);
-  box-shadow:0 0 8px rgba(255,255,255,.24), inset 0 0 12px rgba(255,255,255,.18);
-  filter:url(#wwCrinkleB);}
-/* faint print-dot tooth on the film */
-.ww-plastic::after{content:"";position:absolute;inset:0;border-radius:inherit;
-  background-image:radial-gradient(rgba(255,255,255,.5) .6px, transparent .7px);background-size:6px 6px;
-  opacity:.10;mix-blend-mode:overlay;}
-.ww:nth-child(3n) .ww-plastic{filter:url(#wwCrinkleC)}
-.ww:nth-child(3n+1) .ww-plastic{filter:url(#wwCrinkleB)}
-.ww:hover .ww-plastic,.ww:focus-visible .ww-plastic{opacity:.92}
 
-/* CATEGORY CAPTION — brandless; the kind only, on hover so the field stays clean. */
-.ww-cap{position:absolute;top:calc(100% + 7px);left:50%;transform:translateX(-50%);
-  font-family:var(--ff-ui);font-weight:600;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--zink);white-space:nowrap;opacity:0;transition:opacity .25s;z-index:4}
-.ww:hover .ww-cap,.ww:focus-visible .ww-cap{opacity:.82}
-@media (prefers-reduced-motion:reduce){.ww{animation:none}}
+/* 2 · ORBIT PATHS — faint elliptical guides + hover threads, drawn in SVG and
+   positioned in JS. Strokes ride --zink so they track day/night. */
+.wo-orbits{position:absolute; inset:0; width:100%; height:100%; pointer-events:none}
+.wo-orbits .wo-ellipse{fill:none; stroke:color-mix(in srgb,var(--zink,#330805) 20%, transparent); stroke-width:1; stroke-dasharray:2 8; vector-effect:non-scaling-stroke}
+.wo-orbits .wo-thread{fill:none; stroke:color-mix(in srgb,var(--zglow,#D8443A) 60%, transparent); stroke-width:1.2; stroke-dasharray:1 6; vector-effect:non-scaling-stroke; opacity:0; transition:opacity .35s}
+.wo-orbits .wo-thread.on{opacity:.9}
+.wo-orbits .wo-moment{fill:color-mix(in srgb,var(--zglow,#D8443A) 75%, transparent)}
 
-/* ── WORLD STAGE — full-bleed, edge-dyed, pannable still life ───────────
-   The scene covers the whole panel and FADES into all four edges, so it
-   reads as wallpaper concentrated in the center. .world-pan is sized in JS
-   to cover the stage with overscan, then dragged horizontally. The red
-   grade rides the live zone tokens (tracks day/night); each object on the
-   table is a .wh hotspot layered above the grade. */
-.world-stage{
-  position:absolute; inset:0; z-index:0; overflow:hidden;
-  cursor:grab; touch-action:pan-y; user-select:none;
-  background:var(--zbg,#2A0606);
-  /* dye into the edges: feathered rectangular vignette (two linear masks
-     intersected) keeps the center fully visible, fades the last ~14%. */
-  -webkit-mask-image:
-    linear-gradient(to right, transparent 0%, #000 13%, #000 87%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, #000 11%, #000 89%, transparent 100%);
-  -webkit-mask-composite:source-in; -webkit-mask-repeat:no-repeat;
-  mask-image:
-    linear-gradient(to right, transparent 0%, #000 13%, #000 87%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, #000 11%, #000 89%, transparent 100%);
-  mask-composite:intersect; mask-repeat:no-repeat;
+/* 3 · OBJECT NODES — absolutely placed, sized by --h (% of stage). The canvas
+   carries the plastic shader; number + label + note are LIVE HTML. */
+.wo-nodes{position:absolute; inset:0; z-index:2}
+.wo-node{
+  position:absolute; transform:translate(-50%,-50%);
+  width:auto; height:var(--h,16%);
+  background:none; border:none; padding:0; margin:0;
+  cursor:pointer; -webkit-tap-highlight-color:transparent;
+  display:flex; align-items:center; justify-content:center;
+  filter:drop-shadow(0 12px 16px rgba(0,0,0,.30));
+  transition:transform .4s cubic-bezier(.2,1,.36,1), opacity .4s, filter .35s;
 }
-.world-stage.is-panning{cursor:grabbing}
-.world-pan{
-  position:absolute; top:50%; left:50%;
-  transform:translate(-50%,-50%) translateX(var(--panx,0px));
-  will-change:transform; isolation:isolate;
-}
-/* WRAPPED (default) state is deliberately ABSTRACT — the whole table is
-   "draped": softened and frosted so you read forms and categories, not
-   literal products (no legible titles, no brand of speaker). Detail only
-   returns where an object is unwrapped (the .wh-lens, which is sharp). */
-.world-scene-img{
-  display:block; width:100%; height:auto; -webkit-user-drag:none; user-select:none;
-  filter:blur(7px) contrast(1.04) brightness(1.06) saturate(.42);
-}
-/* recolor to World red, KEEPING luminance */
-.world-pan::before{
-  content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
-  background:var(--zglow,#D8443A); mix-blend-mode:color; opacity:.82;
-}
-/* maroon depth vignette toward the table edges */
-.world-pan::after{
-  content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
-  background:radial-gradient(135% 120% at 50% 40%, transparent 48%, var(--zdeep,#871F1A) 100%);
-  mix-blend-mode:multiply; opacity:.55;
-}
-/* PLASTIC SHEET — a translucent frosted drape over everything: milky body +
-   sliding bright highlights, like furniture under a dust/plastic cover. */
-.world-wrap{
-  position:absolute; inset:0; z-index:3; pointer-events:none;
-  background:
-    linear-gradient(122deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,0) 18%, rgba(255,255,255,0) 54%, rgba(255,255,255,.12) 68%, rgba(255,255,255,0) 84%),
-    linear-gradient(58deg, rgba(255,255,255,0) 42%, rgba(255,255,255,.10) 50%, rgba(255,255,255,0) 58%),
-    radial-gradient(120% 90% at 32% 6%, rgba(255,255,255,.14), rgba(255,255,255,0) 46%);
-  mix-blend-mode:screen; opacity:.9;
-}
-/* faint plastic tooth so the drape reads as a sheet, not a wash */
-.world-wrap::after{
-  content:""; position:absolute; inset:0;
-  background-image:radial-gradient(rgba(255,255,255,.5) .6px, transparent .7px);
-  background-size:5px 5px; opacity:.05; mix-blend-mode:overlay;
-}
-.world-hotspots{position:absolute; inset:0; z-index:4}
+.wo-node .wo-canvas,.wo-node .wo-plane{display:block; height:100%; width:auto; pointer-events:none}
+.wo-node .wo-plane{color:color-mix(in srgb,var(--zink,#FFD0CC) 82%, transparent);
+  filter:drop-shadow(0 0 10px color-mix(in srgb,var(--zglow,#D8443A) 45%, transparent))}
+/* index number — always faintly present, like a field-note tag */
+.wo-num{position:absolute; left:50%; bottom:calc(100% + 3px); transform:translateX(-50%);
+  font-family:var(--ff-mono); font-size:9px; letter-spacing:.14em;
+  color:color-mix(in srgb,var(--zink,#FFD0CC) 52%, transparent); opacity:.6;
+  transition:opacity .3s,color .3s; pointer-events:none}
+/* annotation (label + note) — revealed on hover/active, to the side */
+.wo-annot{position:absolute; left:calc(100% + 10px); top:50%; transform:translateY(-50%) translateX(-6px);
+  text-align:left; pointer-events:none; opacity:0; transition:opacity .3s, transform .3s; z-index:5}
+.wo-node.flip .wo-annot{left:auto; right:calc(100% + 10px); text-align:right; transform:translateY(-50%) translateX(6px)}
+.wo-label{font-family:var(--ff-ui); font-weight:600; font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--zink,#FFD0CC); white-space:nowrap}
+.wo-note{display:block; margin-top:2px; max-width:150px;
+  font-family:var(--ff-mono); font-size:9.5px; letter-spacing:.02em; line-height:1.3;
+  color:color-mix(in srgb,var(--zink,#FFD0CC) 74%, transparent)}
+.wo-node.flip .wo-note{margin-left:auto}
 
-/* ONE OBJECT — an invisible round hit area in image space. Hover/active
-   lifts a clearer "unwrapped" lens of just that object, a coral halo, and a
-   one-word category name. The lens is a window onto the same photo, sharper
-   and un-graded, soft-masked to a disc (set in JS to align with the object). */
-.wh{position:absolute; transform:translate(-50%,-50%);
-  border:none; background:none; padding:0; margin:0; cursor:pointer; pointer-events:auto;}
-.wh-lens{position:absolute; inset:0; border-radius:50%; pointer-events:none;
-  background-repeat:no-repeat;
-  /* "visible" but never literal — clearer than the wrap, still soft/abstract */
-  filter:blur(2px) brightness(1.14) saturate(1.08) contrast(1.04);
-  -webkit-mask-image:radial-gradient(circle at 50% 50%, #000 40%, transparent 72%);
-  mask-image:radial-gradient(circle at 50% 50%, #000 40%, transparent 72%);
-  opacity:0; transition:opacity .3s ease;}
-.wh-halo{position:absolute; inset:-6%; border-radius:50%; pointer-events:none;
-  box-shadow:0 0 0 1.5px color-mix(in srgb,var(--zglow,#FF5046) 75%, transparent),
-             0 0 24px 7px color-mix(in srgb,var(--zglow,#FF5046) 45%, transparent);
-  opacity:0; transform:scale(.86); transition:opacity .3s ease, transform .3s cubic-bezier(.2,1,.36,1);}
-.wh-label{position:absolute; left:50%; bottom:-30px; transform:translate(-50%,4px);
-  font-family:var(--ff-ui); font-weight:600; font-size:10px; letter-spacing:.16em; text-transform:uppercase;
-  white-space:nowrap; color:var(--zink,#FFD0CC);
-  background:color-mix(in srgb,var(--zdeep,#5A0D0A) 82%, transparent);
-  -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px);
-  padding:4px 10px; border-radius:var(--fillet-inset,6px);
-  opacity:0; transition:opacity .25s ease, transform .25s ease; pointer-events:none;}
-.wh:hover .wh-lens, .wh.is-active .wh-lens{opacity:1}
-.wh:hover .wh-halo, .wh:focus-visible .wh-halo, .wh.is-active .wh-halo{opacity:1; transform:scale(1)}
-.wh:hover .wh-label, .wh:focus-visible .wh-label, .wh.is-active .wh-label{opacity:1; transform:translate(-50%,0)}
-.wh:focus-visible{outline:none}
-body.in-zone.is-panning .wh{pointer-events:none}   /* don't fight a drag */
+/* HOVER — glow, lift, reveal annotation */
+.wo-node:hover, .wo-node:focus-visible{
+  outline:none; z-index:9;
+  transform:translate(-50%,-50%) translateY(-7px) scale(1.05);
+  filter:drop-shadow(0 18px 22px rgba(0,0,0,.4))
+         drop-shadow(0 0 18px color-mix(in srgb,var(--zglow,#FF5046) 60%, transparent));
+}
+.wo-node:hover .wo-num, .wo-node:focus-visible .wo-num{opacity:1; color:var(--zink)}
+.wo-node:hover .wo-annot, .wo-node:focus-visible .wo-annot, .wo-node.is-active .wo-annot{opacity:1; transform:translateY(-50%) translateX(0)}
 
-.world-stage-hint{position:absolute; left:50%; bottom:14px; transform:translateX(-50%);
-  font-family:var(--ff-mono); font-size:9px; letter-spacing:.18em; text-transform:uppercase;
-  color:color-mix(in srgb,var(--zink,#FFD0CC) 62%, transparent); pointer-events:none; z-index:4;
-  opacity:.72; transition:opacity .5s;}
-.world-stage.has-panned .world-stage-hint{opacity:0}
+/* ACTIVE — this one lifts; the rest dim back into the field */
+.wo-nodes.has-active .wo-node:not(.is-active){opacity:.2; filter:drop-shadow(0 10px 14px rgba(0,0,0,.28)) saturate(.7)}
+.wo-node.is-active{z-index:9;
+  transform:translate(-50%,-50%) translateY(-7px) scale(1.08);
+  filter:drop-shadow(0 20px 26px rgba(0,0,0,.45))
+         drop-shadow(0 0 22px color-mix(in srgb,var(--zglow,#FF5046) 70%, transparent));
+}
+
+/* 4 · ACTIVE OBJECT PANEL — a small relational note that opens on click. */
+.wo-panel{position:absolute; right:5%; bottom:7%; z-index:30; width:min(300px,42%);
+  background:color-mix(in srgb,var(--zbg,#2A0606) 80%, transparent);
+  -webkit-backdrop-filter:blur(14px); backdrop-filter:blur(14px);
+  border:1px solid color-mix(in srgb,var(--zink,#FFD0CC) 16%, transparent);
+  border-radius:var(--frame-radius); box-shadow:var(--frame-shadow);
+  color:var(--zink,#FFD0CC); padding:20px 22px;
+  opacity:0; transform:translateY(10px) scale(.98); pointer-events:none;
+  transition:opacity .35s, transform .35s}
+.wo-panel.open{opacity:1; transform:none; pointer-events:auto}
+.wo-panel-x{position:absolute; top:8px; right:10px; background:none; border:none; cursor:pointer;
+  font-family:var(--ff-mono); font-size:8.5px; letter-spacing:.16em; text-transform:uppercase;
+  color:color-mix(in srgb,var(--zink) 64%, transparent)}
+.wo-panel-x:hover{color:var(--zink)}
+.wo-panel-num{font-family:var(--ff-mono); font-size:9px; letter-spacing:.18em; color:color-mix(in srgb,var(--zink) 56%, transparent)}
+.wo-panel-label{font-family:var(--ff-ui); font-weight:600; font-size:10.5px; letter-spacing:.18em; text-transform:uppercase;
+  color:color-mix(in srgb,var(--zglow,#FF5046) 88%, var(--zink)); margin-top:4px}
+.wo-panel-title{font-family:var(--ff-head); font-weight:700; font-size:22px; letter-spacing:-.01em; margin:6px 0 8px; line-height:1.05}
+.wo-panel-note{font-family:var(--ff-serif); font-size:13.5px; line-height:1.5; color:color-mix(in srgb,var(--zink) 88%, transparent); margin:0 0 12px}
+.wo-panel-rel{font-family:var(--ff-mono); font-size:9.5px; letter-spacing:.04em; line-height:1.55; color:color-mix(in srgb,var(--zink) 64%, transparent); margin-bottom:14px}
+.wo-panel-rel b{color:var(--zink); font-weight:600}
+.wo-panel-visit{display:inline-flex; align-items:center; gap:6px; background:var(--zink); color:var(--zbg);
+  text-decoration:none; font-family:var(--ff-ui); font-weight:500; font-size:10px; letter-spacing:.10em; text-transform:uppercase;
+  padding:9px 16px; border-radius:var(--fillet-inset); box-shadow:var(--btn-shadow); transition:box-shadow .2s, transform .2s}
+.wo-panel-visit:hover{box-shadow:var(--btn-shadow-hover); transform:translateY(-1px)}
+
+@media (max-width:600px){
+  .wo-panel{right:4%; left:4%; width:auto; bottom:5%}
+  .wo-note{max-width:96px}
+}
 
 /* ════════════════════════════════════════════════════════════════
    FIELD LOG — depth field with organic scatter.
@@ -2300,6 +2244,25 @@ body.night:not(.in-zone) .mf-panel{
 }catch(e){}})();
 </script>
 
+<!-- Blank boot cover — hides everything until the centre gate text is ready. -->
+<div id="boot" aria-hidden="true"></div>
+<script>
+(function(){
+  var html=document.documentElement;
+  function reveal(){ html.classList.add('booted'); }
+  // Hold the blank until webfonts are ready, so the centre text appears already
+  // set in its real face rather than flashing a fallback or partial chrome.
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(function(){
+      requestAnimationFrame(function(){ requestAnimationFrame(reveal); });
+    });
+  } else {
+    window.addEventListener('load', function(){ setTimeout(reveal, 80); });
+  }
+  setTimeout(reveal, 2600);   // safety net: never stay blank
+})();
+</script>
+
 <div id="cur"></div>
 
 <svg class="snake-svg" aria-hidden="true">
@@ -2683,28 +2646,21 @@ body.night:not(.in-zone) .mf-panel{
         <svg class="wf-plane wf-p4" viewBox="0 0 100 60"><use href="#of-plane"/></svg>
         <svg class="wf-plane wf-p5" viewBox="0 0 100 60"><use href="#of-plane"/></svg>
       </div>
-      <!-- WORLD STAGE — the still life full-bleeds the panel, dyes into the
-           edges, and pans horizontally. Every object on the table is a hotspot
-           (built from WORLD_HOTSPOTS in JS): by default everything's "draped"
-           in the red wrap; hover haloes + names an object and lifts its wrap,
-           click unwraps it and opens its destination. -->
-      <div class="world-stage" id="world-stage">
-        <div class="world-pan" id="world-pan">
-          <img class="world-scene-img" id="world-scene-img" src="assets/world/scene.jpg"
-               alt="A late-night table — a still life of the things, places and people in my world."
-               decoding="async" draggable="false">
-          <div class="world-wrap" aria-hidden="true"></div>
-          <div class="world-hotspots" id="world-hotspots"></div>
-        </div>
-        <div class="world-stage-hint" id="world-stage-hint">drag to pan · click an object</div>
+      <!-- ═══ WORLD ORBIT FIELD — layered, not an image ═══
+           bloom (CSS) · orbit paths (SVG) · objects (plastic-shader canvases)
+           · annotations (live HTML) · active panel. Day/night via tokens. -->
+      <div class="world-orbit" id="world-orbit">
+        <div class="wo-bloom" aria-hidden="true"></div>
+        <svg class="wo-orbits" id="wo-orbits" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+        <div class="wo-nodes" id="world-grid" role="list"></div>
       </div>
       <div class="zone-content">
         <header class="zone-head">
           <div class="zone-eyebrow">← WORLD</div>
           <h1 class="zone-title">WORLD</h1>
-          <div class="zone-sub">studios · makers · places · objects in orbit</div>
+          <div class="zone-sub">a table is a map of a life in orbit</div>
         </header>
-        <p class="zpara world-intro">A table of the things, places and people in my life — drag to wander it, point at what's covered, pick what you want to know.</p>
+        <p class="zpara world-intro">A table of curiosities — the studios, makers, places and objects in my orbit. Point at one to name it; pick it up to follow it out.</p>
         <!-- WORLD THUMBNAIL ICONS — one general icon per subject/category.
              Line-drawn to sit on the dark tiles. The perfume bottle borrows
              the landing daisy as its stopper (Liza Pittard). -->
@@ -2897,8 +2853,16 @@ body.night:not(.in-zone) .mf-panel{
             <feDisplacementMap in="SourceGraphic" in2="n" scale="8" xChannelSelector="R" yChannelSelector="G"/>
           </filter>
         </defs></svg>
-        <!-- Still life moved to the full-bleed .world-stage above; the old
-             icon-pouch grid is retired (symbols/JS remain unused below). -->
+      </div>
+      <!-- ACTIVE OBJECT PANEL — a small relational note that opens on click. -->
+      <div class="wo-panel" id="wo-panel" aria-hidden="true">
+        <button class="wo-panel-x" onclick="closeWorldObject()" aria-label="close">close ×</button>
+        <div class="wo-panel-num" id="wo-panel-num"></div>
+        <div class="wo-panel-label" id="wo-panel-label"></div>
+        <h3 class="wo-panel-title" id="wo-panel-title"></h3>
+        <p class="wo-panel-note" id="wo-panel-note"></p>
+        <div class="wo-panel-rel" id="wo-panel-rel"></div>
+        <a class="wo-panel-visit" id="wo-panel-visit" href="#" target="_blank" rel="noopener">visit ↗</a>
       </div>
     </section>
 
@@ -3825,8 +3789,9 @@ function enterZone(zoneId, skipHash){
     logScrollZ = 0; populateLogField();
     setLogView('grid');   // FIELD is the LOG experience on every device
   }
-  if (zoneId === 'world' && typeof initWorldStage === 'function'){
-    requestAnimationFrame(initWorldStage);
+  if (zoneId === 'world' && typeof renderWorldGrid === 'function'){
+    renderWorldGrid();
+    _worldPaintTries = 0; requestAnimationFrame(paintWorldObjects);
   }
   // Reset all labels to default state. The SVG triangle inside .arr stays as-is
   // (direction is CSS-driven by [data-edge]); we just update tooltip + aria.
@@ -4345,37 +4310,89 @@ const WOBJ_ASPECT = {wine:0.259,press:0.600,mug:1.263,candle:0.667,perfume:0.538
 const WOBJ_REAL = {wine:1.00,press:0.82,vase:0.72,pizza:0.70,hoodie:0.66,yoga:0.66,
   grapes:0.64,silk:0.62,speaker:0.62,clippers:0.55,books:0.55,perfume:0.52,cake:0.50,
   mug:0.50,needle:0.50,candle:0.46,shades:0.36};
+/* ── WORLD ORBIT FIELD — node composition + interaction ────────────────
+   Each node is a shader object (or the vector paper-plane), placed by
+   normalized %, carrying a number, a one-word label, and a short field-note
+   (the live-HTML annotation). `rel` lists the threads it shares; who/href
+   drive the relational panel + outbound link. */
+const WORLD_NODES = [
+  {obj:'flower',  num:'01', label:'PLANT',      note:'from the landing page',         who:'ONE',              href:'#',                         x:26, y:54, h:42, rel:['speaker','press']},
+  {plane:true,    num:'14', label:'MESSAGES',   note:'notes from passengers',         who:'Field notes',      href:'#',                         x:15, y:32, h:9,  rel:['flower']},
+  {obj:'speaker', num:'02', label:'SOUND',      note:'always playing',                who:'Pocket Speaker',   href:'#',                         x:45, y:24, h:18, rel:['flower','wine']},
+  {obj:'grapes',  num:'03', label:'FRUIT',      note:'for guests, for abundance',     who:'Hart Howerton',    href:'https://harthowerton.com',  x:67, y:21, h:16, rel:['wine','press']},
+  {obj:'wine',    num:'04', label:'WINE',       note:'shared, and late',              who:'Irving Bottle',    href:'https://irvingbottle.com',  x:56, y:39, h:26, rel:['grapes','press']},
+  {obj:'candle',  num:'05', label:'REFERENCE',  note:'late nights, saved',            who:'Are.na',           href:'https://www.are.na/josh-harrison-tzcbbdxiro8', x:85, y:27, h:15, rel:['press']},
+  {obj:'press',   num:'09', label:'PRESS',      note:'slow mornings',                 who:'Morning Press',    href:'#',                         x:78, y:47, h:22, rel:['mug','wine']},
+  {obj:'mug',     num:'06', label:'STUDIO',     note:'the work around the work',      who:'Wesley Moon Inc.', href:'https://wesleymoon.com',    x:64, y:64, h:13, rel:['press']},
+  {obj:'shades',  num:'11', label:'FOCUS',      note:'to see clearly',                who:'Tortoise',         href:'#',                         x:86, y:67, h:10, rel:['openbook']},
+  {obj:'openbook',num:'12', label:'INSPIRATION',note:'collected everywhere',          who:'Bachelard',        href:'#',                         x:48, y:62, h:13, rel:['flower','shades']},
+  {obj:'perfume', num:'07', label:'SCENT',      note:'made in Brooklyn',              who:'Liza Pittard',     href:'https://lizapittard.com',   x:31, y:74, h:16, rel:['silk']},
+  {obj:'silk',    num:'08', label:'NAPKIN',     note:'marbled silk, a gift from Sid', who:'Cidney Cher',      href:'https://cidneycher.com',    x:15, y:71, h:12, rel:['perfume']},
+  {obj:'clippers',num:'10', label:'BARBER',     note:'a fresh line, every time',      who:'Trios for Hair',   href:'https://triosforhair.com',  x:72, y:80, h:14, rel:['mug']},
+];
+const WORLD_NMAP = {};
+WORLD_NODES.forEach((n,i)=>{ WORLD_NMAP[n.plane?'plane':n.obj] = i; });
+const _VBW = 1000, _VBH = 640;
+
 function renderWorldGrid(){
   const el = document.getElementById('world-grid'); if (!el) return;
-  const BASE = 188;
-  el.innerHTML = WORLD_OBJECTS.map((it, i) => {
-    const a = WOBJ_ASPECT[it.obj] || 1;
-    const h = Math.round(BASE * (WOBJ_REAL[it.obj] || 0.55));
-    const w = Math.round(h * a);
-    const off = ((i * 37) % 5) * 20;                 // vertical scatter 0–80px
-    const fdur = (6.4 + (i % 4) * 0.9).toFixed(1) + 's';
-    const fdelay = (-(i % 5) * 1.3).toFixed(1) + 's';
-    // Photo file convention: assets/world/<obj>.png (e.g. assets/world/mug.png).
-    // Starts on the SVG fallback (.no-photo); flips to the photo on load, stays
-    // on the silhouette if the file isn't there yet.
-    const photo = `assets/world/${it.obj}.png`;
+  el.innerHTML = WORLD_NODES.map((n,i) => {
+    const flip = n.x > 54 ? ' flip' : '';
+    const art = n.plane
+      ? `<svg class="wo-plane" viewBox="0 0 100 60" aria-hidden="true"><use href="#of-plane"/></svg>`
+      : `<canvas class="wo-canvas" data-obj="${n.obj}" aria-hidden="true"></canvas>`;
     return `
-      <button type="button" class="ww no-photo" role="listitem" data-i="${i}"
-         style="--off:${off}px;--fdur:${fdur};--fdelay:${fdelay}"
-         aria-label="${escapeHtml(it.kind)} — ${escapeHtml(it.who)}, open">
-        <span class="ww-obj" style="--h:${h}px">
-          <img class="ww-photo" src="${photo}" alt="" decoding="async"
-               onload="this.closest('.ww').classList.remove('no-photo')"
-               onerror="this.remove()">
-          <svg class="wo-svg" style="width:${w}px;height:${h}px" aria-hidden="true"><use href="#wo-${it.obj}"></use></svg>
-          <span class="ww-plastic" aria-hidden="true"></span>
-        </span>
-        <span class="ww-cap">${escapeHtml(it.kind)}</span>
+      <button type="button" class="wo-node${flip}" role="listitem" data-i="${i}"
+        style="left:${n.x}%; top:${n.y}%; --h:${n.h}%"
+        aria-label="${escapeHtml(n.label)} — ${escapeHtml(n.who)}">
+        <span class="wo-num">${n.num}</span>
+        ${art}
+        <span class="wo-annot"><span class="wo-label">${escapeHtml(n.label)}</span><span class="wo-note">${escapeHtml(n.note)}</span></span>
       </button>`;
   }).join('');
-  el.querySelectorAll('.ww').forEach(b => {
-    b.addEventListener('click', () => openWorldModal(parseInt(b.dataset.i,10)));
+  el.querySelectorAll('.wo-node').forEach(b => {
+    b.addEventListener('click', () => openWorldObject(parseInt(b.dataset.i,10)));
   });
+  drawOrbitGuides();
+}
+/* faint elliptical guides + a moment dot per node + a thread group for active */
+function drawOrbitGuides(){
+  const svg = document.getElementById('wo-orbits'); if(!svg) return;
+  const cx=505, cy=315;
+  const ell = (rx,ry,rot)=>`<ellipse class="wo-ellipse" cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" transform="rotate(${rot} ${cx} ${cy})"/>`;
+  const dots = WORLD_NODES.map(n=>`<circle class="wo-moment" cx="${(n.x/100*_VBW).toFixed(0)}" cy="${(n.y/100*_VBH).toFixed(0)}" r="2.4"/>`).join('');
+  svg.innerHTML = ell(430,250,-12) + ell(320,175,-12) + ell(495,300,9) + dots + `<g id="wo-threads"></g>`;
+}
+function openWorldObject(i){
+  const n = WORLD_NODES[i]; if(!n) return;
+  const nodes = document.getElementById('world-grid');
+  nodes.classList.add('has-active');
+  nodes.querySelectorAll('.wo-node').forEach(b => b.classList.toggle('is-active', +b.dataset.i===i));
+  const g = document.getElementById('wo-threads');
+  if(g){
+    const ax=n.x/100*_VBW, ay=n.y/100*_VBH;
+    g.innerHTML = (n.rel||[]).map(k=>{ const j=WORLD_NMAP[k]; if(j==null) return ''; const m=WORLD_NODES[j];
+      return `<line class="wo-thread on" x1="${ax.toFixed(0)}" y1="${ay.toFixed(0)}" x2="${(m.x/100*_VBW).toFixed(0)}" y2="${(m.y/100*_VBH).toFixed(0)}"/>`;
+    }).join('');
+  }
+  const relNames = (n.rel||[]).map(k=>{ const j=WORLD_NMAP[k]; return j!=null?WORLD_NODES[j].label:null; }).filter(Boolean);
+  document.getElementById('wo-panel-num').textContent = n.num + ' · OBJECT';
+  document.getElementById('wo-panel-label').textContent = n.label;
+  document.getElementById('wo-panel-title').textContent = n.who;
+  document.getElementById('wo-panel-note').textContent = n.note;
+  document.getElementById('wo-panel-rel').innerHTML = relNames.length
+    ? ('in orbit with ' + relNames.map(r=>'<b>'+escapeHtml(r)+'</b>').join(' · '))
+    : 'a thread of its own';
+  const visit = document.getElementById('wo-panel-visit');
+  if(n.href && n.href !== '#'){ visit.href=n.href; visit.style.display=''; visit.setAttribute('target','_blank'); }
+  else visit.style.display='none';
+  document.getElementById('wo-panel').classList.add('open');
+}
+function closeWorldObject(){
+  const nodes = document.getElementById('world-grid');
+  if(nodes){ nodes.classList.remove('has-active'); nodes.querySelectorAll('.wo-node.is-active').forEach(b=>b.classList.remove('is-active')); }
+  const g=document.getElementById('wo-threads'); if(g) g.innerHTML='';
+  const p=document.getElementById('wo-panel'); if(p) p.classList.remove('open');
 }
 /* Render every shader object into its world tile, using the same WebGL
    pipeline as the landing flowers. Retries until tiles have measured size. */
@@ -4411,132 +4428,6 @@ function openWorldModal(i){
   document.getElementById('world-modal').classList.add('open');
 }
 function closeWorldModal(){ document.getElementById('world-modal').classList.remove('open'); }
-
-/* ════════════════════════════════════════════════════════════════
-   WORLD STAGE — full-bleed, pannable still life with clickable objects.
-   Each hotspot is placed in normalized image space (nx,ny = object center
-   as a fraction of the photo; r = radius as a fraction of photo WIDTH), so
-   it stays pinned to its object at any size or pan offset. Hover/active
-   lifts a clearer "unwrapped" lens of that object + a halo + a one-word
-   category name; click opens its destination.
-
-   NOTE: these coordinates are eyeballed on the current scene.jpg and are
-   placeholders — swap the photo and/or hand over the exact object map and
-   destinations and this list is the only thing that changes.
-════════════════════════════════════════════════════════════════ */
-const WORLD_SCENE_SRC = 'assets/world/scene.jpg';
-const WORLD_HOTSPOTS = [
-  {nx:.555, ny:.165, r:.060, label:'sound',   href:'#', note:'a playlist'},
-  {nx:.470, ny:.190, r:.034, label:'scent',   href:'#'},
-  {nx:.635, ny:.235, r:.050, label:'wine',    href:'#'},
-  {nx:.738, ny:.135, r:.058, label:'garden',  href:'#'},
-  {nx:.848, ny:.290, r:.050, label:'coffee',  href:'#'},
-  {nx:.865, ny:.430, r:.045, label:'studio',  href:'#'},
-  {nx:.505, ny:.265, r:.062, label:'reading', href:'#'},
-  {nx:.420, ny:.520, r:.075, label:'album',   href:'#', note:'a photo album'},
-  {nx:.748, ny:.555, r:.050, label:'eyes',    href:'#'},
-  {nx:.600, ny:.560, r:.052, label:'needle',  href:'#'},
-  {nx:.500, ny:.640, r:.050, label:'ticket',  href:'#'},
-  {nx:.205, ny:.520, r:.085, label:'wear',    href:'#'},
-];
-
-let _worldStageBuilt = false, _worldPanX = 0, _worldMaxPanX = 0, _worldStageRO = null;
-function buildWorldHotspots(){
-  const layer = document.getElementById('world-hotspots');
-  if (!layer) return;
-  layer.innerHTML = WORLD_HOTSPOTS.map((h,i) => `
-    <button type="button" class="wh" data-i="${i}"
-      aria-label="${escapeHtml(h.label)}${h.note ? ' — ' + escapeHtml(h.note) : ''}">
-      <span class="wh-lens" aria-hidden="true"></span>
-      <span class="wh-halo" aria-hidden="true"></span>
-      <span class="wh-label">${escapeHtml(h.label)}</span>
-    </button>`).join('');
-  layer.querySelectorAll('.wh').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.preventDefault();
-      const h = WORLD_HOTSPOTS[+btn.dataset.i];
-      // reveal this one, dim the rest
-      layer.querySelectorAll('.wh').forEach(o => o.classList.remove('is-active'));
-      btn.classList.add('is-active');
-      if (h.href && h.href !== '#') window.open(h.href, '_blank', 'noopener');
-    });
-  });
-  _worldStageBuilt = true;
-}
-function layoutWorldStage(){
-  const stage = document.getElementById('world-stage');
-  const pan   = document.getElementById('world-pan');
-  const img   = document.getElementById('world-scene-img');
-  if (!stage || !pan || !img) return;
-  const W = stage.clientWidth, H = stage.clientHeight;
-  const iw = img.naturalWidth, ih = img.naturalHeight;
-  if (!W || !H || !iw || !ih) return;        // not visible / not loaded yet
-  const OVERSCAN = 1.18;                       // room to pan + bleed past edges
-  const scale = Math.max(W / iw, H / ih) * OVERSCAN;
-  const trackW = iw * scale, trackH = ih * scale;
-  pan.style.width = trackW + 'px';             // height follows via img aspect
-  // place + size each hotspot, and aim its reveal lens at its object
-  WORLD_HOTSPOTS.forEach((h,i) => {
-    const el = pan.querySelector(`.wh[data-i="${i}"]`); if (!el) return;
-    const d = 2 * h.r * trackW;                // diameter scales with the image
-    const cx = h.nx * trackW, cy = h.ny * trackH;
-    el.style.left = cx + 'px'; el.style.top = cy + 'px';
-    el.style.width = d + 'px'; el.style.height = d + 'px';
-    const lens = el.querySelector('.wh-lens');
-    if (lens){
-      lens.style.backgroundImage = `url(${WORLD_SCENE_SRC})`;
-      lens.style.backgroundSize = trackW + 'px ' + trackH + 'px';
-      lens.style.backgroundPosition = `-${cx - d/2}px -${cy - d/2}px`;
-    }
-  });
-  _worldMaxPanX = Math.max(0, (trackW - W) / 2);
-  _worldPanX = Math.max(-_worldMaxPanX, Math.min(_worldMaxPanX, _worldPanX));
-  pan.style.setProperty('--panx', _worldPanX + 'px');
-}
-function setWorldPan(x){
-  _worldPanX = Math.max(-_worldMaxPanX, Math.min(_worldMaxPanX, x));
-  const pan = document.getElementById('world-pan');
-  if (pan) pan.style.setProperty('--panx', _worldPanX + 'px');
-}
-function initWorldStage(){
-  const stage = document.getElementById('world-stage');
-  const img   = document.getElementById('world-scene-img');
-  if (!stage || !img) return;
-  if (!_worldStageBuilt){
-    buildWorldHotspots();
-    // ── pan: pointer drag (distinguishes click from drag via a threshold) ──
-    let down = false, moved = false, startX = 0, startPan = 0;
-    stage.addEventListener('pointerdown', e => {
-      down = true; moved = false; startX = e.clientX; startPan = _worldPanX;
-      stage.setPointerCapture(e.pointerId);
-    });
-    stage.addEventListener('pointermove', e => {
-      if (!down) return;
-      const dx = e.clientX - startX;
-      if (!moved && Math.abs(dx) > 5){ moved = true; stage.classList.add('is-panning','has-panned'); document.body.classList.add('is-panning'); }
-      if (moved) setWorldPan(startPan + dx);
-    });
-    const end = () => { down = false; stage.classList.remove('is-panning'); document.body.classList.remove('is-panning'); };
-    stage.addEventListener('pointerup', end);
-    stage.addEventListener('pointercancel', end);
-    // horizontal wheel / shift-wheel pans
-    stage.addEventListener('wheel', e => {
-      const d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
-      if (d){ e.preventDefault(); stage.classList.add('has-panned'); setWorldPan(_worldPanX - d); }
-    }, {passive:false});
-    // arrow keys pan while World is the active zone
-    window.addEventListener('keydown', e => {
-      const onWorld = document.querySelector('.zone[data-zone="world"].active');
-      if (!onWorld) return;
-      if (e.key === 'ArrowLeft'){ stage.classList.add('has-panned'); setWorldPan(_worldPanX + 60); }
-      else if (e.key === 'ArrowRight'){ stage.classList.add('has-panned'); setWorldPan(_worldPanX - 60); }
-    });
-    _worldStageRO = new ResizeObserver(() => layoutWorldStage());
-    _worldStageRO.observe(stage);
-  }
-  if (img.complete && img.naturalWidth) layoutWorldStage();
-  else img.addEventListener('load', layoutWorldStage, {once:true});
-}
 
 /* Curriculum vitae rows (Story · Author tab) */
 function renderCV(){
@@ -5762,6 +5653,37 @@ body[data-zone="world"] .balloon-bed{ z-index:0 }
       [[158,206],[174,176],[164,148],[146,128]].forEach(p=>{P.push([p[0],p[1],0,13]);C.push(st);}); // right arm up
       P.push([130,118,0,12]); C.push(st);         // hands meeting overhead
       return {box:[0,0,260,392],P,C,CV,kMul:0.6}; })(),
+
+    /* THE LANDING MOTIF — a balloon daisy on a stem in a small glass vase. */
+    flower:(()=>{ const P=[],C=[],CV=[];
+      const glass=SRGB('#D9CFC0'), stem=SRGB('#6E8C4A'), petal=SRGB('#ECDFC8'), core=SRGB('#D7A24A');
+      const cx=120;
+      stack(P,C,cx,402,cx,302,46,30,18,glass);    // vase body
+      P.push([cx,294,0,30]); C.push(glass);          // mouth
+      CV.push([cx,292,22,10]);
+      stack(P,C,cx,302,cx,168,7,6,15,stem);          // stem
+      const R=44; for(let a=0;a<6.283;a+=6.283/8){ P.push([cx+R*Math.cos(a),120+R*Math.sin(a),0,22]); C.push(petal); } // petals
+      P.push([cx,120,18,26]); C.push(core);          // daisy centre
+      return {box:[0,0,240,422],P,C,CV,kMul:0.7}; })(),
+
+    /* INSPIRATION — an open book, two pages tented in a shallow V. */
+    openbook:(()=>{ const P=[],C=[],CV=[];
+      const pg=SRGB('#E7DECB'), pg2=SRGB('#D8CFBA'), spine=SRGB('#B3A992');
+      stack(P,C,180,118,42,84,8,8,15,pg);            // left page
+      stack(P,C,180,118,318,84,8,8,15,pg2);          // right page
+      stack(P,C,180,132,48,98,7,7,15,pg);            // page thickness L
+      stack(P,C,180,132,312,98,7,7,15,pg2);          // page thickness R
+      P.push([180,122,0,12]); C.push(spine);          // spine
+      return {box:[0,0,360,196],P,C,CV,kMul:0.85}; })(),
+
+    /* TREASURES — a shallow dish holding a few small beads + rings. */
+    tray:(()=>{ const P=[],C=[],CV=[];
+      const dish=SRGB('#9AA08A'), gold=SRGB('#C9A24A'), pearl=SRGB('#E6DECB');
+      for(let a=0;a<6.283;a+=0.5){ P.push([150+112*Math.cos(a),92+44*Math.sin(a),0,18]); C.push(dish); } // rim
+      P.push([150,92,0,60]); C.push(dish);            // base
+      CV.push([150,80,98,26]);                          // hollow
+      [[120,86,gold],[162,82,pearl],[186,94,gold],[134,100,pearl]].forEach(t=>{P.push([t[0],t[1],14,12]);C.push(t[2]);});
+      return {box:[0,0,300,172],P,C,CV,kMul:0.6}; })(),
   };
   const BOTTLE = OBJECTS.perfume;
 
