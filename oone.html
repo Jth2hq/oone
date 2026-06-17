@@ -1309,10 +1309,17 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
 }
 
 /* ── WORLD ORBIT FIELD ────────────────────────── */
+/* World zone fills the whole frame, no padding */
+.zone[data-zone="world"] .zone-content {
+  padding: 0;
+  align-items: stretch;
+  overflow: hidden;
+}
 .world-orbit-zone {
   position: relative;
   width: 100%;
-  min-height: 700px;
+  flex: 1;
+  min-height: 100%;
   overflow: hidden;
   background: radial-gradient(ellipse at 40% 60%, rgba(200,140,120,0.35) 0%, transparent 60%),
               radial-gradient(ellipse at 75% 30%, rgba(180,120,100,0.25) 0%, transparent 50%),
@@ -2627,7 +2634,7 @@ body.night:not(.in-zone) .pm-card{
     <!-- WORLD ZONE -->
     <section class="zone" data-zone="world">
       <div class="zone-content">
-        <div class="world-orbit-zone">
+        <div class="world-orbit-zone full-bleed">
   <!-- orbit field layers -->
   <div class="orbit-bloom" aria-hidden="true"></div>
   <svg class="orbit-paths" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
