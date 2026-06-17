@@ -1308,294 +1308,522 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
   }
 }
 
-/* ── WORLD ORBIT FIELD ────────────────────────── */
-/* World zone fills the whole frame, no padding */
+/* ══════════════════════════════════════════════
+   WORLD ORBIT FIELD — reference-faithful rebuild
+   Art direction: scattered tabletop, always-visible
+   field notes, glassy 3D-looking objects, zone chrome
+   ══════════════════════════════════════════════ */
 .zone[data-zone="world"] .zone-content {
   padding: 0;
   align-items: stretch;
   overflow: hidden;
 }
-.world-orbit-zone {
-  position: relative;
-  width: 100%;
-  flex: 1;
-  min-height: 100%;
-  overflow: hidden;
-  background: radial-gradient(ellipse at 40% 60%, rgba(200,140,120,0.35) 0%, transparent 60%),
-              radial-gradient(ellipse at 75% 30%, rgba(180,120,100,0.25) 0%, transparent 50%),
-              var(--bg);
-}
 
-.orbit-bloom {
+/* Root container — fills the zone frame.
+   The world field defines its OWN warm palette (overriding the dark
+   zone skin) so it reads like the reference terracotta tabletop. */
+.wof {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  /* local palette tokens — used by all children via var() */
+  --wof-ink: #4a3228;
+  --wof-acc: #c06a4c;
+  --wof-base: #c98268;
+  background:
+    radial-gradient(ellipse 70% 55% at 40% 52%, #d49a80 0%, rgba(200,128,102,0) 72%),
+    radial-gradient(ellipse 55% 48% at 74% 30%, #cf8e74 0%, rgba(190,118,94,0) 64%),
+    radial-gradient(ellipse 50% 45% at 18% 74%, #be7458 0%, rgba(170,100,76,0) 58%),
+    linear-gradient(160deg, #cd8b70 0%, #c07a5e 50%, #b56c50 100%);
+}
+/* Map the field's chrome to the warm local palette */
+.wof .wn-ann .an-num,
+.wof .wn-ann .an-title,
+.wof .wn-ann .an-sub,
+.wof .wof-wordmark,
+.wof .wof-tagline,
+.wof .wof-topnav a,
+.wof .wof-coords,
+.wof .wof-cooo-label,
+.wof .wof-cooo-sub { color: var(--wof-ink); }
+.wof .oe, .wof .oc,
+.wof .wof-cooo-ring circle,
+.wof .wof-dn-icon circle,
+.wof .wof-dn-icon line { stroke: var(--wof-ink); }
+.wof .wn-ring circle { stroke: var(--wof-acc); }
+.wof .wp-num, .wof .wp-rel { color: var(--wof-acc); }
+.wof .wp-rel { border-color: color-mix(in srgb, var(--wof-acc) 50%, transparent); }
+.wof .wof-dn-dot { background: var(--wof-acc); }
+.wof .wp-title, .wof .wp-sub, .wof .wp-note,
+.wof .wof-panel-close { color: var(--wof-ink); }
+.wof .wof-panel {
+  background: color-mix(in srgb, #d49a80 90%, transparent);
+  border-left-color: color-mix(in srgb, var(--wof-ink) 22%, transparent);
+}
+.wof .wp-rule { border-top-color: color-mix(in srgb, var(--wof-ink) 18%, transparent); }
+.wof .wn.active .wn-ann .an-num { color: var(--wof-acc); }
+
+/* Grain texture layer */
+.wof-grain {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background:
-    radial-gradient(circle at 30% 55%, rgba(255,180,150,0.18) 0%, transparent 35%),
-    radial-gradient(circle at 70% 40%, rgba(220,160,130,0.14) 0%, transparent 30%),
-    radial-gradient(circle at 55% 70%, rgba(200,140,110,0.10) 0%, transparent 25%);
   z-index: 1;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='1'/></svg>");
 }
 
-.orbit-paths {
+/* Soft bloom glows */
+.wof-bloom {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    radial-gradient(circle 300px at 68% 30%, rgba(255,190,160,0.12) 0%, transparent 100%),
+    radial-gradient(circle 200px at 25% 60%, rgba(220,160,130,0.10) 0%, transparent 100%),
+    radial-gradient(circle 250px at 52% 72%, rgba(200,140,110,0.08) 0%, transparent 100%);
+}
+
+/* SVG orbit ellipse layer */
+.wof-orbits {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 2;
-}
-
-.orbit-ellipse {
-  fill: none;
-  stroke: var(--ink);
-  stroke-width: 0.5;
-  opacity: 0.15;
-}
-
-.orbit-ellipse.orbit-table {
-  stroke-dasharray: 4 8;
-  opacity: 0.22;
-}
-
-.orbit-ellipse.orbit-inner {
-  stroke-dasharray: 2 12;
-  opacity: 0.12;
-}
-
-.orbit-ellipse.orbit-outer {
-  stroke-dasharray: 1 16;
-  opacity: 0.08;
-}
-
-.orbit-connector {
-  stroke: var(--acc);
-  stroke-width: 0.5;
-  opacity: 0.2;
-  stroke-dasharray: 3 6;
-}
-
-.orbit-nodes {
-  position: absolute;
-  inset: 0;
   z-index: 3;
 }
+.wof-orbits .oe { fill: none; stroke: var(--ink); stroke-width: 0.6; }
+.wof-orbits .oe-main  { stroke-dasharray: 5 10; opacity: 0.18; }
+.wof-orbits .oe-inner { stroke-dasharray: 2 14; opacity: 0.10; }
+.wof-orbits .oe-outer { stroke-dasharray: 1 18; opacity: 0.07; }
+.wof-orbits .oc { fill: none; stroke: var(--ink); stroke-width: 0.4; stroke-dasharray: 2 6; opacity: 0.12; }
 
-.onode {
+/* Field nodes layer */
+.wof-nodes {
   position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  transform: translate(-50%, -50%);
-  transition: transform 0.3s ease, filter 0.3s ease;
-  will-change: transform, filter;
+  inset: 0;
+  z-index: 4;
 }
 
-.onode:hover {
-  transform: translate(-50%, calc(-50% - 8px));
-  filter: drop-shadow(0 0 12px rgba(255,180,150,0.6)) drop-shadow(0 4px 16px rgba(180,100,80,0.3));
+/* Individual object node */
+.wn {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  /* Each node is: [orbit-ring] + [object svg] + [annotation] stacked */
+}
+
+.wn-body {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.28s cubic-bezier(0.2,0,0.2,1), filter 0.28s ease;
+}
+
+.wn:hover .wn-body {
+  transform: translateY(-7px) scale(1.06);
+  filter:
+    drop-shadow(0 0 10px rgba(255,180,150,0.55))
+    drop-shadow(0 8px 18px rgba(160,80,60,0.28));
   z-index: 10;
 }
-
-.onode.active {
-  transform: translate(-50%, calc(-50% - 6px));
-  filter: drop-shadow(0 0 18px rgba(255,180,150,0.8)) drop-shadow(0 6px 20px rgba(180,100,80,0.4));
+.wn.active .wn-body {
+  transform: translateY(-5px) scale(1.04);
+  filter:
+    drop-shadow(0 0 16px rgba(255,190,160,0.75))
+    drop-shadow(0 10px 24px rgba(160,80,60,0.35));
   z-index: 11;
 }
-
-.onode.dimmed {
-  opacity: 0.25;
-  filter: none;
+.wn.dimmed {
+  opacity: 0.22;
   pointer-events: none;
 }
 
-.onode svg {
-  width: 80px;
-  height: 80px;
-  transition: width 0.2s, height 0.2s;
-}
-
-.onode:hover svg {
-  width: 88px;
-  height: 88px;
-}
-
-.onode-num {
-  font-family: var(--font-mono, monospace);
-  font-size: 9px;
-  letter-spacing: 0.08em;
-  color: var(--ink2);
-  opacity: 0.6;
-  margin-top: 4px;
-  transition: opacity 0.2s;
-}
-
-.onode:hover .onode-num,
-.onode.active .onode-num {
-  opacity: 1;
-  color: var(--acc);
-}
-
-.onode-annotation {
+/* Orbit ring that spins on hover/active */
+.wn-ring {
   position: absolute;
-  bottom: calc(100% + 6px);
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
+  transform: translate(-50%, -50%);
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.25s ease;
+}
+.wn:hover .wn-ring,
+.wn.active .wn-ring { opacity: 1; }
+.wn-ring circle {
+  fill: none;
+  stroke: var(--acc, #c87860);
+  stroke-width: 0.7;
+  stroke-dasharray: 3 6;
+  opacity: 0.55;
+  transform-origin: center;
+  animation: wn-spin 14s linear infinite;
+}
+@keyframes wn-spin { to { transform: rotate(360deg); } }
+
+/* The SVG object inside .wn-body */
+.wn-obj { display: block; transition: none; }
+
+/* Field note annotation — ALWAYS VISIBLE, positioned to the side */
+.wn-ann {
+  position: absolute;
+  pointer-events: none;
   white-space: nowrap;
+  line-height: 1.35;
 }
-
-.onode:hover .onode-annotation,
-.onode.active .onode-annotation {
-  opacity: 1;
-}
-
-.onode-annotation .ann-title {
+.wn-ann .an-num {
   display: block;
-  font-family: var(--font-sans, sans-serif);
+  font-family: var(--ff-mono, monospace);
+  font-size: 8.5px;
+  letter-spacing: 0.14em;
+  color: var(--ink, #3a2820);
+  opacity: 0.45;
+  margin-bottom: 1px;
+}
+.wn-ann .an-title {
+  display: block;
+  font-family: var(--ff-mono, monospace);
   font-size: 9px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
-  color: var(--ink);
-  line-height: 1.3;
+  color: var(--ink, #3a2820);
+  opacity: 0.75;
 }
-
-.onode-annotation .ann-sub {
+.wn-ann .an-sub {
   display: block;
-  font-family: var(--font-mono, monospace);
+  font-family: var(--ff-mono, monospace);
   font-size: 8px;
-  color: var(--ink2);
+  letter-spacing: 0.04em;
+  color: var(--ink, #3a2820);
+  opacity: 0.45;
   margin-top: 1px;
 }
-
-.onode-orbit-mark {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 110px;
-  height: 110px;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.onode.active .onode-orbit-mark,
-.onode:hover .onode-orbit-mark {
+.wn:hover .wn-ann .an-num,
+.wn:hover .wn-ann .an-title,
+.wn:hover .wn-ann .an-sub,
+.wn.active .wn-ann .an-num,
+.wn.active .wn-ann .an-title,
+.wn.active .wn-ann .an-sub {
   opacity: 1;
+  color: var(--ink, #3a2820);
 }
+.wn.active .wn-ann .an-num { color: var(--acc, #c87860); opacity: 1; }
 
-.onode-orbit-mark circle {
-  fill: none;
-  stroke: var(--acc);
-  stroke-width: 0.8;
-  stroke-dasharray: 3 5;
-  opacity: 0.5;
-  transform-origin: center;
-  animation: orbit-spin 12s linear infinite;
-}
+/* Annotation sides — set per node via data-ann-side */
+.wn[data-ann="right"]  .wn-ann { left: calc(100% + 8px); top: 50%; transform: translateY(-50%); text-align: left; }
+.wn[data-ann="left"]   .wn-ann { right: calc(100% + 8px); top: 50%; transform: translateY(-50%); text-align: right; }
+.wn[data-ann="above"]  .wn-ann { bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); text-align: center; }
+.wn[data-ann="below"]  .wn-ann { top: calc(100% + 6px);    left: 50%; transform: translateX(-50%); text-align: center; }
 
-@keyframes orbit-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.active-obj-panel {
-  position: fixed;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%) translateX(100%);
-  width: 260px;
-  background: var(--bg);
-  border-left: 1px solid var(--ink);
-  padding: 2rem 1.5rem;
-  z-index: 100;
-  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
-  opacity: 0.96;
-}
-
-.active-obj-panel.open {
-  transform: translateY(-50%) translateX(0);
-}
-
-.panel-close {
+/* Zone chrome: top nav bar */
+.wof-topbar {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  padding: 14px 20px 10px;
+  gap: 0;
+  pointer-events: none;
+}
+.wof-wordmark {
+  font-family: var(--ff-mono, monospace);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.7;
+  white-space: nowrap;
+}
+.wof-wordmark strong { font-weight: 900; letter-spacing: 0.05em; }
+.wof-slash {
+  font-family: var(--ff-mono, monospace);
+  font-size: 9px;
+  color: var(--ink);
+  opacity: 0.35;
+  margin: 0 6px;
+}
+.wof-tagline {
+  font-family: var(--ff-mono, monospace);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  opacity: 0.4;
+  font-style: italic;
+}
+.wof-topnav {
+  margin-left: auto;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+.wof-topnav a {
+  font-family: var(--ff-mono, monospace);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.4;
+  text-decoration: none;
+  pointer-events: auto;
+  transition: opacity 0.15s;
+}
+.wof-topnav a.current,
+.wof-topnav a:hover { opacity: 0.9; }
+.wof-topnav .dn-toggle {
+  pointer-events: auto;
+  cursor: pointer;
   background: none;
   border: none;
-  color: var(--ink2);
-  font-size: 18px;
+  padding: 0;
+  color: var(--ink);
+  opacity: 0.5;
+  font-size: 11px;
+  line-height: 1;
+  transition: opacity 0.15s;
+}
+.wof-topnav .dn-toggle:hover { opacity: 1; }
+
+/* Zone chrome: bottom bar */
+.wof-bottombar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+  padding: 10px 20px 16px;
+  pointer-events: none;
+}
+
+/* CO / OO orbit marks — bottom left */
+.wof-cooo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.wof-cooo-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.wof-cooo-label {
+  font-family: var(--ff-head, sans-serif);
+  font-weight: 900;
+  font-stretch: 75%;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--ink);
+  opacity: 0.75;
+  letter-spacing: -0.02em;
+}
+.wof-cooo-ring {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.wof-cooo-ring circle {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 0.7;
+  stroke-dasharray: 2 4;
+  opacity: 0.45;
+}
+.wof-cooo-sub {
+  font-family: var(--ff-mono, monospace);
+  font-size: 8px;
+  letter-spacing: 0.10em;
+  color: var(--ink);
+  opacity: 0.4;
+  margin-top: 2px;
+}
+
+/* Coordinates — bottom right */
+.wof-coords {
+  margin-left: auto;
+  font-family: var(--ff-mono, monospace);
+  font-size: 8.5px;
+  letter-spacing: 0.10em;
+  color: var(--ink);
+  opacity: 0.35;
+  text-align: right;
+  line-height: 1.5;
+}
+
+/* Day/Night indicator bottom right */
+.wof-dn {
+  margin-left: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.wof-dn-icon {
+  width: 14px;
+  height: 14px;
+}
+.wof-dn-icon circle, .wof-dn-icon line { stroke: var(--ink); stroke-width: 1; opacity: 0.4; }
+.wof-dn-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--acc, #c87860);
+  opacity: 0.6;
+}
+
+/* Active object panel — slides in from right */
+.wof-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 240px;
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
+  border-left: 0.5px solid color-mix(in srgb, var(--ink) 20%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 52px 20px 20px;
+  z-index: 30;
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.wof-panel.open { transform: translateX(0); }
+.wof-panel-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: var(--ink);
+  opacity: 0.4;
+  font-size: 14px;
   cursor: pointer;
   padding: 0;
   line-height: 1;
+  transition: opacity 0.15s;
 }
-
-.panel-num {
-  font-family: var(--font-mono, monospace);
-  font-size: 10px;
+.wof-panel-close:hover { opacity: 0.9; }
+.wp-num {
+  font-family: var(--ff-mono, monospace);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: var(--acc, #c87860);
+  margin-bottom: 6px;
+}
+.wp-title {
+  font-family: var(--ff-mono, monospace);
+  font-size: 12px;
+  font-weight: 700;
   letter-spacing: 0.12em;
-  color: var(--acc);
-  margin-bottom: 0.5rem;
-}
-
-.panel-title {
-  font-family: var(--font-sans, sans-serif);
-  font-size: 1.1rem;
-  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--ink);
-  margin-bottom: 0.25rem;
+  margin-bottom: 3px;
 }
-
-.panel-sub {
-  font-family: var(--font-mono, monospace);
+.wp-sub {
+  font-family: var(--ff-mono, monospace);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  opacity: 0.5;
+  margin-bottom: 14px;
+}
+.wp-rule {
+  border: none;
+  border-top: 0.5px solid color-mix(in srgb, var(--ink) 18%, transparent);
+  margin: 0 0 14px;
+}
+.wp-note {
+  font-family: var(--ff-mono, monospace);
   font-size: 10px;
-  color: var(--ink2);
-  margin-bottom: 1rem;
+  line-height: 1.65;
+  color: var(--ink);
+  opacity: 0.65;
+  margin-bottom: 16px;
+  flex: 1;
 }
-
-.panel-note {
-  font-family: var(--font-sans, sans-serif);
-  font-size: 11px;
-  line-height: 1.6;
-  color: var(--ink2);
-  margin-bottom: 1rem;
-  border-top: 0.5px solid var(--ink);
-  padding-top: 0.75rem;
+.wp-rels-label {
+  font-family: var(--ff-mono, monospace);
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0.35;
+  margin-bottom: 6px;
 }
-
-.panel-relations {
+.wp-rels {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 5px;
 }
-
-.panel-relation-tag {
-  font-family: var(--font-mono, monospace);
-  font-size: 9px;
-  letter-spacing: 0.1em;
-  color: var(--acc);
-  border: 0.5px solid var(--acc);
-  padding: 2px 6px;
-  opacity: 0.8;
+.wp-rel {
+  font-family: var(--ff-mono, monospace);
+  font-size: 8.5px;
+  letter-spacing: 0.08em;
+  color: var(--acc, #c87860);
+  border: 0.5px solid color-mix(in srgb, var(--acc, #c87860) 50%, transparent);
+  padding: 3px 7px;
+  cursor: pointer;
+  transition: background 0.15s;
 }
+.wp-rel:hover { background: color-mix(in srgb, var(--acc, #c87860) 12%, transparent); }
 
-[data-theme="night"] .orbit-bloom,
-.scheme-WINTER .orbit-bloom {
+/* Night / WINTER scheme overrides */
+[data-theme="night"] .wof,
+.scheme-WINTER .wof,
+.wof.wof-night {
   background:
-    radial-gradient(circle at 30% 55%, rgba(100,120,180,0.18) 0%, transparent 35%),
-    radial-gradient(circle at 70% 40%, rgba(80,100,160,0.14) 0%, transparent 30%);
+    radial-gradient(ellipse 80% 60% at 38% 55%, rgba(60,80,140,0.22) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 72% 32%, rgba(40,60,120,0.18) 0%, transparent 60%),
+    #1a1820;
 }
+[data-theme="night"] .wof-bloom,
+.scheme-WINTER .wof-bloom,
+.wof.wof-night .wof-bloom {
+  background:
+    radial-gradient(circle 300px at 68% 30%, rgba(120,150,220,0.12) 0%, transparent 100%),
+    radial-gradient(circle 200px at 25% 60%, rgba(90,120,190,0.09) 0%, transparent 100%);
+}
+/* Night raises ink contrast so field notes stay legible on the dark field */
+.wof.wof-night .wn-ann .an-num,
+.wof.wof-night .wn-ann .an-title,
+.wof.wof-night .wn-ann .an-sub,
+.wof.wof-night .wof-wordmark,
+.wof.wof-night .wof-tagline,
+.wof.wof-night .wof-topnav a,
+.wof.wof-night .wof-coords,
+.wof.wof-night .wof-cooo-label,
+.wof.wof-night .wof-cooo-sub {
+  color: #e8e0e4;
+}
+.wof.wof-night .oe,
+.wof.wof-night .oc { stroke: #e8e0e4; }
+.wof.wof-night .wof-cooo-ring circle,
+.wof.wof-night .wof-dn-icon circle,
+.wof.wof-night .wof-dn-icon line { stroke: #e8e0e4; }
+.wof.wof-night .wof-panel {
+  background: color-mix(in srgb, #1a1820 92%, transparent);
+  border-left-color: rgba(232,224,228,0.2);
+}
+.wof.wof-night .wp-title,
+.wof.wof-night .wp-sub,
+.wof.wof-night .wp-note,
+.wof.wof-night .wof-panel-close { color: #e8e0e4; }
 
+/* Responsive */
 @media (max-width: 768px) {
-  .world-orbit-zone { min-height: 520px; }
-  .onode svg { width: 56px; height: 56px; }
-  .onode:hover svg { width: 62px; height: 62px; }
-  .active-obj-panel { width: 100vw; right: 0; }
+  .wof-topnav { display: none; }
+  .wof-panel { width: 100%; }
+  .wn-ann { font-size: 7.5px; }
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -2634,33 +2862,86 @@ body.night:not(.in-zone) .pm-card{
     <!-- WORLD ZONE -->
     <section class="zone" data-zone="world">
       <div class="zone-content">
-        <div class="world-orbit-zone full-bleed">
-  <!-- orbit field layers -->
-  <div class="orbit-bloom" aria-hidden="true"></div>
-  <svg class="orbit-paths" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-    <!-- main table ellipse -->
-    <ellipse cx="600" cy="380" rx="480" ry="200" class="orbit-ellipse orbit-table"/>
-    <!-- inner orbit ring -->
-    <ellipse cx="600" cy="360" rx="280" ry="120" class="orbit-ellipse orbit-inner"/>
-    <!-- outer scatter ring -->
-    <ellipse cx="600" cy="400" rx="520" ry="240" class="orbit-ellipse orbit-outer"/>
-    <!-- connector paths between related objects -->
-    <line x1="200" y1="200" x2="400" y2="300" class="orbit-connector"/>
-    <line x1="900" y1="180" x2="750" y2="320" class="orbit-connector"/>
-    <line x1="150" y1="420" x2="300" y2="380" class="orbit-connector"/>
-    <line x1="1000" y1="500" x2="850" y2="420" class="orbit-connector"/>
-  </svg>
-  <div class="orbit-nodes" id="orbitNodes"></div>
-  <div class="orbit-annotation-layer" id="orbitAnnotations" aria-live="polite"></div>
-</div>
-<div class="active-obj-panel" id="activeObjPanel" role="dialog" aria-modal="true" aria-hidden="true">
-  <button class="panel-close" id="panelClose" aria-label="Close">×</button>
-  <div class="panel-num" id="panelNum"></div>
-  <div class="panel-title" id="panelTitle"></div>
-  <div class="panel-sub" id="panelSub"></div>
-  <div class="panel-note" id="panelNote"></div>
-  <div class="panel-relations" id="panelRelations"></div>
-</div>
+        <!-- World orbit field — full-bleed inside zone-content -->
+        <div class="wof full-bleed" id="wof">
+
+          <!-- Atmosphere layers -->
+          <div class="wof-grain" aria-hidden="true"></div>
+          <div class="wof-bloom" aria-hidden="true"></div>
+
+          <!-- SVG orbit ellipses -->
+          <svg class="wof-orbits" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <ellipse cx="600" cy="390" rx="490" ry="210" class="oe oe-main"/>
+            <ellipse cx="600" cy="370" rx="290" ry="125" class="oe oe-inner"/>
+            <ellipse cx="600" cy="410" rx="530" ry="255" class="oe oe-outer"/>
+            <!-- organic connectors between clustered objects -->
+            <line x1="840" y1="200" x2="960" y2="260" class="oc"/>
+            <line x1="960" y1="260" x2="880" y2="400" class="oc"/>
+            <line x1="200" y1="350" x2="160" y2="480" class="oc"/>
+            <line x1="420" y1="180" x2="560" y2="220" class="oc"/>
+            <line x1="560" y1="520" x2="700" y2="560" class="oc"/>
+          </svg>
+
+          <!-- Object nodes — injected by JS -->
+          <div class="wof-nodes" id="wofNodes"></div>
+
+          <!-- Zone chrome: top bar -->
+          <header class="wof-topbar" aria-label="World navigation">
+            <span class="wof-wordmark"><strong>CO</strong></span>
+            <span class="wof-slash">/</span>
+            <span class="wof-wordmark"><strong>ONE</strong></span>
+            <span class="wof-slash">/</span>
+            <span class="wof-tagline">in itself, in orbit.</span>
+            <nav class="wof-topnav" aria-label="Zones">
+              <a href="#" class="current" aria-current="page">WORLD</a>
+              <a href="#">PRACTICE</a>
+              <a href="#">STORIES</a>
+              <a href="#">FIELD LOG</a>
+              <a href="#">ABOUT</a>
+              <button class="dn-toggle" id="wofDnToggle" aria-label="Toggle day/night" title="Day / Night">☀</button>
+            </nav>
+          </header>
+
+          <!-- Zone chrome: bottom bar -->
+          <footer class="wof-bottombar" aria-label="Field coordinates">
+            <div class="wof-cooo">
+              <div class="wof-cooo-row">
+                <span class="wof-cooo-label">CO</span>
+                <svg class="wof-cooo-ring" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg>
+              </div>
+              <div class="wof-cooo-row">
+                <span class="wof-cooo-label">OO</span>
+                <svg class="wof-cooo-ring" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" stroke-dasharray="1 3"/></svg>
+              </div>
+              <div class="wof-cooo-sub">ORBIT OF ONE<br>est. 2024</div>
+            </div>
+            <div class="wof-coords" aria-label="Location coordinates">
+              40.6782° N, 73.9442° W<br>
+              <span style="opacity:.6">BROOKLYN, NY</span>
+            </div>
+            <div class="wof-dn" aria-hidden="true">
+              <svg class="wof-dn-icon" viewBox="0 0 14 14">
+                <circle cx="7" cy="7" r="3" fill="none"/>
+                <line x1="7" y1="0" x2="7" y2="2"/><line x1="7" y1="12" x2="7" y2="14"/>
+                <line x1="0" y1="7" x2="2" y2="7"/><line x1="12" y1="7" x2="14" y2="7"/>
+              </svg>
+              <div class="wof-dn-dot"></div>
+            </div>
+          </footer>
+
+          <!-- Active object panel -->
+          <aside class="wof-panel" id="wofPanel" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Object detail">
+            <button class="wof-panel-close" id="wofPanelClose" aria-label="Close">×</button>
+            <div class="wp-num" id="wpNum"></div>
+            <div class="wp-title" id="wpTitle"></div>
+            <div class="wp-sub" id="wpSub"></div>
+            <hr class="wp-rule">
+            <div class="wp-note" id="wpNote"></div>
+            <div class="wp-rels-label">IN RELATION TO</div>
+            <div class="wp-rels" id="wpRels"></div>
+          </aside>
+
+        </div>
       </div>
     </section>
 
@@ -2906,11 +3187,11 @@ function onKey(e){
   const filterOpen = document.body.classList.contains('lfd-open');
   const overlayOpen = document.getElementById('log-overlay').classList.contains('open')
                    || document.getElementById('proj-modal').classList.contains('open')
-                   || (document.getElementById('activeObjPanel') && document.getElementById('activeObjPanel').classList.contains('open'));
+                   || (document.getElementById('wofPanel') && document.getElementById('wofPanel').classList.contains('open'));
   if (e.key === 'Escape'){
     if (composerOpen) toggleLogComposer();
     else if (filterOpen) closeLogFilters();
-    else if (overlayOpen){ closeLogOverlay(); closeProjModal(); if(document.getElementById('activeObjPanel')) document.getElementById('activeObjPanel').classList.remove('open'); }
+    else if (overlayOpen){ closeLogOverlay(); closeProjModal(); if(document.getElementById('wofPanel')) document.getElementById('wofPanel').classList.remove('open'); }
     else if (activeZone) exitZone();
     return;
   }
@@ -3935,113 +4216,270 @@ function logEntryPrev(){ if (currentLogIdx > 0) openLogEntry(currentLogIdx-1); }
 function logEntryNext(){ if (currentLogIdx < LOG_ENTRIES.length-1) openLogEntry(currentLogIdx+1); }
 function closeLogOverlay(){ document.getElementById('log-overlay').classList.remove('open'); currentLogIdx = -1; }
 
-// ── WORLD ORBIT FIELD ────────────────────────────────────────────
+// ── WORLD ORBIT FIELD — reference-faithful ───────────────────────
 (function() {
+  // x/y in %, scale 0.7–1.4, ann = annotation anchor side
+  // Positions match reference: upper-right cluster (speaker/fruit/wine),
+  // left coast (napkin/clippers/perfume/flower), center (books/paper-plane/french-press)
   var NODES = [
-    { id:'flower',      num:'01', title:'FLOWER',       sub:'always playing',         note:'A daisy from the landing. Marks the center — it begins here.',           x:30, y:35, rels:['paper-plane','open-book'] },
-    { id:'paper-plane', num:'02', title:'PAPER PLANE',  sub:'messages from passengers',note:'Folded intention. Sent without a return address.',                      x:55, y:25, rels:['flower','books'] },
-    { id:'speaker',     num:'03', title:'SOUND',        sub:'always playing',         note:'Wesley Moon, always playing. The room has its own frequency.',           x:78, y:22, rels:['wine','french-press'] },
-    { id:'fruit',       num:'04', title:'FRUIT',        sub:'for guests, in abundance',note:'A bowl kept full. Hospitality as ambient act.',                         x:88, y:38, rels:['napkin','tray'] },
-    { id:'wine',        num:'05', title:'WINE',         sub:'slow mornings',          note:'Opened the night before. Still breathing by morning.',                   x:82, y:58, rels:['speaker','glasses'] },
-    { id:'glasses',     num:'06', title:'FOCUS',        sub:'to see clearly',         note:'Set down here, picked up again. Thinking resumes.',                      x:70, y:72, rels:['wine','open-book'] },
-    { id:'open-book',   num:'07', title:'OPEN BOOK',    sub:'bits and reminders',     note:'Left open at a page. The sentence that stopped you.',                    x:52, y:78, rels:['books','flower'] },
-    { id:'tray',        num:'08', title:'TREASURES',    sub:'bits and reminders',     note:'Small objects that survived the move. No assigned meaning.',             x:35, y:75, rels:['napkin','clippers'] },
-    { id:'napkin',      num:'09', title:'NAPKIN',       sub:'washed silk, gift from him', note:'Marbled. Used once at a dinner that changed things.',                x:18, y:65, rels:['tray','books'] },
-    { id:'clippers',    num:'10', title:'SCENT',        sub:'from Dad',               note:'His bottle. Worn before every important thing.',                         x:12, y:45, rels:['napkin','perfume'] },
-    { id:'perfume',     num:'11', title:'PERFUME',      sub:'from Dad',               note:"The smell of a specific Saturday. Can't be found again.",               x:20, y:28, rels:['clippers','flower'] },
-    { id:'books',       num:'12', title:'INSPIRATION',  sub:'written everywhere',     note:'Stack from the shelf. Titles that rearranged something.',                x:42, y:32, rels:['paper-plane','open-book'] },
-    { id:'french-press',num:'13', title:'FRENCH PRESS', sub:'slow mornings',          note:'Blue hours. The press cools while you\'re still reading.',               x:62, y:48, rels:['speaker','glasses'] }
+    { id:'flower',       num:'01', title:'FLOWER',       sub:'always playing',             note:'A daisy from the landing. Marks the center — it begins here.',           x:28, y:38, s:1.3, ann:'right', rels:['paper-plane','perfume'] },
+    { id:'paper-plane',  num:'02', title:'PAPER PLANE',  sub:'messages from passengers',   note:'Folded intention. Sent without a return address.',                        x:53, y:22, s:1.1, ann:'right', rels:['flower','books'] },
+    { id:'speaker',      num:'03', title:'SOUND',        sub:'Wesley Moon, always playing', note:'The room has its own frequency. Always something on.',                   x:76, y:18, s:1.2, ann:'left',  rels:['wine','french-press'] },
+    { id:'fruit',        num:'04', title:'FRUIT',        sub:'for guests, in abundance',   note:'A bowl kept full. Hospitality as ambient act.',                           x:88, y:34, s:1.1, ann:'left',  rels:['napkin','tray'] },
+    { id:'wine',         num:'05', title:'WINE',         sub:'slow mornings',              note:'Opened the night before. Still breathing by morning.',                    x:84, y:55, s:1.0, ann:'left',  rels:['speaker','glasses'] },
+    { id:'glasses',      num:'06', title:'FOCUS',        sub:'to see clearly',             note:'Set down here, picked up again. Thinking resumes.',                       x:69, y:70, s:0.8, ann:'left',  rels:['wine','open-book'] },
+    { id:'open-book',    num:'07', title:'OPEN BOOK',    sub:'bits and reminders',         note:'Left open at a page. The sentence that stopped you.',                     x:50, y:78, s:1.15,ann:'right', rels:['books','flower'] },
+    { id:'tray',         num:'08', title:'TREASURES',    sub:'bits and reminders',         note:'Small objects that survived the move. No assigned meaning.',               x:34, y:74, s:0.9, ann:'right', rels:['napkin','clippers'] },
+    { id:'napkin',       num:'09', title:'NAPKIN',       sub:'washed silk, gift from him', note:'Marbled. Used once at a dinner that changed things.',                      x:14, y:62, s:1.0, ann:'right', rels:['tray','books'] },
+    { id:'clippers',     num:'10', title:'CLIPPERS',     sub:'kept sharp',                 note:'Steel that has outlasted three apartments.',                              x:10, y:44, s:0.75,ann:'right', rels:['napkin','perfume'] },
+    { id:'perfume',      num:'11', title:'SCENT',        sub:'from Dad',                   note:'His bottle. The smell of a specific Saturday.',                           x:18, y:25, s:0.85,ann:'right', rels:['clippers','flower'] },
+    { id:'books',        num:'12', title:'INSPIRATION',  sub:'written everywhere',         note:'Stack from the shelf. Titles that rearranged something.',                  x:40, y:30, s:1.1, ann:'right', rels:['paper-plane','open-book'] },
+    { id:'french-press', num:'13', title:'FRENCH PRESS', sub:'slow mornings',              note:'Blue hours. The press cools while you\'re still reading.',                x:62, y:46, s:1.0, ann:'right', rels:['speaker','glasses'] }
   ];
 
+  // Shared glass gradient defs — referenced by every object for a
+  // consistent translucent-plastic shading model (volume + rim + specular).
+  var GLASS_DEFS =
+    '<defs>' +
+      '<radialGradient id="gGlass" cx="38%" cy="30%" r="75%">' +
+        '<stop offset="0%" stop-color="rgba(255,248,244,0.85)"/>' +
+        '<stop offset="42%" stop-color="rgba(232,206,200,0.45)"/>' +
+        '<stop offset="100%" stop-color="rgba(190,148,134,0.30)"/>' +
+      '</radialGradient>' +
+      '<radialGradient id="gGlassWarm" cx="40%" cy="32%" r="72%">' +
+        '<stop offset="0%" stop-color="rgba(255,238,222,0.85)"/>' +
+        '<stop offset="45%" stop-color="rgba(240,190,164,0.50)"/>' +
+        '<stop offset="100%" stop-color="rgba(200,128,100,0.34)"/>' +
+      '</radialGradient>' +
+      '<linearGradient id="gRim" x1="0" y1="0" x2="1" y2="1">' +
+        '<stop offset="0%" stop-color="rgba(255,255,255,0.55)"/>' +
+        '<stop offset="100%" stop-color="rgba(190,150,140,0.30)"/>' +
+      '</linearGradient>' +
+    '</defs>';
+  var RIM = 'rgba(150,108,94,0.55)';      // warm edge stroke
+  var SPEC = 'rgba(255,255,255,0.75)';    // specular highlight
+
   var SVGS = {
-    flower: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.85"><ellipse cx="40" cy="20" rx="8" ry="14" fill="rgba(255,200,190,0.45)" stroke="rgba(200,130,110,0.6)" stroke-width="0.8"/><ellipse cx="40" cy="20" rx="8" ry="14" fill="rgba(255,200,190,0.45)" stroke="rgba(200,130,110,0.6)" stroke-width="0.8" transform="rotate(60 40 40)"/><ellipse cx="40" cy="20" rx="8" ry="14" fill="rgba(255,200,190,0.45)" stroke="rgba(200,130,110,0.6)" stroke-width="0.8" transform="rotate(120 40 40)"/><ellipse cx="40" cy="20" rx="8" ry="14" fill="rgba(255,200,190,0.45)" stroke="rgba(200,130,110,0.6)" stroke-width="0.8" transform="rotate(180 40 40)"/><ellipse cx="40" cy="20" rx="8" ry="14" fill="rgba(255,200,190,0.45)" stroke="rgba(200,130,110,0.6)" stroke-width="0.8" transform="rotate(240 40 40)"/><ellipse cx="40" cy="20" rx="8" ry="14" fill="rgba(255,200,190,0.45)" stroke="rgba(200,130,110,0.6)" stroke-width="0.8" transform="rotate(300 40 40)"/><circle cx="40" cy="40" r="9" fill="rgba(255,210,180,0.7)" stroke="rgba(200,140,110,0.8)" stroke-width="1"/><circle cx="40" cy="40" r="4" fill="rgba(240,180,150,0.9)" stroke="rgba(180,110,90,0.5)" stroke-width="0.5"/><line x1="40" y1="49" x2="40" y2="68" stroke="rgba(140,160,110,0.7)" stroke-width="1.5" stroke-linecap="round"/><ellipse cx="37" cy="37" rx="3" ry="4" fill="rgba(255,255,255,0.3)" transform="rotate(-20 37 37)"/></g></svg>',
-    'paper-plane': '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.85" transform="rotate(-15 40 40)"><polygon points="8,50 72,32 40,58" fill="rgba(220,200,210,0.5)" stroke="rgba(180,150,160,0.7)" stroke-width="0.8"/><polygon points="8,50 72,32 36,40" fill="rgba(240,220,225,0.6)" stroke="rgba(190,160,170,0.6)" stroke-width="0.5"/><line x1="8" y1="50" x2="40" y2="58" stroke="rgba(180,150,160,0.5)" stroke-width="0.5"/><line x1="36" y1="40" x2="40" y2="58" stroke="rgba(200,170,180,0.4)" stroke-width="0.5"/><line x1="36" y1="40" x2="60" y2="34" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/></g></svg>',
-    speaker: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.85"><rect x="20" y="12" width="40" height="56" rx="6" fill="rgba(200,185,190,0.45)" stroke="rgba(160,140,145,0.7)" stroke-width="0.8"/><circle cx="40" cy="46" r="16" fill="rgba(180,165,170,0.4)" stroke="rgba(150,130,135,0.6)" stroke-width="0.7"/><circle cx="40" cy="46" r="8" fill="rgba(160,145,150,0.5)" stroke="rgba(130,110,115,0.5)" stroke-width="0.5"/><circle cx="40" cy="46" r="3" fill="rgba(140,125,130,0.7)"/><circle cx="40" cy="22" r="5" fill="rgba(210,195,200,0.5)" stroke="rgba(170,150,155,0.5)" stroke-width="0.5"/><rect x="24" y="15" width="8" height="20" rx="3" fill="rgba(255,255,255,0.15)"/></g></svg>',
-    fruit: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.85"><ellipse cx="40" cy="62" rx="28" ry="8" fill="rgba(210,195,195,0.5)" stroke="rgba(170,150,150,0.6)" stroke-width="0.8"/><path d="M 12 58 Q 14 50 40 50 Q 66 50 68 58" fill="rgba(215,200,200,0.4)" stroke="rgba(170,150,150,0.5)" stroke-width="0.7"/><circle cx="32" cy="46" r="10" fill="rgba(230,170,150,0.6)" stroke="rgba(190,130,110,0.7)" stroke-width="0.7"/><circle cx="48" cy="44" r="10" fill="rgba(210,185,160,0.6)" stroke="rgba(170,140,120,0.6)" stroke-width="0.7"/><circle cx="40" cy="36" r="9" fill="rgba(225,160,140,0.65)" stroke="rgba(185,120,100,0.7)" stroke-width="0.7"/><line x1="40" y1="27" x2="38" y2="22" stroke="rgba(140,160,110,0.7)" stroke-width="1" stroke-linecap="round"/><circle cx="37" cy="33" r="3" fill="rgba(255,255,255,0.3)"/></g></svg>',
-    wine: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.85"><ellipse cx="40" cy="68" rx="14" ry="4" fill="rgba(180,160,165,0.5)" stroke="rgba(150,130,135,0.5)" stroke-width="0.5"/><rect x="36" y="55" width="8" height="14" rx="1" fill="rgba(200,180,185,0.5)" stroke="rgba(160,140,145,0.6)" stroke-width="0.7"/><path d="M 26 30 Q 24 50 36 55 L 44 55 Q 56 50 54 30 Z" fill="rgba(210,185,190,0.5)" stroke="rgba(170,145,150,0.6)" stroke-width="0.8"/><rect x="30" y="26" width="20" height="6" rx="2" fill="rgba(220,200,205,0.55)" stroke="rgba(180,155,160,0.6)" stroke-width="0.6"/><rect x="33" y="16" width="14" height="12" rx="5" fill="rgba(215,195,200,0.5)" stroke="rgba(175,150,155,0.7)" stroke-width="0.7"/><ellipse cx="40" cy="16" rx="5" ry="4" fill="rgba(205,185,190,0.6)" stroke="rgba(165,140,145,0.6)" stroke-width="0.6"/><path d="M 31 32 Q 30 42 34 50" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-linecap="round" fill="none"/></g></svg>',
-    glasses: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.85" transform="rotate(-8 40 40)"><ellipse cx="27" cy="40" rx="15" ry="11" fill="rgba(200,190,195,0.35)" stroke="rgba(160,148,152,0.7)" stroke-width="0.8"/><ellipse cx="53" cy="40" rx="15" ry="11" fill="rgba(200,190,195,0.35)" stroke="rgba(160,148,152,0.7)" stroke-width="0.8"/><path d="M 42 40 Q 40 37 38 40" fill="none" stroke="rgba(160,148,152,0.7)" stroke-width="0.8"/><line x1="8" y1="35" x2="12" y2="38" stroke="rgba(160,148,152,0.6)" stroke-width="1.2" stroke-linecap="round"/><line x1="68" y1="35" x2="72" y2="38" stroke="rgba(160,148,152,0.6)" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="24" cy="36" rx="5" ry="3" fill="rgba(255,255,255,0.2)" transform="rotate(-10 24 36)"/><ellipse cx="50" cy="36" rx="5" ry="3" fill="rgba(255,255,255,0.2)" transform="rotate(-10 50 36)"/></g></svg>',
-    'open-book': '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.85"><path d="M 40 20 Q 20 22 16 62 L 40 60 Z" fill="rgba(235,220,215,0.55)" stroke="rgba(185,165,160,0.6)" stroke-width="0.7"/><path d="M 40 20 Q 60 22 64 62 L 40 60 Z" fill="rgba(230,215,210,0.5)" stroke="rgba(185,165,160,0.6)" stroke-width="0.7"/><line x1="40" y1="20" x2="40" y2="60" stroke="rgba(170,145,140,0.6)" stroke-width="1"/><line x1="22" y1="32" x2="37" y2="31" stroke="rgba(160,140,135,0.4)" stroke-width="0.7"/><line x1="22" y1="37" x2="37" y2="36" stroke="rgba(160,140,135,0.4)" stroke-width="0.7"/><line x1="22" y1="42" x2="37" y2="41" stroke="rgba(160,140,135,0.4)" stroke-width="0.7"/><line x1="22" y1="47" x2="37" y2="46" stroke="rgba(160,140,135,0.4)" stroke-width="0.7"/><line x1="43" y1="31" x2="58" y2="32" stroke="rgba(160,140,135,0.4)" stroke-width="0.7"/><line x1="43" y1="36" x2="58" y2="37" stroke="rgba(160,140,135,0.4)" stroke-width="0.7"/><line x1="43" y1="41" x2="57" y2="42" stroke="rgba(160,140,135,0.35)" stroke-width="0.7"/><path d="M 40 20 Q 32 22 28 50" stroke="rgba(255,255,255,0.2)" stroke-width="1" fill="none"/></g></svg>',
-    tray: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.85"><ellipse cx="40" cy="55" rx="30" ry="10" fill="rgba(205,190,190,0.4)" stroke="rgba(165,148,148,0.6)" stroke-width="0.7"/><path d="M 10 55 L 12 45 Q 14 38 40 38 Q 66 38 68 45 L 70 55 Z" fill="rgba(210,195,195,0.45)" stroke="rgba(168,150,150,0.6)" stroke-width="0.7"/><circle cx="30" cy="46" r="4" fill="rgba(220,200,180,0.6)" stroke="rgba(180,155,135,0.5)" stroke-width="0.5"/><rect x="36" y="42" width="10" height="6" rx="1" fill="rgba(215,195,185,0.55)" stroke="rgba(175,150,140,0.5)" stroke-width="0.5"/><circle cx="52" cy="47" r="3" fill="rgba(225,205,185,0.6)" stroke="rgba(185,160,140,0.5)" stroke-width="0.5"/><ellipse cx="36" cy="41" rx="8" ry="3" fill="rgba(255,255,255,0.15)" transform="rotate(-5 36 41)"/></g></svg>',
-    napkin: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.85"><path d="M 15 25 Q 20 20 50 22 Q 65 24 68 35 Q 70 50 55 58 Q 40 65 22 60 Q 10 55 12 40 Q 13 32 15 25 Z" fill="rgba(215,205,210,0.5)" stroke="rgba(175,160,165,0.6)" stroke-width="0.7"/><path d="M 20 30 Q 35 38 45 30 Q 55 22 62 40" fill="none" stroke="rgba(190,170,175,0.3)" stroke-width="0.8"/><path d="M 25 45 Q 40 50 55 42" fill="none" stroke="rgba(190,170,175,0.25)" stroke-width="0.6"/><path d="M 30 25 Q 35 40 28 55" fill="none" stroke="rgba(160,140,145,0.2)" stroke-width="1.5"/><path d="M 20 28 Q 30 32 42 28" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></g></svg>',
-    clippers: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.85"><path d="M 25 65 Q 20 55 28 30 L 35 30 Q 38 55 38 65 Z" fill="rgba(195,185,190,0.5)" stroke="rgba(155,143,148,0.7)" stroke-width="0.7"/><path d="M 55 65 Q 60 55 52 30 L 45 30 Q 42 55 42 65 Z" fill="rgba(195,185,190,0.5)" stroke="rgba(155,143,148,0.7)" stroke-width="0.7"/><circle cx="40" cy="30" r="5" fill="rgba(180,168,173,0.7)" stroke="rgba(150,138,143,0.7)" stroke-width="0.7"/><path d="M 28 30 Q 35 20 40 15 Q 42 20 38 28 Z" fill="rgba(210,200,205,0.6)" stroke="rgba(170,158,163,0.6)" stroke-width="0.6"/><path d="M 52 30 Q 45 20 40 15 Q 38 20 42 28 Z" fill="rgba(210,200,205,0.55)" stroke="rgba(170,158,163,0.6)" stroke-width="0.6"/><circle cx="40" cy="30" r="2" fill="rgba(200,185,190,0.8)" stroke="rgba(160,143,148,0.5)" stroke-width="0.5"/><path d="M 27 32 L 30 55" stroke="rgba(255,255,255,0.25)" stroke-width="0.8" stroke-linecap="round" fill="none"/></g></svg>',
-    perfume: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.85"><path d="M 26 40 Q 24 55 28 65 Q 32 72 40 72 Q 48 72 52 65 Q 56 55 54 40 Z" fill="rgba(205,190,195,0.5)" stroke="rgba(163,148,152,0.7)" stroke-width="0.8"/><path d="M 30 30 Q 28 36 26 40 L 54 40 Q 52 36 50 30 Z" fill="rgba(210,195,200,0.55)" stroke="rgba(168,152,157,0.6)" stroke-width="0.6"/><rect x="34" y="20" width="12" height="12" rx="2" fill="rgba(215,200,205,0.55)" stroke="rgba(172,156,160,0.6)" stroke-width="0.6"/><rect x="32" y="14" width="16" height="8" rx="2" fill="rgba(220,205,210,0.6)" stroke="rgba(175,158,163,0.65)" stroke-width="0.6"/><rect x="30" y="44" width="20" height="14" rx="1" fill="rgba(235,225,228,0.4)" stroke="rgba(185,170,174,0.4)" stroke-width="0.4"/><path d="M 30 38 Q 29 50 31 62" stroke="rgba(255,255,255,0.3)" stroke-width="1.2" stroke-linecap="round" fill="none"/></g></svg>',
-    books: '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.85"><rect x="14" y="18" width="18" height="52" rx="2" fill="rgba(195,178,182,0.5)" stroke="rgba(155,138,142,0.6)" stroke-width="0.7" transform="rotate(-5 23 44)"/><rect x="28" y="16" width="18" height="52" rx="2" fill="rgba(215,200,195,0.55)" stroke="rgba(170,153,148,0.65)" stroke-width="0.7" transform="rotate(2 37 42)"/><rect x="44" y="20" width="18" height="50" rx="2" fill="rgba(210,193,197,0.55)" stroke="rgba(165,148,152,0.65)" stroke-width="0.7" transform="rotate(-3 53 45)"/><line x1="15" y1="18" x2="13" y2="68" stroke="rgba(140,120,125,0.3)" stroke-width="0.5"/><line x1="28" y1="16" x2="27" y2="67" stroke="rgba(140,120,125,0.3)" stroke-width="0.5"/><rect x="46" y="22" width="4" height="20" rx="1" fill="rgba(255,255,255,0.18)"/></g></svg>',
-    'french-press': '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg"><g opacity="0.85"><path d="M 24 24 Q 22 55 24 68 Q 28 72 40 72 Q 52 72 56 68 Q 58 55 56 24 Z" fill="rgba(200,188,192,0.45)" stroke="rgba(158,145,149,0.65)" stroke-width="0.8"/><path d="M 25 45 Q 24 55 24 68 Q 28 72 40 72 Q 52 72 56 68 Q 56 55 55 45 Z" fill="rgba(150,120,105,0.2)"/><rect x="22" y="20" width="36" height="6" rx="2" fill="rgba(210,198,202,0.55)" stroke="rgba(165,152,156,0.6)" stroke-width="0.6"/><path d="M 56 35 Q 68 40 68 50 Q 68 60 56 60" fill="none" stroke="rgba(165,152,156,0.7)" stroke-width="2.5" stroke-linecap="round"/><line x1="40" y1="8" x2="40" y2="44" stroke="rgba(170,155,160,0.6)" stroke-width="1.5" stroke-linecap="round"/><ellipse cx="40" cy="8" rx="8" ry="3" fill="rgba(205,193,197,0.6)" stroke="rgba(162,148,152,0.6)" stroke-width="0.6"/><ellipse cx="40" cy="44" rx="14" ry="3" fill="rgba(190,175,180,0.5)" stroke="rgba(152,138,142,0.55)" stroke-width="0.6"/><path d="M 26 26 Q 25 40 25 55" stroke="rgba(255,255,255,0.25)" stroke-width="1.2" stroke-linecap="round" fill="none"/></g></svg>'
+    flower:
+      '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">' + GLASS_DEFS +
+      '<g><line x1="40" y1="46" x2="42" y2="72" stroke="rgba(150,150,110,0.5)" stroke-width="2" stroke-linecap="round"/>' +
+      '<g fill="url(#gGlassWarm)" stroke="'+RIM+'" stroke-width="0.7">' +
+      '<ellipse cx="40" cy="18" rx="8.5" ry="15"/>' +
+      '<ellipse cx="40" cy="18" rx="8.5" ry="15" transform="rotate(60 40 38)"/>' +
+      '<ellipse cx="40" cy="18" rx="8.5" ry="15" transform="rotate(120 40 38)"/>' +
+      '<ellipse cx="40" cy="18" rx="8.5" ry="15" transform="rotate(180 40 38)"/>' +
+      '<ellipse cx="40" cy="18" rx="8.5" ry="15" transform="rotate(240 40 38)"/>' +
+      '<ellipse cx="40" cy="18" rx="8.5" ry="15" transform="rotate(300 40 38)"/></g>' +
+      '<circle cx="40" cy="38" r="9.5" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="1"/>' +
+      '<circle cx="40" cy="38" r="4" fill="rgba(235,170,140,0.85)"/>' +
+      '<ellipse cx="36" cy="33" rx="3" ry="4.5" fill="'+SPEC+'" opacity="0.6" transform="rotate(-20 36 33)"/></g></svg>',
+
+    'paper-plane':
+      '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">' + GLASS_DEFS +
+      '<g transform="rotate(-16 40 40)">' +
+      '<polygon points="6,52 74,30 42,60" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.8"/>' +
+      '<polygon points="6,52 74,30 36,42" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.6" opacity="0.9"/>' +
+      '<line x1="6" y1="52" x2="42" y2="60" stroke="'+RIM+'" stroke-width="0.6"/>' +
+      '<line x1="36" y1="42" x2="42" y2="60" stroke="rgba(160,116,102,0.4)" stroke-width="0.5"/>' +
+      '<line x1="36" y1="42" x2="64" y2="33" stroke="'+SPEC+'" stroke-width="0.9" opacity="0.7"/></g></svg>',
+
+    speaker:
+      '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">' + GLASS_DEFS +
+      '<g><rect x="19" y="10" width="42" height="60" rx="8" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.9"/>' +
+      '<circle cx="40" cy="46" r="16" fill="rgba(190,150,140,0.22)" stroke="'+RIM+'" stroke-width="0.7"/>' +
+      '<circle cx="40" cy="46" r="8.5" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.6"/>' +
+      '<circle cx="40" cy="46" r="3" fill="rgba(150,108,94,0.5)"/>' +
+      '<circle cx="40" cy="22" r="5" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.6"/>' +
+      '<rect x="24" y="14" width="7" height="22" rx="3.5" fill="'+SPEC+'" opacity="0.4"/></g></svg>',
+
+    fruit:
+      '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">' + GLASS_DEFS +
+      '<g><path d="M 12 56 Q 14 48 40 48 Q 66 48 68 56 Q 60 66 40 66 Q 20 66 12 56 Z" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.8"/>' +
+      '<circle cx="31" cy="45" r="10.5" fill="url(#gGlassWarm)" stroke="'+RIM+'" stroke-width="0.7"/>' +
+      '<circle cx="49" cy="43" r="10.5" fill="url(#gGlassWarm)" stroke="'+RIM+'" stroke-width="0.7"/>' +
+      '<circle cx="40" cy="34" r="9.5" fill="url(#gGlassWarm)" stroke="'+RIM+'" stroke-width="0.7"/>' +
+      '<line x1="40" y1="25" x2="38" y2="20" stroke="rgba(150,150,110,0.6)" stroke-width="1" stroke-linecap="round"/>' +
+      '<ellipse cx="36" cy="31" rx="2.5" ry="3.5" fill="'+SPEC+'" opacity="0.6"/></g></svg>',
+
+    wine:
+      '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">' + GLASS_DEFS +
+      '<g><ellipse cx="40" cy="70" rx="13" ry="3.5" fill="rgba(150,108,94,0.25)"/>' +
+      '<path d="M 26 30 Q 24 52 36 56 L 44 56 Q 56 52 54 30 Z" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.9"/>' +
+      '<rect x="36" y="55" width="8" height="15" rx="1.5" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.7"/>' +
+      '<rect x="30" y="24" width="20" height="7" rx="3" fill="url(#gGlassWarm)" stroke="'+RIM+'" stroke-width="0.7"/>' +
+      '<rect x="33" y="13" width="14" height="13" rx="6" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.8"/>' +
+      '<ellipse cx="40" cy="13" rx="5" ry="3.5" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.6"/>' +
+      '<path d="M 30 32 Q 29 44 33 53" stroke="'+SPEC+'" stroke-width="1.4" stroke-linecap="round" fill="none" opacity="0.6"/></g></svg>',
+
+    glasses:
+      '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">' + GLASS_DEFS +
+      '<g transform="rotate(-7 40 40)">' +
+      '<ellipse cx="26" cy="40" rx="15.5" ry="11.5" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.9"/>' +
+      '<ellipse cx="54" cy="40" rx="15.5" ry="11.5" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.9"/>' +
+      '<path d="M 41.5 40 Q 40 36 38.5 40" fill="none" stroke="'+RIM+'" stroke-width="0.9"/>' +
+      '<line x1="7" y1="34" x2="11" y2="38" stroke="'+RIM+'" stroke-width="1.4" stroke-linecap="round"/>' +
+      '<line x1="69" y1="34" x2="73" y2="38" stroke="'+RIM+'" stroke-width="1.4" stroke-linecap="round"/>' +
+      '<ellipse cx="22" cy="35" rx="5" ry="3" fill="'+SPEC+'" opacity="0.5" transform="rotate(-12 22 35)"/>' +
+      '<ellipse cx="50" cy="35" rx="5" ry="3" fill="'+SPEC+'" opacity="0.5" transform="rotate(-12 50 35)"/></g></svg>',
+
+    'open-book':
+      '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">' + GLASS_DEFS +
+      '<g><path d="M 40 22 Q 19 24 15 62 L 40 58 Z" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.8"/>' +
+      '<path d="M 40 22 Q 61 24 65 62 L 40 58 Z" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.8"/>' +
+      '<line x1="40" y1="22" x2="40" y2="58" stroke="'+RIM+'" stroke-width="1"/>' +
+      '<g stroke="rgba(150,108,94,0.32)" stroke-width="0.7">' +
+      '<line x1="22" y1="33" x2="36" y2="32"/><line x1="22" y1="38" x2="36" y2="37"/><line x1="22" y1="43" x2="36" y2="42"/><line x1="22" y1="48" x2="34" y2="47"/>' +
+      '<line x1="44" y1="32" x2="58" y2="33"/><line x1="44" y1="37" x2="58" y2="38"/><line x1="44" y1="42" x2="56" y2="43"/></g>' +
+      '<path d="M 40 22 Q 31 24 27 50" stroke="'+SPEC+'" stroke-width="0.9" fill="none" opacity="0.5"/></g></svg>',
+
+    tray:
+      '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">' + GLASS_DEFS +
+      '<g><path d="M 10 54 L 12 44 Q 14 38 40 38 Q 66 38 68 44 L 70 54 Q 56 62 40 62 Q 24 62 10 54 Z" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.8"/>' +
+      '<circle cx="30" cy="47" r="4.5" fill="url(#gGlassWarm)" stroke="'+RIM+'" stroke-width="0.5"/>' +
+      '<rect x="36" y="43" width="11" height="6" rx="1.5" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.5"/>' +
+      '<circle cx="53" cy="48" r="3.5" fill="url(#gGlassWarm)" stroke="'+RIM+'" stroke-width="0.5"/>' +
+      '<ellipse cx="34" cy="42" rx="9" ry="3" fill="'+SPEC+'" opacity="0.35" transform="rotate(-4 34 42)"/></g></svg>',
+
+    napkin:
+      '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">' + GLASS_DEFS +
+      '<g><path d="M 14 26 Q 20 19 50 21 Q 66 23 69 36 Q 71 51 55 59 Q 39 66 21 60 Q 9 55 11 40 Q 12 31 14 26 Z" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.8"/>' +
+      '<path d="M 19 31 Q 35 39 46 30 Q 56 22 63 41" fill="none" stroke="rgba(150,108,94,0.32)" stroke-width="0.9"/>' +
+      '<path d="M 24 47 Q 40 52 56 43" fill="none" stroke="rgba(150,108,94,0.24)" stroke-width="0.7"/>' +
+      '<path d="M 19 29 Q 30 33 43 28" fill="none" stroke="'+SPEC+'" stroke-width="1" opacity="0.55"/></g></svg>',
+
+    clippers:
+      '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">' + GLASS_DEFS +
+      '<g><path d="M 25 66 Q 19 55 28 28 L 35 28 Q 38 55 38 66 Z" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.7"/>' +
+      '<path d="M 55 66 Q 61 55 52 28 L 45 28 Q 42 55 42 66 Z" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.7"/>' +
+      '<path d="M 28 28 Q 35 18 40 13 Q 42 18 38 27 Z" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.6"/>' +
+      '<path d="M 52 28 Q 45 18 40 13 Q 38 18 42 27 Z" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.6"/>' +
+      '<circle cx="40" cy="29" r="4.5" fill="url(#gGlassWarm)" stroke="'+RIM+'" stroke-width="0.7"/>' +
+      '<path d="M 27 31 L 30 56" stroke="'+SPEC+'" stroke-width="0.8" stroke-linecap="round" fill="none" opacity="0.5"/></g></svg>',
+
+    perfume:
+      '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">' + GLASS_DEFS +
+      '<g><path d="M 26 40 Q 23 56 28 66 Q 32 73 40 73 Q 48 73 52 66 Q 57 56 54 40 Z" fill="url(#gGlassWarm)" stroke="'+RIM+'" stroke-width="0.9"/>' +
+      '<path d="M 30 30 Q 28 36 26 41 L 54 41 Q 52 36 50 30 Z" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.7"/>' +
+      '<rect x="34" y="19" width="12" height="13" rx="2" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.7"/>' +
+      '<rect x="32" y="12" width="16" height="8" rx="2" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.7"/>' +
+      '<rect x="30" y="46" width="20" height="14" rx="1.5" fill="rgba(255,248,244,0.30)" stroke="rgba(150,108,94,0.3)" stroke-width="0.5"/>' +
+      '<path d="M 30 39 Q 28 52 31 64" stroke="'+SPEC+'" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.55"/></g></svg>',
+
+    books:
+      '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">' + GLASS_DEFS +
+      '<g><rect x="13" y="18" width="19" height="52" rx="2.5" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.7" transform="rotate(-5 23 44)"/>' +
+      '<rect x="27" y="15" width="19" height="53" rx="2.5" fill="url(#gGlassWarm)" stroke="'+RIM+'" stroke-width="0.7" transform="rotate(2 37 42)"/>' +
+      '<rect x="44" y="20" width="19" height="50" rx="2.5" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.7" transform="rotate(-3 53 45)"/>' +
+      '<rect x="46" y="23" width="4" height="20" rx="1" fill="'+SPEC+'" opacity="0.4"/></g></svg>',
+
+    'french-press':
+      '<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">' + GLASS_DEFS +
+      '<g><path d="M 24 24 Q 22 55 24 68 Q 28 73 40 73 Q 52 73 56 68 Q 58 55 56 24 Z" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.9"/>' +
+      '<path d="M 25 46 Q 24 56 24 68 Q 28 73 40 73 Q 52 73 56 68 Q 56 56 55 46 Z" fill="rgba(190,128,100,0.22)"/>' +
+      '<rect x="22" y="19" width="36" height="7" rx="2.5" fill="url(#gGlassWarm)" stroke="'+RIM+'" stroke-width="0.7"/>' +
+      '<path d="M 56 35 Q 69 40 69 50 Q 69 61 56 61" fill="none" stroke="'+RIM+'" stroke-width="2.5" stroke-linecap="round"/>' +
+      '<line x1="40" y1="7" x2="40" y2="44" stroke="'+RIM+'" stroke-width="1.6" stroke-linecap="round"/>' +
+      '<ellipse cx="40" cy="7" rx="8" ry="3" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.6"/>' +
+      '<ellipse cx="40" cy="44" rx="14" ry="3" fill="url(#gGlass)" stroke="'+RIM+'" stroke-width="0.6"/>' +
+      '<path d="M 26 26 Q 25 42 25 56" stroke="'+SPEC+'" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.55"/></g></svg>'
   };
 
+  // Per-object base render size in px (multiplied by node scale)
+  var BASE = 78;
+
+  function fallbackSvg() {
+    return '<svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="rgba(220,200,195,0.4)" stroke="rgba(150,108,94,0.55)" stroke-width="1"/></svg>';
+  }
+
   function initWorldOrbit() {
-    var zone = document.querySelector('.world-orbit-zone');
-    if (!zone) return;
-    var container = zone.querySelector('#orbitNodes');
-    if (!container) return;
+    var container = document.getElementById('wofNodes');
+    if (!container || container.childElementCount) return;
 
     NODES.forEach(function(n) {
-      var div = document.createElement('div');
-      div.className = 'onode';
-      div.dataset.id = n.id;
-      div.style.left = n.x + '%';
-      div.style.top = n.y + '%';
+      var size = Math.round(BASE * (n.s || 1));
+      var node = document.createElement('div');
+      node.className = 'wn';
+      node.dataset.id = n.id;
+      node.setAttribute('data-ann', n.ann || 'right');
+      node.style.left = n.x + '%';
+      node.style.top = n.y + '%';
+      node.tabIndex = 0;
+      node.setAttribute('role', 'button');
+      node.setAttribute('aria-label', n.title + ' — ' + n.sub);
 
-      div.innerHTML =
-        '<div class="onode-annotation">' +
-          '<span class="ann-title">' + n.title + '</span>' +
-          '<span class="ann-sub">' + n.sub + '</span>' +
+      var ringSize = Math.round(size * 1.35);
+
+      node.innerHTML =
+        '<svg class="wn-ring" width="' + ringSize + '" height="' + ringSize + '" viewBox="0 0 100 100" aria-hidden="true">' +
+          '<circle cx="50" cy="50" r="46"/>' +
+        '</svg>' +
+        '<div class="wn-body" style="width:' + size + 'px;height:' + size + 'px;">' +
+          '<div class="wn-obj" style="width:' + size + 'px;height:' + size + 'px;">' +
+            (SVGS[n.id] || fallbackSvg()) +
+          '</div>' +
         '</div>' +
-        '<svg class="onode-orbit-mark" viewBox="0 0 110 110"><circle cx="55" cy="55" r="48" stroke-dasharray="3 7"/></svg>' +
-        (SVGS[n.id] || '<svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="28" fill="rgba(200,180,180,0.4)" stroke="rgba(160,140,140,0.6)" stroke-width="1"/></svg>') +
-        '<span class="onode-num">' + n.num + '</span>';
+        '<div class="wn-ann">' +
+          '<span class="an-num">' + n.num + '</span>' +
+          '<span class="an-title">' + n.title + '</span>' +
+          '<span class="an-sub">' + n.sub + '</span>' +
+        '</div>';
 
-      div.addEventListener('click', function(e) {
-        e.stopPropagation();
-        activateNode(n);
+      // make the inner svg fill the obj box
+      var svgEl = node.querySelector('.wn-obj > svg');
+      if (svgEl) { svgEl.setAttribute('width', '100%'); svgEl.setAttribute('height', '100%'); }
+
+      node.addEventListener('click', function(e) { e.stopPropagation(); activateNode(n); });
+      node.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activateNode(n); }
       });
 
-      container.appendChild(div);
+      container.appendChild(node);
     });
 
-    document.addEventListener('click', function() {
-      deactivateAll();
-    });
+    // dismiss on background click / Esc
+    var wof = document.getElementById('wof');
+    if (wof) wof.addEventListener('click', deactivateAll);
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') deactivateAll(); });
 
-    var closeBtn = document.getElementById('panelClose');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', function(e) {
+    var closeBtn = document.getElementById('wofPanelClose');
+    if (closeBtn) closeBtn.addEventListener('click', function(e) { e.stopPropagation(); deactivateAll(); });
+
+    // day/night toggle wired to existing scheme system if present, else local
+    var dn = document.getElementById('wofDnToggle');
+    if (dn) {
+      dn.addEventListener('click', function(e) {
         e.stopPropagation();
-        deactivateAll();
+        var wofEl = document.getElementById('wof');
+        var isNight = wofEl.classList.toggle('wof-night');
+        wofEl.setAttribute('data-theme', isNight ? 'night' : 'day');
+        dn.textContent = isNight ? '☾' : '☀';
       });
     }
   }
 
   function activateNode(n) {
-    var nodes = document.querySelectorAll('.onode');
-    nodes.forEach(function(el) {
-      if (el.dataset.id === n.id) {
-        el.classList.remove('dimmed');
-        el.classList.add('active');
-      } else {
-        el.classList.remove('active');
-        el.classList.add('dimmed');
-      }
+    document.querySelectorAll('.wn').forEach(function(el) {
+      if (el.dataset.id === n.id) { el.classList.remove('dimmed'); el.classList.add('active'); }
+      else { el.classList.remove('active'); el.classList.add('dimmed'); }
     });
 
-    var panel = document.getElementById('activeObjPanel');
-    document.getElementById('panelNum').textContent = n.num;
-    document.getElementById('panelTitle').textContent = n.title;
-    document.getElementById('panelSub').textContent = n.sub;
-    document.getElementById('panelNote').textContent = n.note;
+    var panel = document.getElementById('wofPanel');
+    if (!panel) return;
+    document.getElementById('wpNum').textContent = 'NO. ' + n.num;
+    document.getElementById('wpTitle').textContent = n.title;
+    document.getElementById('wpSub').textContent = n.sub;
+    document.getElementById('wpNote').textContent = n.note;
 
-    var relsEl = document.getElementById('panelRelations');
+    var relsEl = document.getElementById('wpRels');
     relsEl.innerHTML = '';
     (n.rels || []).forEach(function(relId) {
-      var tag = document.createElement('span');
-      tag.className = 'panel-relation-tag';
       var relNode = NODES.find(function(x) { return x.id === relId; });
+      var tag = document.createElement('span');
+      tag.className = 'wp-rel';
       tag.textContent = relNode ? relNode.title : relId;
-      tag.style.cursor = 'pointer';
       tag.addEventListener('click', function(e) {
         e.stopPropagation();
-        var target = NODES.find(function(x) { return x.id === relId; });
-        if (target) activateNode(target);
+        if (relNode) activateNode(relNode);
       });
       relsEl.appendChild(tag);
     });
@@ -4051,14 +4489,11 @@ function closeLogOverlay(){ document.getElementById('log-overlay').classList.rem
   }
 
   function deactivateAll() {
-    document.querySelectorAll('.onode').forEach(function(el) {
+    document.querySelectorAll('.wn').forEach(function(el) {
       el.classList.remove('active', 'dimmed');
     });
-    var panel = document.getElementById('activeObjPanel');
-    if (panel) {
-      panel.classList.remove('open');
-      panel.setAttribute('aria-hidden', 'true');
-    }
+    var panel = document.getElementById('wofPanel');
+    if (panel) { panel.classList.remove('open'); panel.setAttribute('aria-hidden', 'true'); }
   }
 
   if (document.readyState === 'loading') {
@@ -4132,7 +4567,7 @@ function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;',
   let last = 0;
   panel.addEventListener('pointerdown', e => {
     if (!document.body.classList.contains('in-zone')) return;
-    if (document.querySelector('.log-overlay.open, .proj-modal.open, .active-obj-panel.open')) return;
+    if (document.querySelector('.log-overlay.open, .proj-modal.open, .wof-panel.open')) return;
     const now = performance.now();
     if (now - last < 60) return; // de-dupe rapid synthetic events
     last = now;
@@ -4309,7 +4744,7 @@ function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;',
   /* ── main loop ── */
   let posTick=0;
   const posEl=document.getElementById('ofPos');
-  const surfaceOpen=()=>!!document.querySelector('.log-overlay.open,.proj-modal.open,.active-obj-panel.open,body.lc-open');
+  const surfaceOpen=()=>!!document.querySelector('.log-overlay.open,.proj-modal.open,.wof-panel.open,body.lc-open');
   let aimed=null;
   const TOUCH=matchMedia('(hover:none)').matches;
   function tick(ts){
