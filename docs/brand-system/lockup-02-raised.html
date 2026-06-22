@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OoONE / CoTANNER — raised-prefix lockup system</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDEAE3; --ink:#181818; --ink2:rgba(24,24,24,.5); --ink3:rgba(24,24,24,.3);
+    --acc:#A8362A; --hair:rgba(24,24,24,.13);
+    --geist:"Geist","Helvetica Neue",Arial,sans-serif;
+    --mono:"Geist Mono","config-mono-vf",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--geist);
+    -webkit-font-smoothing:antialiased;padding:54px clamp(20px,6vw,80px) 96px;
+    max-width:1120px;margin:0 auto}
+  .ov{font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;line-height:1.45}
+  .ov.mut{color:var(--ink2)} .acc{color:var(--acc)}
+  header{display:flex;justify-content:space-between;align-items:flex-start;
+    border-bottom:1px solid var(--ink);padding-bottom:14px;margin-bottom:34px}
+  header .r{text-align:right}
+  .sect{padding:32px 0;border-top:1px solid var(--hair)}
+  .lab{font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:24px}
+  .lab.mut{color:var(--ink2)}
+
+  /* ── THE LOCKUP — raised prefix ─────────────────────────────────
+     .pre (Care of / Orbit of) sits small, lifted to the brand cap-line.
+     .brand is the written-out name, heavy. Tuned with em units so it
+     scales with font-size on any tier. */
+  .lk{font-family:var(--geist);font-weight:800;letter-spacing:-.03em;
+    line-height:1;white-space:nowrap;display:inline-flex;align-items:flex-start}
+  .lk .pre{font-size:.4em;font-weight:600;letter-spacing:.005em;
+    line-height:1;margin-right:.05em;transform:translateY(.06em);color:var(--ink2)}
+  .lk .brand{line-height:1}
+  .on-dark{color:#EDEAE3} .on-dark .pre{color:rgba(237,234,227,.55)}
+
+  .pair{display:grid;grid-template-columns:1fr 1fr;gap:46px;align-items:flex-start}
+  .pair .item .cap{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--ink3);margin-top:14px}
+  .on-dark .cap{color:rgba(237,234,227,.45)!important}
+  @media(max-width:760px){.pair{grid-template-columns:1fr;gap:30px}}
+
+  .hero .lk{font-size:76px}
+  .dark{background:var(--ink);border-radius:2px;padding:44px clamp(24px,5vw,54px)}
+
+  /* tiers */
+  .tiers{display:flex;align-items:flex-end;gap:54px;flex-wrap:wrap}
+  .tier .t-lk{margin-bottom:12px}
+  .tier .tname{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--ink3)}
+  .t-primary .lk{font-size:50px}
+  .t-secondary .lk{font-size:28px}
+  .t-mark{font-family:var(--geist);font-weight:800;font-size:40px;letter-spacing:-.02em;line-height:1}
+  .t-mark .po{font-size:.62em;font-weight:600;color:var(--ink2);vertical-align:.18em;margin-right:.02em}
+
+  .notes{font-family:var(--mono);font-size:12px;line-height:1.85;color:var(--ink2);max-width:64ch}
+  .notes b{color:var(--ink);font-weight:500}
+</style>
+</head>
+<body>
+
+<header>
+  <div><div class="ov">Scheme 02 — Raised Prefix · Geist</div><div class="ov mut">OoONE / CoTANNER lockup system</div></div>
+  <div class="r"><div class="ov">Lockup spec</div><div class="ov mut"><span class="acc">©2026</span></div></div>
+</header>
+
+<!-- PRIMARY, LIGHT -->
+<section class="sect" style="border-top:none">
+  <div class="lab">01 / Primary lockups — light</div>
+  <div class="pair hero">
+    <div class="item"><div class="lk"><span class="pre">Co</span><span class="brand">TANNER</span></div><div class="cap">Care of Tanner · the practice</div></div>
+    <div class="item"><div class="lk"><span class="pre">Oo</span><span class="brand">ONE</span></div><div class="cap">Orbit of One · the brand</div></div>
+  </div>
+</section>
+
+<!-- PRIMARY, DARK -->
+<section class="sect">
+  <div class="lab">02 / On dark</div>
+  <div class="dark">
+    <div class="pair hero on-dark">
+      <div class="item"><div class="lk"><span class="pre">Co</span><span class="brand">TANNER</span></div><div class="cap">Care of Tanner</div></div>
+      <div class="item"><div class="lk"><span class="pre">Oo</span><span class="brand">ONE</span></div><div class="cap">Orbit of One</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TIERS -->
+<section class="sect">
+  <div class="lab">03 / Three tiers — simplify before you shrink</div>
+  <div class="tiers">
+    <div class="tier t-primary"><div class="t-lk"><div class="lk"><span class="pre">Co</span><span class="brand">TANNER</span></div></div><div class="tname">Primary · full lockup</div></div>
+    <div class="tier t-secondary"><div class="t-lk"><div class="lk"><span class="pre">Co</span><span class="brand">TANNER</span></div></div><div class="tname">Secondary · inline</div></div>
+    <div class="tier t-mark"><div class="t-lk"><span class="t-mark"><span class="po">Co</span></span></div><div class="tname">Mark · ≤32px</div></div>
+  </div>
+  <div class="tiers" style="margin-top:34px">
+    <div class="tier t-primary"><div class="t-lk"><div class="lk"><span class="pre">Oo</span><span class="brand">ONE</span></div></div><div class="tname">Primary · full lockup</div></div>
+    <div class="tier t-secondary"><div class="t-lk"><div class="lk"><span class="pre">Oo</span><span class="brand">ONE</span></div></div><div class="tname">Secondary · inline</div></div>
+    <div class="tier t-mark"><div class="t-lk"><span class="t-mark"><span class="po">Oo</span></span></div><div class="tname">Mark · ≤32px</div></div>
+  </div>
+</section>
+
+<!-- NOTES -->
+<section class="sect">
+  <div class="lab">04 / Construction</div>
+  <div class="notes">
+    <b>Prefix</b> (Co / Oo) = 0.4 × the brand size, weight 600, lifted to sit on the brand's cap-line; it carries the tagline (Care of / Orbit of).<br>
+    <b>Brand</b> (TANNER / ONE) = Geist 800, written out in full, tracking −0.03em.<br>
+    <b>Mark</b> at ≤32px drops the brand name; the prefix monogram (Co / Oo) stands alone as the icon.<br>
+    <b>One mark per surface.</b> Lead accent reserved for active states — the lockup itself stays ink (or paper on dark).
+  </div>
+</section>
+
+</body>
+</html>
