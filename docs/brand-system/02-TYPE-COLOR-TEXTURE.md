@@ -27,25 +27,30 @@ Loaded from **three places**: Typekit (`use.typekit.net/ohy2syh.css`), Google
 > still parked. All a one-line `--ff-display` change. The three-role collapse below is
 > **implemented** in `oone.html`. Specimen: `type-specimen-v2.html`.
 
-### Target: three roles — IMPLEMENTED
-Canonical role tokens now live in `oone.html`; legacy variables are aliases that resolve
-into the roles (one source of truth):
+### Target: system v3 — 4 fonts / 3 families (planned)
+The role tokens stay; what they point to changes. The defining rule: **utility (sans) and
+body (serif) come from ONE superfamily** so the system is 4 fonts across 3 families. Gratia
+becomes a sanctioned *decorative* role, not the body face. Data folds into the utility sans
+(tabular figures) — the dedicated mono is dropped.
 
-| Role | Token | Job | Face | Legacy aliases folded in |
+| Role | Token | Job | Face (v3) | Family |
 |---|---|---|---|---|
-| **Display** | `--ff-display` | Headlines, zone titles, the wordmark | **Saira Semi Condensed** (tall/heavy/condensed, ROT-style) | `--ff-head` |
-| **Utility** | `--ff-utility` (+ `--ff-mono` data variant) | UI, labels, captions, data | **early-sans** / config-mono | `--ff-ui`, old sans `--ff-body` |
-| **Body** | `--ff-body` | Reading text, editorial voice | **Gratia** (serif) | `--ff-serif` |
+| **Display** | `--ff-display` | Headlines, zone titles, wordmark (lockup 02, raised prefix) | **Geist** | 1 |
+| **Utility (sans)** | `--ff-utility` | UI, labels, captions, **data** (tabular nums) | **superfamily sans** (e.g. IBM Plex Sans) | 2 |
+| **Body (serif)** | `--ff-body` | Reading text | **superfamily serif** (e.g. IBM Plex Serif) | 2 |
+| **Decorative** | `--ff-deco` | Manifesto voice, editorial pull-quotes — one per screen | **Gratia** | 3 |
 
-**Retired as standing roles (done):** `--ff-redaction` deleted (0 uses);
-`--ff-redaction-it` and `--ff-liquida` kept but demoted to **decorative treatments** that
-resolve into `--ff-body`. Rule 9 allows **one decorative treatment per screen** — so
-redaction/liquida may appear as a deliberate accent (e.g. a redacted manifesto line) but
-must not be a system font role. Embedded `oone-gothic` is now **orphaned** (removed from all
-role chains; only its `@font-face` remains) — flagged for deletion as the next payload win.
+**Superfamily candidates (utility + body, pick one):** IBM Plex (recommended — clean,
+modern, pairs with Geist) · Source (warmer, bookish) · Alegreya (literary, most character).
+Specimen: `type-system-v3.html`.
 
-**Collapse applied:** `head → display`, `ui + old-sans-body + mono → utility`,
-`serif → body`. 8 family variables → 3 roles, verified rendering in-browser.
+**Status:** decided in principle; **not yet wired into `oone.html`** (the live file still runs
+the earlier Saira/early-sans/Gratia/config-mono set). Wiring is a token-and-loader swap plus
+repointing `.zpara`/footnotes off `config-mono` to the body serif.
+
+> **History:** an earlier pass collapsed 8 family vars → 3 roles (Saira display, early-sans
+> utility, Gratia body, config-mono data) and deleted the orphaned `oone-gothic` @font-face.
+> v3 supersedes that: display → Geist, body → a superfamily serif, Gratia → decorative.
 
 ---
 

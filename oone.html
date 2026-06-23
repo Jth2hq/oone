@@ -6,14 +6,16 @@
 <title>oone — in itself, in orbit</title>
 <link rel="stylesheet" href="https://use.typekit.net/ohy2syh.css">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@600;700;800;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 <style id="display-face">
-/* Display face = Saira Semi Condensed (tall, heavy, condensed). Titles ask
-   for 600–900, all real weights; block any synthetic bolding as a guard.
-   RULE: Saira is ALWAYS all-caps — never set lowercase/mixed-case display
-   text. Any new selector that uses var(--ff-head)/--ff-display for TEXT must
-   be added to this group so it inherits text-transform:uppercase. */
-.zone-title,.lo-title,.wm,.wm-card .wm-title,.pm-card .pm-title,.zproj-title,.svc-name,.svc-quips li,.story-block h3{font-synthesis-weight:none;text-transform:uppercase}
+/* Display face = Geist (type system v3). Headings are currently set ALL-CAPS
+   via this group; casing is an open decision (sentence-case is also on the
+   table for the timeless register). Any new selector using
+   var(--ff-head)/--ff-display for TEXT should be added here so its casing
+   stays consistent. font-synthesis guard kept (harmless; Geist has weights). */
+/* Caps kept on headings + brand-name elements only. svc-quips (full-sentence
+   quips) dropped from this group → render sentence-case. */
+.zone-title,.lo-title,.wm,.wm-card .wm-title,.pm-card .pm-title,.zproj-title,.svc-name,.story-block h3{font-synthesis-weight:none;text-transform:uppercase}
 </style>
 
 <style>
@@ -122,19 +124,23 @@
      roles, so there is ONE source of truth — do not target the aliases in
      new code. Decorative faces are treatments (max one per screen), never
      system roles. Display is standardized on Anton (2026-06). */
-  --ff-display:"Saira Semi Condensed","Anton","early-sans","Helvetica Neue",Arial,sans-serif; /* headlines, wordmark */
-  --ff-utility:"early-sans","Helvetica Neue",Arial,sans-serif;         /* UI, labels, captions */
-  --ff-body:"gratia","Georgia",serif;                                  /* reading / editorial voice */
-  --ff-mono:"config-mono-vf",ui-monospace,monospace;                   /* data variant of utility */
+  /* TYPE SYSTEM v3 — 4 fonts / 3 families.
+     Family 1: Geist (display) · Family 2: IBM Plex (utility sans + body serif)
+     · Family 3: Gratia (editorial decorative). Data uses the utility sans. */
+  --ff-display:"Geist","Helvetica Neue",Arial,sans-serif;              /* headlines, wordmark */
+  --ff-utility:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;      /* UI, labels, captions, data */
+  --ff-body:"IBM Plex Serif","Georgia",serif;                          /* reading text */
+  --ff-deco:"gratia","Georgia",serif;                                  /* editorial decorative — voice/pull-quotes only */
+  --ff-mono:var(--ff-utility);                                         /* data → utility sans (tabular figures) */
 
   /* Decorative treatments — one per screen, not a system role */
-  --ff-redaction-it:"redaction-50","redaction",var(--ff-body);
-  --ff-liquida:"liquida",var(--ff-body);
+  --ff-redaction-it:"redaction-50","redaction",var(--ff-deco);
+  --ff-liquida:"liquida",var(--ff-deco);
 
   /* Legacy aliases → resolve through the three roles (do not author against) */
   --ff-head:var(--ff-display);
   --ff-ui:var(--ff-utility);
-  --ff-serif:var(--ff-body);
+  --ff-serif:var(--ff-deco);   /* legacy "serif voice" usages = decorative Gratia */
 }
 body.night{
   --bg:#1A1A1A; --bg-2:#0E0E0E;
@@ -467,7 +473,7 @@ body.night .paper{mix-blend-mode:screen;opacity:.35}
 /* ── Footnote apparatus (Story philosophy) ── */
 .zpara sup{font-family:var(--ff-mono);font-size:9px;vertical-align:super;font-style:normal;margin-left:1px;color:color-mix(in srgb,var(--zglow,var(--zink)) 88%, var(--zink))}
 .footnotes{list-style:none;margin:30px 0 4px;padding-top:15px;border-top:1px solid color-mix(in srgb,var(--zink,var(--ink)) 16%, transparent);display:grid;gap:8px;max-width:620px}
-.footnotes li{font-family:var(--ff-mono);font-size:11px;line-height:1.55;color:color-mix(in srgb,var(--zink,var(--ink)) 58%, transparent);display:flex;gap:13px}
+.footnotes li{font-family:var(--ff-body);font-size:12px;line-height:1.55;color:color-mix(in srgb,var(--zink,var(--ink)) 58%, transparent);display:flex;gap:13px}
 .footnotes .fn-n{color:color-mix(in srgb,var(--zglow,var(--zink)) 85%, transparent);min-width:14px;text-align:right}
 
 /* ── Accession codes (catalog) ── */
@@ -1196,7 +1202,7 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
 
 .zsec{margin-bottom:40px}
 .zsec-head{font-family:var(--ff-ui);font-weight:500;font-size:13px;letter-spacing:.10em;text-transform:uppercase;color:color-mix(in srgb,var(--zink) 65%, transparent);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid color-mix(in srgb,var(--zink) 24%, transparent)}
-.zpara{font-family:var(--ff-mono);font-size:13.5px;line-height:1.7;color:color-mix(in srgb,var(--zink) 92%, transparent);margin-bottom:14px;letter-spacing:.01em}
+.zpara{font-family:var(--ff-body);font-size:15px;line-height:1.62;color:color-mix(in srgb,var(--zink) 92%, transparent);margin-bottom:14px;letter-spacing:.01em}
 .zpara em{font-family:var(--ff-redaction-it);font-style:italic;color:var(--zink);font-size:1em}
 /* Design Practice uses Redaction instead of Gratia for emphasis */
 .zone[data-zone="tanner"] .zpara em{font-family:var(--ff-redaction-it)}
@@ -2034,7 +2040,7 @@ body.lc-open .log-composer{opacity:1;pointer-events:auto;transform:translateY(0)
 .lo-title{font-family:var(--ff-head);font-weight:700;font-size:32px;line-height:1.05;letter-spacing:-.015em;color:var(--zink);margin-bottom:16px}
 .lo-photo{margin-bottom:16px;max-height:50svh;overflow:hidden;background:#1a1a1a}
 .lo-photo img{display:block;width:100%;height:auto;max-height:50svh;object-fit:contain}
-.lo-body{font-family:var(--ff-mono);font-size:13.5px;line-height:1.7;color:color-mix(in srgb,var(--zink) 92%, transparent)}
+.lo-body{font-family:var(--ff-body);font-size:15px;line-height:1.62;color:color-mix(in srgb,var(--zink) 92%, transparent)}
 .lo-nav{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:32px;padding-top:18px;border-top:1px solid color-mix(in srgb,var(--zink) 22%, transparent)}
 .lo-nav-btn{background:transparent;cursor:pointer;border:1px solid color-mix(in srgb,var(--zink) 40%, transparent);color:var(--zink);font-family:var(--ff-ui);font-weight:500;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:8px 14px;min-height:var(--hit);min-width:var(--hit)}
 .lo-nav-btn:hover{background:color-mix(in srgb,var(--zink) 90%, transparent);color:var(--zbg)}
@@ -2082,7 +2088,7 @@ body.lc-open .log-composer{opacity:1;pointer-events:auto;transform:translateY(0)
 .wm-close{position:absolute;top:8px;right:8px;background:none;border:none;cursor:pointer;width:var(--hit);height:var(--hit);font-family:var(--ff-mono);font-size:9px;letter-spacing:.18em;color:var(--zink);opacity:.6;text-transform:uppercase;display:inline-flex;align-items:center;justify-content:center}
 .wm-card .wm-kind{font-family:var(--ff-ui);font-weight:500;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:color-mix(in srgb,var(--zink) 70%, transparent);margin-bottom:8px}
 .wm-card .wm-title{font-family:var(--ff-head);font-weight:700;font-size:28px;line-height:1.05;letter-spacing:-.015em;color:var(--zink);margin-bottom:14px}
-.wm-card .wm-blurb{font-family:var(--ff-mono);font-size:13px;line-height:1.6;color:color-mix(in srgb,var(--zink) 88%, transparent);margin-bottom:20px}
+.wm-card .wm-blurb{font-family:var(--ff-body);font-size:14px;line-height:1.55;color:color-mix(in srgb,var(--zink) 88%, transparent);margin-bottom:20px}
 .wm-card .wm-visit{display:inline-flex;align-items:center;gap:8px;background:var(--zink);color:var(--zbg);text-decoration:none;border:none;font-family:var(--ff-ui);font-weight:500;font-size:11px;letter-spacing:.10em;text-transform:uppercase;padding:12px 22px;min-height:var(--hit);cursor:pointer;border-radius:var(--fillet-inset);transition:transform .2s}
 .wm-card .wm-visit:hover{transform:translateY(-2px)}
 
@@ -2161,7 +2167,7 @@ body.night:not(.in-zone) .mf-panel{
 .pm-card .pm-eyebrow{font-family:var(--ff-ui);font-weight:500;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:color-mix(in srgb,var(--zink) 70%, transparent);margin-bottom:6px}
 .pm-card .pm-title{font-family:var(--ff-head);font-weight:800;font-size:36px;line-height:1.05;letter-spacing:-.018em;color:var(--zink);margin-bottom:16px}
 .pm-card .pm-meta{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:18px;font-family:var(--ff-mono);font-size:11px;letter-spacing:.06em;color:color-mix(in srgb,var(--zink) 75%, transparent)}
-.pm-card .pm-body{font-family:var(--ff-mono);font-size:13.5px;line-height:1.7;color:color-mix(in srgb,var(--zink) 92%, transparent)}
+.pm-card .pm-body{font-family:var(--ff-body);font-size:15px;line-height:1.62;color:color-mix(in srgb,var(--zink) 92%, transparent)}
 
 </style>
 <style id="manifesto-style">

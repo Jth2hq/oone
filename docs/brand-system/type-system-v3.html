@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OONE — type system v3 (4 fonts / 3 families)</title>
+<link rel="stylesheet" href="https://use.typekit.net/ohy2syh.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=Source+Sans+3:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDEAE3; --ink:#181818; --ink2:rgba(24,24,24,.52); --ink3:rgba(24,24,24,.32);
+    --acc:#A8362A; --hair:rgba(24,24,24,.13);
+    --geist:"Geist","Helvetica Neue",Arial,sans-serif;
+    --gratia:"gratia",Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--geist);
+    -webkit-font-smoothing:antialiased;padding:54px clamp(20px,6vw,80px) 90px;max-width:1120px;margin:0 auto}
+  .ov{font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;line-height:1.45}
+  .ov.mut{color:var(--ink2)} .acc{color:var(--acc)}
+  header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--ink);padding-bottom:14px;margin-bottom:6px}
+  header .r{text-align:right}
+  .struct{font-family:var(--geist);font-size:13px;color:var(--ink2);margin:16px 0 30px;line-height:1.7}
+  .struct b{color:var(--ink);font-weight:600}
+  .sect{padding:30px 0;border-top:1px solid var(--hair)}
+  .lab{font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:22px}
+  .lab.mut{color:var(--ink2)}
+
+  /* lockup 02 — Geist raised prefix */
+  .lk{font-family:var(--geist);font-weight:800;letter-spacing:-.03em;line-height:1;white-space:nowrap;display:inline-flex;align-items:flex-start}
+  .lk .pre{font-size:.4em;font-weight:600;letter-spacing:.005em;margin-right:.05em;transform:translateY(.06em);color:var(--ink2)}
+  .lockrow{display:flex;gap:50px;flex-wrap:wrap}
+  .lockrow .lk{font-size:60px}
+  .cap{font-family:var(--geist);font-size:11px;color:var(--ink3);margin-top:10px;letter-spacing:.04em}
+
+  /* superfamily options */
+  .opts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--hair)}
+  .opt{background:var(--bg);padding:24px 24px 28px}
+  .opt.pick{outline:2px solid var(--acc);outline-offset:-2px}
+  .tag{display:inline-block;font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--bg);background:var(--acc);padding:3px 8px;margin-bottom:16px}
+  .tag.ghost{background:transparent;color:var(--ink2);border:1px solid var(--hair)}
+  .fam{font-weight:600;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+  .uti-labels{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+  .uti-labels span{font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+  .uti-h{font-size:19px;font-weight:600;letter-spacing:-.01em;margin-bottom:14px}
+  .bod{font-size:14px;line-height:1.5}
+  .ru{font-family:var(--geist);font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;margin-top:14px}
+
+  .plex .uti-labels span,.plex .uti-h{font-family:"IBM Plex Sans"}
+  .plex .bod{font-family:"IBM Plex Serif"}
+  .source .uti-labels span,.source .uti-h{font-family:"Source Sans 3"}
+  .source .bod{font-family:"Source Serif 4"}
+  .aleg .uti-labels span,.aleg .uti-h{font-family:"Alegreya Sans"}
+  .aleg .bod{font-family:"Alegreya"}
+  .bod em{font-style:italic}
+  @media(max-width:820px){.opts{grid-template-columns:1fr}}
+
+  /* decorative gratia */
+  .deco{font-family:var(--gratia);font-style:italic;font-size:36px;line-height:1.25;max-width:24ch}
+  .deco-note{font-family:var(--geist);font-size:12px;color:var(--ink2);margin-top:14px;max-width:60ch;line-height:1.6}
+
+  /* in context (recommended = plex) */
+  .ctx{padding:36px 0 4px}
+  .ctx .c-eyebrow{font-family:"IBM Plex Sans";font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin-bottom:12px}
+  .ctx .c-body{font-family:"IBM Plex Serif";font-size:15px;line-height:1.6;max-width:54ch;margin-top:6px}
+  .ctx .c-voice{font-family:var(--gratia);font-style:italic;font-size:22px;line-height:1.3;margin:18px 0 0;max-width:30ch}
+  .ctx .c-data{font-family:"IBM Plex Sans";font-weight:500;font-size:12px;letter-spacing:.04em;color:var(--ink2);margin-top:16px;display:flex;gap:18px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+
+<header>
+  <div><div class="ov">OONE — type system v3</div><div class="ov mut">4 fonts · 3 families</div></div>
+  <div class="r"><div class="ov">Pick the superfamily</div><div class="ov mut">Specimen <span class="acc">©2026</span></div></div>
+</header>
+<div class="struct">
+  <b>Display</b> — Geist (lockup 02, raised prefix) · family 1<br>
+  <b>Utility (sans) + Body (serif)</b> — one superfamily · family 2 · 2 fonts. Sans also carries data (tabular figures).<br>
+  <b>Decorative</b> — Gratia, editorial only · family 3
+</div>
+
+<!-- display / lockup -->
+<section class="sect" style="border-top:none">
+  <div class="lab">Display — Geist · lockup scheme 02 (fixed)</div>
+  <div class="lockrow">
+    <div><div class="lk"><span class="pre">Co</span><span class="brand">TANNER</span></div><div class="cap">Care of Tanner</div></div>
+    <div><div class="lk"><span class="pre">Oo</span><span class="brand">ONE</span></div><div class="cap">Orbit of One</div></div>
+  </div>
+</section>
+
+<!-- superfamily options -->
+<section class="sect">
+  <div class="lab">Utility + Body — pick one superfamily (serif = body, sans = utility)</div>
+  <div class="opts">
+    <div class="opt plex pick">
+      <span class="tag">Recommended</span>
+      <div class="fam">IBM Plex</div>
+      <div class="uti-labels"><span>Studio</span><span class="mut" style="color:var(--ink2)">Brooklyn</span></div>
+      <div class="uti-h">A studio for built worlds</div>
+      <div class="bod">Architecture, interiors, and visual systems for clients who want their place to <em>think</em>. Carried from first sketch to last detail.</div>
+      <div class="ru">Plex Sans · Plex Serif — modern, clean, pairs with Geist</div>
+    </div>
+    <div class="opt source">
+      <span class="tag ghost">Warmer</span>
+      <div class="fam">Source</div>
+      <div class="uti-labels"><span>Studio</span><span style="color:var(--ink2)">Brooklyn</span></div>
+      <div class="uti-h">A studio for built worlds</div>
+      <div class="bod">Architecture, interiors, and visual systems for clients who want their place to <em>think</em>. Carried from first sketch to last detail.</div>
+      <div class="ru">Source Sans 3 · Source Serif 4 — soft, bookish serif</div>
+    </div>
+    <div class="opt aleg">
+      <span class="tag ghost">Editorial</span>
+      <div class="fam">Alegreya</div>
+      <div class="uti-labels"><span>Studio</span><span style="color:var(--ink2)">Brooklyn</span></div>
+      <div class="uti-h">A studio for built worlds</div>
+      <div class="bod">Architecture, interiors, and visual systems for clients who want their place to <em>think</em>. Carried from first sketch to last detail.</div>
+      <div class="ru">Alegreya Sans · Alegreya — literary, most character</div>
+    </div>
+  </div>
+</section>
+
+<!-- decorative gratia -->
+<section class="sect">
+  <div class="lab">Decorative — Gratia (editorial only)</div>
+  <div class="deco">“a world is an orbit of one; a body is a mark between.”</div>
+  <div class="deco-note">Gratia is now a sanctioned decorative role — used for the manifesto voice and editorial pull-quotes, max one moment per screen. It is no longer the body face.</div>
+</section>
+
+<!-- in context -->
+<section class="ctx">
+  <div class="lab" style="margin-bottom:18px">All together — recommended (Geist · IBM Plex · Gratia)</div>
+  <div class="c-eyebrow">A multidisciplinary creative studio</div>
+  <div class="lk" style="font-size:54px"><span class="pre">Co</span><span class="brand">TANNER</span></div>
+  <div class="c-body">Architecture, interiors, and visual systems for clients who want their place to think. We carry projects from first sketch through the last detail on site — one quiet system holding the whole thing.</div>
+  <div class="c-voice">“care of tanner — placemaking the in-between.”</div>
+  <div class="c-data"><span>field ▮ live</span><span>x +0042</span><span>y −0117</span><span>rel orbit</span></div>
+</section>
+
+</body>
+</html>

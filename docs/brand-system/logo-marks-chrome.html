@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OONE — chrome logo marks (refined)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDEAE3; --ink:#181818; --ink2:rgba(24,24,24,.52); --ink3:rgba(24,24,24,.3);
+    --acc:#A8362A; --hair:rgba(24,24,24,.13);
+    --geist:"Geist","Helvetica Neue",Arial,sans-serif;
+    --plex:"IBM Plex Sans",Arial,sans-serif;
+    --serif:"IBM Plex Serif",Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--plex);
+    -webkit-font-smoothing:antialiased;padding:54px clamp(20px,6vw,80px) 90px;max-width:1100px;margin:0 auto}
+  .ov{font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;line-height:1.45}
+  .ov.mut{color:var(--ink2)} .acc{color:var(--acc)}
+  header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--ink);padding-bottom:14px;margin-bottom:34px}
+  header .r{text-align:right}
+  .sect{padding:30px 0;border-top:1px solid var(--hair)}
+  .lab{font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:22px}
+  .lab.mut{color:var(--ink2)}
+
+  svg{display:block;overflow:visible}
+  .L-base{fill:none;stroke:#23242a;stroke-linecap:round;stroke-linejoin:round}
+  .L-chr{fill:none;stroke:url(#chr);stroke-linecap:round;stroke-linejoin:round}
+  .L-hi{fill:none;stroke:#ffffff;opacity:.72;stroke-linecap:round;stroke-linejoin:round}
+  /* widths scale with the mark via stroke-width set per-size below */
+
+  .marks{display:flex;gap:70px;align-items:center;flex-wrap:wrap}
+  .mk-lg svg{width:230px;height:auto}
+  .mk-lg .L-base{stroke-width:13} .mk-lg .L-chr{stroke-width:10.5} .mk-lg .L-hi{stroke-width:2.4;transform:translateY(-2px)}
+  .cap{font-size:11px;color:var(--ink3);letter-spacing:.08em;text-transform:uppercase;margin-top:16px;text-align:center}
+
+  .dark{background:#15151a;border-radius:3px;padding:38px 44px;margin-top:8px;display:flex;gap:70px;align-items:center;flex-wrap:wrap}
+  .dark .cap{color:rgba(237,234,227,.5)}
+
+  .brand{font-family:var(--geist);font-weight:800;text-transform:uppercase;letter-spacing:-.02em;line-height:.9}
+  .sub{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start;max-width:640px}
+  .sub svg{width:90px;height:auto}
+  .sub .L-base{stroke-width:14} .sub .L-chr{stroke-width:11} .sub .L-hi{stroke-width:2.6;transform:translateY(-2px)}
+  .sub .brand{font-size:44px;margin-bottom:13px}
+  .sub .body{font-family:var(--serif);font-size:15px;line-height:1.6;color:var(--ink2);max-width:44ch}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="chr" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#f7f7f8"/>
+    <stop offset="16%" stop-color="#b9bac0"/>
+    <stop offset="33%" stop-color="#65666e"/>
+    <stop offset="47%" stop-color="#f0f1f4"/>
+    <stop offset="60%" stop-color="#54555d"/>
+    <stop offset="80%" stop-color="#b3b5bb"/>
+    <stop offset="100%" stop-color="#34353c"/>
+  </linearGradient>
+  <g id="orbit" fill="none">
+    <ellipse cx="112" cy="62" rx="92" ry="33" transform="rotate(-16 112 62)"/>
+    <ellipse cx="74" cy="101" rx="22" ry="15" transform="rotate(-14 74 101)"/>
+  </g>
+  <g id="swirl" fill="none">
+    <path d="M 94 90 C 50 80, 32 44, 56 26 C 78 8, 134 9, 165 29 C 185 42, 193 37, 203 24"/>
+    <ellipse cx="80" cy="104" rx="21" ry="15" transform="rotate(-14 80 104)"/>
+  </g>
+</defs></svg>
+
+<header>
+  <div><div class="ov">OONE — chrome logo marks</div><div class="ov mut">refined to reference · orbit (ONE) · swirl (TANNER)</div></div>
+  <div class="r"><div class="ov">Marks v2 · chrome</div><div class="ov mut"><span class="acc">©2026</span></div></div>
+</header>
+
+<section class="sect" style="border-top:none">
+  <div class="lab">01 / Chrome marks on light</div>
+  <div class="marks">
+    <div class="mk-lg"><svg viewBox="0 0 224 150" role="img" aria-label="ONE orbit mark"><use href="#orbit" class="L-base"/><use href="#orbit" class="L-chr"/><use href="#orbit" class="L-hi"/></svg><div class="cap">ONE — orbit</div></div>
+    <div class="mk-lg"><svg viewBox="0 0 224 150" role="img" aria-label="TANNER swirl mark"><use href="#swirl" class="L-base"/><use href="#swirl" class="L-chr"/><use href="#swirl" class="L-hi"/></svg><div class="cap">TANNER — swirl</div></div>
+  </div>
+</section>
+
+<section class="sect">
+  <div class="lab">02 / On dark</div>
+  <div class="dark">
+    <div class="mk-lg"><svg viewBox="0 0 224 150" role="img" aria-label="ONE orbit mark"><use href="#orbit" class="L-base"/><use href="#orbit" class="L-chr"/><use href="#orbit" class="L-hi"/></svg><div class="cap">ONE</div></div>
+    <div class="mk-lg"><svg viewBox="0 0 224 150" role="img" aria-label="TANNER swirl mark"><use href="#swirl" class="L-base"/><use href="#swirl" class="L-chr"/><use href="#swirl" class="L-hi"/></svg><div class="cap">TANNER</div></div>
+  </div>
+</section>
+
+<section class="sect">
+  <div class="lab">03 / Subpage lockup — mark hangs left, brand + body left-justified</div>
+  <div class="sub" style="margin-bottom:36px">
+    <svg viewBox="0 0 224 150" aria-hidden="true"><use href="#orbit" class="L-base"/><use href="#orbit" class="L-chr"/><use href="#orbit" class="L-hi"/></svg>
+    <div><div class="brand">One</div><p class="body">The editorial brand. The O left-justifies with this body copy; the chrome orbit hangs in the margin to the left.</p></div>
+  </div>
+  <div class="sub">
+    <svg viewBox="0 0 224 150" aria-hidden="true"><use href="#swirl" class="L-base"/><use href="#swirl" class="L-chr"/><use href="#swirl" class="L-hi"/></svg>
+    <div><div class="brand">Tanner</div><p class="body">The design practice. The T left-justifies with this body copy; the chrome swirl hangs to its left.</p></div>
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OONE — current type system, all four together</title>
+<link rel="stylesheet" href="https://use.typekit.net/ohy2syh.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#E8E4DC; --ink:#1A1A1A; --ink2:rgba(26,26,26,.5); --ink3:rgba(26,26,26,.32);
+    --acc:#A8362A; --hair:rgba(26,26,26,.13);
+    --display:"Saira Semi Condensed","Anton",Arial,sans-serif;
+    --utility:"early-sans","Helvetica Neue",Arial,sans-serif;
+    --body:"gratia",Georgia,serif;
+    --mono:"config-mono-vf",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--utility);
+    -webkit-font-smoothing:antialiased;padding:54px clamp(20px,6vw,80px) 90px;
+    max-width:1120px;margin:0 auto}
+  .ov{font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;line-height:1.45}
+  .ov.mut{color:var(--ink2)} .acc{color:var(--acc)}
+  header{display:flex;justify-content:space-between;align-items:flex-start;
+    border-bottom:1px solid var(--ink);padding-bottom:14px;margin-bottom:6px}
+  header .r{text-align:right}
+
+  .row{display:grid;grid-template-columns:150px 1fr;gap:30px;
+    padding:30px 0;border-bottom:1px solid var(--hair);align-items:start}
+  .meta .role{font-family:var(--utility);font-weight:700;font-size:12px;
+    letter-spacing:.06em;text-transform:uppercase}
+  .meta .face{font-family:var(--mono);font-size:11px;color:var(--ink2);margin-top:5px;line-height:1.5}
+  .meta .use{font-family:var(--utility);font-size:11px;color:var(--ink3);margin-top:10px;line-height:1.5}
+  .sample{min-width:0}
+  .big{line-height:1;margin-bottom:14px}
+  .glyphs{font-size:15px;color:var(--ink2);letter-spacing:.01em}
+  @media(max-width:680px){.row{grid-template-columns:1fr;gap:12px}}
+
+  /* DISPLAY — Saira (all caps) */
+  .r-display .big{font-family:var(--display);font-weight:800;font-size:64px;
+    text-transform:uppercase;letter-spacing:-.01em}
+  .r-display .glyphs{font-family:var(--display);font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+
+  /* UTILITY — early-sans */
+  .r-utility .big{font-family:var(--utility);font-weight:600;font-size:30px;letter-spacing:-.01em}
+  .r-utility .labels{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:14px}
+  .r-utility .labels span{font-family:var(--utility);font-weight:700;font-size:12px;
+    letter-spacing:.12em;text-transform:uppercase}
+  .r-utility .labels .mut{color:var(--ink2)}
+  .r-utility .glyphs{font-family:var(--utility)}
+
+  /* BODY — Gratia */
+  .r-body .big{font-family:var(--body);font-weight:400;font-size:34px;line-height:1.18;max-width:22ch}
+  .r-body .big em{font-style:italic}
+  .r-body .para{font-family:var(--body);font-size:17px;line-height:1.55;max-width:54ch;margin-bottom:14px}
+  .r-body .glyphs{font-family:var(--body);font-style:italic}
+
+  /* DATA — config-mono */
+  .r-mono .big{font-family:var(--mono);font-size:22px;letter-spacing:.02em}
+  .r-mono .data{font-family:var(--mono);font-size:14px;display:flex;gap:22px;flex-wrap:wrap;margin-bottom:14px;color:var(--ink2)}
+  .r-mono .data .k{color:var(--ink)}
+  .r-mono .glyphs{font-family:var(--mono)}
+
+  /* combined */
+  .comp{padding:40px 0 4px}
+  .comp .c-wm{font-family:var(--display);font-weight:800;font-size:58px;text-transform:uppercase;letter-spacing:-.01em;line-height:.92}
+  .comp .c-eyebrow{font-family:var(--utility);font-weight:700;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);margin-bottom:10px}
+  .comp .c-voice{font-family:var(--body);font-style:italic;font-size:23px;line-height:1.3;margin:18px 0;max-width:30ch}
+  .comp .c-data{font-family:var(--mono);font-size:12px;color:var(--ink2);display:flex;gap:18px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header>
+  <div><div class="ov">OONE — type system, all four together</div><div class="ov mut">Live in oone.html today</div></div>
+  <div class="r"><div class="ov">Display · Utility · Body · Data</div><div class="ov mut">Specimen <span class="acc">©2026</span></div></div>
+</header>
+
+<div class="row r-display">
+  <div class="meta"><div class="role acc">Display</div><div class="face">Saira Semi Condensed<br>weight 700–900</div><div class="use">Headlines, zone titles, wordmark. Always all-caps.</div></div>
+  <div class="sample">
+    <div class="big">Orbit of one</div>
+    <div class="glyphs">ABCDEFGHIJKLM NOPQRSTUVWXYZ 0123456789</div>
+  </div>
+</div>
+
+<div class="row r-utility">
+  <div class="meta"><div class="role acc">Utility</div><div class="face">early-sans<br>weight 500–700</div><div class="use">UI, labels, captions, eyebrows. The quiet workhorse.</div></div>
+  <div class="sample">
+    <div class="labels"><span>A multidisciplinary studio</span><span class="mut">Based in Brooklyn, NY</span><span class="acc">Orbit with us</span></div>
+    <div class="big">A studio for built worlds</div>
+    <div class="glyphs">ABCDEFGHIJKLM abcdefghijklm 0123456789</div>
+  </div>
+</div>
+
+<div class="row r-body">
+  <div class="meta"><div class="role acc">Body</div><div class="face">Gratia<br>roman + italic</div><div class="use">Reading text and the editorial / literary voice.</div></div>
+  <div class="sample">
+    <div class="big">a world is an orbit of one; a body is a <em>mark</em> between.</div>
+    <div class="para">Brooklyn-based designer working across architecture, interiors, and brand systems — carrying projects from first sketch through the last detail on site.</div>
+    <div class="glyphs">abcdefghijklm nopqrstuvwxyz &amp; 0123456789</div>
+  </div>
+</div>
+
+<div class="row r-mono">
+  <div class="meta"><div class="role acc">Data</div><div class="face">config-mono<br>(config-mono-vf)</div><div class="use">Coordinates, field readouts, footnotes. Data only — never reading text.</div></div>
+  <div class="sample">
+    <div class="data"><span><span class="k">field</span> ▮ live</span><span><span class="k">x</span> +0042</span><span><span class="k">y</span> −0117</span><span><span class="k">rel</span> orbit</span><span><span class="k">t</span> 2026.06.22</span></div>
+    <div class="big">in itself, in orbit</div>
+    <div class="glyphs">ABCDEFG abcdefg 0123456789 ()[]{}/—·</div>
+  </div>
+</div>
+
+<section class="comp">
+  <div class="ov" style="margin-bottom:20px">All four in context</div>
+  <div class="c-eyebrow">A multidisciplinary creative studio</div>
+  <div class="c-wm">Oone</div>
+  <div class="c-voice">“a world is an orbit of one.”</div>
+  <div class="c-data"><span>field ▮ live</span><span>x +0042</span><span>y −0117</span></div>
+</section>
+
+</body>
+</html>

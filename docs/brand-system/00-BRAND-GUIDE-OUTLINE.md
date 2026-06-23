@@ -15,8 +15,8 @@
 5. **One lead accent per page.** The second accent is support only.
 6. **One hero texture + one support texture, max, per screen.**
 7. **Quiet backgrounds.** Reserve color for focal moments, labels, and active states.
-8. **Three type roles only:** display, utility, body.
-9. **One decorative type treatment per screen.**
+8. **Four type roles, three families:** display, utility (sans), body (serif), and one editorial-decorative. Utility + body come from a single serif/sans superfamily; display and the decorative are their own families. Total: **4 fonts / 3 families.** Data uses the utility sans (tabular figures) — no separate mono.
+9. **One decorative moment per screen.** Gratia is the *sanctioned* decorative face — reserved for the manifesto voice and editorial pull-quotes, never body or UI, max once per screen.
 10. **Purposeful motion only:** drift, breath, trace, reveal, orbit.
 11. **Every animated state needs a still / reduced-motion equivalent.**
 12. **Structure first.** Rigid, legible layout; atmosphere sits on top of structure, never replaces it.
