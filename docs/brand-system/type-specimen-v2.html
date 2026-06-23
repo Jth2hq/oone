@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OONE — Type System v2 specimen</title>
+<link rel="stylesheet" href="https://use.typekit.net/ohy2syh.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Oswald:wght@600;700&family=Saira+Semi+Condensed:wght@700;800;900&family=Saira+Condensed:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#E8E4DC; --bg2:#DAD6CF; --ink:#1A1A1A; --ink2:rgba(26,26,26,.52);
+    --acc:#A8362A;            /* one lead accent — a ROT-style brick red, earthy/on-brand */
+    --hair:rgba(26,26,26,.16);
+    --ff-display:"Saira Semi Condensed","Anton",Arial,sans-serif; /* tall + heavy + narrow (ROT) */
+    --ff-utility:"early-sans","Helvetica Neue",Arial,sans-serif;
+    --ff-body:"gratia",Georgia,serif;
+    --ff-mono:"config-mono-vf",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);
+    font-family:var(--ff-utility);-webkit-font-smoothing:antialiased;
+    padding:56px clamp(20px,6vw,96px) 96px;max-width:1240px;margin:0 auto}
+
+  /* ── utility role: labels / captions / overlines ─────────────── */
+  .ov{font-family:var(--ff-utility);font-weight:700;font-size:11px;
+    letter-spacing:.14em;text-transform:uppercase;line-height:1.4}
+  .ov.mut{color:var(--ink2)}
+  .acc{color:var(--acc)}
+
+  header{display:flex;justify-content:space-between;align-items:flex-start;
+    border-bottom:1px solid var(--ink);padding-bottom:14px;margin-bottom:8px}
+  header .r{text-align:right}
+
+  .sect{padding:40px 0;border-bottom:1px solid var(--hair)}
+  .sect > .ov{margin-bottom:22px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--hair)}
+  .cell{background:var(--bg);padding:30px 34px}
+  .pick{outline:2px solid var(--acc);outline-offset:-2px}
+  .tag{display:inline-block;font-family:var(--ff-utility);font-weight:700;
+    font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--bg);background:var(--acc);padding:3px 8px;margin-bottom:18px}
+  .tag.ghost{background:transparent;color:var(--ink2);border:1px solid var(--hair)}
+
+  /* ── display candidates: tall/narrow comparison ─────────────── */
+  .disp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--hair)}
+  .disp-grid .cell{display:flex;flex-direction:column;align-items:flex-start}
+  .d-wm{font-size:96px;line-height:.82;text-transform:uppercase;margin:2px 0 10px}
+  .d-line{font-size:22px;line-height:1;letter-spacing:.02em;text-transform:uppercase;color:var(--ink2)}
+  @media(max-width:880px){.disp-grid{grid-template-columns:1fr}}
+
+  /* ── display role candidates ─────────────────────────────────── */
+  .wm-grotesk{font-family:var(--ff-display);font-weight:900;font-stretch:118%;
+    font-size:84px;line-height:.86;letter-spacing:-.02em;text-transform:uppercase}
+  .wm-serif{font-family:var(--ff-serifdisp);font-weight:800;
+    font-size:88px;line-height:.9;letter-spacing:-.01em;text-transform:uppercase}
+  .hl-grotesk{font-family:var(--ff-display);font-weight:800;font-stretch:112%;
+    font-size:30px;line-height:1.02;letter-spacing:-.01em;text-transform:uppercase;margin-top:18px}
+  .hl-serif{font-family:var(--ff-serifdisp);font-weight:700;
+    font-size:34px;line-height:1.05;margin-top:18px}
+  .meta{margin-top:18px}
+
+  /* ── body / voice role: gratia ───────────────────────────────── */
+  .voice{font-family:var(--ff-body);font-weight:400;font-size:40px;
+    line-height:1.18;letter-spacing:.01em;max-width:20ch}
+  .voice em{font-style:italic}
+  .voice .big{font-family:var(--ff-display);font-weight:900;font-stretch:118%;
+    font-style:normal;font-size:.92em;text-transform:uppercase;letter-spacing:-.02em}
+  .voice-note{font-family:var(--ff-body);font-style:italic;font-size:19px;
+    line-height:1.5;color:var(--ink2);max-width:46ch;margin-top:20px}
+
+  /* ── mono / data role ────────────────────────────────────────── */
+  .mono{font-family:var(--ff-mono);font-size:14px;letter-spacing:.02em;line-height:1.8}
+  .data-row{display:flex;gap:26px;flex-wrap:wrap;align-items:baseline}
+  .data-row .k{color:var(--ink2)}
+  .typewriter{font-family:var(--ff-mono);font-size:18px;line-height:1.7;max-width:54ch}
+  .typewriter b{font-weight:700}
+
+  /* ── ladder / scale ──────────────────────────────────────────── */
+  .ladder{display:flex;flex-direction:column;gap:4px}
+  .ladder .lg{font-family:var(--ff-display);font-weight:900;font-stretch:118%;
+    text-transform:uppercase;line-height:.9;letter-spacing:-.02em}
+
+  /* ── in-context comp ─────────────────────────────────────────── */
+  .comp{background:var(--bg);border:1px solid var(--ink);padding:38px 40px;
+    display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end;margin-top:10px}
+  .comp .lede{font-family:var(--ff-display);font-weight:900;font-stretch:118%;
+    font-size:62px;line-height:.86;text-transform:uppercase;letter-spacing:-.02em}
+  .comp .lede small{display:block;font-family:var(--ff-body);font-style:italic;
+    font-weight:400;font-stretch:normal;text-transform:none;font-size:26px;
+    letter-spacing:0;margin-top:12px;color:var(--ink)}
+  .comp .side{text-align:right}
+  .row-labels{display:flex;justify-content:space-between;margin-top:14px;gap:16px}
+
+  .role-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--hair);margin-top:8px}
+  .role-grid .rc{background:var(--bg);padding:20px 18px}
+  .role-grid .rc .face{font-size:22px;margin:8px 0 6px;line-height:1}
+  @media(max-width:880px){.two,.comp{grid-template-columns:1fr}.role-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="ov">OONE — Type System v2</div>
+    <div class="ov mut">Structure ✕ Swash</div>
+  </div>
+  <div class="r">
+    <div class="ov">Three roles · one treatment</div>
+    <div class="ov mut">Specimen <span class="acc">©2026</span></div>
+  </div>
+</header>
+<div class="ov mut" style="margin-bottom:8px">Display · Utility · Body — Gratia kept, display deviates</div>
+
+<!-- ── DISPLAY — tall / narrow heavy grotesques ─────────────── -->
+<section class="sect">
+  <div class="ov">01 / Display role — tall &amp; narrow, heavy (ROT)</div>
+  <div class="ov mut" style="margin:-14px 0 22px">No expanded widths. Pick the proportion — all set at one cap-height.</div>
+  <div class="disp-grid">
+    <div class="cell pick">
+      <span class="tag">Recommended</span>
+      <div class="d-wm" style="font-family:'Saira Semi Condensed';font-weight:800;letter-spacing:-.005em">OONE</div>
+      <div class="d-line" style="font-family:'Saira Semi Condensed';font-weight:700">ORBIT OF ONE</div>
+      <div class="meta ov mut">Saira Semi Condensed · 800 · heavy, condensed, modern — closest free face to ROT</div>
+    </div>
+    <div class="cell">
+      <span class="tag ghost">Tallest</span>
+      <div class="d-wm" style="font-family:'Bebas Neue';font-weight:400;letter-spacing:.005em">OONE</div>
+      <div class="d-line" style="font-family:'Bebas Neue';letter-spacing:.04em">ORBIT OF ONE</div>
+      <div class="meta ov mut">Bebas Neue · ultra-tall, ultra-narrow — display only, lighter mass</div>
+    </div>
+    <div class="cell">
+      <span class="tag ghost">Heaviest</span>
+      <div class="d-wm" style="font-family:'Saira Condensed';font-weight:900;letter-spacing:-.01em">OONE</div>
+      <div class="d-line" style="font-family:'Saira Condensed';font-weight:800">ORBIT OF ONE</div>
+      <div class="meta ov mut">Saira Condensed · 900 · narrowest + most ink mass</div>
+    </div>
+    <div class="cell">
+      <span class="tag ghost">Refined</span>
+      <div class="d-wm" style="font-family:'Anton';font-weight:400;letter-spacing:.002em">OONE</div>
+      <div class="d-line" style="font-family:'Oswald';font-weight:700;letter-spacing:.01em">ORBIT OF ONE</div>
+      <div class="meta ov mut">Anton / Oswald · the original tall condensed black</div>
+    </div>
+  </div>
+  <div class="ov mut" style="margin-top:18px">↳ For the exact ROT face (heavy, slightly condensed, blunt terminals), the paid pick is <span class="acc">Druk Condensed Super</span> on Adobe Fonts — I can wire it if you want the real thing.</div>
+</section>
+
+<!-- ── BODY / VOICE — GRATIA (kept) ─────────────────────────── -->
+<section class="sect">
+  <div class="ov">02 / Body &amp; voice — <span class="acc">Gratia, kept</span></div>
+  <div class="voice">a world is an orbit of <span class="big">one</span>. a body is a <em>mark</em> between a world within and one beyond.</div>
+  <div class="voice-note">Gratia carries the editorial, queer, literary register — the swash italic is the same family as <em>Daydream</em>, <em>Old Money</em> and <em>Are you ready?</em> on the board. This is the one decorative treatment per screen.</div>
+</section>
+
+<!-- ── UTILITY — early-sans (kept) ──────────────────────────── -->
+<section class="sect">
+  <div class="ov">03 / Utility — early-sans (kept)</div>
+  <div class="two" style="background:transparent;gap:30px;grid-template-columns:1fr 1fr">
+    <div>
+      <div class="ov">A multidisciplinary<br>creative studio</div>
+      <div class="ov mut" style="margin-top:18px">Constructing visual worlds<br>across digital and physical space</div>
+    </div>
+    <div class="r" style="text-align:right">
+      <div class="ov">Inquiries</div>
+      <div class="ov acc" style="margin-top:4px">Orbit with us</div>
+      <div class="ov mut" style="margin-top:18px">Based in<br>Brooklyn, NY</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MONO / DATA — config-mono (kept) ─────────────────────── -->
+<section class="sect">
+  <div class="ov">04 / Mono &amp; data — config-mono (kept)</div>
+  <div class="typewriter">Your orbit is near, and we want to thank you for joining. We bring <b>real, structural, never-blended</b> space to the field every time.</div>
+  <div class="data-row mono" style="margin-top:22px">
+    <span><span class="k">field</span> ▮ live</span>
+    <span><span class="k">x</span> +0042</span>
+    <span><span class="k">y</span> −0117</span>
+    <span><span class="k">rel</span> orbit</span>
+    <span><span class="k">t</span> 2026.06.22</span>
+  </div>
+</section>
+
+<!-- ── SCALE LADDER (Direction A) ───────────────────────────── -->
+<section class="sect">
+  <div class="ov">05 / Display scale — simplify before you shrink</div>
+  <div class="ladder">
+    <div class="lg" style="font-size:64px">ONE</div>
+    <div class="lg" style="font-size:40px">ONE — orbit</div>
+    <div class="ov" style="font-size:13px;margin-top:10px">↳ below ~32px, drop display weight to utility caps</div>
+    <div class="ov" style="font-size:18px;letter-spacing:.08em">ONE · ORBIT · TANNER</div>
+  </div>
+</section>
+
+<!-- ── IN CONTEXT ───────────────────────────────────────────── -->
+<section class="sect" style="border-bottom:none">
+  <div class="ov">06 / In context — the three working together</div>
+  <div class="comp">
+    <div>
+      <div class="lede">Orbit<br>of one<small>a namesake placemaking the in-between.</small></div>
+    </div>
+    <div class="side">
+      <div class="ov">Care of</div>
+      <div class="ov acc">Tanner</div>
+      <div class="mono" style="margin-top:16px;font-size:12px">x +0000 · y +0000</div>
+    </div>
+  </div>
+  <div class="role-grid">
+    <div class="rc"><div class="ov mut">Display</div><div class="face" style="font-family:var(--ff-display);font-weight:900;font-stretch:118%">ROT</div><div class="ov mut">Archivo</div></div>
+    <div class="rc"><div class="ov mut">Body / voice</div><div class="face" style="font-family:var(--ff-body);font-style:italic">Gratia</div><div class="ov mut">kept</div></div>
+    <div class="rc"><div class="ov mut">Utility</div><div class="face" style="font-family:var(--ff-utility);font-weight:700">early-sans</div><div class="ov mut">kept</div></div>
+    <div class="rc"><div class="ov mut">Mono / data</div><div class="face" style="font-family:var(--ff-mono)">config-mono</div><div class="ov mut">kept</div></div>
+  </div>
+</section>
+
+</body>
+</html>

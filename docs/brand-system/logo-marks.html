@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OONE — graphic logo marks</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EDEAE3; --ink:#181818; --ink2:rgba(24,24,24,.52); --ink3:rgba(24,24,24,.3);
+    --acc:#A8362A; --hair:rgba(24,24,24,.13);
+    --geist:"Geist","Helvetica Neue",Arial,sans-serif;
+    --plex:"IBM Plex Sans",Arial,sans-serif;
+    --serif:"IBM Plex Serif",Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--plex);
+    -webkit-font-smoothing:antialiased;padding:54px clamp(20px,6vw,80px) 90px;max-width:1100px;margin:0 auto}
+  .ov{font-family:var(--plex);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;line-height:1.45}
+  .ov.mut{color:var(--ink2)} .acc{color:var(--acc)}
+  header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--ink);padding-bottom:14px;margin-bottom:34px}
+  header .r{text-align:right}
+  .sect{padding:32px 0;border-top:1px solid var(--hair)}
+  .lab{font-family:var(--plex);font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:24px}
+  .lab.mut{color:var(--ink2)}
+  .mark{color:var(--ink);display:block}
+  .mark svg{display:block;overflow:visible}
+
+  /* big marks */
+  .marks{display:flex;gap:80px;align-items:center;flex-wrap:wrap}
+  .markwrap{text-align:center}
+  .markwrap .mark svg{width:210px;height:auto}
+  .markwrap .cap{font-family:var(--plex);font-size:11px;color:var(--ink3);letter-spacing:.08em;text-transform:uppercase;margin-top:18px}
+
+  /* brand wordmark — caps, Geist */
+  .brand{font-family:var(--geist);font-weight:800;text-transform:uppercase;letter-spacing:-.02em;line-height:.9}
+
+  /* subpage lockup: mark hangs LEFT; brand first letter left-justifies with body below */
+  .sub{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:start;max-width:640px;margin-bottom:40px}
+  .sub .mark{align-self:start;padding-top:4px}
+  .sub .mark svg{width:84px;height:auto}
+  .sub .txt .brand{font-size:46px;margin-bottom:14px}
+  .sub .txt .body{font-family:var(--serif);font-size:15px;line-height:1.6;color:var(--ink2);max-width:46ch}
+  .alignline{position:relative}
+
+  /* inline / primary lockup: mark sits inline before brand */
+  .inline{display:flex;align-items:center;gap:18px}
+  .inline .mark svg{width:64px;height:auto}
+  .inline .brand{font-size:52px}
+
+  /* dark */
+  .dark{background:var(--ink);color:#EDEAE3;border-radius:2px;padding:40px 44px;margin-top:8px}
+  .dark .mark{color:#EDEAE3} .dark .brand{color:#EDEAE3} .dark .body{color:rgba(237,234,227,.6)!important}
+
+  .q{font-family:var(--serif);font-size:15px;line-height:1.6;max-width:60ch;color:var(--ink)}
+  .q b{font-family:var(--plex);font-weight:600}
+  @media(max-width:680px){.marks{gap:40px}.sub{grid-template-columns:auto 1fr;gap:16px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div><div class="ov">OONE — graphic logo marks</div><div class="ov mut">orbit (ONE) · swirl (TANNER) · my interpretation</div></div>
+  <div class="r"><div class="ov">Marks v1</div><div class="ov mut"><span class="acc">©2026</span></div></div>
+</header>
+
+<!-- the two marks -->
+<section class="sect" style="border-top:none">
+  <div class="lab">01 / The two marks — clean SVG interpretation</div>
+  <div class="marks">
+    <div class="markwrap">
+      <span class="mark" aria-label="ONE orbit mark">
+        <svg viewBox="0 0 200 130" role="img"><g fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="104" cy="56" rx="84" ry="34" transform="rotate(-14 104 56)"/>
+          <ellipse cx="74" cy="92" rx="22" ry="16" transform="rotate(-10 74 92)"/>
+        </g></svg>
+      </span>
+      <div class="cap">ONE — orbit (Oo)</div>
+    </div>
+    <div class="markwrap">
+      <span class="mark" aria-label="TANNER swirl mark">
+        <svg viewBox="0 0 200 130" role="img"><g fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M92 74 C 52 66, 30 40, 50 22 C 68 6, 116 6, 146 22 C 168 33, 178 30, 190 16"/>
+          <ellipse cx="86" cy="94" rx="21" ry="15" transform="rotate(-10 86 94)"/>
+        </g></svg>
+      </span>
+      <div class="cap">TANNER — swirl (Co)</div>
+    </div>
+  </div>
+</section>
+
+<!-- subpage lockup -->
+<section class="sect">
+  <div class="lab">02 / Subpage category — mark hangs left, brand + body left-justified</div>
+  <div class="sub">
+    <span class="mark" aria-hidden="true"><svg viewBox="0 0 200 130"><g fill="none" stroke="currentColor" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="104" cy="56" rx="84" ry="34" transform="rotate(-14 104 56)"/><ellipse cx="74" cy="92" rx="22" ry="16" transform="rotate(-10 74 92)"/></g></svg></span>
+    <div class="txt">
+      <div class="brand">One</div>
+      <p class="body">The editorial brand. Architecture, interiors, and visual systems — the world around the work. The O left-justifies with this body copy; the mark hangs in the margin to the left.</p>
+    </div>
+  </div>
+  <div class="sub">
+    <span class="mark" aria-hidden="true"><svg viewBox="0 0 200 130"><g fill="none" stroke="currentColor" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"><path d="M92 74 C 52 66, 30 40, 50 22 C 68 6, 116 6, 146 22 C 168 33, 178 30, 190 16"/><ellipse cx="86" cy="94" rx="21" ry="15" transform="rotate(-10 86 94)"/></g></svg></span>
+    <div class="txt">
+      <div class="brand">Tanner</div>
+      <p class="body">The design practice. The T left-justifies with this body copy; the swirl mark hangs to its left. One mark per surface, ink on paper.</p>
+    </div>
+  </div>
+</section>
+
+<!-- inline + dark -->
+<section class="sect">
+  <div class="lab">03 / Inline lockup + on dark</div>
+  <div class="inline" style="margin-bottom:30px">
+    <span class="mark" aria-hidden="true"><svg viewBox="0 0 200 130"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="104" cy="56" rx="84" ry="34" transform="rotate(-14 104 56)"/><ellipse cx="74" cy="92" rx="22" ry="16" transform="rotate(-10 74 92)"/></g></svg></span>
+    <div class="brand">One</div>
+  </div>
+  <div class="dark">
+    <div class="inline">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 200 130"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M92 74 C 52 66, 30 40, 50 22 C 68 6, 116 6, 146 22 C 168 33, 178 30, 190 16"/><ellipse cx="86" cy="94" rx="21" ry="15" transform="rotate(-10 86 94)"/></g></svg></span>
+      <div class="brand">Tanner</div>
+    </div>
+  </div>
+</section>
+
+<!-- notes / questions -->
+<section class="sect">
+  <div class="lab">04 / What I need from you</div>
+  <p class="q">These are my line interpretations of your chrome marks. Before wiring into the live site I want to confirm: the <b>rendering style</b> (flat ink stroke like this, vs. keeping the dimensional chrome look), whether the graphic marks replace the <b>inline manifesto mentions</b> too or only the standalone wordmark, and that I've read the <b>mark forms</b> right (orbit = ONE, swirl = TANNER).</p>
+</section>
+
+</body>
+</html>

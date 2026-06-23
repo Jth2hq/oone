@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>OONE — 3 font schemes</title>
+<link rel="stylesheet" href="https://use.typekit.net/ohy2syh.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Semi+Condensed:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,700;0,800;1,500&family=Montserrat:wght@400;500;600;700&family=Syne:wght@600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;700&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#E8E4DC; --bg2:#DAD6CF; --ink:#1A1A1A; --ink2:rgba(26,26,26,.52);
+    --acc:#A8362A; --hair:rgba(26,26,26,.14);
+    --ff-gratia:"gratia",Georgia,serif;
+    --ff-early:"early-sans","Helvetica Neue",Arial,sans-serif;
+    --ff-mono:"config-mono-vf",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--ff-early);
+    -webkit-font-smoothing:antialiased;padding:56px clamp(20px,6vw,88px) 96px;
+    max-width:1180px;margin:0 auto}
+  .ov{font-family:var(--ff-early);font-weight:700;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;line-height:1.4}
+  .ov.mut{color:var(--ink2)} .acc{color:var(--acc)}
+
+  header{display:flex;justify-content:space-between;align-items:flex-start;
+    border-bottom:1px solid var(--ink);padding-bottom:14px;margin-bottom:6px}
+  header .r{text-align:right}
+  .lead-note{font-family:var(--ff-gratia);font-style:italic;font-size:19px;
+    color:var(--ink2);margin:18px 0 30px;max-width:60ch;line-height:1.5}
+
+  .scheme{border:1px solid var(--ink);padding:34px 38px 30px;margin-bottom:26px;background:var(--bg)}
+  .scheme-head{display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:1px solid var(--hair);padding-bottom:14px;margin-bottom:26px}
+  .scheme-num{font-family:var(--ff-mono);font-size:13px;color:var(--ink2)}
+  .scheme-name{font-family:var(--ff-early);font-weight:700;font-size:13px;
+    letter-spacing:.12em;text-transform:uppercase}
+  .mood{display:inline-block;font-family:var(--ff-early);font-weight:700;font-size:10px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--bg);background:var(--acc);
+    padding:3px 9px}
+
+  .wm{font-size:78px;line-height:.84;text-transform:uppercase;margin:0 0 6px}
+  .hl{font-size:26px;line-height:1.05;margin-bottom:22px}
+  .voice{font-size:33px;line-height:1.2;max-width:24ch;margin-bottom:8px}
+  .voice em{font-style:italic}
+  .voice .mk{text-transform:uppercase}
+  .util-row{display:flex;gap:28px;flex-wrap:wrap;margin:24px 0 14px}
+  .util-row .lab{font-weight:700;font-size:11px;letter-spacing:.13em;text-transform:uppercase}
+  .util-row .lab.mut{color:var(--ink2)}
+  .data{font-size:13px;letter-spacing:.02em;display:flex;gap:22px;flex-wrap:wrap}
+  .data .k{color:var(--ink2)}
+
+  .legend{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--hair);
+    margin-top:24px;border:1px solid var(--hair)}
+  .legend .lc{background:var(--bg);padding:13px 14px}
+  .legend .role{font-family:var(--ff-early);font-weight:700;font-size:9px;
+    letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
+  .legend .face{font-size:17px;margin-top:5px;line-height:1.1}
+  @media(max-width:760px){.legend{grid-template-columns:1fr 1fr}.wm{font-size:58px}}
+
+  /* ── Scheme 01 — Field Studio ─────────── */
+  .s1 .wm,.s1 .hl{font-family:"Saira Semi Condensed";font-weight:800;letter-spacing:-.005em}
+  .s1 .hl{font-weight:700;text-transform:uppercase;letter-spacing:.005em}
+  .s1 .voice{font-family:var(--ff-gratia);font-weight:400}
+  .s1 .voice .mk{font-family:"Saira Semi Condensed";font-weight:800}
+  .s1 .util-row .lab{font-family:var(--ff-early)}
+  .s1 .data{font-family:var(--ff-mono)}
+
+  /* ── Scheme 02 — Salon ────────────────── */
+  .s2 .wm{font-family:"Playfair Display";font-weight:800;letter-spacing:-.01em}
+  .s2 .hl{font-family:"Playfair Display";font-weight:700;font-style:italic}
+  .s2 .voice{font-family:var(--ff-gratia);font-weight:400}
+  .s2 .voice .mk{font-family:"Playfair Display";font-weight:800;font-style:normal}
+  .s2 .util-row .lab{font-family:"Montserrat";font-weight:600;letter-spacing:.16em}
+  .s2 .data{font-family:var(--ff-mono)}
+
+  /* ── Scheme 03 — New Wave ─────────────── */
+  .s3 .wm{font-family:"Syne";font-weight:800;letter-spacing:-.02em}
+  .s3 .hl{font-family:"Syne";font-weight:700}
+  .s3 .voice{font-family:"Fraunces";font-weight:400;font-optical-sizing:auto}
+  .s3 .voice em{font-style:italic;font-weight:500}
+  .s3 .voice .mk{font-family:"Syne";font-weight:800;font-style:normal}
+  .s3 .util-row .lab{font-family:"Space Grotesk";font-weight:500;letter-spacing:.12em}
+  .s3 .data{font-family:"Space Mono"}
+</style>
+</head>
+<body>
+
+<header>
+  <div><div class="ov">OONE — three font schemes</div><div class="ov mut">Display · Body · Utility · Data</div></div>
+  <div class="r"><div class="ov">Pick a direction</div><div class="ov mut">Specimen <span class="acc">©2026</span></div></div>
+</header>
+<div class="lead-note">Each scheme keeps the three-role system. Schemes 01–02 keep <em>Gratia</em> as the body voice; Scheme 03 deviates to <em>Fraunces</em> as invited. All faces shown are the real thing.</div>
+
+<!-- 01 -->
+<section class="scheme s1">
+  <div class="scheme-head">
+    <div><span class="scheme-num">01</span> &nbsp; <span class="scheme-name">Field Studio</span></div>
+    <span class="mood">brutalist · editorial · live</span>
+  </div>
+  <div class="wm">OONE</div>
+  <div class="hl">A studio for built worlds</div>
+  <div class="voice">a world is an orbit of <span class="mk">one</span> — a body is a <em>mark</em> between.</div>
+  <div class="util-row"><span class="lab">A multidisciplinary studio</span><span class="lab mut">Based in Brooklyn, NY</span><span class="lab acc">Orbit with us</span></div>
+  <div class="data"><span><span class="k">field</span> ▮ live</span><span><span class="k">x</span> +0042</span><span><span class="k">y</span> −0117</span><span><span class="k">rel</span> orbit</span></div>
+  <div class="legend">
+    <div class="lc"><div class="role">Display</div><div class="face" style="font-family:'Saira Semi Condensed';font-weight:800;text-transform:uppercase">Saira Semi Cond.</div></div>
+    <div class="lc"><div class="role">Body / voice</div><div class="face" style="font-family:var(--ff-gratia);font-style:italic">Gratia</div></div>
+    <div class="lc"><div class="role">Utility</div><div class="face" style="font-family:var(--ff-early);font-weight:700">early-sans</div></div>
+    <div class="lc"><div class="role">Data</div><div class="face" style="font-family:var(--ff-mono)">config-mono</div></div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section class="scheme s2">
+  <div class="scheme-head">
+    <div><span class="scheme-num">02</span> &nbsp; <span class="scheme-name">Salon</span></div>
+    <span class="mood">old money · gallery · luxe</span>
+  </div>
+  <div class="wm">Oone</div>
+  <div class="hl">A studio for built worlds</div>
+  <div class="voice">a world is an orbit of <span class="mk">One</span> — a body is a <em>mark</em> between.</div>
+  <div class="util-row"><span class="lab">A MULTIDISCIPLINARY STUDIO</span><span class="lab mut">BASED IN BROOKLYN, NY</span><span class="lab acc">ORBIT WITH US</span></div>
+  <div class="data"><span><span class="k">field</span> ▮ live</span><span><span class="k">x</span> +0042</span><span><span class="k">y</span> −0117</span><span><span class="k">rel</span> orbit</span></div>
+  <div class="legend">
+    <div class="lc"><div class="role">Display</div><div class="face" style="font-family:'Playfair Display';font-weight:800">Playfair Display</div></div>
+    <div class="lc"><div class="role">Body / voice</div><div class="face" style="font-family:var(--ff-gratia);font-style:italic">Gratia</div></div>
+    <div class="lc"><div class="role">Utility</div><div class="face" style="font-family:'Montserrat';font-weight:600">Montserrat</div></div>
+    <div class="lc"><div class="role">Data</div><div class="face" style="font-family:var(--ff-mono)">config-mono</div></div>
+  </div>
+</section>
+
+<!-- 03 -->
+<section class="scheme s3">
+  <div class="scheme-head">
+    <div><span class="scheme-num">03</span> &nbsp; <span class="scheme-name">New Wave</span></div>
+    <span class="mood">art-school · queer · contemporary</span>
+  </div>
+  <div class="wm">OONE</div>
+  <div class="hl">A studio for built worlds</div>
+  <div class="voice">a world is an orbit of <span class="mk">one</span> — a body is a <em>mark</em> between.</div>
+  <div class="util-row"><span class="lab">A multidisciplinary studio</span><span class="lab mut">Based in Brooklyn, NY</span><span class="lab acc">Orbit with us</span></div>
+  <div class="data"><span><span class="k">field</span> ▮ live</span><span><span class="k">x</span> +0042</span><span><span class="k">y</span> −0117</span><span><span class="k">rel</span> orbit</span></div>
+  <div class="legend">
+    <div class="lc"><div class="role">Display</div><div class="face" style="font-family:'Syne';font-weight:800">Syne</div></div>
+    <div class="lc"><div class="role">Body / voice</div><div class="face" style="font-family:'Fraunces';font-style:italic">Fraunces</div></div>
+    <div class="lc"><div class="role">Utility</div><div class="face" style="font-family:'Space Grotesk';font-weight:500">Space Grotesk</div></div>
+    <div class="lc"><div class="role">Data</div><div class="face" style="font-family:'Space Mono'">Space Mono</div></div>
+  </div>
+</section>
+
+</body>
+</html>
