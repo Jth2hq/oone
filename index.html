@@ -2031,28 +2031,65 @@ const PROJECTS = [
 const PHOTO_BASE = 'photos/';
 
 const PHOTOS = {
-  naples:    {title:"Napoli, waterfront",            src:'naples.jpg'},
-  checker:   {title:"Studio threshold",              src:'checker.jpg'},
-  edinburgh: {title:"Arthur's Seat, gorse",          src:'edinburgh.jpg'},
-  autumn:    {title:"Brooklyn, autumn rail",         src:'autumn.jpg'},
-  moss:      {title:"Jetty, fog, oystercatcher",     src:'moss.jpg'},
-  powder:    {title:"Powder Room, scarlet",          src:'powder.jpg'},
+  'street-laugh':       {title:"Street, laughing",                src:'street-laugh.jpg'},
+  'leap':               {title:"Ochre wall, mid-leap",            src:'leap.jpg'},
+  'clover-sneaker':     {title:"Clover, sneaker",                 src:'clover-sneaker.jpg'},
+  'minisuper':          {title:"Minisúper, red awning",           src:'minisuper.jpg'},
+  'rotunda':            {title:"Rotunda, three figures",          src:'rotunda.jpg'},
+  'platform':           {title:"Platform, pushchair",             src:'platform.jpg'},
+  'calla':              {title:"Calla lilies",                    src:'calla.jpg'},
+  'supper':             {title:"Supper, teal room",               src:'supper.jpg'},
+  'plaza-trees':        {title:"Plaza, clipped trees",            src:'plaza-trees.jpg'},
+  'arcade':             {title:"Arcade, checkerboard",            src:'arcade.jpg'},
+  'stelae':             {title:"Stelae, corridor",                src:'stelae.jpg'},
+  'palm-glass':         {title:"Palm through glass",              src:'palm-glass.jpg'},
+  'breezeblock':        {title:"Breezeblock, blue tile",          src:'breezeblock.jpg'},
+  'shutters':           {title:"Shutters, balcony",               src:'shutters.jpg'},
+  'toast':              {title:"Toast, overhead",                 src:'toast.jpg'},
+  'underpass':          {title:"Underpass, columns",              src:'underpass.jpg'},
+  'shoreline':          {title:"Shoreline, foam",                 src:'shoreline.jpg'},
+  'piazza-sphere':      {title:"Piazza, mirrored sphere",         src:'piazza-sphere.jpg'},
+  'ferry-deck':         {title:"Ferry deck, fog",                 src:'ferry-deck.jpg'},
+  'city-square':        {title:"City square, wet stone",          src:'city-square.jpg'},
+  'gorse-hill':         {title:"Arthur's Seat, gorse",            src:'gorse-hill.jpg'},
+  'conservatory':       {title:"Conservatory, courtyard",         src:'conservatory.jpg'},
+  'philodendron':       {title:"Philodendron, pink wall",         src:'philodendron.jpg'},
+  'bar-amber':          {title:"Bar, amber glass",                src:'bar-amber.jpg'},
+  'here-queer':         {title:"Here, Queer, Fabulous",           src:'here-queer.jpg'},
+  'festival-fan':       {title:"Festival, paper fan",             src:'festival-fan.jpg'},
+  'gerbera':            {title:"Gerbera, white sill",             src:'gerbera.jpg'},
+  'window-light':       {title:"Window light, hand to brow",      src:'window-light.jpg'},
+  'mossy-branches':     {title:"Mossy branches",                  src:'mossy-branches.jpg'},
+  'lot-sedan':          {title:"Lot, sedan, tall grass",          src:'lot-sedan.jpg'},
+  'streetlamp':         {title:"Streetlamp, night rail",          src:'streetlamp.jpg'},
+  'boardwalk-house':    {title:"Boardwalk, flagged house",        src:'boardwalk-house.jpg'},
+  'pergola':            {title:"Pergola, wisteria",               src:'pergola.jpg'},
+  'barn-pines':         {title:"Barn, pines",                     src:'barn-pines.jpg'},
+  'counter-long':       {title:"Counter, long light",             src:'counter-long.jpg'},
+  'checker-threshold':  {title:"Checkerboard threshold",          src:'checker-threshold.jpg'},
+  'bouquet-park':       {title:"Bouquet, bare park",              src:'bouquet-park.jpg'},
+  'kelp-rocks':         {title:"Kelp rocks, surf",                src:'kelp-rocks.jpg'},
+  'corridor':           {title:"Corridor, terrazzo",              src:'corridor.jpg'},
+  'bethesda':           {title:"Bethesda, arches",                src:'bethesda.jpg'},
+  'josh-table':         {title:"Portrait, table",                 src:'josh-table.jpg'},
+  'land-and-sea':       {title:"Land and sea",                    src:'land-and-sea.jpg'},
+  'powder-room':        {title:"Powder Room, scarlet",            src:'powder-room.jpg'},
 };
 const LOG_ENTRIES = [
   {id:'l1',cat:'idea',rel:'itself',date:'2026-05-12',title:'Lorem ipsum dolor',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'p1',cat:'artifact',rel:'itself',date:'2026-05-02',title:'Consectetur adipiscing',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'naples'},
+  {id:'p1',cat:'artifact',rel:'itself',date:'2026-05-02',title:'Consectetur adipiscing',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'piazza-sphere'},
   {id:'l2',cat:'artifact',rel:'itself',date:'2026-04-28',title:'Sed do eiusmod',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'l3',cat:'idea',rel:'orbit',date:'2026-04-10',title:'Tempor incididunt',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'p2',cat:'sensation',rel:'orbit',date:'2026-04-04',title:'Ut labore et dolore',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'moss'},
+  {id:'p2',cat:'sensation',rel:'orbit',date:'2026-04-04',title:'Ut labore et dolore',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'kelp-rocks'},
   {id:'l4',cat:'sensation',rel:'itself',date:'2026-03-22',title:'Magna aliqua',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'p3',cat:'artifact',rel:'itself',date:'2026-03-12',title:'Quis nostrud',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'checker'},
+  {id:'p3',cat:'artifact',rel:'itself',date:'2026-03-12',title:'Quis nostrud',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'checker-threshold'},
   {id:'l5',cat:'idea',rel:'itself',date:'2026-03-08',title:'Ullamco laboris',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'p4',cat:'sensation',rel:'itself',date:'2026-02-22',title:'Nisi ut aliquip',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'edinburgh'},
+  {id:'p4',cat:'sensation',rel:'itself',date:'2026-02-22',title:'Nisi ut aliquip',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'gorse-hill'},
   {id:'l6',cat:'sensation',rel:'orbit',date:'2026-02-14',title:'Ex ea commodo',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'l7',cat:'artifact',rel:'orbit',date:'2026-02-02',title:'Duis aute irure',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'p5',cat:'sensation',rel:'itself',date:'2025-12-20',title:'Reprehenderit voluptate',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'autumn'},
+  {id:'p5',cat:'sensation',rel:'itself',date:'2025-12-20',title:'Reprehenderit voluptate',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'bouquet-park'},
   {id:'l8',cat:'sensation',rel:'itself',date:'2026-01-15',title:'Velit esse cillum',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'p6',cat:'artifact',rel:'itself',date:'2025-11-22',title:'Excepteur sint',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'powder'},
+  {id:'p6',cat:'artifact',rel:'itself',date:'2025-11-22',title:'Excepteur sint',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'powder-room'},
   {id:'l9',cat:'idea',rel:'itself',date:'2025-12-04',title:'Occaecat cupidatat',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'l10',cat:'artifact',rel:'itself',date:'2025-11-15',title:'Non proident',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'l11',cat:'sensation',rel:'orbit',date:'2025-10-30',title:'Sunt in culpa',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
@@ -2193,7 +2230,11 @@ const Film = {
     this.plates = this.keys.map(key => {
       const plate = document.createElement('div');
       plate.className = 'film-plate';
-      plate.innerHTML = `<img src="${PHOTO_BASE}${PHOTOS[key].src}" alt="" draggable="false" loading="eager">`;
+      /* The src is parked on data-src and only promoted when the plate is
+         about to be seen. Absolutely-positioned plates all count as "in
+         viewport", so loading="lazy" would not hold them back — with 43
+         frames that is the whole roll on first paint. */
+      plate.innerHTML = `<img data-src="${PHOTO_BASE}${PHOTOS[key].src}" alt="" draggable="false" decoding="async">`;
       stage.appendChild(plate);
       return plate;
     });
@@ -2225,8 +2266,22 @@ const Film = {
     Decay.start();
   },
 
+  /* Promote data-src -> src for one plate. Idempotent. */
+  load(n){
+    const plate = this.plates[(n + this.plates.length) % this.plates.length];
+    if (!plate) return;
+    const img = plate.querySelector('img');
+    if (img && img.dataset.src){
+      img.src = img.dataset.src;
+      delete img.dataset.src;
+    }
+  },
+
   show(i){
     this.index = i;
+    /* This frame now, the next one queued so the gate never waits on a
+       download, and the previous one kept for a backwards advance. */
+    this.load(i); this.load(i + 1); this.load(i - 1);
     this.plates.forEach((p, n) => p.classList.toggle('on', n === i));
     const no = document.getElementById('film-no');
     const ti = document.getElementById('film-title');
