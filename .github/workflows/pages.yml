@@ -1,0 +1,47 @@
+# Publishes the repo root to GitHub Pages.
+#
+# This replaces GitHub's built-in "pages-build-deployment", which checks out
+# submodules and fails on the orphaned `magic-mcp` gitlink (exit code 128).
+# actions/checkout does NOT fetch submodules unless asked, so this never
+# looks at magic-mcp and the broken entry becomes harmless.
+
+name: Deploy to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:        # lets you re-run it by hand from the Actions tab
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# If two pushes land close together, let the newer one win.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+        with:
+          submodules: false   # the whole point — do not touch magic-mcp
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'           # serve the repo root: index.html + photos/
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
