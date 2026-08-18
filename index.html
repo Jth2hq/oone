@@ -31,6 +31,10 @@
    block should introduce a new hardcoded colour, radius, or spacing value.
    ═══════════════════════════════════════════════════════════════════════════ */
 :root{
+  /* ONE curve for the whole site. The browser default (ease) leaves late and
+     arrives hard; this one leaves early and settles long, so every change of
+     state reads as a gradient rather than a switch. */
+  --ease-grad:cubic-bezier(.32,.06,.24,1);
   /* ── SPACING ────────────────────────────────────────────────────────────
      --x              gap from viewport edge to the panel frame
      --page-inset     gap from panel frame to content, shared by all subpages
@@ -135,7 +139,15 @@ button{-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
    scrollable container inherits the rule. */
 *{scrollbar-width:none;-ms-overflow-style:none}
 *::-webkit-scrollbar{display:none;width:0;height:0}
-html{height:100%;height:100svh}
+html{
+  height:100%;height:100svh;
+  /* Nothing outside the panel may ever move: no horizontal pan on a narrow
+     viewport, no iOS rubber-banding past the edges. Scrolling belongs to
+     the panes inside the panel, never to the document. */
+  overflow:hidden;
+  width:100%;max-width:100%;
+  overscroll-behavior:none;
+}
 body{
   margin:0;background:var(--bg);color:var(--ink);
   font-family:var(--ff-mono);font-size:13px;-webkit-font-smoothing:antialiased;
@@ -145,9 +157,16 @@ body{
   padding-bottom:max(var(--m-bot), env(safe-area-inset-bottom));
   padding-left:max(var(--m-side), env(safe-area-inset-left));
   padding-right:max(var(--m-side), env(safe-area-inset-right));
-  transition:background .9s, color .9s;
+  transition:background 2.16s, color 2.16s;
   cursor:default;overscroll-behavior:none;touch-action:pan-y;
   position:relative;
+  /* Locking the document with position:fixed fought the safe-area padding
+     in iOS portrait and could leave the panel mis-sized on first paint.
+     Constraining the width and hiding overflow does the same job — nothing
+     pans sideways — without taking body out of flow. */
+  width:100%;max-width:100vw;
+  overflow:hidden;
+  box-sizing:border-box;
 }
 
 
@@ -162,9 +181,11 @@ body{
   line-height:.9;
   letter-spacing:.005em;
   padding:0 .04em;
-  /* a hair of stroke gives the single available weight some body */
-  -webkit-text-stroke:.4px currentColor;
-  paint-order:stroke fill;
+  /* Offset copies rather than a stroke — same reason as the landing: a
+     stroke miters, and this face has the shallow joins that spike. */
+  text-shadow:
+     .4px 0 0 currentColor, -.4px 0 0 currentColor,
+     0 .4px 0 currentColor,  0 -.4px 0 currentColor;
 }
 
 /* The relative 1.22em works inside a heading, but the zone subtitle is a
@@ -186,8 +207,9 @@ body{
   line-height:1;
   letter-spacing:.005em;
   color:var(--zink);
-  -webkit-text-stroke:.5px currentColor;
-  paint-order:stroke fill;
+  text-shadow:
+     .5px 0 0 currentColor, -.5px 0 0 currentColor,
+     0 .5px 0 currentColor,  0 -.5px 0 currentColor;
   margin:2px 0 10px;
 }
 
@@ -208,7 +230,7 @@ body{
      it is the clip that actually holds. Belt and braces: keep both. */
   clip-path:inset(0 round var(--fillet-frame));
   z-index:5;
-  transition:background .9s;
+  transition:background 2.16s;
   box-shadow:
     0 0 0 1px rgba(26,26,26,.18),
     0 0 0 2px #c4c4c4,
@@ -285,7 +307,7 @@ body.night #panel::before{
   pointer-events:none;
   filter:blur(58px);
   opacity:.9;
-  transition:opacity 1.4s ease, background 1.2s ease, scale 1.8s cubic-bezier(.22,1,.36,1);
+  transition:opacity 1.4s var(--ease-grad), background 2.88s var(--ease-grad), scale 1.8s cubic-bezier(.22,1,.36,1);
   animation:bloomDrift 74s ease-in-out infinite alternate;
   /* --bloom / --bloom-deep are re-pointed per page below. */
   background:
@@ -352,8 +374,44 @@ body:not(.in-zone).resting-log    .bloom,
 body:not(.in-zone).resting-world  .bloom{ scale:1.18 }
 
 @media (prefers-reduced-motion:reduce){
-  .bloom{ animation:none; transition:opacity .3s, background .3s }
+  .bloom{ animation:none; transition:opacity 0.72s, background 0.72s }
   body.in-zone .bloom{ animation:none; scale:1.4 }
+}
+
+/* ── PORTRAIT / SMALL-SCREEN BUDGET ───────────────────────────────────────
+   A phone in portrait is compositing the same stack as a desktop on about
+   a tenth of the GPU: a 58px bloom blur, an 11px steam blur, an 18px intro
+   blur and an SVG displacement filter, all over a full-bleed photograph.
+   Trimming the radii and dropping the displacement keeps the character and
+   gives back most of the cost — the blurs are what stall the first paint,
+   not the geometry. */
+@media (max-width:760px), (orientation:portrait) and (max-width:1024px){
+  .bloom{ filter:blur(34px) }
+  .steam{
+    -webkit-backdrop-filter:blur(4px) saturate(.9);
+            backdrop-filter:blur(4px) saturate(.9);
+  }
+  .keys-intro{
+    -webkit-backdrop-filter:blur(10px) saturate(.92);
+            backdrop-filter:blur(10px) saturate(.92);
+  }
+  /* The displacement map is the single most expensive thing on the page and
+     the least visible at this size. The mosaic carries the idea on its own. */
+  .film-plate img{ filter:saturate(calc(1.06 + .22 * var(--decay,0)))
+                          contrast(calc(1.04 + .16 * var(--decay,0))) }
+  body.night .film-plate img{ filter:saturate(.94)
+                          contrast(calc(1.12 + .18 * var(--decay,0)))
+                          brightness(.74) }
+}
+
+/* Portrait type: the display sizes are set for a wide panel and simply do
+   not fit a phone held upright — the measure runs out before the line does. */
+@media (orientation:portrait) and (max-width:820px){
+  .enter-cue .h{ font-size:clamp(30px,8.4vw,52px);--ink-weight:.020em }
+  .enter-cue .h2{ font-size:clamp(19px,5.2vw,30px);margin-top:12px }
+  .enter-cue .intro-prose{ font-size:clamp(16px,4.4vw,24px);margin-top:22px;max-width:20ch }
+  .enter-cue .intro-welcome{ font-size:clamp(14px,3.8vw,20px);margin-top:18px }
+  .enter-cue{ width:94% }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -372,7 +430,7 @@ body:not(.in-zone).resting-world  .bloom{ scale:1.18 }
   border-radius:var(--fillet-frame);
   clip-path:inset(0 round var(--fillet-frame));
   cursor:pointer;                 /* the whole screen advances the reel */
-  opacity:0;transition:opacity 1.8s ease;
+  opacity:0;transition:opacity 1.8s var(--ease-grad);
 }
 body.film-live:not(.in-zone) .film{ opacity:1 }
 body.in-zone .film{ opacity:0; visibility:hidden; pointer-events:none }
@@ -382,7 +440,10 @@ body.in-zone .film{ opacity:0; visibility:hidden; pointer-events:none }
    and lift, the way a slide carrier passes the lamp — not a dissolve. */
 .film-plate{
   position:absolute;inset:0;
-  opacity:0;transition:opacity .9s ease;
+  /* A long dissolve. At .9s the changeover read as a cut; over 3.4s both
+     plates sit half-present together and the photographs genuinely pass
+     through one another. */
+  opacity:0;transition:opacity 3.4s cubic-bezier(.37,0,.35,1);
   will-change:opacity;
 }
 .film-plate.on{ opacity:1 }
@@ -395,7 +456,7 @@ body.in-zone .film{ opacity:0; visibility:hidden; pointer-events:none }
   /* COLOUR DOMINATES. The grade is a light hand — enough to read as an
      old broadcast, not enough to drain the photograph. */
   filter:saturate(1.06) contrast(1.04) brightness(.98);
-  transition:filter .9s ease;
+  transition:filter 2.16s var(--ease-grad);
 }
 /* Night: the tube is in a dark room. Dimmer and cooler, still colour. */
 body.night .film-plate img{
@@ -403,28 +464,69 @@ body.night .film-plate img{
 }
 @keyframes filmBreath{ from{ transform:scale(1.04) } to{ transform:scale(1.09) } }
 
-/* ── IDLE DECAY ────────────────────────────────────────────────────────────
-   Five discrete states. A timer steps the screen down one level every few
-   seconds of stillness; advancing or interacting resets to level 0.
-   Discrete steps read as a signal failing, where a smooth ramp would read
-   as an effect looping.
+/* ── IDLE DRIFT ───────────────────────────────────────────────────────────
+   Continuous, not stepped. A single number --decay ramps 0 -> 1 across a
+   long stillness and eases back to 0 the moment anything happens. Every
+   expression below is a function of it, so there is no threshold anywhere
+   for the eye to catch on.
 
-   The SVG filters (#decay1..#decay4, defined at the foot of <body>) use
-   feMorphology with an x-only radius: pixels dilate sideways, so blocks
-   swell and smear horizontally rather than blurring. */
-.film-plate img{ will-change:filter }
-body[data-decay="1"] .film-plate img{ filter:url(#decay1) saturate(1.1)  contrast(1.06) }
-body[data-decay="2"] .film-plate img{ filter:url(#decay2) saturate(1.16) contrast(1.1)  }
-body[data-decay="3"] .film-plate img{ filter:url(#decay3) saturate(1.24) contrast(1.16) }
-body[data-decay="4"] .film-plate img{ filter:url(#decay4) saturate(1.34) contrast(1.22) }
-body.night[data-decay="1"] .film-plate img{ filter:url(#decay1) brightness(.74) contrast(1.14) }
-body.night[data-decay="2"] .film-plate img{ filter:url(#decay2) brightness(.76) contrast(1.18) }
-body.night[data-decay="3"] .film-plate img{ filter:url(#decay3) brightness(.78) contrast(1.24) }
-body.night[data-decay="4"] .film-plate img{ filter:url(#decay4) brightness(.8)  contrast(1.3)  }
+   The heavy lifting is in #decay (see the SVG at the foot of <body>); the
+   grade here rides along on top of it. */
+.film-plate img{
+  will-change:filter;
+  filter:url(#decay)
+         saturate(calc(1.06 + 0.28 * var(--decay, 0)))
+         contrast(calc(1.04 + 0.18 * var(--decay, 0)))
+         brightness(calc(0.98 - 0.04 * var(--decay, 0)));
+}
+body.night .film-plate img{
+  filter:url(#decay)
+         saturate(calc(0.94 + 0.10 * var(--decay, 0)))
+         contrast(calc(1.12 + 0.20 * var(--decay, 0)))
+         brightness(calc(0.72 + 0.06 * var(--decay, 0)));
+}
+/* ── TIME DISPLACEMENT · the picture disagreeing with itself ──────────────
+   Painted by tdDraw() into a canvas sitting directly over the plate: the
+   same photograph, cut into an irregular grid, each tile sampled from a
+   slightly shifted position. Full detail is preserved — the fracture is at
+   the tile seams.
 
-/* At the deepest levels the raster itself starts to slip. */
-body[data-decay="3"] .film-plate{ transform:translateX(.25%) }
-body[data-decay="4"] .film-plate{ transform:translateX(-.5%) scaleY(1.006) }
+   The mask is the ramp: a soft edge that starts off the right side of the
+   frame and travels left as --decay rises, so the quantisation creeps in
+   from one side rather than appearing everywhere at once. It is capped
+   well short of the full width — at maximum drift the left half of the
+   photograph is still a photograph. */
+.film-mosaic{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  z-index:1;pointer-events:none;
+  /* The canvas holds a full-detail copy of the plate, so it can sit opaque
+     over the photograph — the fracture reads at the tile seams, not through
+     transparency. It fades in with the drift and is masked from the right so
+     the displacement arrives across the frame rather than all at once. */
+  opacity:calc(1 * var(--decay, 0));
+  --mo-edge:calc(100% - var(--decay, 0) * 130%);
+  -webkit-mask-image:linear-gradient(to right,
+    transparent 0%,
+    transparent var(--mo-edge),
+    #000 calc(var(--mo-edge) + 18%),
+    #000 100%);
+          mask-image:linear-gradient(to right,
+    transparent 0%,
+    transparent var(--mo-edge),
+    #000 calc(var(--mo-edge) + 18%),
+    #000 100%);
+}
+/* Nothing to quantise into if the canvas was never painted. */
+.film-plate:not([data-mosaic]) .film-mosaic{ display:none }
+@media (prefers-reduced-motion:reduce){ .film-mosaic{ opacity:0 } }
+
+/* The raster slips as the drift deepens — a fraction of a percent, eased
+   by the same number, so it slides rather than snaps. */
+.film-plate{
+  transform:translateX(calc(-0.5% * var(--decay, 0)))
+            scaleY(calc(1 + 0.006 * var(--decay, 0)));
+}
 
 /* ── SCANLINES · aperture grille ──────────────────────────────────────── */
 .film-scan{
@@ -436,11 +538,18 @@ body[data-decay="4"] .film-plate{ transform:translateX(-.5%) scaleY(1.006) }
   opacity:.2;mix-blend-mode:multiply;
 }
 body.night .film-scan{ opacity:.42 }
-/* Decay widens the grille — the tube losing horizontal hold. */
-body[data-decay="3"] .film-scan{ opacity:.3 }
-body[data-decay="4"] .film-scan{ opacity:.4;
+/* The grille loses horizontal hold as the drift deepens. Two grilles are
+   cross-faded rather than one being swapped for the other, so the pitch
+   appears to widen smoothly instead of changing gauge in one frame. */
+.film-scan{ opacity:calc(.2 + .18 * var(--decay, 0)) }
+body.night .film-scan{ opacity:calc(.42 + .16 * var(--decay, 0)) }
+.film-scan::after{
+  content:"";position:absolute;inset:0;
   background:repeating-linear-gradient(to bottom,
-    rgba(0,0,0,.34) 0px, rgba(0,0,0,.34) 2px, transparent 2px, transparent 5px) }
+    rgba(0,0,0,.34) 0px, rgba(0,0,0,.34) 2px,
+    transparent 2px, transparent 5px);
+  opacity:var(--decay, 0);
+}
 
 /* ── DUST · the emulsion is old. Static grain, no animation. ──────────── */
 .film-dust{
@@ -458,20 +567,42 @@ body.night .film-dust{ opacity:.24 }
     transparent 52%, rgba(0,0,0,.2) 82%, rgba(0,0,0,.46) 100%);
 }
 
+/* ── FOG · the bloom the text sits in ──────────────────────────────────────
+   The gate and the advance control sit over whatever photograph happens to
+   be up, and a text-shadow alone cannot carry them across a bright frame.
+   This is a soft darkening pooled along the bottom edge — no hard edge
+   anywhere, so it reads as haze in the lamp rather than a scrim laid over
+   the picture. It sits under the text (z-index 5) and over the plate. */
+.film-fog{
+  position:absolute;left:0;right:0;bottom:0;
+  height:38%;
+  z-index:5;pointer-events:none;
+  background:
+    /* a wider, fainter pool centred low — the bloom */
+    radial-gradient(120% 100% at 50% 118%,
+      rgba(0,0,0,.52) 0%, rgba(0,0,0,.30) 38%,
+      rgba(0,0,0,.10) 66%, transparent 100%),
+    /* and a gentle lift off the very bottom edge */
+    linear-gradient(to top,
+      rgba(0,0,0,.42) 0%, rgba(0,0,0,.20) 30%,
+      rgba(0,0,0,.06) 62%, transparent 100%);
+}
+body.night .film-fog{ opacity:.82 }   /* the room is already dark */
+
 /* ── GATE · frame counter and title, set like a slide mount ───────────── */
 .film-gate{
   position:absolute;left:20px;bottom:18px;z-index:6;
   display:flex;align-items:baseline;gap:12px;
   font-family:var(--ff-mono);font-size:9px;letter-spacing:.2em;
   text-transform:uppercase;
-  color:rgba(255,255,255,.66);
-  text-shadow:0 1px 3px rgba(0,0,0,.7);
+  color:rgba(255,255,255,.86);
+  text-shadow:0 1px 2px rgba(0,0,0,.55);
   pointer-events:none;
 }
-.film-no{ font-variant-numeric:tabular-nums;color:rgba(255,255,255,.82) }
+.film-no{ font-variant-numeric:tabular-nums;color:rgba(255,255,255,.96) }
 .film-title{
   font-family:var(--ff-mono);font-size:9px;letter-spacing:.14em;
-  text-transform:uppercase;color:rgba(255,255,255,.6);
+  text-transform:uppercase;color:rgba(255,255,255,.8);
 }
 
 /* ── ADVANCE · one discreet control, opposite the gate ────────────────── */
@@ -485,7 +616,7 @@ body.night .film-dust{ opacity:.24 }
   border-radius:999px;
   font-family:var(--ff-mono);font-size:8.5px;letter-spacing:.2em;
   text-transform:uppercase;color:rgba(255,255,255,.72);
-  opacity:0;transition:opacity 1.2s ease .6s, color .25s, border-color .25s;
+  opacity:0;transition:opacity 2.88s var(--ease-grad) 1.44s, color 0.6s, border-color 0.6s;
 }
 body.film-live:not(.in-zone) .film-advance{ opacity:1 }
 body.in-zone .film-advance{ opacity:0;pointer-events:none }
@@ -495,12 +626,15 @@ body.in-zone .film-advance{ opacity:0;pointer-events:none }
   box-shadow:0 0 0 1px #fff, 0 0 10px 2px rgba(255,255,255,.4) }
 
 /* The lamp dims for a beat as the carrier moves. */
-body.film-advancing .film-plate.on{ opacity:.06;transition:opacity .16s ease }
+body.film-advancing .film-plate.on{ opacity:.06;transition:opacity 0.38s var(--ease-grad) }
 
 @media (prefers-reduced-motion:reduce){
   .film-plate img{ animation:none }
-  body[data-decay] .film-plate img{ filter:none }
-  body[data-decay] .film-plate{ transform:none }
+  /* No drift at all when motion is reduced — the ramp is the effect. */
+  .film-plate img{ filter:saturate(1.06) contrast(1.04) brightness(.98) }
+  body.night .film-plate img{ filter:saturate(.94) contrast(1.12) brightness(.72) }
+  .film-plate{ transform:none }
+  .film-scan::after{ opacity:0 }
 }
 @media (max-width:600px){
   .film-title{ display:none }
@@ -542,23 +676,80 @@ body.in-zone .panel-brand .tag{color:var(--zink)}
 /* The prefix rides above the baseline of the wordmark it introduces. It is
    Lipstick, lowercase, and never scales below a legible size — the em-
    relative size is floored so it survives inside 13.5px body copy. */
+/* THE PREFIX. Written out — "[care of] TANNER", "[orbit of] ONE" — and set
+   as ordinary inline text ahead of the wordmark. No superscript, no
+   hanging, no Lipstick: at prefix scale the script was illegible and the
+   raised position collided with everything around it. Mono, bracketed and
+   tracked reads as an aside in every context, from a 13px paragraph to a
+   112px display line. */
 .mark{
-  font-family:var(--ff-serif);
-  font-weight:400;
+  font-family:var(--ff-mono);
+  font-weight:500;
+  font-style:normal;
+  font-size:max(10px, .38em);
+  letter-spacing:.10em;
   text-transform:lowercase;
-  font-size:max(13px, .52em);
-  line-height:0;
-  /* Exponent position: the prefix sits on the wordmark's cap line, its own
-     baseline raised so the glyphs occupy the upper corner — x², not x·. */
-  vertical-align:super;
-  position:relative;
-  top:-.06em;
-  letter-spacing:.01em;
-  margin-right:.16em;
-  -webkit-text-stroke:.3px currentColor;
-  paint-order:stroke fill;
+  opacity:.66;
   white-space:nowrap;
+  /* sits on the wordmark's own baseline; the small gap is the only spacing */
+  margin-right:.42em;
+  vertical-align:baseline;
 }
+/* ── IN A HEADING · stacked ───────────────────────────────────────────────
+   The bracket sits ON TOP of the wordmark, left-aligned to it, as a line of
+   its own — a label above a title, not a phrase running into it. Inline it
+   pushed the T and the O off the measure; stacked, the wordmark keeps the
+   margin and the prefix reads as annotation. */
+.zone-title .mark{
+  display:block;
+  margin:0 0 .1em 0;
+  font-size:max(11px, .15em);
+  letter-spacing:.16em;
+  opacity:.6;
+  line-height:1.1;
+}
+/* The wordmark begins its own line, so nothing sits beside the bracket. */
+.zone-title .wm{ display:block }
+
+/* NOT in a run-in heading. "The design practice — [care of] TANNER" is a
+   sentence with a name in it; stacking there would break one line into
+   three. The bracket stays inline and the name keeps the display cut. */
+.story-block h3 .mark{
+  display:inline;
+  font-size:max(10px, .42em);
+  letter-spacing:.08em;
+  margin-right:.34em;
+}
+
+.panel-brand .mark{ font-size:9px;letter-spacing:.10em;opacity:.62;margin-right:.34em }
+
+/* ── IN BODY COPY · no logo ───────────────────────────────────────────────
+   Inside a paragraph the heavy display cut is a signature dropped into a
+   sentence — it stops the line dead. In running text the names are just
+   words: body face, body weight, body size. The wordmark is reserved for
+   headings and the brand lockup, where it is actually a mark. */
+.zpara .wm, .zpara .mark,
+p .wm, p .mark,
+li .wm, li .mark,
+.zone-sub .wm, .zone-sub .mark,
+.intro-prose .wm, .intro-prose .mark,
+.pm-body .wm, .lo-body .wm{
+  font-family:inherit;
+  font-weight:inherit;
+  font-stretch:normal;
+  font-size:inherit;
+  letter-spacing:inherit;
+  line-height:inherit;
+  text-transform:none;
+  display:inline;
+}
+/* the bracket keeps only its tracking and its recessive tone */
+.zpara .mark, p .mark, li .mark, .zone-sub .mark, .intro-prose .mark{
+  letter-spacing:.06em;
+  opacity:.62;
+  margin-right:.3em;
+}
+
 .wm{font-family:var(--ff-head);font-weight:800;font-stretch:75%;letter-spacing:-.025em;text-transform:uppercase;line-height:.92}
 .panel-brand .mark{font-size:15px;color:var(--ink);align-self:baseline}
 .panel-brand .wm{font-size:20px;color:var(--ink);align-self:baseline}
@@ -587,13 +778,13 @@ body.in-zone .dn-icon{color:var(--zink)}
   border-radius:999px;
   border:1px solid currentColor;
   background:transparent;
-  transition:background-color .35s ease, box-shadow .25s;
+  transition:background-color 0.84s var(--ease-grad), box-shadow 0.6s;
 }
 .dn-thumb{
   position:absolute; top:2px; left:2px;
   width:12px; height:12px; border-radius:50%;
   background:currentColor;
-  transition:transform .35s cubic-bezier(.7,0,.3,1), background-color .35s;
+  transition:transform 0.84s cubic-bezier(.7,0,.3,1), background-color 0.84s;
 }
 /* Night: thumb slides right, track inverts to filled */
 body.night .dn-track{background:currentColor}
@@ -611,7 +802,7 @@ body.night.in-zone .dn-thumb{background:var(--zbg)}
   position:fixed;inset:0;z-index:8;
   width:100%;height:100%;
   overflow:visible;pointer-events:none;
-  transition:opacity .9s;
+  transition:opacity 2.16s;
 }
 body.in-zone .snake-svg{ opacity:.30 }
 .snake-svg text{
@@ -655,7 +846,7 @@ body.in-zone .zlabel{ color:var(--zink) }
     inset 0 2px 4px color-mix(in srgb, #000 26%, transparent),
     inset 0 -1px 0 color-mix(in srgb, #fff 30%, transparent),
     0 1px 0 color-mix(in srgb, #fff 22%, transparent);
-  transition:transform .5s cubic-bezier(.22,1,.36,1), box-shadow .3s;
+  transition:transform 1.2s cubic-bezier(.22,1,.36,1), box-shadow 0.72s;
 }
 body.night .zlabel .circ{
   background:color-mix(in srgb, currentColor 4%, transparent);
@@ -678,7 +869,7 @@ body.night .zlabel .circ{
   box-shadow:
     inset 0 3px 7px color-mix(in srgb, #000 44%, transparent),
     inset 0 -1px 0 color-mix(in srgb, #fff 20%, transparent);
-  transition:transform .16s cubic-bezier(.2,.9,.3,1.1), box-shadow .16s;
+  transition:transform 0.38s cubic-bezier(.2,.9,.3,1.1), box-shadow 0.38s;
 }
 .zlabel:focus-visible{ outline:none }
 .zlabel:focus-visible .circ{
@@ -696,7 +887,7 @@ body.night .zlabel .circ{
   color:currentColor;
   white-space:nowrap;
   opacity:0;pointer-events:none;
-  transition:opacity .25s, transform .25s;
+  transition:opacity 0.6s, transform 0.6s;
   padding:0 8px;
 }
 .zlabel:hover .tip,
@@ -728,7 +919,7 @@ body.in-zone .zlabel.return{ opacity:1;pointer-events:auto;visibility:visible;z-
 .mf-scrim{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;
   background:color-mix(in srgb,var(--zbg) 46%, transparent);
   -webkit-backdrop-filter:blur(9px) saturate(1.04);backdrop-filter:blur(9px) saturate(1.04);
-  padding:6% 7%;opacity:0;transition:opacity .4s ease;}
+  padding:6% 7%;opacity:0;transition:opacity 0.96s var(--ease-grad);}
 .mf-scrim.on{display:flex;opacity:1;}
 .mf-panel{position:relative;width:min(640px,94vw);max-height:84%;overflow:hidden;
   display:flex;flex-direction:column;
@@ -739,7 +930,7 @@ body.in-zone .zlabel.return{ opacity:1;pointer-events:auto;visibility:visible;z-
   padding:0;border-radius:var(--frame-radius);
   /* Body is a clean, READABLE serif. gratia (the calligraphic display face)
      is reserved for the single neogothic drop cap + the signature. */
-  font-family:Georgia,"Times New Roman",serif;transform:translateY(14px);transition:transform .4s ease;}
+  font-family:Georgia,"Times New Roman",serif;transform:translateY(14px);transition:transform 0.96s var(--ease-grad);}
 .mf-scrim.on .mf-panel{transform:none;}
 .mf-panel .modal-body{padding:46px clamp(24px,5vw,52px) 52px}
 .mf-kicker{font-family:var(--ff-mono,ui-monospace,monospace);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:color-mix(in srgb,var(--zink) 60%, transparent);margin:0 0 6px;}
@@ -771,23 +962,111 @@ body.in-zone .zlabel.return{ opacity:1;pointer-events:auto;visibility:visible;z-
    come from a seeded shuffle in writeOn(), so it never reads as a font.
    ═══════════════════════════════════════════════════════════════════════════ */
 :root{
-  /* Waxy pigment. rgb(255 42 42) — the specified red. */
-  --lipstick:rgb(255 42 42);
-  --lipstick-lo:rgb(176 22 30);
+  /* CHERRY. The point is the wax, not the contrast — this is lipstick, and
+     it should read as pigment laid on glass. The dark bed and light edge in
+     .enter-cue are what carry it over a busy plate; the hue does not have
+     to fight for legibility on its own. */
+  --lipstick:#D8102F;        /* cherry */
+  --lipstick-lo:#6B0417;     /* the bed it sits in */
+  --lipstick-lift:#FF6B7E;   /* the wet highlight along the top edge */
 }
 body.night{
-  --lipstick:rgb(255 62 62);
-  --lipstick-lo:rgb(150 16 24);
+  --lipstick:#FF2340;
+  --lipstick-lo:#59030F;
+  --lipstick-lift:#FF97A6;
 }
 
 .landing{
   position:absolute;inset:0;z-index:9;
   pointer-events:none;
-  opacity:1;transition:opacity 1s;
+  opacity:1;transition:opacity 2.4s;
 }
 body.in-zone .landing{ opacity:0;pointer-events:none!important }
 
 /* OFF-CENTRE, ON A SLANT. Sits left of middle and rides up to the right. */
+/* ── STEAM · the condensation the writing is drawn in ─────────────────────
+   The landing type is drawn ON the glass, and the glass is fogged. This is
+   a permanent semi-translucent layer between the photograph and the
+   writing — never absent, so the type never has to survive a bare plate.
+   It is what makes the copy legible over 43 different photographs without
+   tuning the colour to any of them.
+
+   Sits at z-index 9, directly under .enter-cue (10) and above the film. */
+.steam{
+  position:absolute;inset:0;z-index:9;pointer-events:none;
+  /* Denser where the writing is, thinning toward the frame — so it reads
+     as breath on glass rather than a flat scrim dropped over the picture. */
+  background:
+    radial-gradient(78% 62% at 50% 48%,
+      color-mix(in srgb, var(--steam-tint) 82%, transparent) 0%,
+      color-mix(in srgb, var(--steam-tint) 62%, transparent) 42%,
+      color-mix(in srgb, var(--steam-tint) 26%, transparent) 74%,
+      transparent 100%);
+  /* The blur is on THIS box and this box never moves. Animating the
+     transform of a backdrop-filtered element makes the compositor re-blur
+     the entire panel every frame — on iOS that alone can stall the first
+     paint. The drift lives on the pseudo-element below, which carries no
+     filter, so the expensive layer is computed once and cached. */
+  -webkit-backdrop-filter:blur(5px) saturate(.88);
+          backdrop-filter:blur(5px) saturate(.88);
+  transform:translateZ(0);
+}
+.steam::after{
+  content:"";position:absolute;inset:-6%;
+  background:inherit;
+  animation:steamDrift 63s ease-in-out infinite alternate;
+  will-change:transform;
+}
+body{ --steam-tint:#F2EFE8 }
+body.night{ --steam-tint:#0C0A14 }
+@keyframes steamDrift{
+  from{ transform:translate(-1.6%,-1.1%) scale(1.04) }
+  to  { transform:translate( 1.6%, 1.1%) scale(1.10) }
+}
+/* Inside a zone the screen is off — no steam over the content. */
+body.in-zone .steam{ opacity:0;transition:opacity 1.92s }
+
+/* ── EVAPORATION ──────────────────────────────────────────────────────────
+   Once the message has been read, both it and the fog thin away until the
+   photograph is the only thing on the panel — the landing becomes a
+   wallpaper rather than a title card. Slow enough (CUE_FADE) that it reads
+   as condensation lifting, not as an element being hidden. Any interaction
+   calls recondense() and it comes back. */
+/* Condensation does not dim uniformly — it THINS, opening from the middle
+   outward while the corners hold last. Fading opacity alone was the problem:
+   the whole plane went evenly translucent and read as a layer being switched
+   off. A mask whose clear centre grows gives the fog somewhere to go. */
+@property --evap{ syntax:'<percentage>'; inherits:false; initial-value:0% }
+.steam{
+  --evap:0%;
+  -webkit-mask-image:radial-gradient(120% 110% at 50% 46%,
+    transparent 0%,
+    transparent var(--evap),
+    #000 calc(var(--evap) + 34%),
+    #000 100%);
+          mask-image:radial-gradient(120% 110% at 50% 46%,
+    transparent 0%,
+    transparent var(--evap),
+    #000 calc(var(--evap) + 34%),
+    #000 100%);
+  transition:opacity 2.6s var(--ease-grad), --evap 2.6s var(--ease-grad);
+}
+body.evaporated .steam{
+  --evap:132%;
+  opacity:0;
+  /* the mask leads, the opacity follows — it thins before it leaves */
+  transition:--evap 9s cubic-bezier(.32,0,.5,1),
+             opacity 9s cubic-bezier(.62,0,.86,1) 1.6s;
+}
+body.evaporated .enter-cue{
+  opacity:0;
+  filter:blur(2px);
+  transition:opacity 9s cubic-bezier(.45,0,.7,1), filter 9s var(--ease-grad);
+}
+/* Coming back is quicker than going — a breath on the glass. */
+.enter-cue{ transition:opacity 2.64s var(--ease-grad), filter 2.64s var(--ease-grad) }
+@media (prefers-reduced-motion:reduce){ .steam{ animation:none } }
+
 .enter-cue{
   position:absolute;
   left:50%; top:49%;
@@ -798,89 +1077,100 @@ body.in-zone .landing{ opacity:0;pointer-events:none!important }
   text-align:center;
   font-family:var(--ff-serif);
   color:var(--lipstick);
-  /* LIPSTICK ships one weight. Stroke is how the wax gets its body —
-     sized in em so it scales with whatever line it is drawn on. */
-  -webkit-text-stroke:0.019em currentColor;
-  paint-order:stroke fill;
-  /* the wax: a soft bloom of pigment, and a smear of it under the stroke */
+  /* NO text-stroke. It miters its joins, and on a script face every place
+     two strokes meet at a shallow angle the miter runs out to a point —
+     those are the triangles. There is no join-style control for
+     -webkit-text-stroke, so weight comes from offset copies instead: eight
+     around the compass, each following the glyph's own outline, which
+     cannot spike. --ink-weight is the single dial. */
+  --ink-weight:.022em;
   text-shadow:
-    0 0 1px color-mix(in srgb, var(--lipstick) 70%, transparent),
-    0 0 14px color-mix(in srgb, var(--lipstick) 45%, transparent),
-    1px 2px 0 color-mix(in srgb, var(--lipstick-lo) 55%, transparent),
-    0 2px 18px rgba(0,0,0,.4);
+    /* the body — eight offsets ring the glyph and read as one thicker stroke */
+     var(--ink-weight) 0 0 currentColor,
+    calc(var(--ink-weight) * -1) 0 0 currentColor,
+    0  var(--ink-weight) 0 currentColor,
+    0 calc(var(--ink-weight) * -1) 0 currentColor,
+    calc(var(--ink-weight) *  .7) calc(var(--ink-weight) *  .7) 0 currentColor,
+    calc(var(--ink-weight) * -.7) calc(var(--ink-weight) *  .7) 0 currentColor,
+    calc(var(--ink-weight) *  .7) calc(var(--ink-weight) * -.7) 0 currentColor,
+    calc(var(--ink-weight) * -.7) calc(var(--ink-weight) * -.7) 0 currentColor,
+    /* the wet edge above, the bed below, and a little lift off the plate */
+    0 -1px 0 color-mix(in srgb, var(--lipstick-lift) 62%, transparent),
+    0 2px 0  color-mix(in srgb, var(--lipstick-lo)   88%, transparent),
+    0 3px 12px rgba(0,0,0,.5);
 }
 @media (max-width:700px){
   .enter-cue{ width:92%;transform:translate(-50%,-50%) rotate(-3deg) }
 }
 
-/* ── THE STROKE ───────────────────────────────────────────────────────────
-   Each character is masked by a diagonal gradient parked off to the right.
-   Animating mask-position drags it across the glyph — the pigment arrives
-   in one pass, leading edge soft, the way a wax stick actually lays down. */
+/* ── THE HAND ─────────────────────────────────────────────────────────────
+   Stripped back to one idea: a letter is either written or it is not there.
+   The old version stacked a travelling gradient mask, a per-glyph rotation,
+   a vertical jog and a random opacity on every character — four effects
+   fighting each other, which is why it read as noise rather than as
+   writing. Now each glyph simply appears, held a beat behind the last.
+
+   The pace is the effect. At CH_STAGGER the letters land at roughly the
+   speed of a hand moving across glass, not a terminal printing. */
 .enter-cue .ch{
   display:inline-block;
-  -webkit-mask-image:linear-gradient(100deg,
-    #000 0%, #000 42%, rgba(0,0,0,.55) 58%, rgba(0,0,0,.12) 68%, transparent 78%);
-          mask-image:linear-gradient(100deg,
-    #000 0%, #000 42%, rgba(0,0,0,.55) 58%, rgba(0,0,0,.12) 68%, transparent 78%);
-  -webkit-mask-size:320% 100%;  mask-size:320% 100%;
-  -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
-  -webkit-mask-position:118% 0;  mask-position:118% 0;
-  /* hand jitter — set per character by writeOn() */
-  transform:rotate(var(--r,0deg)) translateY(var(--y,0px));
-  opacity:var(--o,1);
+  opacity:0;
+  /* a hair of settle as each letter lands — the only flourish left */
+  transform:translateY(.06em);
 }
 body.writing .enter-cue .ch{
-  animation:lipstickStroke .62s cubic-bezier(.35,.6,.4,1) forwards;
-  animation-delay:calc(var(--i,0) * 88ms);
+  animation:handWrite .34s cubic-bezier(.2,.7,.3,1) forwards;
+  animation-delay:calc(var(--i,0) * var(--ch-stagger, 118ms));
 }
-@keyframes lipstickStroke{
-  from{ -webkit-mask-position:118% 0; mask-position:118% 0 }
-  to  { -webkit-mask-position:0% 0;   mask-position:0% 0 }
+@keyframes handWrite{
+  from{ opacity:0; transform:translateY(.06em) }
+  to  { opacity:1; transform:none }
 }
 /* Once the message is finished, drop the masks so the compositor is free. */
 body.written .enter-cue .ch{
   animation:none!important;
-  -webkit-mask-image:none;mask-image:none;
+  opacity:1;transform:none;
 }
 /* Words are the wrap unit, so lines never break mid-word. */
 .enter-cue .w{ display:inline-block;white-space:nowrap }
 
 .enter-cue .h{
-  font-size:clamp(42px,6.6vw,92px);
-  line-height:1.1;letter-spacing:.004em;
-  -webkit-text-stroke:0.026em currentColor;
+  font-size:clamp(52px,7.8vw,112px);
+  line-height:1.08;letter-spacing:.004em;
+  --ink-weight:.024em;
 }
 /* "orbit of ONE" — the phrase she leans on, written largest. */
 .enter-cue .sig{
   font-size:1.3em;
   line-height:.94;
-  -webkit-text-stroke:0.03em currentColor;
+  --ink-weight:.026em;
+  /* the cue's eight-way weight already covers this — drop the .sig pair */
+  text-shadow:inherit;
 }
 .enter-cue .h2{
   display:block;margin-top:18px;
-  font-size:clamp(24px,3.3vw,44px);
-  line-height:1.26;
-  -webkit-text-stroke:0.02em currentColor;
+  font-size:clamp(30px,4.1vw,56px);
+  line-height:1.22;
+  --ink-weight:.020em;
   color:color-mix(in srgb, var(--lipstick) 88%, #fff);
 }
 .enter-cue .intro-prose{
-  font-size:clamp(21px,2.7vw,36px);
-  line-height:1.34;
+  font-size:clamp(25px,3.2vw,42px);
+  line-height:1.32;
   margin:34px auto 0;max-width:22ch;
-  -webkit-text-stroke:0.019em currentColor;
-  color:color-mix(in srgb, var(--lipstick) 92%, #fff);
+  --ink-weight:.018em;
+  color:color-mix(in srgb, var(--lipstick) 82%, #fff);
 }
-.enter-cue .intro-prose em{ font-style:normal;color:#FFF1F2 }
+.enter-cue .intro-prose em{ font-style:normal;color:var(--lipstick-lift) }
 .enter-cue .intro-welcome{
-  font-size:clamp(19px,2.3vw,30px);
+  font-size:clamp(22px,2.7vw,34px);
   margin-top:30px;
-  -webkit-text-stroke:0.018em currentColor;
-  color:color-mix(in srgb, var(--lipstick) 80%, #fff);
+  --ink-weight:.017em;
+  color:color-mix(in srgb, var(--lipstick) 74%, #fff);
 }
 
 @media (prefers-reduced-motion:reduce){
-  .enter-cue .ch{ -webkit-mask-image:none;mask-image:none;transform:none;opacity:1 }
+  .enter-cue .ch{ opacity:1;transform:none }
   body.writing .enter-cue .ch{ animation:none }
 }
 
@@ -898,12 +1188,15 @@ body.written .enter-cue .ch{
   -webkit-backdrop-filter:blur(18px) saturate(.9);
           backdrop-filter:blur(18px) saturate(.9);
   cursor:pointer;
-  transition:opacity .9s ease, backdrop-filter .9s ease;
+  /* opacity only — transitioning backdrop-filter re-blurs every frame */
+  transition:opacity 2.16s var(--ease-grad);
 }
 body.night .keys-intro{ background:color-mix(in srgb, #0B0A16 88%, transparent) }
 body.keys-done .keys-intro{
   opacity:0;pointer-events:none;
-  -webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);
+  /* dropped from the compositor entirely once it has faded */
+  visibility:hidden;
+  transition:opacity 2.16s var(--ease-grad), visibility 0s linear 2.16s;
 }
 
 .ki-eyebrow{
@@ -977,7 +1270,7 @@ body.night .ki-key kbd{
 /* ════════════════════════════════════════════════════════════════
    ZONES
 ════════════════════════════════════════════════════════════════ */
-.zone{position:absolute;inset:0;z-index:10;opacity:0;pointer-events:none;display:flex;flex-direction:column;transition:opacity 1.1s;border-radius:var(--fillet-frame);overflow:hidden;clip-path:inset(0 round var(--fillet-frame))}
+.zone{position:absolute;inset:0;z-index:10;opacity:0;pointer-events:none;display:flex;flex-direction:column;transition:opacity 2.64s;border-radius:var(--fillet-frame);overflow:hidden;clip-path:inset(0 round var(--fillet-frame))}
 body.in-zone .zone.active{opacity:1;pointer-events:auto}
 
 /* The zone-content has reserved padding so it can't overlap with the
@@ -1015,7 +1308,13 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
 .zone-title{
   font-family:var(--ff-head);font-weight:900;font-stretch:75%;
   font-size:clamp(52px,9.5vw,120px);line-height:.86;letter-spacing:-.03em;
-  color:var(--zink);margin-top:6px;display:flex;align-items:baseline;gap:.04em;
+  color:var(--zink);margin-top:6px;
+  /* STACKED. This was display:flex with align-items:baseline, which laid
+     the bracket and the wordmark out side by side as flex items — setting
+     display:block on the children did nothing, because flex items are
+     blockified anyway and stay in the row. A column is what actually
+     stacks them, and align-items:start keeps both flush to the measure. */
+  display:flex;flex-direction:column;align-items:flex-start;gap:0;
   text-transform:uppercase;
 }
 .zone-title .wm{font-weight:900;font-stretch:75%}
@@ -1037,7 +1336,7 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
   padding:12px 22px 12px 0;margin-right:24px;
   border-bottom:2px solid transparent;
   min-height:var(--hit);
-  transition:color .2s,border-color .2s;
+  transition:color 0.48s,border-color 0.48s;
 }
 .tabs-row button.on{color:var(--zink);border-bottom-color:var(--zink)}
 .tabs-row button:hover{color:var(--zink)}
@@ -1050,6 +1349,36 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
   color:var(--zink);margin-bottom:8px;
 }
 .footnotes{list-style:none;margin:0;padding:0}
+/* The manifesto's six imperatives, set in the zone's own idiom — numbered
+   in the accent, the way the footnotes and project tiles are. */
+.mf-imperatives{
+  list-style:none;margin:18px 0 0;padding:0;
+  counter-reset:imp;
+  display:grid;gap:12px;
+}
+.mf-imperatives li{
+  counter-increment:imp;
+  position:relative;
+  padding-left:34px;
+  font-size:13.5px;line-height:1.62;
+  color:color-mix(in srgb, var(--zink) 88%, transparent);
+}
+.mf-imperatives li::before{
+  content:counter(imp,decimal-leading-zero);
+  position:absolute;left:0;top:.18em;
+  font-family:var(--ff-mono);font-size:10px;letter-spacing:.14em;
+  color:var(--zglow);
+}
+.tab-pane .mf-sign{
+  font-family:var(--ff-serif);font-size:26px;line-height:1;
+  text-align:right;margin-top:26px;color:var(--zink);
+}
+.tab-pane .mf-refs{
+  font-size:11px;line-height:1.7;
+  color:color-mix(in srgb, var(--zink) 58%, transparent);
+  border-top:1px solid color-mix(in srgb, var(--zink) 14%, transparent);
+  padding-top:12px;margin-top:16px;
+}
 .story-block h4{
   font-family:var(--ff-ui);font-weight:600;font-size:11px;letter-spacing:.16em;text-transform:uppercase;
   color:color-mix(in srgb,var(--zink) 70%, transparent);margin-top:18px;margin-bottom:8px;
@@ -1081,7 +1410,7 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
   background:color-mix(in srgb, var(--zbg) 34%, transparent);
   border:1px solid color-mix(in srgb, var(--zglow) 46%, transparent);
   -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
-  transition:transform .16s cubic-bezier(.2,.85,.3,1.1), filter .3s, border-color .25s;
+  transition:transform 0.38s cubic-bezier(.2,.85,.3,1.1), filter 0.72s, border-color 0.6s;
 }
 /* Halftone print overlay — the same texture every tile on the site carries. */
 .zproj::after{
@@ -1163,7 +1492,7 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
   display:block;
   cursor:pointer;
   min-height:var(--hit);
-  transition:transform .4s cubic-bezier(.2,.8,.3,1);
+  transition:transform 0.96s cubic-bezier(.2,.8,.3,1);
 }
 .wt:hover{transform:translateY(-5px) scale(1.015)}
 .wt.size-1x1{grid-column:span 1;grid-row:span 1}
@@ -1220,7 +1549,7 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
 .wt-blurb{font-family:var(--ff-mono);font-size:11px;line-height:1.45;color:rgba(255,255,255,.8);max-width:280px}
 .wt-price{font-family:var(--ff-mono);font-size:11px;color:var(--led);font-weight:600;margin-top:6px}
 /* ↗ glyph only on external-link tiles */
-.wt-arrow{position:absolute;top:11px;right:12px;font-family:var(--ff-head);font-size:15px;color:var(--led-dim);transition:transform .25s, color .25s;z-index:4;opacity:0}
+.wt-arrow{position:absolute;top:11px;right:12px;font-family:var(--ff-head);font-size:15px;color:var(--led-dim);transition:transform 0.6s, color 0.6s;z-index:4;opacity:0}
 
 .wt.is-link .wt-arrow{opacity:.9}
 .wt.is-link:hover .wt-arrow{transform:translate(3px,-3px);color:#fff}
@@ -1261,7 +1590,7 @@ body.in-zone .zone.active{opacity:1;pointer-events:auto}
   cursor:pointer;overflow:hidden;
   border-radius:var(--frame-radius);
   -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
-  transition:box-shadow .25s, filter .3s, transform .16s cubic-bezier(.2,.85,.3,1.1), opacity .3s;
+  transition:box-shadow 0.6s, filter 0.72s, transform 0.38s cubic-bezier(.2,.85,.3,1.1), opacity 0.72s;
   /* relation tokens — set per category below */
   --led:var(--zglow);
   --led-dim:color-mix(in srgb, var(--zglow) 50%, var(--zdeep, var(--zglow)));
@@ -1356,17 +1685,23 @@ FILTER DRAWER — collapsible overlay at top of log zone
 /* ════════════════════════════════════════════════════════════════
    DENSITY FOOTER STRIP — full panel width, persistent across log views
 ════════════════════════════════════════════════════════════════ */
+.log-grid{ padding-bottom:calc(36px + var(--x) + 14px) }
 .log-density-strip{
   position:absolute;
-  bottom:0;left:0;right:0;
+  /* A strip floating in the footer, inset from the frame on all three
+     sides by the same gutter the rest of the panel uses — not a bar welded
+     to the bottom edge. */
+  left:var(--x);right:var(--x);bottom:var(--x);
   height:36px;
-  display:flex;align-items:center;
-  padding:0 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 14px;
   gap:0;
-  background:color-mix(in srgb, var(--zbg) 75%, #000 25%);
-  border-top:1px solid color-mix(in srgb,var(--zink) 14%, transparent);
-  border-bottom-left-radius:var(--fillet-frame);
-  border-bottom-right-radius:var(--fillet-frame);
+  background:color-mix(in srgb, var(--zbg) 82%, #000 18%);
+  -webkit-backdrop-filter:blur(10px) saturate(1.1);
+          backdrop-filter:blur(10px) saturate(1.1);
+  border:1px solid color-mix(in srgb,var(--zink) 16%, transparent);
+  border-radius:999px;
+  box-shadow:0 6px 22px -8px rgba(0,0,0,.5);
   z-index:26;
 }
 .lds-item{
@@ -1378,7 +1713,7 @@ FILTER DRAWER — collapsible overlay at top of log zone
   font-family:var(--ff-ui);font-weight:600;font-size:9px;letter-spacing:.18em;
   text-transform:uppercase;
   color:color-mix(in srgb,var(--zink) 60%, transparent);
-  transition:color .25s;
+  transition:color 0.6s;
 }
 .lds-item:hover{color:var(--zink)}
 .lds-item.hot{color:var(--zink)}
@@ -1394,7 +1729,8 @@ FILTER DRAWER — collapsible overlay at top of log zone
 .lds-item[data-cat="sensation"].ldot.f{background:#FF5046}
 .lds-item:focus-visible{outline:none;box-shadow:inset 0 0 0 1px var(--zink)}
 @media (max-width:560px){
-  .log-density-strip{padding:0 14px;gap:0;height:32px}
+  .log-density-strip{padding:0 10px;gap:0;height:32px;left:12px;right:12px;bottom:12px}
+  .log-grid{ padding-bottom:calc(32px + 12px + 14px) }
   .lds-item{font-size:8.5px;letter-spacing:.12em;gap:8px;padding:0 4px}
 }
 
@@ -1412,7 +1748,7 @@ FILTER DRAWER — collapsible overlay at top of log zone
   min-height:var(--hit);
   box-shadow:var(--frame-shadow);
   overflow:hidden;
-  transition:transform .2s, opacity .25s, background .25s, border-color .25s;
+  transition:transform 0.48s, opacity 0.6s, background 0.6s, border-color 0.6s;
 }
 .log-fab::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
   background-image:radial-gradient(rgba(255,255,255,.5) .7px, transparent .8px);background-size:5px 5px;opacity:.10;mix-blend-mode:overlay}
@@ -1438,7 +1774,7 @@ body.lc-open .log-fab{opacity:0;pointer-events:none;transform:translateY(8px)}
   opacity:0;pointer-events:none;
   transform:translateY(20px) scale(.985);
   transform-origin:bottom right;
-  transition:opacity .35s, transform .35s cubic-bezier(.2,.7,.25,1.1);
+  transition:opacity 0.84s, transform 0.84s cubic-bezier(.2,.7,.25,1.1);
 }
 .log-composer::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
   background-image:radial-gradient(rgba(255,255,255,.45) .7px, transparent .8px);background-size:5px 5px;opacity:.06;mix-blend-mode:overlay}
@@ -1446,7 +1782,7 @@ body.lc-open .log-fab{opacity:0;pointer-events:none;transform:translateY(8px)}
 body.lc-open .log-composer{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
 .lc-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px}
 .lc-eyebrow{font-family:var(--ff-ui);font-weight:600;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--zglow)}
-.lc-close{background:none;border:none;cursor:pointer;width:var(--hit);height:var(--hit);font-family:var(--ff-mono);font-size:22px;line-height:1;color:color-mix(in srgb,var(--zink) 70%, transparent);transition:color .2s, transform .2s;display:inline-flex;align-items:center;justify-content:center}
+.lc-close{background:none;border:none;cursor:pointer;width:var(--hit);height:var(--hit);font-family:var(--ff-mono);font-size:22px;line-height:1;color:color-mix(in srgb,var(--zink) 70%, transparent);transition:color 0.48s, transform 0.48s;display:inline-flex;align-items:center;justify-content:center}
 .lc-close:hover{color:var(--zink);transform:rotate(90deg)}
 .lc-sub{font-family:var(--ff-redaction-it);font-style:italic;font-size:13.5px;color:color-mix(in srgb,var(--zink) 80%, transparent);margin:6px 0 14px}
 
@@ -1466,7 +1802,7 @@ body.lc-open .log-composer{opacity:1;pointer-events:auto;transform:translateY(0)
   width:100%; min-height:var(--hit);
   border-radius:0;
   -webkit-appearance:none; appearance:none;
-  transition:border-color .2s;
+  transition:border-color 0.48s;
 }
 .zform input::placeholder,
 .zform textarea::placeholder{color:color-mix(in srgb,var(--zink) 50%, transparent)}
@@ -1480,7 +1816,7 @@ body.lc-open .log-composer{opacity:1;pointer-events:auto;transform:translateY(0)
   width:6px;height:6px;border-radius:50%;
   background:var(--zglow);
   opacity:.9;
-  transition:opacity .25s;
+  transition:opacity 0.6s;
   pointer-events:none;
 }
 .zform .field[data-required="true"][data-filled="true"]::before{opacity:0}
@@ -1489,7 +1825,7 @@ body.lc-open .log-composer{opacity:1;pointer-events:auto;transform:translateY(0)
   border:1px solid var(--zink);color:var(--zink);
   font-family:var(--ff-ui);font-weight:500;font-size:10.5px;letter-spacing:.10em;text-transform:uppercase;
   padding:10px 20px;min-height:var(--hit);
-  transition:background .25s, color .25s;
+  transition:background 0.6s, color 0.6s;
 }
 .zform button:hover{background:var(--zink);color:var(--zbg)}
 
@@ -1530,7 +1866,7 @@ body.night:not(.in-zone){
    language to touch, everywhere in-zone. */
 
 .log-fab,
-.lds-item{ transition:color .2s, border-color .2s, background .2s, box-shadow .2s, transform .16s cubic-bezier(.2,.85,.3,1.1); }
+.lds-item{ transition:color 0.48s, border-color 0.48s, background 0.48s, box-shadow 0.48s, transform 0.38s cubic-bezier(.2,.85,.3,1.1); }
 
 .log-fab:active{ transform:scale(.95) }
 .lds-item:active{ transform:scale(.93) }
@@ -1546,7 +1882,7 @@ body.night:not(.in-zone){
 .wm-card .wm-kind{font-family:var(--ff-ui);font-weight:500;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:color-mix(in srgb,var(--zink) 70%, transparent);margin-bottom:8px}
 .wm-card .wm-title{font-family:var(--ff-head);font-weight:700;font-size:28px;line-height:1.05;letter-spacing:-.015em;color:var(--zink);margin-bottom:14px}
 .wm-card .wm-blurb{font-family:var(--ff-mono);font-size:13px;line-height:1.6;color:color-mix(in srgb,var(--zink) 88%, transparent);margin-bottom:20px}
-.wm-card .wm-visit{display:inline-flex;align-items:center;gap:8px;background:var(--zink);color:var(--zbg);text-decoration:none;border:none;font-family:var(--ff-ui);font-weight:500;font-size:11px;letter-spacing:.10em;text-transform:uppercase;padding:12px 22px;min-height:var(--hit);cursor:pointer;border-radius:var(--fillet-inset);transition:transform .2s}
+.wm-card .wm-visit{display:inline-flex;align-items:center;gap:8px;background:var(--zink);color:var(--zbg);text-decoration:none;border:none;font-family:var(--ff-ui);font-weight:500;font-size:11px;letter-spacing:.10em;text-transform:uppercase;padding:12px 22px;min-height:var(--hit);cursor:pointer;border-radius:var(--fillet-inset);transition:transform 0.48s}
 .wm-card .wm-visit:hover{transform:translateY(-2px)}
 
 /* Project detail modal */
@@ -1629,7 +1965,8 @@ body.night:not(.in-zone) .pm-card{
   <div class="landing" id="landing">
     <div class="enter-cue intro-text">
       <div class="h">a world is an <span class="sig">orbit of ONE</span>.<br><span class="h2">a body is a mark between a world within and one beyond.</span></div>
-      <div class="intro-prose">TANNER is a design practice; a <em>namesake</em> placemaking the in-between.</div>
+      <div class="intro-prose"><span data-mark="C"></span><span class="wm">TANNER</span> is a design practice;<br>
+        a <em>namesake</em> placemaking the in-between.</div>
       <div class="intro-welcome">welcome to my orbit</div>
     </div>
   </div>
@@ -1689,12 +2026,12 @@ body.night:not(.in-zone) .pm-card{
           </div>
           <div class="story-block">
             <h3>The design practice — <span data-mark="C"></span><span class="wm">TANNER</span></h3>
-            <p class="zpara"><em><span data-mark="C"></span><span class="wm">TANNER</span></em> is the design studio inside <span data-mark="O"></span><span class="wm">ONE</span>. Architecture, interiors, and visual systems. Where ONE is the editorial side, TANNER is where the work gets made<sup>3</sup>.</p>
+            <p class="zpara"><em><span data-mark="C"></span><span class="wm">TANNER</span></em> is the design studio inside <span data-mark="O"></span><span class="wm">ONE</span>. Architecture, interiors, and visual systems. Where <span data-mark="O"></span><span class="wm">ONE</span> is the editorial side, <span data-mark="C"></span><span class="wm">TANNER</span> is where the work gets made<sup>3</sup>.</p>
           </div>
           <ol class="footnotes">
             <li><span class="fn-n">1</span> in itself — the work as an object.</li>
             <li><span class="fn-n">2</span> in orbit — the work in its context.</li>
-            <li><span class="fn-n">3</span> ONE is the brand; TANNER is the practice.</li>
+            <li><span class="fn-n">3</span> <span data-mark="O"></span><span class="wm">ONE</span> is the brand; <span data-mark="C"></span><span class="wm">TANNER</span> is the practice.</li>
           </ol>
         </section>
       </div>
@@ -1704,8 +2041,27 @@ body.night:not(.in-zone) .pm-card{
         <section class="zsec">
           <div class="story-block">
             <h3>Home as Possibility</h3>
-            <p class="zpara manifesto-cue">Written December 2021. On the closet, the bedroom and the house as nested layers, and on <em>&ldquo;an understanding of home as the overwhelming, all-encompassing emotion of arrival.&rdquo;</em></p>
-            <p class="zpara"><button type="button" class="manifesto-link" onclick="openManifesto()">Read the manifesto</button></p>
+            <p class="zpara">I write this with an acknowledgment of my privilege as both a white gay male within the Queer community and as someone that has always had a shelter over their head. I write this from the perspective of having grown up with a single mother raising two children, from having watched her make sacrificial life decisions in order to keep us within a dwelling, from having relocated so many times that growth was never to be held in one place. I know that, because of this, I walk with both an inability to settle and an understanding of home as the overwhelming, all-encompassing emotion of arrival.</p>
+            <p class="zpara">We choose to adhere to traditions of the past as our rate of change increases exponentially. We&rsquo;re taught Monopoly in order to play the game of capitalism. We clothe our bodies with the market as if it is embedded within our DNA. We assume wealth is interchangeable with value. We accept fiction as fact. We find meaning in that which we orient ourselves to. For those of us born into a world disoriented, it is in our reorientation that greater truths emerge. The reorientation process is a hunt for meaning and quest for acceptance. To consider existence is to consider the inevitable opposite: not existing. The greatest fear and truth does not discriminate; we do. Finding purpose through Queer existentialism requires coveting the sacredly-private on while we hunt and forge towards our own liberating publics. The closeted Queer body is perceived to be in a constant surveillance state of most private and most public, where heightened are performances of harsh stoicism and supercharged eruption.</p>
+            <p class="zpara">Consider the closet: a room, ubiquitously understood, embedded with spatial implications. To come out of the closet is to shed the first layer of a thickened skin. Delayering the Queer body is non-linear and lifelong; it is a constant shedding of skins at varying intervals dictated by a spectrum of climate conditions one must snake through on their quest for home. &ldquo;Coming out&rdquo; does not rid the closet of what&rsquo;s inside, nor does it imply that layers once worn can&rsquo;t be put back on. The Queer body is Bachelard&rsquo;s casket; delayering (coming out) breaks the dialectics of inside and outside; the most private and most public become one.</p>
+            <p class="zpara">Consider the house: a collection of rooms, one being a bedroom encompassing a closet. If the closet is acceptance within one&rsquo;s skin, the bedroom is acceptance within one&rsquo;s space, becoming the second most sacred layer. Now we have two layers that one must come out from, each bound by four walls, each with spatial implications, one within the other as a nesting doll.</p>
+            <p class="zpara">Consider the home: a collection of rooms, one being a bedroom encompassing a closet. In leaving the bedroom, one may walk down the corridor, through the living room, and make a stop in the kitchen before they are able to freely exit; each additional volume within this navigational sequence, too, has its own spatial implications. To feel at home is to know the ease of navigating these layers as one; to have a house is to know the boundaries that define them.</p>
+            <p class="zpara">Home is an association of place, an unbound, non-physical ideological condition of security that begins with finding comfort in one&rsquo;s skin; for the Queer body, home is first, quite literally, where the heart is.</p>
+          </div>
+          <div class="story-block">
+            <h3>On How to Design for the Possibility of Home</h3>
+          </div>
+          <ol class="mf-imperatives">
+            <li><b>Be the casket.</b> Make an unimpeachable case that foregrounds your being within a logical operation.</li>
+            <li><b>Unlearn conventions of domesticity</b> embedded in the patriarchal dwelling; consider alternative methods of residence that prioritize identities over formal precedent.</li>
+            <li><b>Design one sacred room</b> with the affect of the first time, every time.</li>
+            <li><b>Layer private and public.</b> Reconsider thresholds and interstitial spaces as opportunities to connect and Queer one&rsquo;s spatial experience.</li>
+            <li><b>Enable spatial autonomy</b> by prescribing the unscripted, embedding an aesthetics of access.</li>
+            <li><b>Consider the skin on your back.</b> Elevate the invisible preconditions of the site; celebrate and orient towards every edge.</li>
+          </ol>
+          <div class="story-block">
+            <p class="zpara mf-sign">Josh Harrison<small>December 2021</small></p>
+            <p class="zpara mf-refs">Selected references &mdash; Ahmed, Queer Phenomenology &middot; Bachelard, The Poetics of Space &middot; Colomina &amp; Bloomer, Sexuality &amp; Space &middot; Foucault, Of Other Spaces &middot; McHarg, Design with Nature &middot; Pallasmaa, The Eyes of the Skin &middot; Potvin, Bachelors of a Different Sort &middot; Solnit, Wanderlust</p>
           </div>
         </section>
       </div>
@@ -1776,7 +2132,7 @@ body.night:not(.in-zone) .pm-card{
       <header class="zone-head">
         <div class="zone-eyebrow">→ PRACTICE</div>
         <h1 class="zone-title"><span data-mark="C"></span><span class="wm">TANNER</span></h1>
-        <div class="zone-sub">design practice <span class="sig">within</span> <span data-mark="O"></span><span class="wm">ONE</span></div>
+        <div class="zone-sub">design practice <span data-mark="O"></span><span class="wm">ONE</span></div>
       </header>
       <section class="zsec">
         <div class="zsec-head">Manifesto</div>
@@ -1920,26 +2276,32 @@ body.night:not(.in-zone) .pm-card{
   </div>
 </main>
 
-<!-- ── DECAY FILTERS ────────────────────────────────────────────────────
-     feMorphology dilate with an x-heavy radius: pixels swell sideways, so
-     the image blocks up and smears horizontally instead of blurring. Four
-     levels; the body carries data-decay="1".."4" (see Decay in the script).
+<!-- ── DRIFT FILTER ─────────────────────────────────────────────────────
+     A turbulence field the picture is pushed along, plus a horizontal
+     smear at the deep end. Continuously driven: the root carries
+     --decay 0..1 and Decay.apply() writes the primitive attributes.
      ──────────────────────────────────────────────────────────────────── -->
 <svg class="decay-defs" width="0" height="0" aria-hidden="true" focusable="false">
   <defs>
-    <filter id="decay1" x="0" y="0" width="100%" height="100%">
-      <feMorphology operator="dilate" radius="1.2 0.4"/>
-    </filter>
-    <filter id="decay2" x="0" y="0" width="100%" height="100%">
-      <feMorphology operator="dilate" radius="2.6 0.8"/>
-    </filter>
-    <filter id="decay3" x="0" y="0" width="100%" height="100%">
-      <feMorphology operator="dilate" radius="4.5 1.3"/>
-      <feOffset dx="1.5" dy="0"/>
-    </filter>
-    <filter id="decay4" x="0" y="0" width="100%" height="100%">
-      <feMorphology operator="dilate" radius="7.5 2"/>
-      <feOffset dx="-3" dy="0"/>
+    <!-- ONE filter, continuously driven from script. The old set of four
+         (#decay1..#decay4) was swapped wholesale at each level, which is
+         what made the drift read as four hard steps. Here nothing swaps:
+         the turbulence field is constant and only its DISPLACEMENT SCALE
+         ramps, so the picture warps into itself rather than jumping.
+
+         feTurbulence supplies a slow organic field; feDisplacementMap
+         pushes pixels along it; feMorphology adds a horizontal smear at
+         the deep end so it still reads as a signal failing, not a filter
+         looping. All three primitives are animated by Decay.apply(). -->
+    <filter id="decay" x="-6%" y="-6%" width="112%" height="112%"
+            color-interpolation-filters="sRGB">
+      <feTurbulence id="decayNoise" type="fractalNoise"
+                    baseFrequency="0.006 0.014" numOctaves="2" seed="7"
+                    stitchTiles="stitch" result="fog"/>
+      <feDisplacementMap id="decayWarp" in="SourceGraphic" in2="fog"
+                         scale="0" xChannelSelector="R" yChannelSelector="G"
+                         result="warp"/>
+      <feMorphology id="decaySmear" in="warp" operator="dilate" radius="0 0"/>
     </filter>
   </defs>
 </svg>
@@ -1979,7 +2341,7 @@ const escapeHtml = s => String(s).replace(/[&<>"']/g,
    hand: the slash leaning, the letters small and quick. The orbital ring
    logomark is coming back as a drawn mark; until then this is the mark. */
 function markGlyph(letter){
-  return (letter||'O').toUpperCase() === 'C' ? 'c/o' : 'o/o';
+  return (letter||'O').toUpperCase() === 'C' ? '[care of]' : '[orbit of]';
 }
 function hydrateMarks(root){
   (root||document).querySelectorAll('[data-mark]').forEach(el => {
@@ -2176,47 +2538,247 @@ function initBloomRest(){
    control, or hit space. Like stepping a carousel projector.
    Pauses when the tab is hidden or a zone is open.
    ═══════════════════════════════════════════════════════════════════════════ */
-const FILM_DWELL = 24000;   // ms a plate is held before it steps on its own
+const FILM_DWELL = 30000;   // ms a plate is held before it steps on its own
 const FILM_GATE  = 260;     // ms the lamp is dark while the carrier moves
-const DECAY_STEP = 4500;    // ms of stillness between decay levels
-const DECAY_MAX  = 4;       // deepest level (matches #decay1..#decay4)
+const DECAY_HOLD = 2200;    // ms of stillness before the drift begins
+/* Must be comfortably SHORTER than FILM_DWELL: Decay.reset() fires on every
+   plate advance, so a ramp longer than the dwell can never finish — the old
+   26s against a 24s dwell topped out around 0.77 and spent most of its life
+   near zero, which is why the fracture was barely there. */
+const DECAY_RAMP = 12000;   // ms from clean to fully drifted
+const DECAY_HEAL = 5200;     // ms to come back clean when something happens
+const WARP_MAX   = 5;       // px of displacement — a whisper, not the effect
+const SMEAR_MAX  = 1.1;     // px of horizontal dilation at full drift
+/* ── TIME DISPLACEMENT ────────────────────────────────────────────────────
+   The frame is cut into an irregular rectangular grid and each tile samples
+   the photograph from a slightly shifted position. The picture stays whole
+   and readable; it simply stops agreeing with itself at the tile edges. */
+const TD_W      = 720;   // working resolution of the displacement canvas
+const TD_COLS   = 7;     // nominal grid — widths are jittered per plate
+const TD_ROWS   = 9;
+const TD_SHIFT  = 0.14;  // max offset as a fraction of the tile's own size
+const TD_ACTIVE = 0.26;  // fraction of tiles displaced at full drift
+const TD_FPS    = 11;     // the grid re-deals this often — stepped, not smooth
 
 /* ── DECAY ─────────────────────────────────────────────────────────────────
    Left alone the signal degrades one discrete level at a time. Any advance,
    pointer move, key, or scroll resets it to clean. Nothing runs per frame —
    it is one interval and a data attribute.                                */
+/* ── DRIFT ─────────────────────────────────────────────────────────────────
+   A single number, 0 -> 1, eased. After DECAY_HOLD of stillness it creeps
+   toward 1 over DECAY_RAMP; any sign of life eases it back to 0 over
+   DECAY_HEAL. Nothing here is stepped — the previous version stepped four
+   discrete levels and swapped a different SVG filter at each one, which is
+   what made the picture jump rather than slide.
+
+   The value is published two ways: as --decay on :root for the CSS grade,
+   and as live attributes on the filter primitives, which cannot read CSS
+   custom properties and so have to be written directly. */
 const Decay = {
-  level:0, timer:null,
+  v:0, target:0, raf:null, holdAt:0, last:0,
+  els:null,
 
-  set(n){
-    this.level = Math.max(0, Math.min(DECAY_MAX, n));
-    if (this.level === 0) delete document.body.dataset.decay;
-    else document.body.dataset.decay = String(this.level);
+  bind(){
+    this.els = {
+      warp : document.getElementById('decayWarp'),
+      smear: document.getElementById('decaySmear'),
+    };
   },
 
-  reset(){
-    if (this.level !== 0) this.set(0);
-    this.start();
+  /* Push the current value out to CSS and to the filter. */
+  apply(){
+    const v = this.v;
+    document.documentElement.style.setProperty('--decay', v.toFixed(4));
+    if (!this.els) return;
+    /* Eased so the warp stays almost invisible through the first half and
+       gathers late — a slow slide into distortion rather than a linear
+       creep the eye can track. */
+    const e = v * v * (3 - 2 * v);
+    if (this.els.warp)  this.els.warp.setAttribute('scale', (e * WARP_MAX).toFixed(2));
+    if (this.els.smear) this.els.smear.setAttribute('radius',
+                          `${(e * SMEAR_MAX).toFixed(2)} ${(e * SMEAR_MAX * 0.28).toFixed(2)}`);
   },
+
+  tick(now){
+    this.raf = requestAnimationFrame(t => this.tick(t));
+    const dt = Math.min(64, now - (this.last || now));
+    this.last = now;
+
+    if (activeZone || document.hidden){ this.target = 0; }
+    else if (!this.holdAt)             { this.target = 0; }
+    else if (now - this.holdAt > DECAY_HOLD) { this.target = 1; }
+
+    if (Math.abs(this.v - this.target) < 0.0005){
+      if (this.v !== this.target){ this.v = this.target; this.apply(); }
+      if (this.v > 0.02) tdTick(now, this.v);   // hold: keep re-dealing
+      return;
+    }
+    /* Rising is slow, healing is gentle. Healing used to be near-instant,
+       which is what produced the flash: the plate advanced, the drift was
+       dumped to zero in under a second, and the eye read a hard reset
+       against the incoming photograph. */
+    const span = this.target > this.v ? DECAY_RAMP : DECAY_HEAL;
+    const step = dt / span;
+    this.v += this.target > this.v ? Math.min(step, this.target - this.v)
+                                   : -Math.min(step, this.v - this.target);
+    this.apply();
+    tdTick(now, this.v);
+  },
+
+  reset(){ this.holdAt = performance.now(); this.target = 0; },
 
   start(){
-    this.stop();
-    if (activeZone) return;                  // only the landing decays
-    this.timer = setInterval(() => {
-      if (activeZone || document.hidden) return;
-      if (this.level >= DECAY_MAX) return;   // hold at the bottom
-      this.set(this.level + 1);
-    }, DECAY_STEP);
+    this.holdAt = performance.now();
+    if (!this.raf) this.raf = requestAnimationFrame(t => this.tick(t));
   },
 
-  stop(){ clearInterval(this.timer); this.timer = null; },
+  stop(){
+    if (this.raf) cancelAnimationFrame(this.raf);
+    this.raf = null;
+    this.holdAt = 0; this.target = 0; this.v = 0; this.apply();
+  },
 
-  /* Any sign of life cleans the picture up. */
+  /* Kept for callers that used the old stepped API. */
+  set(n){ if (n === 0) this.reset(); },
+
   watch(){
     ['pointermove','pointerdown','keydown','wheel','touchstart'].forEach(ev =>
-      window.addEventListener(ev, () => { if (!activeZone) this.reset(); }, { passive:true }));
+      window.addEventListener(ev, () => {
+        if (activeZone) return;
+        this.reset();
+        /* the same signal that heals the drift re-condenses the writing */
+        if (typeof recondense === 'function') recondense();
+      }, { passive:true }));
   }
 };
+
+/* ── TIME DISPLACEMENT ────────────────────────────────────────────────────
+   An irregular grid is dealt once per plate (stable, seeded from the key so
+   a frame always fractures the same way). On each re-deal a subset of tiles
+   is given a small offset and the photograph is redrawn tile by tile,
+   sampling from the shifted position. Detail survives — this is not a blur
+   or an average — the image just stops lining up with itself.
+
+   Redrawn at TD_FPS, not per frame: the stepped quality is the effect, and
+   it keeps the cost off the phone. */
+
+/* Deterministic PRNG so a given plate always deals the same grid. */
+function tdRandom(seed){
+  let x = seed >>> 0 || 1;
+  return () => { x ^= x << 13; x ^= x >>> 17; x ^= x << 5; return ((x >>> 0) % 1e6) / 1e6; };
+}
+
+/* Jittered track sizes that always sum to `total`. */
+function tdTracks(n, total, rnd){
+  const raw = Array.from({length:n}, () => 0.55 + rnd());
+  const sum = raw.reduce((a,b) => a + b, 0);
+  const out = raw.map(v => v / sum * total);
+  /* absorb rounding into the last track so the grid closes exactly */
+  const acc = out.slice(0,-1).reduce((a,b)=>a+b,0);
+  out[out.length-1] = total - acc;
+  return out;
+}
+
+function tdBuildGrid(canvas, seed){
+  const rnd  = tdRandom(seed);
+  const cols = tdTracks(TD_COLS, canvas.width,  rnd);
+  const rows = tdTracks(TD_ROWS, canvas.height, rnd);
+  const tiles = [];
+  let y = 0;
+  for (const th of rows){
+    let x = 0;
+    for (const tw of cols){
+      tiles.push({ x, y, w:tw, h:th, r:rnd() });
+      x += tw;
+    }
+    y += th;
+  }
+  return tiles;
+}
+
+/* Draw one pass. `amount` is 0..1 — the drift level. */
+function tdDraw(state, amount, phase){
+  const { ctx, canvas, img, tiles } = state;
+  const W = canvas.width, H = canvas.height;
+
+  /* cover-fit the source into the canvas */
+  const ia = img.naturalWidth / img.naturalHeight, ca = W / H;
+  let sw, sh, sx, sy;
+  if (ia > ca){ sh = img.naturalHeight; sw = sh * ca; sx = (img.naturalWidth - sw)/2; sy = 0; }
+  else        { sw = img.naturalWidth;  sh = sw / ca; sx = 0; sy = (img.naturalHeight - sh)/2; }
+  const kx = sw / W, ky = sh / H;
+
+  ctx.clearRect(0, 0, W, H);
+  for (let i = 0; i < tiles.length; i++){
+    const t = tiles[i];
+    /* Which tiles are live this pass. The phase walks the threshold so the
+       set changes between deals instead of flickering at random. */
+    const live = ((t.r * 37 + phase * 0.137) % 1) < (TD_ACTIVE * amount);
+    let ox = 0, oy = 0;
+    if (live){
+      const swing = TD_SHIFT * amount;
+      ox = (((t.r * 91 + phase * 0.31) % 1) - 0.5) * 2 * swing * t.w;
+      oy = (((t.r * 53 + phase * 0.19) % 1) - 0.5) * 2 * swing * t.h * 0.5;
+    }
+    /* Source rect for this tile, nudged by the offset and clamped so we
+       never sample outside the image (which would draw nothing). */
+    let ssx = sx + (t.x + ox) * kx;
+    let ssy = sy + (t.y + oy) * ky;
+    ssx = Math.max(sx, Math.min(sx + sw - t.w*kx, ssx));
+    ssy = Math.max(sy, Math.min(sy + sh - t.h*ky, ssy));
+    ctx.drawImage(img, ssx, ssy, t.w*kx, t.h*ky, t.x, t.y, t.w + 0.5, t.h + 0.5);
+  }
+}
+
+/* Per-plate state, created lazily when a plate first becomes visible. */
+const TD = { states:new WeakMap(), last:0, phase:0 };
+
+function primeDisplace(plate){
+  if (!plate || TD.states.has(plate)) return;
+  const img = plate.querySelector('img');
+  const cv  = plate.querySelector('canvas.film-mosaic');
+  if (!img || !cv || !img.src) return;
+  const go = () => {
+    if (!img.naturalWidth) return;
+    /* Size the canvas to the PLATE, not the photograph. tdDraw() already
+       cover-fits the image into whatever box it is given; sizing to the
+       image's own aspect and letting CSS stretch it to the plate distorted
+       every tile. */
+    const box = plate.getBoundingClientRect();
+    const ar  = (box.width && box.height) ? (box.height / box.width)
+                                          : (img.naturalHeight / img.naturalWidth);
+    const W = TD_W;
+    const H = Math.max(1, Math.round(W * ar));
+    cv.width = W; cv.height = H;
+    const ctx = cv.getContext('2d');
+    if (!ctx) return;
+    let seed = 0;
+    for (const ch of (img.getAttribute('src') || '')) seed = (seed * 31 + ch.charCodeAt(0)) | 0;
+    TD.states.set(plate, { ctx, canvas:cv, img, tiles:tdBuildGrid(cv, Math.abs(seed) || 7) });
+    plate.dataset.mosaic = '1';
+  };
+  if (img.complete) go();
+  else img.addEventListener('load', go, { once:true });
+}
+
+/* Driven from the drift loop. Redraws only the plate on screen, only when
+   there is drift to show, and only TD_FPS times a second. */
+/* A fresh phase, so the fracture never opens in the same tiles twice. The
+   grid geometry is seeded from the filename and stays put; only the phase
+   moves, which is what decides WHICH tiles slip and by how much. */
+function tdReseed(){
+  TD.phase = Math.random() * 10000;
+}
+
+function tdTick(now, amount){
+  if (amount < 0.02) return;
+  if (now - TD.last < 1000 / TD_FPS) return;
+  TD.last = now;
+  TD.phase += 1;
+  const plate = Film.plates && Film.plates[Film.index];
+  const st = plate && TD.states.get(plate);
+  if (st) { try { tdDraw(st, amount, TD.phase); } catch(_){} }
+}
 
 const Film = {
   keys:[], plates:[], index:0, timer:null, moving:false,
@@ -2234,7 +2796,9 @@ const Film = {
          about to be seen. Absolutely-positioned plates all count as "in
          viewport", so loading="lazy" would not hold them back — with 43
          frames that is the whole roll on first paint. */
-      plate.innerHTML = `<img data-src="${PHOTO_BASE}${PHOTOS[key].src}" alt="" draggable="false" decoding="async">`;
+      plate.innerHTML =
+        `<img data-src="${PHOTO_BASE}${PHOTOS[key].src}" alt="" draggable="false" decoding="async">` +
+        `<canvas class="film-mosaic" aria-hidden="true"></canvas>`;
       stage.appendChild(plate);
       return plate;
     });
@@ -2242,6 +2806,8 @@ const Film = {
     stage.insertAdjacentHTML('beforeend', `
       <div class="film-scan"></div>
       <div class="film-dust"></div>
+      <div class="film-fog"></div>
+      <div class="steam" aria-hidden="true"></div>
       <div class="film-gate">
         <span class="film-no" id="film-no"></span>
         <span class="film-title" id="film-title"></span>
@@ -2262,11 +2828,12 @@ const Film = {
       () => document.hidden ? this.stop() : this.start());
 
     this.start();
+    Decay.bind();
     Decay.watch();
     Decay.start();
   },
 
-  /* Promote data-src -> src for one plate. Idempotent. */
+    /* Promote data-src -> src for one plate. Idempotent. */
   load(n){
     const plate = this.plates[(n + this.plates.length) % this.plates.length];
     if (!plate) return;
@@ -2275,6 +2842,7 @@ const Film = {
       img.src = img.dataset.src;
       delete img.dataset.src;
     }
+    primeDisplace(plate);
   },
 
   show(i){
@@ -2295,7 +2863,14 @@ const Film = {
     if (this.moving || activeZone || !this.plates.length) return;
     this.moving = true;
     document.body.classList.add('film-advancing');
-    Decay.reset();
+    /* NO Decay.reset() here. Wiping the drift on every advance was the
+       flash: the fracture vanished, the plate changed, and the fracture
+       crawled back — three events the eye reads as a hard cut. The drift
+       now runs on its own clock, indifferent to which photograph is
+       underneath, so the plates dissolve THROUGH a continuous condition
+       rather than each getting a fresh one. Only real interaction heals
+       it. Re-seeding the grid is enough to keep each plate distinct. */
+    tdReseed();
     tapHaptic();
     setTimeout(() => {
       this.show((this.index + 1) % this.plates.length);
@@ -2324,8 +2899,13 @@ const Film = {
    Elements that must stay whole — the orbital mark and the ONE/TANNER
    wordmarks — are treated as single characters and keep their own index.
    ═══════════════════════════════════════════════════════════════════════════ */
-const CH_STAGGER  = 88;    // ms between glyphs — must match the CSS delay
-const CH_DURATION = 620;   // ms for one stroke to complete
+/* The pace of a hand, not a printer. Published to CSS as --ch-stagger so
+   the delay and the JS timeout can never drift apart. */
+const CH_STAGGER  = 118;   // ms between glyphs
+const CH_DURATION = 340;   // ms for one glyph to settle
+/* How long the writing is left up before it begins to go. */
+const CUE_HOLD    = 6000;  // ms the finished message is held
+const CUE_FADE    = 9000;  // ms it takes to evaporate completely
 
 /* A fixed shuffle, so the handwriting is identical on every load — a real
    message on a real mirror does not re-scramble itself when you blink. */
@@ -2382,10 +2962,42 @@ function startStatement(){
   const cue = document.querySelector('.enter-cue');
   if (!cue) return 0;
   const n = writeOn(cue);
+  document.documentElement.style.setProperty('--ch-stagger', CH_STAGGER + 'ms');
   requestAnimationFrame(() => document.body.classList.add('writing'));
-  setTimeout(() => document.body.classList.add('written'),
-             n * CH_STAGGER + CH_DURATION + 150);
+
+  const done = n * CH_STAGGER + CH_DURATION + 150;
+  /* When the last glyph lands, in absolute time. recondense() reads this so
+     it can never schedule the fade before the sentence exists. */
+  startStatement._doneAt = performance.now() + done;
+  setTimeout(() => document.body.classList.add('written'), done);
+
+  /* ── EVAPORATION ──────────────────────────────────────────────────────
+     The message is not permanent furniture. Once it has been read it goes,
+     and the fog goes with it, until the photographs are the only thing
+     left — the panel becomes a wallpaper rather than a title card. Any
+     interaction brings it back, so it is never lost, only at rest. */
+  clearTimeout(startStatement._evap);
+  startStatement._evap = setTimeout(
+    () => document.body.classList.add('evaporated'), done + CUE_HOLD);
   return n;
+}
+
+/* Bring the writing back, then start the clock again.
+
+   The clock is measured from whichever is LATER: now, or the moment the
+   last glyph lands. Previously it always counted CUE_HOLD from the
+   interaction, so moving the pointer two seconds in scheduled the fade for
+   eight — while the hand was still six sentences from finishing, and the
+   message evaporated mid-word. */
+function recondense(){
+  if (!document.body.classList.contains('keys-done')) return;
+  document.body.classList.remove('evaporated');
+  clearTimeout(startStatement._evap);
+  const now   = performance.now();
+  const doneAt = startStatement._doneAt || now;
+  const wait  = Math.max(doneAt - now, 0) + CUE_HOLD;
+  startStatement._evap = setTimeout(
+    () => document.body.classList.add('evaporated'), wait);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -2431,8 +3043,18 @@ function initKeyIntro(){
    path so each glyph sits square to the edge it rides. The head advances
    on a fixed period, then the strand resets and grows again.
    ═══════════════════════════════════════════════════════════════════════════ */
-const SNAKE_PERIOD = 96;   // seconds to type the full perimeter, then reset
+/* A fixed-length strand that travels the loop forever. It never fills the
+   perimeter and never resets — head and tail are the same distance apart at
+   every moment, so there is no seam to see. */
+const SNAKE_SPEED  = 26;   // px/sec — a writing pace, roughly 3 glyphs a second
 const SNAKE_STEP   = 9;    // px between glyph centres along the path
+/* The strand NEVER closes the loop. The head stops this far short of its own
+   tail, so there is always a visible break in the ring — the thought ends an
+   inch before where it began instead of colliding with itself. */
+const SNAKE_GAP    = 112;  // px of permanent open path between tail and head
+/* Glyphs arrive and leave through a gradient rather than popping on and off. */
+const SNAKE_LEAD   = 130;  // px over which a new glyph fades up at the head
+const SNAKE_TRAIL  = 260;  // px over which an old glyph fades out at the tail
 
 /* The literary braid — the reading behind the practice, typed into the
    gutter one letter at a time. Carried over from the canonical build. */
@@ -2460,7 +3082,12 @@ function setupSnakeMarquee(){
 
   // Braid the log's own titles with the stray phrases, so the marquee
   // reports what the site actually contains.
-  const phrase = MARQUEE_STRAYS.join('   ·   ') + '   ·   ';
+  /* Wide gaps. With the strand now occupying only part of the perimeter,
+     the quotes need real air between them or they read as one run-on
+     sentence chasing its own tail. The spaces are skipped when drawing, so
+     each one is simply a stretch of empty path. */
+  const gap = '        ·        ';
+  const phrase = MARQUEE_STRAYS.join(gap) + gap;
 
   snake = {
     svg,
@@ -2484,7 +3111,10 @@ function buildSnakePath(){
   const off = resolveLength('--marquee-off', 14);
   const x1 = r.left - off,  y1 = r.top - off;
   const x2 = r.right + off, y2 = r.bottom + off;
-  const R = 12;
+  /* Match the frame's own fillet, plus the gutter, so the strand turns on
+     the same curve the panel does. A fixed 12px cut inside the corner and
+     read as a hard turn against a much rounder frame. */
+  const R = Math.max(12, resolveLength('--fillet-frame', 16) + off);
 
   snake.pathEl.setAttribute('d', [
     `M ${x1 + R} ${y1}`,
@@ -2501,26 +3131,56 @@ function buildSnakePath(){
 function tickSnake(){
   requestAnimationFrame(tickSnake);
   if (!snake || !snake.pathLen) return;
-  /* The band does not scroll. It GROWS: the character count climbs from zero
-     to a full lap across the cycle, so the line types itself into the gutter
-     one glyph at a time, catches its own tail, and starts over. Glyph
-     positions are fixed — only how many of them exist changes. */
-  const elapsed  = (performance.now() - snake.t0) / 1000;
-  const cyclePct = (elapsed % SNAKE_PERIOD) / SNAKE_PERIOD;
-  const maxChars = Math.floor(snake.pathLen / SNAKE_STEP);
-  renderSnake(Math.floor(cyclePct * maxChars));
+  /* A snake, not a cycle. The head travels the loop at a constant crawl and
+     the tail follows a fixed distance behind; both wrap through the path
+     independently, so the strand is the same length at every instant and
+     there is no moment where it completes, empties, or restarts.
+
+     Draw-then-erase was the previous attempt and it still had a seam — the
+     erase pass ran over the same ground the draw pass had just covered. */
+  /* ONE unbounded distance drives everything. The head simply keeps going;
+     the tail is held a fixed length behind it and clamped at zero, which
+     gives two phases out of one line of arithmetic and no transition
+     between them:
+
+       phase 1  travelled < maxLen   tail pinned at 0, so the line GROWS —
+                                     it types itself out of the top-left
+                                     corner, one glyph at a time
+       phase 2  travelled > maxLen   tail moves at head speed, so the line
+                                     holds its length and TRAVELS
+
+     Nothing resets, nothing is erased, and the two phases are the same
+     equation — so there is no seam, no stall, and no moment where the
+     animation visibly starts over. */
+  const travelled = ((performance.now() - snake.t0) / 1000) * SNAKE_SPEED;
+  const maxLen    = snake.pathLen - SNAKE_GAP;
+  const tailDist  = Math.max(0, travelled - maxLen);
+  renderSnake(travelled, tailDist);
 }
 
 /* Place `charCount` glyphs along the path, each rotated to its tangent so
    the character tops face OUTSIDE the panel. */
-function renderSnake(charCount){
+function renderSnake(headDist, tailDist){
   const { pathEl, charsG, strand, pathLen } = snake;
   const frag = document.createDocumentFragment();
+  const len  = strand.length;
+  const headIdx = Math.floor(headDist / SNAKE_STEP);
+  const bodyChars = Math.floor((headDist - tailDist) / SNAKE_STEP);
 
-  for (let i = 0; i < charCount; i++){
-    const ch = strand[i % strand.length];
+  for (let i = 0; i < bodyChars; i++){
+    const ch = strand[(((headIdx - i) % len) + len) % len];
     if (!ch || ch === ' ' || ch === '\n') continue;
-    const arc = (i * SNAKE_STEP) % pathLen;
+    /* absolute distance of this glyph, then wrapped onto the ring */
+    const abs = headDist - i * SNAKE_STEP;
+    const arc = ((abs % pathLen) + pathLen) % pathLen;
+    /* Fade in at the head, fade out at the tail. The glyph is never simply
+       present or absent — it arrives and leaves through a ramp, which is
+       what stops the line reading as a row of switches flicking on. */
+    const inAge  = headDist - abs;
+    const outAge = abs - tailDist;
+    const a = Math.min(1, inAge / SNAKE_LEAD) *
+              (tailDist > 0 ? Math.min(1, outAge / SNAKE_TRAIL) : 1);
+    if (a <= 0.01) continue;
     const pt  = pathEl.getPointAtLength(arc);
     const pt2 = pathEl.getPointAtLength((arc + 1) % pathLen);
     /* The path runs clockwise, so rotating each glyph to the tangent stands
@@ -2531,6 +3191,7 @@ function renderSnake(charCount){
     t.setAttribute('x', pt.x);
     t.setAttribute('y', pt.y);
     t.setAttribute('transform', `rotate(${tan.toFixed(1)} ${pt.x} ${pt.y})`);
+    if (a < 0.995) t.setAttribute('opacity', a.toFixed(3));
     t.textContent = ch;
     frag.appendChild(t);
   }
@@ -2674,7 +3335,7 @@ function onKey(e){
     if (e.key === 'ArrowRight') logEntryNext();
     return;
   }
-  if (composerOpen || filterOpen) return;
+  if (composerOpen) return;
 
   // Space steps the reel forward on the landing, like a projector remote.
   if (!activeZone && (e.key === ' ' || e.code === 'Space')){
@@ -2722,6 +3383,7 @@ function enterZone(zoneId, skipHash){
   entryDirection = ENTRY_DIR[zoneId];
 
   applyZoneSkin(zoneId);
+  restartBloomDwell();
   setRest(null);
   document.body.classList.add('in-zone');
   document.body.classList.toggle('in-log', zoneId === 'log');
@@ -2774,6 +3436,19 @@ function exitZone(skipHash){
 /* Paint the four zone variables. --zdeep is a darker tone of the SAME hue,
    never a complement, so authored/external reads as one colour at two
    energy levels. */
+/* Re-arm the bloom's dwell. Going zone -> zone the element keeps the same
+   animation-name, so the browser never re-triggers bloomDwell — the swell
+   happened once, on the first zone of a session, and never again. Clearing
+   the animation and forcing a reflow before restoring it is what re-fires
+   it. The blank frame is imperceptible under a 58px blur. */
+function restartBloomDwell(){
+  const b = document.querySelector('.bloom');
+  if (!b) return;
+  b.style.animation = 'none';
+  void b.offsetWidth;              // reflow — required, do not remove
+  b.style.animation = '';
+}
+
 function applyZoneSkin(zoneId){
   const z = ZONES[zoneId]; if (!z) return;
   document.body.dataset.zone = zoneId;
