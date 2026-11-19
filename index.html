@@ -1818,38 +1818,61 @@ body.night:not(.in-zone) body.night:not(.in-zone) .pm-card{
 .pm-card .pm-meta{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:18px;font-family:var(--ff-mono);font-size:11px;letter-spacing:.06em;color:color-mix(in srgb,var(--zink) 75%, transparent)}
 .pm-card .pm-body{font-family:var(--ff-mono);font-size:13.5px;line-height:1.7;color:color-mix(in srgb,var(--zink) 92%, transparent)}
 /* ═══════════════════════════════════════════════════════════════════════════
-   care of TANNER · lockup, return recess, world links, feed posts
+   care of TANNER · logo, landing, return recess, world links, feed posts
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* ── LOCKUP · the logo: "care of" in cherry script, riding over the top-left
-   of TANNER and cutting into it, the way it is written by hand. */
-.lockup{
-  position:relative;display:inline-block;
-  padding-top:.52em;line-height:.92;white-space:nowrap;
-}
-.lockup .wm{ position:relative;z-index:1;display:inline-block }
-.lock-co{
-  position:absolute;z-index:2;left:.04em;top:-.04em;
-  font-family:var(--ff-serif);font-weight:400;font-style:normal;
-  font-size:.86em;line-height:1;letter-spacing:0;text-transform:none;
-  color:var(--lipstick);
-  transform:rotate(-9deg);transform-origin:left bottom;
+
+/* ── THE LOGO · a drawn mark, scaled as a whole ────────────────────────
+   The PNG keeps the artwork's proportions (1001×472). Height is set per
+   context; width follows. TANNER's baseline sits 84% down the image, so
+   inline the mark drops 16% of its height below the text baseline and
+   TANNER reads as a word in the line. */
+.logo{ display:inline-block;position:relative;height:2.1em;aspect-ratio:1001/472;
+       vertical-align:-.34em;line-height:0;margin:0 .12em }
+.logo img{ position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+           user-select:none;-webkit-user-drag:none }
+.logo .logo-bone{ display:none }
+/* dark grounds take the bone cut: night, and the landing over photographs */
+body.night .logo .logo-ink,
+.enter-cue .logo .logo-ink{ display:none }
+body.night .logo .logo-bone,
+.enter-cue .logo .logo-bone{ display:block }
+
+/* the brand row sits on the photographs until a room opens */
+body:not(.in-zone) .panel-brand .logo .logo-ink{ display:none }
+body:not(.in-zone) .panel-brand .logo .logo-bone{ display:block }
+body:not(.in-zone) .panel-brand .logo{ filter:drop-shadow(0 1px 6px rgba(0,0,0,.45)) }
+.panel-brand .logo{ height:46px;vertical-align:middle;margin:0;align-self:center }
+.zone-title .logo{ height:1.5em;margin:0 0 0 -.04em }
+.story-block h3 .logo{ height:1.9em;vertical-align:-.36em }
+@media (max-width:560px){ .panel-brand .logo{ height:38px } }
+
+/* ── LANDING · set in the sans, not the script ─────────────────────────
+   Still written onto the glass in cherry, glyph by glyph — but in the
+   brand's display cut, uppercase, so it reads as a statement. */
+.enter-cue{
+  font-family:var(--ff-head);font-weight:800;font-stretch:75%;
+  text-transform:uppercase;letter-spacing:-.012em;
   text-shadow:
-     .018em 0 0 currentColor, -.018em 0 0 currentColor,
-     0 .018em 0 currentColor,  0 -.018em 0 currentColor;
-  pointer-events:none;
+    0 -1px 0 color-mix(in srgb, var(--lipstick-lift) 50%, transparent),
+    0 2px 0  color-mix(in srgb, var(--lipstick-lo)   80%, transparent),
+    0 3px 16px rgba(0,0,0,.5);
 }
-.panel-brand .lockup{ font-size:24px;align-self:center }
-.panel-brand .lockup .wm{ font-size:1em }
-.zone-title .lockup{ display:inline-block }
-.zone-title .lockup .wm{ display:inline-block }
-@media (max-width:560px){ .panel-brand .lockup{ font-size:21px } }
+.enter-cue .h{ font-size:clamp(34px,5.2vw,80px);line-height:1.02 }
+.enter-cue .intro-welcome{
+  font-size:clamp(40px,6.4vw,100px);line-height:.96;margin-top:.55em;
+  color:var(--lipstick);
+}
+.enter-cue .logo{ text-shadow:none;filter:drop-shadow(0 3px 10px rgba(0,0,0,.45)) }
+@media (orientation:portrait) and (max-width:820px){
+  .enter-cue .h{ font-size:clamp(24px,7.4vw,44px) }
+  .enter-cue .intro-welcome{ font-size:clamp(30px,9.4vw,56px);margin-top:.6em }
+}
 
 /* ── RETURN RECESS · top edge, only ever the way out of WORLD ─────────── */
 body:not(.in-zone) .zlabel-back{ opacity:0;pointer-events:none;visibility:hidden }
 
 /* ── KEY INTRO · nothing above the mark now ───────────────────────────── */
-.ki-mark{ font-family:var(--ff-serif);font-size:18px;letter-spacing:0;text-transform:none;color:var(--lipstick) }
 
 /* ── WORLD · link tiles ────────────────────────────────────────────────
    Same tile, same print. A link is outlined in the zone glow and carries
@@ -2016,16 +2039,14 @@ body:not(.evaporated) .post-open{ pointer-events:none }
   <!-- ── THE MIRROR MESSAGE · written in lipstick, off-centre, on a slant -->
   <div class="landing" id="landing">
     <div class="enter-cue intro-text">
-      <div class="h">good ideas, <span class="sig">better company</span>.<br><span class="h2">people, places, projects, objects, culture.</span></div>
-      <div class="intro-prose"><span data-mark="C"></span><span class="wm">TANNER</span> is a design practice;<br>
-        a <em>namesake</em> placemaking the in-between.</div>
-      <div class="intro-welcome">a brighter everyday</div>
+      <div class="h"><span data-logo></span> IS A PRACTICE.<br>DESIGN IS A NEGOTIATION.<br>BY MIDDLE NAME, I&rsquo;M TANNER.</div>
+      <div class="intro-welcome">LET&rsquo;S MEET IN THE MIDDLE.</div>
     </div>
   </div>
 
   <!-- ── BRAND ROW · mark, wordmark, tagline, day/night switch ─────────── -->
-  <div class="panel-brand" aria-label="care of TANNER — a creative practice for a brighter everyday">
-    <span class="lockup"><span class="lock-co">care of</span><span class="wm">TANNER</span></span>
+  <div class="panel-brand">
+    <span data-logo></span>
     <span class="slash" aria-hidden="true">/</span>
     <span class="tag"><em>for a</em> brighter everyday.</span>
     <button class="dn-icon" onclick="toggleMode()" aria-label="toggle day/night mode" role="switch">
@@ -2060,7 +2081,7 @@ body:not(.evaporated) .post-open{ pointer-events:none }
     <div class="zone-content">
       <header class="zone-head">
         <div class="zone-eyebrow">← STORY</div>
-        <h1 class="zone-title"><span class="lockup"><span class="lock-co">care of</span><span class="wm">TANNER</span></span></h1>
+        <h1 class="zone-title"><span data-logo></span></h1>
         <div class="zone-sub">a creative practice for a <span class="sig">brighter everyday</span></div>
       </header>
 
@@ -2073,8 +2094,8 @@ body:not(.evaporated) .post-open{ pointer-events:none }
       <div class="tab-pane on" data-tab="philosophy">
         <section class="zsec">
           <div class="story-block">
-            <h3>The practice — <span data-mark="C"></span><span class="wm">TANNER</span></h3>
-            <p class="zpara"><em><span data-mark="C"></span><span class="wm">TANNER</span></em> is a design practice and a namesake — architecture, interiors, brand systems and editorial work, made with care for the people who use them<sup>1</sup>.</p>
+            <h3>The practice — <span data-logo></span></h3>
+            <p class="zpara"><em><span data-logo></span></em> is a design practice and a namesake — architecture, interiors, brand systems and editorial work, made with care for the people who use them<sup>1</sup>.</p>
             <p class="zmotto">A brighter everyday</p>
             <p class="zpara">— the motto. Good ideas, better company; the same ideas in different places.</p>
           </div>
@@ -2195,12 +2216,12 @@ body:not(.evaporated) .post-open{ pointer-events:none }
     <div class="zone-content">
       <header class="zone-head">
         <div class="zone-eyebrow">→ PRACTICE</div>
-        <h1 class="zone-title"><span class="lockup"><span class="lock-co">care of</span><span class="wm">TANNER</span></span></h1>
+        <h1 class="zone-title"><span data-logo></span></h1>
         <div class="zone-sub">design practice · Brooklyn, NY</div>
       </header>
       <section class="zsec">
         <div class="zsec-head">Manifesto</div>
-        <p class="zpara"><span data-mark="C"></span><span class="wm">TANNER</span> is a design practice. Architecture, interiors, brand systems and editorial work for people who want their place to think.</p>
+        <p class="zpara"><span data-logo></span> is a design practice. Architecture, interiors, brand systems and editorial work for people who want their place to think.</p>
         <p class="zpara">Objects, spaces, systems — for a brighter everyday.</p>
       </section>
       <section class="zsec">
@@ -2384,8 +2405,24 @@ const escapeHtml = s => String(s).replace(/[&<>"']/g,
 /* THE PREFIX — "c/o" and "o/o", set as a lowercase Lipstick superscript
    riding ahead of the bold sans wordmark. Written the way it is written by
    hand: the slash leaning, the letters small and quick. The script lockup
-   (.lockup) carries the logo in headings and the brand row. */
+   hydrateLogos() swaps [data-logo] for the drawn PNG mark. */
 function markGlyph(){ return '[care of]'; }
+/* THE LOGO — always the drawn mark, never typeset. Two cuts of the same
+   PNG: ink TANNER for light grounds, bone TANNER for dark ones. CSS picks
+   which shows (day/night, landing vs room). */
+const LOGO_SRC = { ink:'brand/care-of-tanner.png', bone:'brand/care-of-tanner-light.png' };
+function hydrateLogos(root){
+  (root||document).querySelectorAll('[data-logo]').forEach(el => {
+    if (el.dataset.logoHydrated) return;
+    el.classList.add('logo');
+    el.setAttribute('role','img');
+    el.setAttribute('aria-label','care of TANNER');
+    el.innerHTML =
+      `<img class="logo-ink" src="${LOGO_SRC.ink}" alt="" draggable="false">` +
+      `<img class="logo-bone" src="${LOGO_SRC.bone}" alt="" draggable="false">`;
+    el.dataset.logoHydrated = '1';
+  });
+}
 function hydrateMarks(root){
   (root||document).querySelectorAll('[data-mark]').forEach(el => {
     if (el.dataset.markHydrated) return;
@@ -3084,6 +3121,11 @@ function writeOn(root){
           frag.appendChild(word);
         });
         n.replaceWith(frag);
+        return;
+      }
+      if (n.nodeType === 1 && n.classList.contains('logo')){
+        n.classList.add('ch');
+        n.style.setProperty('--i', i++);
         return;
       }
       if (n.nodeType === 1) walk(n);
@@ -3818,6 +3860,7 @@ function closeProjModal(){ $('#proj-modal').classList.remove('open'); }
    11 · INIT  ·  the only entry point
    ═══════════════════════════════════════════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', () => {
+  hydrateLogos();
   hydrateMarks();
 
   /* mode */
