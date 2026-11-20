@@ -212,7 +212,6 @@ html.night .lamp{mix-blend-mode:screen;opacity:.6}
 .hud{position:absolute;inset:var(--m);z-index:4;pointer-events:none;color:var(--osd);
   opacity:0;animation:exhale 1s var(--arrive) 4.5s forwards}
 .hud > *{position:absolute;pointer-events:auto}
-.bar > *{position:static}
 @keyframes exhale{to{opacity:1}}
 .chip{display:flex;align-items:center;gap:.7em;height:clamp(34px,2.7cqi,42px);padding:0 1.1em;border-radius:999px;
   background:rgb(18 17 15/.42);box-shadow:inset 0 0 0 1px rgb(255 255 255/.16);
@@ -223,26 +222,18 @@ html.night .lamp{mix-blend-mode:screen;opacity:.6}
 .reel.light .chip{background:rgb(255 255 255/.6);color:var(--ink);box-shadow:inset 0 0 0 1px var(--rule);text-shadow:none}
 .reel.light .chip:hover{background:#fff}
 .reel.light .hud .home .logo{background-image:url(brand/care-of-tanner.webp);filter:none}
-/* the bottom bar: one quiet row of information on a hairline, no blocks */
-.hud .bar{left:0;right:0;bottom:0;display:flex;align-items:center;gap:clamp(14px,2.4cqi,36px);padding-top:10px;
-  border-top:1px solid rgb(255 255 255/.32);font:400 clamp(11px,.82cqi,13px)/1 var(--mono);letter-spacing:.04em;
-  text-shadow:0 1px 10px rgb(0 0 0/.45)}
-.bar .door,.bar .caption{display:flex;align-items:center;gap:.6em;min-height:40px;margin:0;padding:0;border:0;background:none;
-  color:inherit;font:inherit;letter-spacing:inherit;white-space:nowrap;cursor:pointer}
-.bar .caption{flex:1;min-width:0;cursor:default;opacity:.82}
-.bar .door:hover,.bar .door:focus-visible{text-decoration:underline;text-underline-offset:5px;text-decoration-color:var(--c)}
-.bar .door-practice{margin-left:0}
-.reel.light .hud .bar{border-top-color:var(--rule);text-shadow:none}
+.door:hover,.door:focus-visible{background:color-mix(in oklch,var(--c) 55%,rgb(18 17 15/.5))}
 .hud .home{top:0;left:0}
 .hud .home .logo{height:clamp(28px,3cqi,46px);vertical-align:0;filter:drop-shadow(0 1px 6px rgb(0 0 0/.4))}
 .hud .controls{top:0;right:0;display:flex;gap:8px}
+.hud .caption{left:0;bottom:calc(clamp(34px,2.7cqi,42px) + 8px);max-width:100%;margin:0}
 .caption .idx{flex:none}
 .caption .cap{overflow:hidden;text-overflow:ellipsis;opacity:.8}
 .door .dot{transition:transform .2s var(--ui)}
 .door:hover .dot,.door:focus-visible .dot{transform:scale(1.6)}
-.door-story{--c:var(--story)}
-.door-practice{--c:var(--practice)}
-.door-world{--c:var(--world)}
+.door-story{left:0;bottom:0;--c:var(--story)}
+.door-practice{right:0;bottom:0;--c:var(--practice)}
+.door-world{bottom:0;left:50%;translate:-50% 0;--c:var(--world)}
 html[data-room] .post,html[data-room] .statement,html[data-room] .hud{visibility:hidden}
 html.shutting .post,html.shutting .statement,html.shutting .hud{visibility:visible}
 
@@ -492,23 +483,25 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 /* 15 MOTION ── a room wipes across the glass from its door ──────────────── */
 /* rooms open and close by animating the room itself — no full-screen snapshots (iOS freezes on them) */
 /* closing: no snapshot — the room itself draws back toward its own door over the landing */
-/* a curtain pulled back to let light in: a slow fade whose soft, wide edge travels from the door */
-.room.opening,.room.closing{-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
-  -webkit-mask-image:linear-gradient(var(--to),#000 0 40%,rgb(0 0 0/.55) 52%,rgb(0 0 0/.18) 62%,transparent 70%);
-          mask-image:linear-gradient(var(--to),#000 0 40%,rgb(0 0 0/.55) 52%,rgb(0 0 0/.18) 62%,transparent 70%)}
+/* one continuous move: the incoming room draws in over whatever is behind it (landing or the last room),
+   which stays put until it's covered — no gap, no second beat */
+.room.leaving{display:block;z-index:5}
+.room.opening,.room.closing{z-index:7;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-image:linear-gradient(var(--to),#000 0 45%,rgb(0 0 0/.5) 52%,transparent 60%);
+          mask-image:linear-gradient(var(--to),#000 0 45%,rgb(0 0 0/.5) 52%,transparent 60%);
+  -webkit-mask-size:var(--ms);mask-size:var(--ms)}
 #story{--to:90deg} #practice{--to:270deg} #world{--to:0deg}
-#story,#practice{--ms:340% 100%} #world{--ms:100% 340%}
-.room.opening,.room.closing{-webkit-mask-size:var(--ms);mask-size:var(--ms)}
-#story.opening{animation:draw-l 1.6s var(--breath) both,lightin 1.6s var(--breath) both}
-#practice.opening{animation:draw-r 1.6s var(--breath) both,lightin 1.6s var(--breath) both}
-#world.opening{animation:draw-d 1.6s var(--breath) both,lightin 1.6s var(--breath) both}
-#story.closing{animation:draw-l 1.3s var(--breath) reverse both,lightin 1.3s var(--breath) reverse both}
-#practice.closing{animation:draw-r 1.3s var(--breath) reverse both,lightin 1.3s var(--breath) reverse both}
-#world.closing{animation:draw-d 1.3s var(--breath) reverse both,lightin 1.3s var(--breath) reverse both}
-@keyframes draw-l{from{-webkit-mask-position:100% 0;mask-position:100% 0}to{-webkit-mask-position:0 0;mask-position:0 0}}
-@keyframes draw-r{from{-webkit-mask-position:0 0;mask-position:0 0}to{-webkit-mask-position:100% 0;mask-position:100% 0}}
-@keyframes draw-d{from{-webkit-mask-position:0 0;mask-position:0 0}to{-webkit-mask-position:0 100%;mask-position:0 100%}}
-@keyframes lightin{from{opacity:0}40%{opacity:.7}to{opacity:1}}
+#story,#practice{--ms:250% 100%} #world{--ms:100% 250%}
+#story.opening{animation:draw-l .95s var(--ease-c) both}
+#practice.opening{animation:draw-r .95s var(--ease-c) both}
+#world.opening{animation:draw-d .95s var(--ease-c) both}
+#story.closing{animation:draw-l .85s var(--ease-c) reverse both}
+#practice.closing{animation:draw-r .85s var(--ease-c) reverse both}
+#world.closing{animation:draw-d .85s var(--ease-c) reverse both}
+:root{--ease-c:cubic-bezier(.45,.05,.25,1)}
+@keyframes draw-l{from{-webkit-mask-position:100% 0;mask-position:100% 0;opacity:.4}to{-webkit-mask-position:0 0;mask-position:0 0;opacity:1}}
+@keyframes draw-r{from{-webkit-mask-position:0 0;mask-position:0 0;opacity:.4}to{-webkit-mask-position:100% 0;mask-position:100% 0;opacity:1}}
+@keyframes draw-d{from{-webkit-mask-position:0 0;mask-position:0 0;opacity:.4}to{-webkit-mask-position:0 100%;mask-position:0 100%;opacity:1}}
 @keyframes fade{from{opacity:0}}
 @supports (animation-timeline:view()){
   .tile,.contents li,.cv li,.svc li,.steps li{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 55%}
@@ -522,8 +515,6 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 @container screen (max-width:720px){
   .chip{padding:0 .9em;gap:.55em}
   .door [aria-hidden]{display:none}
-  .bar .caption .cap{display:none}
-  .hud .bar{justify-content:space-between}
   .runhead{grid-template-columns:auto 1fr}
   .runhead .folio{display:none}
   .page,.backpage{display:block}
@@ -565,12 +556,10 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
         <button class="chip" id="pause" aria-pressed="false">Pause</button>
         <button class="chip" id="next" aria-label="Next post">Next →</button>
       </div>
-      <div class="bar">
-        <button class="door door-story" data-go="story"><span aria-hidden="true">←</span><span class="dot"></span>Story</button>
-        <p class="caption" aria-live="polite"><span class="dot" id="cap-dot"></span><span class="idx" id="cap-idx"></span><span class="cap" id="cap-text"></span></p>
-        <button class="door door-world" data-go="world"><span class="dot"></span>World<span aria-hidden="true">↓</span></button>
-        <button class="door door-practice" data-go="practice">Practice<span class="dot"></span><span aria-hidden="true">→</span></button>
-      </div>
+      <button class="chip door door-story" data-go="story"><span aria-hidden="true">←</span><span class="dot"></span>Story</button>
+      <button class="chip door door-practice" data-go="practice">Practice<span class="dot"></span><span aria-hidden="true">→</span></button>
+      <button class="chip door door-world" data-go="world"><span class="dot"></span>World<span aria-hidden="true">↓</span></button>
+      <p class="chip caption" aria-live="polite"><span class="dot" id="cap-dot"></span><span class="idx" id="cap-idx"></span><span class="cap" id="cap-text"></span></p>
     </nav>
 
     <!-- ═══ THE ROOMS ═══ -->
@@ -662,7 +651,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
       
         <footer class="backpage">
           <a class="next" href="#practice"><span class="mono">Continued — Part Two</span><b>Practice →</b></a>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p style="margin-top:1.2em"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
         </footer>
      </div>
     </article>
@@ -796,7 +785,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 
         <footer class="backpage">
           <a class="next" href="#world"><span class="mono">Continued — Part Three</span><b>World →</b></a>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p style="margin-top:1.2em"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
         </footer>
      </div>
     </article>
@@ -830,7 +819,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 
         <footer class="backpage">
           <a class="next" href="#story"><span class="mono">Back to the beginning — Part One</span><b>Story →</b></a>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p style="margin-top:1.2em"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
         </footer>
      </div>
     </article>
@@ -1136,19 +1125,21 @@ function route(){
     document.title = next ? `${next[0].toUpperCase() + next.slice(1)} — care of TANNER` : 'care of TANNER — Issue 01';
     if (next){ clearTimeout(timer); } else { schedule(); }
   };
-  if (!next && showingPrev){                       // closing: animate the room element, no view transition
+  if (reduced){ swap(); return; }
+  const root = document.documentElement;
+  clearTimeout(route.t); document.querySelectorAll('.room').forEach(r => r.classList.remove('opening','closing','leaving'));
+  root.classList.remove('shutting');
+  if (!next){                                        // closing: the room draws back to its door over the landing
     const el = document.getElementById(showingPrev);
-    if (reduced){ swap(); return; }
-    const root = document.documentElement;
-    root.classList.add('shutting'); el.classList.add('closing');
-    setTimeout(() => { if (showing === null){ swap(); } el.classList.remove('closing'); root.classList.remove('shutting'); }, 1300);
+    root.classList.add('shutting'); el.classList.add('leaving','closing');
+    swap();
+    route.t = setTimeout(() => { el.classList.remove('leaving','closing'); root.classList.remove('shutting'); }, 850);
     return;
   }
-  if (reduced || !next){ swap(); return; }
-  const el = document.getElementById(next), root = document.documentElement;
-  if (!showingPrev) root.classList.add('shutting');          // keep the landing visible under the opening room
+  const el = document.getElementById(next), prev = showingPrev && document.getElementById(showingPrev);
+  if (prev) prev.classList.add('leaving'); else root.classList.add('shutting');   // keep what's behind in place
   swap(); el.classList.add('opening');
-  setTimeout(() => { el.classList.remove('opening'); root.classList.remove('shutting'); }, 1620);
+  route.t = setTimeout(() => { el.classList.remove('opening'); prev && prev.classList.remove('leaving'); root.classList.remove('shutting'); }, 950);
 }
 addEventListener('hashchange', route);
 document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => location.hash = b.dataset.go);
