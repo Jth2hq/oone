@@ -114,7 +114,7 @@ p,li{text-wrap:pretty}
   box-shadow:inset 0 1px 0 rgb(255 255 255/.6),inset 0 -1px 0 rgb(0 0 0/.22),
     0 0 0 1px rgb(26 26 26/.14),0 1px 2px rgb(26 26 26/.06),0 30px 60px -30px rgb(26 26 26/.28)}
 .reel{position:relative;height:100%;overflow:hidden;overflow:clip;background:#1d1c1a;border-radius:var(--r-in);
-  isolation:isolate;box-shadow:0 0 0 var(--gap) #2a2926,0 0 0 calc(var(--gap) + 1px) color-mix(in oklch,var(--brass) 70%,transparent);view-transition-name:screen;container:screen/size}
+  isolation:isolate;box-shadow:0 0 0 var(--gap) #2a2926,0 0 0 calc(var(--gap) + 1px) color-mix(in oklch,var(--brass) 70%,transparent);container:screen/size}
 
 /* 04 GLASS ── painted once; only the grain moves ────────────────────────── */
 .glass{position:absolute;inset:0;z-index:20;pointer-events:none;border-radius:inherit;overflow:hidden}
@@ -125,7 +125,7 @@ p,li{text-wrap:pretty}
 @keyframes grain{0%,100%{transform:translate(0,0)} 20%{transform:translate(-31px,17px)}
   40%{transform:translate(22px,-41px)} 60%{transform:translate(-47px,-9px)} 80%{transform:translate(13px,38px)}}
 .glass .tube{position:absolute;inset:0;
-  background:radial-gradient(120% 90% at 50% 50%,transparent 60%,rgb(0 0 0/.4) 100%),
+  background:radial-gradient(110% 110% at 50% 50%,transparent 60%,rgb(0 0 0/.4) 100%),
              transparent;
   box-shadow:inset 2px 0 0 rgb(255 40 80/.16),inset -2px 0 0 rgb(40 170 255/.16),inset 0 2px 7px rgb(0 0 0/.38)}
 .glass .band{position:absolute;left:0;right:0;top:0;height:14%;opacity:0;mix-blend-mode:screen;
@@ -175,17 +175,17 @@ html[data-room] .glass .tube{opacity:.4}
 html:not(.night) .post img{filter:none}
 html.night .post img{filter:brightness(.46) saturate(1.2) contrast(1.1)}
 /* BLOOMS — colour at each door, breathing. Soft light by day, lit by night. */
-.lamp{inset:-30%;mix-blend-mode:soft-light;opacity:1;filter:blur(90px);will-change:opacity;animation:breathe 11s var(--breath) infinite alternate}
-.lamp.b-story{background:radial-gradient(45% 60% at 0% 100%,rgb(255 186 110/.85),transparent 85%)}   /* the lamp, through linen */
-.lamp.b-day{background:radial-gradient(55% 45% at 85% 0%,rgb(255 252 244/.8),transparent 85%);animation-delay:-5.2s} /* the window */
-html.night .lamp.b-story{background:radial-gradient(55% 70% at 0% 100%,color-mix(in oklch,var(--red) 85%,transparent),transparent 88%)}
-html.night .lamp.b-day{background:radial-gradient(70% 55% at 50% 0%,color-mix(in oklch,var(--red) 40%,transparent),transparent 88%)} /* the red gel */
-.lamp.b-practice{background:radial-gradient(50% 60% at 100% 100%,color-mix(in oklch,var(--blue) 80%,transparent),transparent 85%);animation-delay:-3.7s}
-.lamp.b-world{background:radial-gradient(40% 40% at 50% 100%,color-mix(in oklch,var(--lilac) 80%,transparent),transparent 85%);animation-delay:-7.3s}
+.lamp{inset:-20%;mix-blend-mode:soft-light;opacity:1;animation:breathe 11s var(--breath) infinite alternate}
+.lamp.b-story{background:radial-gradient(70% 85% at 0% 100%,rgb(255 186 110/.85),color-mix(in oklch,rgb(255 186 110/.85) 55%,transparent) 30%,color-mix(in oklch,rgb(255 186 110/.85) 22%,transparent) 58%,color-mix(in oklch,rgb(255 186 110/.85) 6%,transparent) 82%,transparent 100%)}   /* the lamp, through linen */
+.lamp.b-day{background:radial-gradient(80% 70% at 85% 0%,rgb(255 252 244/.8),color-mix(in oklch,rgb(255 252 244/.8) 55%,transparent) 30%,color-mix(in oklch,rgb(255 252 244/.8) 22%,transparent) 58%,color-mix(in oklch,rgb(255 252 244/.8) 6%,transparent) 82%,transparent 100%);animation-delay:-5.2s} /* the window */
+html.night .lamp.b-story{background:radial-gradient(80% 95% at 0% 100%,color-mix(in oklch,var(--red) 85%,transparent),color-mix(in oklch,color-mix(in oklch,var(--red) 85%,transparent) 55%,transparent) 30%,color-mix(in oklch,color-mix(in oklch,var(--red) 85%,transparent) 22%,transparent) 58%,color-mix(in oklch,color-mix(in oklch,var(--red) 85%,transparent) 6%,transparent) 82%,transparent 100%)}
+html.night .lamp.b-day{background:radial-gradient(95% 80% at 50% 0%,color-mix(in oklch,var(--red) 40%,transparent),color-mix(in oklch,color-mix(in oklch,var(--red) 40%,transparent) 55%,transparent) 30%,color-mix(in oklch,color-mix(in oklch,var(--red) 40%,transparent) 22%,transparent) 58%,color-mix(in oklch,color-mix(in oklch,var(--red) 40%,transparent) 6%,transparent) 82%,transparent 100%)} /* the red gel */
+.lamp.b-practice{background:radial-gradient(75% 85% at 100% 100%,color-mix(in oklch,var(--blue) 80%,transparent),color-mix(in oklch,color-mix(in oklch,var(--blue) 80%,transparent) 55%,transparent) 30%,color-mix(in oklch,color-mix(in oklch,var(--blue) 80%,transparent) 22%,transparent) 58%,color-mix(in oklch,color-mix(in oklch,var(--blue) 80%,transparent) 6%,transparent) 82%,transparent 100%);animation-delay:-3.7s}
+.lamp.b-world{background:radial-gradient(65% 65% at 50% 100%,color-mix(in oklch,var(--lilac) 80%,transparent),color-mix(in oklch,color-mix(in oklch,var(--lilac) 80%,transparent) 55%,transparent) 30%,color-mix(in oklch,color-mix(in oklch,var(--lilac) 80%,transparent) 22%,transparent) 58%,color-mix(in oklch,color-mix(in oklch,var(--lilac) 80%,transparent) 6%,transparent) 82%,transparent 100%);animation-delay:-7.3s}
 html.night .lamp{mix-blend-mode:screen;opacity:.6}
 .statement{position:absolute;inset:0;z-index:3;margin:0;display:grid;place-content:center;padding:0 var(--m);
   text-align:center;color:var(--osd);pointer-events:none;
-  background:radial-gradient(70% 60% at 50% 50%,rgb(20 18 16/.42),transparent 75%);
+  background:radial-gradient(95% 85% at 50% 50%,rgb(20 18 16/.42),transparent 75%);
   transition:opacity 2.2s var(--breath)}
 .statement .ln{display:block;font:500 clamp(21px,2.9cqi,46px)/1.16 var(--sans);letter-spacing:-.015em;
   opacity:0;transform:translateY(.25em);text-shadow:0 1px 22px rgb(0 0 0/.32);
@@ -226,26 +226,27 @@ html.night .lamp{mix-blend-mode:screen;opacity:.6}
 .door-practice{right:0;bottom:0;--c:var(--practice)}
 .door-world{bottom:0;left:50%;translate:-50% 0;--c:var(--world)}
 html[data-room] .post,html[data-room] .statement,html[data-room] .hud{visibility:hidden}
+html.shutting .post,html.shutting .statement,html.shutting .hud{visibility:visible}
 
 /* 08 ROOMS + BLOOM ── the bloom is the fill ───────────────────────────── */
 .room{position:absolute;inset:0;z-index:6;display:none;overflow:hidden;overflow:clip;container-type:size;background:var(--weave),var(--paper)}
 :root{--weave:repeating-linear-gradient(90deg,rgb(28 26 24/.022) 0 1px,transparent 1px 3px),
   repeating-linear-gradient(0deg,rgb(255 255 255/.35) 0 1px,transparent 1px 4px)}
 html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=world] #world{display:block}
-.room::before,.room::after{content:"";position:absolute;inset:-30%;pointer-events:none;filter:blur(80px)}
-.room::before{background:var(--bloom-a);animation:breathe 11s var(--breath) infinite alternate,drift 23s var(--breath) infinite alternate}
+.room::before,.room::after{content:"";position:absolute;inset:0;pointer-events:none}
+.room::before{background:var(--bloom-a);animation:breathe 11s var(--breath) infinite alternate}
 .room::after{background:var(--bloom-b);animation:breathe 11s var(--breath) -5.5s infinite alternate}
 @keyframes breathe{from{opacity:.62}to{opacity:1}}
 @keyframes drift{from{transform:translate(-2%,1%)}to{transform:translate(2%,-1%)}}
 #story{--c:var(--char);--c-ink:var(--char);--on-c:var(--paper);
-  --bloom-a:radial-gradient(55% 75% at 4% 40%,color-mix(in oklch,var(--char) 22%,transparent),transparent 88%);
-  --bloom-b:radial-gradient(45% 45% at 96% 96%,color-mix(in oklch,var(--red) 12%,transparent),transparent 88%)}
+  --bloom-a:radial-gradient(80% 100% at 4% 40%,color-mix(in oklch,var(--char) 22%,transparent),color-mix(in oklch,color-mix(in oklch,var(--char) 22%,transparent) 55%,transparent) 30%,color-mix(in oklch,color-mix(in oklch,var(--char) 22%,transparent) 22%,transparent) 58%,color-mix(in oklch,color-mix(in oklch,var(--char) 22%,transparent) 6%,transparent) 82%,transparent 100%);
+  --bloom-b:radial-gradient(70% 70% at 96% 96%,color-mix(in oklch,var(--red) 12%,transparent),color-mix(in oklch,color-mix(in oklch,var(--red) 12%,transparent) 55%,transparent) 30%,color-mix(in oklch,color-mix(in oklch,var(--red) 12%,transparent) 22%,transparent) 58%,color-mix(in oklch,color-mix(in oklch,var(--red) 12%,transparent) 6%,transparent) 82%,transparent 100%)}
 #practice{--c:var(--blue);--c-ink:var(--blue-ink);--on-c:var(--paper);
-  --bloom-a:radial-gradient(55% 75% at 96% 40%,color-mix(in oklch,var(--blue) 42%,transparent),transparent 88%);
-  --bloom-b:radial-gradient(45% 45% at 50% 100%,color-mix(in oklch,var(--red) 12%,transparent),transparent 88%)}
+  --bloom-a:radial-gradient(80% 100% at 96% 40%,color-mix(in oklch,var(--blue) 42%,transparent),color-mix(in oklch,color-mix(in oklch,var(--blue) 42%,transparent) 55%,transparent) 30%,color-mix(in oklch,color-mix(in oklch,var(--blue) 42%,transparent) 22%,transparent) 58%,color-mix(in oklch,color-mix(in oklch,var(--blue) 42%,transparent) 6%,transparent) 82%,transparent 100%);
+  --bloom-b:radial-gradient(70% 70% at 50% 100%,color-mix(in oklch,var(--red) 12%,transparent),color-mix(in oklch,color-mix(in oklch,var(--red) 12%,transparent) 55%,transparent) 30%,color-mix(in oklch,color-mix(in oklch,var(--red) 12%,transparent) 22%,transparent) 58%,color-mix(in oklch,color-mix(in oklch,var(--red) 12%,transparent) 6%,transparent) 82%,transparent 100%)}
 #world{--c:var(--lilac);--c-ink:var(--lilac-ink);--on-c:var(--ink);
-  --bloom-a:radial-gradient(80% 55% at 50% 100%,color-mix(in oklch,var(--lilac) 40%,transparent),transparent 88%);
-  --bloom-b:radial-gradient(45% 45% at 4% 20%,color-mix(in oklch,var(--char) 10%,transparent),transparent 88%)}
+  --bloom-a:radial-gradient(105% 80% at 50% 100%,color-mix(in oklch,var(--lilac) 40%,transparent),color-mix(in oklch,color-mix(in oklch,var(--lilac) 40%,transparent) 55%,transparent) 30%,color-mix(in oklch,color-mix(in oklch,var(--lilac) 40%,transparent) 22%,transparent) 58%,color-mix(in oklch,color-mix(in oklch,var(--lilac) 40%,transparent) 6%,transparent) 82%,transparent 100%);
+  --bloom-b:radial-gradient(70% 70% at 4% 20%,color-mix(in oklch,var(--char) 10%,transparent),color-mix(in oklch,color-mix(in oklch,var(--char) 10%,transparent) 55%,transparent) 30%,color-mix(in oklch,color-mix(in oklch,var(--char) 10%,transparent) 22%,transparent) 58%,color-mix(in oklch,color-mix(in oklch,var(--char) 10%,transparent) 6%,transparent) 82%,transparent 100%)}
 .room ::selection{background:color-mix(in oklch,var(--red) 20%,transparent)}
 .room :focus-visible{outline-color:var(--red)}
 .room-scroll{position:relative;z-index:1;height:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;outline:none;
@@ -471,24 +472,20 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .sheet-body p{max-width:62ch}
 
 /* 15 MOTION ── a room wipes across the glass from its door ──────────────── */
-::view-transition-old(root),::view-transition-new(root){animation:none}
-::view-transition-old(screen){animation:none}
-::view-transition-new(screen){animation:curtain .9s var(--arrive) both;
-  -webkit-mask-image:var(--sheer);mask-image:var(--sheer);-webkit-mask-size:var(--msize);mask-size:var(--msize);mask-repeat:no-repeat}
-::view-transition-old(screen){animation:dim .9s var(--arrive) both}
-@keyframes dim{to{opacity:.6}}
-/* the leading edge is pleated and sheer, like the curtains between rooms */
-@keyframes curtain{from{-webkit-mask-position:var(--m0);mask-position:var(--m0)}to{-webkit-mask-position:var(--m1);mask-position:var(--m1)}}
-html{--pleat:#000 0 44%,rgb(0 0 0/.55) 46%,#000 48.5%,rgb(0 0 0/.4) 51%,#000 53%,rgb(0 0 0/.28) 56%,rgb(0 0 0/.12) 59%,transparent 63%;
-  --sheer:linear-gradient(90deg,var(--pleat));--msize:270% 100%;--m0:100% 0;--m1:0 0}
-html[data-dir=right]{--sheer:linear-gradient(270deg,var(--pleat));--m0:0 0;--m1:100% 0}
-html[data-dir=down]{--sheer:linear-gradient(0deg,var(--pleat));--msize:100% 270%;--m0:0 0;--m1:0 100%}
-html[data-dir=back-right]{--sheer:linear-gradient(270deg,var(--pleat));--m0:0 0;--m1:100% 0}
-html[data-dir=back-down]{--sheer:linear-gradient(0deg,var(--pleat));--msize:100% 270%;--m0:0 0;--m1:0 100%}
-/* closing: the landing sits still underneath; the room's curtain draws back to its own door */
-html[data-dir^=back]::view-transition-new(screen){animation:none;-webkit-mask-image:none;mask-image:none}
-html[data-dir^=back]::view-transition-old(screen){z-index:2;animation:curtain .8s var(--arrive) reverse both;
-  -webkit-mask-image:var(--sheer);mask-image:var(--sheer);-webkit-mask-size:var(--msize);mask-size:var(--msize);mask-repeat:no-repeat}
+/* rooms open and close by animating the room itself — no full-screen snapshots (iOS freezes on them) */
+/* closing: no snapshot — the room itself draws back toward its own door over the landing */
+#story.opening{animation:open-l .8s var(--arrive) both}
+#practice.opening{animation:open-r .8s var(--arrive) both}
+#world.opening{animation:open-d .8s var(--arrive) both}
+@keyframes open-l{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes open-r{from{clip-path:inset(0 0 0 100%)}to{clip-path:inset(0 0 0 0)}}
+@keyframes open-d{from{clip-path:inset(100% 0 0 0)}to{clip-path:inset(0 0 0 0)}}
+#story.closing{animation:shut-l .65s var(--arrive) forwards}
+#practice.closing{animation:shut-r .65s var(--arrive) forwards}
+#world.closing{animation:shut-d .65s var(--arrive) forwards}
+@keyframes shut-l{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 100% 0 0)}}
+@keyframes shut-r{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 0 0 100%)}}
+@keyframes shut-d{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(100% 0 0 0)}}
 @keyframes fade{from{opacity:0}}
 @supports (animation-timeline:view()){
   .tile,.contents li,.cv li,.svc li,.steps li{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 55%}
@@ -496,7 +493,6 @@ html[data-dir^=back]::view-transition-old(screen){z-index:2;animation:curtain .8
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}
-  ::view-transition-new(screen),::view-transition-old(screen){animation:none}
 }
 
 /* 16 NARROW SCREENS ── the same proportions, restacked ─────────────────── */
@@ -1112,8 +1108,19 @@ function route(){
     document.title = next ? `${next[0].toUpperCase() + next.slice(1)} — care of TANNER` : 'care of TANNER — Issue 01';
     if (next){ clearTimeout(timer); } else { schedule(); }
   };
-  document.documentElement.dataset.dir = next ? DIR[next] : (showingPrev ? 'back-' + DIR[showingPrev] : 'back-left');
-  if (document.startViewTransition && !reduced) document.startViewTransition(swap); else swap();
+  if (!next && showingPrev){                       // closing: animate the room element, no view transition
+    const el = document.getElementById(showingPrev);
+    if (reduced){ swap(); return; }
+    const root = document.documentElement;
+    root.classList.add('shutting'); el.classList.add('closing');
+    setTimeout(() => { if (showing === null){ swap(); } el.classList.remove('closing'); root.classList.remove('shutting'); }, 650);
+    return;
+  }
+  if (reduced || !next){ swap(); return; }
+  const el = document.getElementById(next), root = document.documentElement;
+  if (!showingPrev) root.classList.add('shutting');          // keep the landing visible under the opening room
+  swap(); el.classList.add('opening');
+  setTimeout(() => { el.classList.remove('opening'); root.classList.remove('shutting'); }, 820);
 }
 addEventListener('hashchange', route);
 document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => location.hash = b.dataset.go);
