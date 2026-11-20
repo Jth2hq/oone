@@ -357,6 +357,12 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .picks.multi span::before{content:"+";display:inline-block;width:1em;margin-right:.35em;text-align:center;color:var(--ink-2)}
 .picks.multi input:checked + span::before{content:"✓";color:var(--c-ink)}
 
+.form .dim{margin:.6em 0 .7em;color:var(--ink-2);font-size:var(--t-mono);line-height:1.4}
+.form .dim:first-of-type{margin-top:0}
+.form .dim b{display:inline-block;min-width:2.4em;font-weight:400;color:var(--red)}
+.form fieldset .picks + .dim{margin-top:1.8em}
+.form fieldset .picks.multi + .picks.multi{margin-top:1.8em}
+
 /* 11 PRACTICE ── what, how, work ──────────────────────────────────────── */
 .svc{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--gutter);max-width:none!important}
 .svc li{padding:1em 0 1.4em;border-top:1px solid var(--rule)}
@@ -710,21 +716,32 @@ html[data-dir=home]::view-transition-new(screen){animation:fade .7s var(--arrive
                 </div>
                 <fieldset>
                   <legend>What do you need? <small>Click all that apply</small></legend>
+                  <p class="dim mono"><b>2D</b> Flat — on paper and on screen</p>
                   <div class="picks multi">
-                    <label><input type="checkbox" name="needs" value="A design for a new building or addition"><span>A design for a new building or addition</span></label>
-                    <label><input type="checkbox" name="needs" value="Renovation &amp; layout planning"><span>Renovation &amp; layout planning</span></label>
-                    <label><input type="checkbox" name="needs" value="Architectural drawings &amp; permits"><span>Architectural drawings &amp; permits</span></label>
-                    <label><input type="checkbox" name="needs" value="Furniture selection"><span>Furniture selection</span></label>
-                    <label><input type="checkbox" name="needs" value="Lighting, paint &amp; finishes"><span>Lighting, paint &amp; finishes</span></label>
-                    <label><input type="checkbox" name="needs" value="Decorating &amp; styling a room"><span>Decorating &amp; styling a room</span></label>
-                    <label><input type="checkbox" name="needs" value="A custom piece of furniture"><span>A custom piece of furniture</span></label>
-                    <label><input type="checkbox" name="needs" value="An installation, display or shop fit-out"><span>An installation, display or shop fit-out</span></label>
-                    <label><input type="checkbox" name="needs" value="A logo &amp; brand look"><span>A logo &amp; brand look</span></label>
-                    <label><input type="checkbox" name="needs" value="Design for print — stationery, posters, books"><span>Design for print — stationery, posters, books</span></label>
-                    <label><input type="checkbox" name="needs" value="A website"><span>A website</span></label>
-                    <label><input type="checkbox" name="needs" value="Photography"><span>Photography</span></label>
-                    <label><input type="checkbox" name="needs" value="Planning for a property or neighbourhood"><span>Planning for a property or neighbourhood</span></label>
-                    <label><input type="checkbox" name="needs" value="Not sure yet — let’s talk"><span>Not sure yet — let’s talk</span></label>
+                    <label><input type="checkbox" name="needs" value="2D · A logo &amp; brand look"><span>A logo &amp; brand look</span></label>
+                    <label><input type="checkbox" name="needs" value="2D · Design for print — stationery, posters, books"><span>Design for print — stationery, posters, books</span></label>
+                    <label><input type="checkbox" name="needs" value="2D · A website"><span>A website</span></label>
+                    <label><input type="checkbox" name="needs" value="2D · Photography"><span>Photography</span></label>
+                  </div>
+                  <p class="dim mono"><b>3D</b> Space and object — things you walk into or hold</p>
+                  <div class="picks multi">
+                    <label><input type="checkbox" name="needs" value="3D · A design for a new building or addition"><span>A design for a new building or addition</span></label>
+                    <label><input type="checkbox" name="needs" value="3D · Renovation &amp; layout planning"><span>Renovation &amp; layout planning</span></label>
+                    <label><input type="checkbox" name="needs" value="3D · Architectural drawings &amp; permits"><span>Architectural drawings &amp; permits</span></label>
+                    <label><input type="checkbox" name="needs" value="3D · Furniture selection"><span>Furniture selection</span></label>
+                    <label><input type="checkbox" name="needs" value="3D · Lighting, paint &amp; finishes"><span>Lighting, paint &amp; finishes</span></label>
+                    <label><input type="checkbox" name="needs" value="3D · Decorating &amp; styling a room"><span>Decorating &amp; styling a room</span></label>
+                    <label><input type="checkbox" name="needs" value="3D · A custom piece of furniture"><span>A custom piece of furniture</span></label>
+                  </div>
+                  <p class="dim mono"><b>4D</b> Time — things that unfold, move or change</p>
+                  <div class="picks multi">
+                    <label><input type="checkbox" name="needs" value="4D · An installation, display or event"><span>An installation, display or event</span></label>
+                    <label><input type="checkbox" name="needs" value="4D · A shop or restaurant fit-out, opening to opening"><span>A shop or restaurant fit-out, opening to opening</span></label>
+                    <label><input type="checkbox" name="needs" value="4D · Motion, video &amp; social content"><span>Motion, video &amp; social content</span></label>
+                    <label><input type="checkbox" name="needs" value="4D · Planning for a property or neighbourhood, in phases"><span>Planning for a property or neighbourhood, in phases</span></label>
+                  </div>
+                  <div class="picks multi">
+                    <label><input type="checkbox" name="needs" value="Not sure yet"><span>Not sure yet — let’s talk</span></label>
                   </div>
                 </fieldset>
                 <fieldset>
