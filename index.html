@@ -43,6 +43,7 @@
   /* the Schlüter profile: metal face + shadow gap */
   --reveal:clamp(7px,.75vw,11px);
   --gap:clamp(2px,.22vw,4px);
+  --radius:clamp(16px,1.9vw,28px);                 /* the screen's corner */
 
   /* three curves only */
   --breath:cubic-bezier(.37,0,.63,1);   /* ambient, sine in-out */
@@ -60,6 +61,7 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 a{color:inherit}
 :focus-visible{outline:1.5px solid var(--ink);outline-offset:4px;border-radius:2px}
 .mono{font-family:var(--mono);font-size:11.5px;line-height:1.4;letter-spacing:.04em}
+.caption .idx,.masthead .mono{text-shadow:.6px 0 0 rgb(216 16 47/.35),-.6px 0 0 rgb(47 98 196/.35)}
 .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--c,var(--ink));flex:none}
 .vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
@@ -75,7 +77,7 @@ a{color:inherit}
 .landing{position:fixed;inset:0;display:grid;
   grid-template-columns:var(--margin) 1fr var(--margin);
   grid-template-rows:var(--margin) 1fr var(--margin)}
-.frame{grid-area:2/2;position:relative;padding:var(--reveal);
+.frame{grid-area:2/2;position:relative;padding:var(--reveal);border-radius:var(--radius);
   background:
     repeating-linear-gradient(90deg,rgb(255 255 255/.07) 0 1px,rgb(0 0 0/.035) 1px 2px,transparent 2px 4px),
     linear-gradient(180deg,#dcdcd8 0%,#bfc0bc 47%,#d2d3cf 53%,#acada9 100%);
@@ -85,10 +87,43 @@ a{color:inherit}
     0 0 0 1px rgb(26 26 26/.14),              /* metal meets plaster */
     0 1px 2px rgb(26 26 26/.06)}
 .reel{position:relative;height:100%;overflow:hidden;background:#1d1c1a;
+  border-radius:calc(var(--radius) - var(--reveal));isolation:isolate;
   outline:var(--gap) solid #2a2926;            /* the dark reveal interior */
   box-shadow:0 0 0 var(--gap) #2a2926}
-.reel::after{content:"";position:absolute;inset:0;pointer-events:none;
-  box-shadow:inset 0 2px 7px rgb(0 0 0/.38)}   /* tile set back behind the gap */
+.reel::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:6;border-radius:inherit;
+  box-shadow:inset 0 2px 7px rgb(0 0 0/.38)}   /* glass set back behind the gap */
+
+/* THE SCREEN ── it reads as a monitor, not a print in a frame. Every layer
+   here is painted once; only the grain moves, and only by transform. */
+.screen{position:absolute;inset:0;z-index:5;pointer-events:none;border-radius:inherit;overflow:hidden}
+.screen .scan{position:absolute;inset:0;opacity:.55;mix-blend-mode:multiply;
+  background:repeating-linear-gradient(0deg,rgb(0 0 0/.16) 0 1px,transparent 1px 3px)}
+.screen .grain{position:absolute;inset:-96px;opacity:.5;mix-blend-mode:overlay;
+  background:url(brand/grain.png);animation:grain .9s steps(5) infinite}
+@keyframes grain{
+  0%{transform:translate(0,0)} 20%{transform:translate(-31px,17px)} 40%{transform:translate(22px,-41px)}
+  60%{transform:translate(-47px,-9px)} 80%{transform:translate(13px,38px)} 100%{transform:translate(0,0)}}
+.screen .glass{position:absolute;inset:0;
+  background:
+    radial-gradient(120% 90% at 50% 50%,transparent 58%,rgb(0 0 0/.42) 100%),          /* tube falloff */
+    linear-gradient(118deg,rgb(255 255 255/.11) 0%,rgb(255 255 255/0) 34%);            /* glare */
+  box-shadow:inset 2px 0 0 rgb(255 40 80/.16),inset -2px 0 0 rgb(40 170 255/.16)}       /* edge fringe */
+/* the tune: a bright band rolls down the glass as each post comes on */
+.screen .band{position:absolute;left:0;right:0;top:0;height:14%;opacity:0;mix-blend-mode:screen;
+  background:linear-gradient(180deg,transparent,rgb(255 255 255/.10) 40%,rgb(216 16 47/.10) 55%,transparent)}
+.reel.tune .screen .band{animation:band .7s var(--ui)}
+@keyframes band{0%{opacity:1;transform:translateY(-100%)}100%{opacity:0;transform:translateY(780%)}}
+.post.on.tune-in img{animation:jolt .36s steps(3)}
+@keyframes jolt{0%{transform:translateX(-7px)}34%{transform:translateX(5px) scaleY(1.004)}67%{transform:translateX(-2px)}100%{transform:none}}
+
+/* colour leaking past the bezel onto the wall — one halo per door */
+.halo{position:absolute;inset:0;z-index:-1;border-radius:var(--radius);pointer-events:none;
+  animation:breathe 11s var(--breath) infinite alternate;transition:opacity .6s var(--ui)}
+.halo.h-story{box-shadow:-34px 0 90px -18px var(--story)}
+.halo.h-practice{box-shadow:34px 0 90px -18px var(--practice);animation-delay:-3.7s}
+.halo.h-world{box-shadow:0 38px 90px -18px var(--world);animation-delay:-7.3s}
+.landing[data-lean=story] .h-story,.landing[data-lean=practice] .h-practice,
+.landing[data-lean=world] .h-world{opacity:1;animation:none}
 
 /* masthead line — the top margin, like a running head */
 .masthead{grid-area:1/2;display:flex;align-items:center;justify-content:space-between;gap:var(--s2)}
@@ -104,7 +139,7 @@ a{color:inherit}
 .post:not(.panel){color:#F6F3EE}
 
 /* type on designed posts — sentence case, set like a cover line */
-.pt{position:absolute;inset:clamp(28px,7%,96px);display:flex;flex-direction:column;
+.pt{position:absolute;z-index:3;inset:clamp(28px,7%,96px);display:flex;flex-direction:column;
   opacity:0;transition:opacity 1.6s var(--breath) .4s}
 .reel.quiet .post.on .pt{opacity:1}
 .post:not(.panel) .pt{text-shadow:0 1px 18px rgb(0 0 0/.35)}
@@ -125,20 +160,20 @@ a{color:inherit}
 
 /* colour blooms — static gradients at the three doors. They breathe
    (opacity only, one breath = 11s) and lean in when their door is near. */
-.bloom{position:absolute;inset:0;pointer-events:none;mix-blend-mode:soft-light;opacity:.55;
+.bloom{position:absolute;inset:0;z-index:4;pointer-events:none;mix-blend-mode:screen;opacity:.55;
   animation:breathe 11s var(--breath) infinite alternate}
-.bloom.b-story{background:radial-gradient(60% 70% at 0% 50%,var(--story),transparent 70%)}
-.bloom.b-practice{background:radial-gradient(60% 70% at 100% 50%,var(--practice),transparent 70%);animation-delay:-3.7s}
-.bloom.b-world{background:radial-gradient(70% 60% at 50% 100%,var(--world),transparent 70%);animation-delay:-7.3s}
-@keyframes breathe{from{opacity:.32}to{opacity:.62}}
+.bloom.b-story{background:radial-gradient(55% 80% at 0% 50%,rgb(232 130 28/.7),transparent 70%)}
+.bloom.b-practice{background:radial-gradient(55% 80% at 100% 50%,rgb(47 98 196/.75),transparent 70%);animation-delay:-3.7s}
+.bloom.b-world{background:radial-gradient(80% 55% at 50% 100%,rgb(138 123 204/.75),transparent 70%);animation-delay:-7.3s}
+@keyframes breathe{from{opacity:.4}to{opacity:.85}}
 .landing[data-lean=story] .b-story,
 .landing[data-lean=practice] .b-practice,
-.landing[data-lean=world] .b-world{opacity:.95;animation:none;transition:opacity .6s var(--ui)}
+.landing[data-lean=world] .b-world{opacity:1;animation:none;transition:opacity .6s var(--ui)}
 
 /* 05 STATEMENT ── a deep breath ─────────────────────────────────────────
    Inhale: the first image arrives (2s). The lines follow, one at a time.
    Hold. Exhale: the statement leaves and the reel begins to turn. */
-.statement{position:absolute;inset:0;display:grid;place-content:center;padding:0 8%;
+.statement{position:absolute;inset:0;z-index:3;display:grid;place-content:center;padding:0 8%;
   text-align:center;color:#F6F3EE;pointer-events:none;
   background:radial-gradient(70% 60% at 50% 50%,rgb(20 18 16/.42),transparent 75%);
   transition:opacity 2.2s var(--breath)}
@@ -153,8 +188,7 @@ a{color:inherit}
 .statement .logo{height:1.9em;vertical-align:-.38em;margin-right:.08em}
 @keyframes line{to{opacity:1;transform:none}}
 .reel.quiet .statement{opacity:0}
-.first{opacity:0;animation:inhale 2s var(--breath) .2s forwards}
-@keyframes inhale{to{opacity:1}}
+.post.first{transition-duration:2s;transition-delay:.2s}
 
 /* 06 MARGINS ── doors, caption, controls ─────────────────────────────────
    Navigation lives in the margins like running heads, never on the image. */
@@ -172,9 +206,10 @@ a{color:inherit}
 .door-practice{grid-area:2/3;writing-mode:vertical-rl;--c:var(--practice)}
 .foot{grid-area:3/2;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:var(--s2)}
 .door-world{--c:var(--world)}
+.door-m{display:none}
 .caption{display:flex;align-items:center;gap:10px;color:var(--ink-2);min-width:0;
   opacity:0;animation:exhale 1s var(--arrive) 4.5s forwards}
-.caption .idx{color:var(--ink)}
+.caption .idx{color:var(--ink);white-space:nowrap;flex:none}
 .caption .cap{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .controls{justify-self:end;display:flex;gap:var(--s3);opacity:0;animation:exhale 1s var(--arrive) 4.5s forwards}
 .controls button{min-height:44px;color:var(--ink-2)}
@@ -216,6 +251,8 @@ html[data-room] .landing{display:none}
 .body p{margin:0 0 1em}
 .body .lede{font-size:clamp(20px,1.6vw,24px);line-height:1.4;margin-bottom:1.2em}
 .body .logo{height:2em;vertical-align:-.36em}
+.body p:has(.logo){padding-top:.55em}        /* the script rides above the line — give it room */
+.statement p:first-child{padding-top:.4em}
 .pull{grid-column:3/12;margin:0;padding:var(--s4) 0;font:400 clamp(44px,5.6vw,92px)/1 var(--script);
   color:var(--cherry);transform:rotate(-3deg)}
 .notes{list-style:none;padding:var(--s2) 0 0;margin:var(--s4) 0 0;border-top:1px solid var(--rule);color:var(--ink-2)}
@@ -323,9 +360,13 @@ html[data-dir=home]{--vx:0;--vy:0}
   .landing{grid-template-columns:30px 1fr 30px;grid-template-rows:64px 1fr auto}
   .masthead{grid-column:1/-1;padding:0 20px}
   .masthead .issue{display:none}
-  .foot{grid-column:1/-1;grid-template-columns:1fr auto;padding:12px 20px 18px;row-gap:4px}
+  .landing{grid-template-columns:20px 1fr 20px}
+  .door-story,.door-practice{display:none}
+  .foot{grid-column:1/-1;grid-template-columns:1fr auto 1fr;padding:6px 20px 14px;row-gap:2px}
   .caption{grid-column:1/-1;order:-1}
-  .door-world{justify-self:start}
+  .controls{grid-column:1/-1;order:-1;justify-self:start}
+  .foot .door-m{display:flex}
+  .foot .door-m.story{justify-self:start} .foot .door-m.practice{justify-self:end}
   .runhead{grid-template-columns:auto 1fr;padding:10px var(--margin)}
   .runhead .folio{display:none}
   .page,.backpage{display:block;padding-top:var(--s5)}
@@ -352,8 +393,10 @@ html[data-dir=home]{--vx:0;--vy:0}
   <button class="door door-story" data-go="story" aria-label="Story"><span class="dot"></span>Story<span class="arrow" aria-hidden="true">→</span></button>
 
   <div class="frame">
+    <div class="halo h-story"></div><div class="halo h-practice"></div><div class="halo h-world"></div>
     <div class="reel" id="reel" aria-roledescription="carousel" aria-label="The feed">
       <!-- posts are written here by the script -->
+      <div class="screen" aria-hidden="true"><div class="scan"></div><div class="grain"></div><div class="glass"></div><div class="band"></div></div>
       <div class="bloom b-story"></div><div class="bloom b-practice"></div><div class="bloom b-world"></div>
       <div class="statement" aria-label="care of TANNER is a practice. Design is a negotiation. By middle name, I'm Tanner. Let's meet in the middle.">
         <p><span class="logo on-dark"></span> is a practice.</p>
@@ -368,7 +411,9 @@ html[data-dir=home]{--vx:0;--vy:0}
 
   <footer class="foot">
     <p class="caption mono" aria-live="polite"><span class="dot" id="cap-dot"></span><span class="idx" id="cap-idx"></span><span class="cap" id="cap-text"></span></p>
+    <button class="door door-m story" data-go="story" style="--c:var(--story)"><span class="arrow" aria-hidden="true">←</span><span class="dot"></span>Story</button>
     <button class="door door-world" data-go="world"><span class="dot"></span>World<span class="arrow" aria-hidden="true">↓</span></button>
+    <button class="door door-m practice" data-go="practice" style="--c:var(--practice)">Practice<span class="dot"></span><span class="arrow" aria-hidden="true">→</span></button>
     <div class="controls mono">
       <button id="pause" aria-pressed="false">Pause</button>
       <button id="next" aria-label="Next post">Next →</button>
@@ -679,7 +724,7 @@ function typeHTML(p){
 }
 function postEl(p, i){
   const el = document.createElement('figure');
-  el.className = 'post' + (p.photo ? '' : ' panel') + (i === 0 ? ' on first' : '');
+  el.className = 'post' + (p.photo ? '' : ' panel') + (i === 0 ? ' first' : '');
   if (!p.photo){ const [bg, fg] = FIELDS[p.field] || FIELDS.bone; el.style.cssText = `--pf:${bg};--pi:${fg}`; }
   el.innerHTML = (p.photo
     ? `<img data-srcset="${srcset(p.photo)}" sizes="100vw" alt="${esc(PHOTOS[p.photo].title)}" decoding="async">` : '')
@@ -688,8 +733,11 @@ function postEl(p, i){
 }
 const reel = $('#reel'), anchor = reel.querySelector('.bloom');
 const posts = feed.map((p, i) => reel.insertBefore(postEl(p, i), anchor));
+function ready(i){ const img = posts[i]?.querySelector('img'); return img && img.decode ? img.decode().catch(() => {}) : Promise.resolve(); }
 function load(i){ const img = posts[i]?.querySelector('img[data-srcset]'); if (img){ img.srcset = img.dataset.srcset; img.removeAttribute('data-srcset'); } }
-load(0); posts[0].querySelector('img')?.setAttribute('fetchpriority', 'high'); load(1);
+posts[0].querySelector('img')?.setAttribute('fetchpriority', 'high'); load(0); load(1);
+/* inhale: the first photograph fades up once it is decoded */
+ready(0).then(() => requestAnimationFrame(() => posts[0].classList.add('on')));
 
 let at = 0, timer = null, paused = reduced;
 function caption(){
@@ -698,12 +746,19 @@ function caption(){
   $('#cap-idx').textContent = p.idx;
   $('#cap-text').textContent = p.cap;
 }
+let busy = false;
 function show(i){
-  posts[at].classList.remove('on', 'first');
-  at = (i + posts.length) % posts.length;
-  load(at); load(at + 1);
-  posts[at].classList.add('on');
-  caption();
+  if (busy) return; busy = true;
+  const to = (i + posts.length) % posts.length;
+  load(to); load(to + 1);
+  ready(to).then(() => {                       // never fade to an undecoded image
+    posts[at].classList.remove('on', 'first', 'tune-in');
+    at = to;
+    posts[at].classList.add('on', 'tune-in');
+    reel.classList.remove('tune'); void reel.offsetWidth; reel.classList.add('tune');
+    caption();
+    busy = false;
+  });
 }
 function schedule(){ clearTimeout(timer); if (!paused) timer = setTimeout(() => { show(at + 1); schedule(); }, HOLD + FADE); }
 caption();
