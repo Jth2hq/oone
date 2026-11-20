@@ -198,12 +198,14 @@ html.night .lamp{mix-blend-mode:screen;opacity:.6}
 .statement .ln{display:block;font:500 clamp(21px,2.9cqi,46px)/1.16 var(--sans);letter-spacing:-.015em;
   opacity:0;transform:translateY(.25em);text-shadow:0 1px 22px rgb(0 0 0/.32);
   animation:line 1.2s var(--arrive) forwards}
-.statement .ln:nth-child(1){animation-delay:1.6s;padding-top:.4em}
+.statement .ln:nth-child(1){animation-delay:1.6s}
 .statement .ln:nth-child(2){animation-delay:2.1s}
 .statement .ln:nth-child(3){animation-delay:2.6s}
 .statement .spoken{margin-top:.5em;font:400 clamp(32px,4.4cqi,72px)/1 var(--script);letter-spacing:0;
   color:var(--red);text-shadow:0 1px 16px rgb(0 0 0/.25);animation-delay:3.4s}
-.statement .logo{height:1.9em;vertical-align:-.36em;margin-right:.1em}
+/* the logo takes only TANNER's cap height in the line box, so the three lines sit at equal spacing;
+   the red "care of" and its slash pierce above and below without pushing anything */
+.statement .logo{display:inline-block;height:2.05em;vertical-align:baseline;margin:-1.032em .12em -.301em 0}
 @keyframes line{to{opacity:1;transform:none}}
 .reel.quiet .statement{opacity:0}
 
