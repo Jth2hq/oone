@@ -15,131 +15,108 @@
 /* ═══════════════════════════════════════════════════════════════════════
    care of TANNER — Issue 01, Autumn/Winter 2026
 
-   One file, read like a magazine. No canvas, no WebGL, no per-frame
-   JavaScript: motion is opacity and transform only, run by CSS.
+   You are looking at a screen. Everything lives inside it: the reel, the
+   three rooms, the project sheet, the controls. The wall around it is
+   plaster; the bezel is a brushed-steel reveal. Nothing crosses the bezel.
 
-   01 TOKENS   02 BASE   03 FRAME (landing)   04 REEL   05 STATEMENT
-   06 MARGINS (pills, caption, controls)   07 ROOMS   08 STORY
-   09 PRACTICE   10 WORLD   11 DIALOG   12 MOTION   13 SMALL SCREENS
+   No canvas, no WebGL, no per-frame JavaScript. Motion is CSS opacity,
+   transform and one clip-path wipe.
+
+   01 TOKENS  02 BASE  03 DEVICE  04 GLASS  05 REEL  06 STATEMENT
+   07 ON-SCREEN CONTROLS  08 ROOMS + BLOOM  09 PAGE  10 PRACTICE
+   11 WORLD  12 SHEET  13 MOTION  14 SMALL SCREENS
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* 01 TOKENS ───────────────────────────────────────────────────────────── */
 @font-face{font-family:"lipstick";src:url(fonts/lipstick.woff2) format("woff2");font-display:swap}
 :root{
   --bone:#E8E4DC; --paper:#F1EEE8; --ink:#1A1A1A; --ink-2:#5E5A54; --rule:rgb(26 26 26/.16);
-  --cherry:#D8102F;
+  --cherry:#D8102F; --osd:#F6F3EE;
   --story:#E8821C; --practice:#2F62C4; --world:#8A7BCC;
-  --story-bg:#F4D9B4; --practice-bg:#2F62C4; --world-bg:#D9D1F0;
 
   --sans:"early-sans-variable","early-sans","Helvetica Neue",Arial,sans-serif;
   --mono:"config-mono-vf",ui-monospace,"SF Mono",monospace;
   --script:"lipstick",Georgia,serif;
 
-  /* print grid: 12 columns, margins that read as page margins */
-  --margin:clamp(22px,5vw,80px);
+  --wall:clamp(10px,2.4vw,36px);          /* plaster showing around the device */
+  --pad:clamp(20px,4.2vw,72px);           /* page margin inside the screen */
+  --hud:clamp(14px,1.8vw,26px);           /* on-screen controls inset */
   --gutter:clamp(12px,1.5vw,24px);
-  --s1:8px; --s2:16px; --s3:24px; --s4:48px; --s5:96px; --s6:144px; --s7:192px;
+  --s1:8px; --s2:16px; --s3:24px; --s4:48px; --s5:96px; --s6:144px;
 
-  /* the Schlüter profile: metal face + shadow gap */
-  --reveal:clamp(7px,.75vw,11px);
-  --gap:clamp(2px,.22vw,4px);
-  --radius:clamp(16px,1.9vw,28px);                 /* the screen's corner */
+  --reveal:clamp(6px,.7vw,11px);          /* the metal face */
+  --gap:clamp(2px,.22vw,4px);             /* the shadow gap */
+  --radius:clamp(16px,1.9vw,28px);
+  --r-in:calc(var(--radius) - var(--reveal));
 
-  /* three curves only */
-  --breath:cubic-bezier(.37,0,.63,1);   /* ambient, sine in-out */
-  --arrive:cubic-bezier(.22,1,.36,1);   /* arrivals, no overshoot */
-  --ui:cubic-bezier(.4,0,.2,1);         /* hovers, toggles */
+  --breath:cubic-bezier(.37,0,.63,1);
+  --arrive:cubic-bezier(.22,1,.36,1);
+  --ui:cubic-bezier(.4,0,.2,1);
 }
 
 /* 02 BASE ─────────────────────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
 html{background:var(--bone);color:var(--ink);-webkit-text-size-adjust:100%}
-body{margin:0;font:400 17px/1.5 var(--sans);font-optical-sizing:auto;
-  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{margin:0;font:400 17px/1.5 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 img{display:block;max-width:100%;height:auto}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
 a{color:inherit}
-:focus-visible{outline:1.5px solid var(--ink);outline-offset:4px;border-radius:2px}
+:focus-visible{outline:1.5px solid currentColor;outline-offset:4px;border-radius:2px}
 .mono{font-family:var(--mono);font-size:11.5px;line-height:1.4;letter-spacing:.04em}
-.caption .idx,.masthead .mono{text-shadow:.6px 0 0 rgb(216 16 47/.35),-.6px 0 0 rgb(47 98 196/.35)}
 .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--c,var(--ink));flex:none}
-.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
-/* The logo is always the drawn mark. Two cuts: ink TANNER on light
-   grounds, bone TANNER over photographs. Ratio 1001 × 472. */
+/* The logo is always the drawn mark. Ink TANNER on light, bone on dark. */
 .logo{display:inline-block;aspect-ratio:1001/472;height:2.1em;vertical-align:-.34em;
   background:url(brand/care-of-tanner.png) center/contain no-repeat}
 .logo.on-dark{background-image:url(brand/care-of-tanner-light.png)}
+.home{display:block;line-height:0}
 
-/* 03 FRAME ── the landing ────────────────────────────────────────────────
-   The page is plaster; the reel is tile; between them a brushed-steel
-   L-angle with a dark shadow gap. Painted once — nothing here animates. */
-.landing{position:fixed;inset:0;display:grid;
-  grid-template-columns:var(--margin) 1fr var(--margin);
-  grid-template-rows:var(--margin) 1fr var(--margin)}
-.frame{grid-area:2/2;position:relative;padding:var(--reveal);border-radius:var(--radius);
+/* 03 DEVICE ── plaster, steel reveal, shadow gap ───────────────────────── */
+.device{position:fixed;inset:0;padding:var(--wall);
+  padding:max(var(--wall),env(safe-area-inset-top)) max(var(--wall),env(safe-area-inset-right))
+          max(var(--wall),env(safe-area-inset-bottom)) max(var(--wall),env(safe-area-inset-left))}
+.frame{height:100%;padding:var(--reveal);border-radius:var(--radius);
   background:
     repeating-linear-gradient(90deg,rgb(255 255 255/.07) 0 1px,rgb(0 0 0/.035) 1px 2px,transparent 2px 4px),
     linear-gradient(180deg,#dcdcd8 0%,#bfc0bc 47%,#d2d3cf 53%,#acada9 100%);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255/.6),       /* lit top arris */
-    inset 0 -1px 0 rgb(0 0 0/.22),            /* shaded bottom arris */
-    0 0 0 1px rgb(26 26 26/.14),              /* metal meets plaster */
-    0 1px 2px rgb(26 26 26/.06)}
-.reel{position:relative;height:100%;overflow:hidden;background:#1d1c1a;
-  border-radius:calc(var(--radius) - var(--reveal));isolation:isolate;
-  outline:var(--gap) solid #2a2926;            /* the dark reveal interior */
-  box-shadow:0 0 0 var(--gap) #2a2926}
-.reel::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:6;border-radius:inherit;
-  box-shadow:inset 0 2px 7px rgb(0 0 0/.38)}   /* glass set back behind the gap */
+  box-shadow:inset 0 1px 0 rgb(255 255 255/.6),inset 0 -1px 0 rgb(0 0 0/.22),
+    0 0 0 1px rgb(26 26 26/.14),0 1px 2px rgb(26 26 26/.06)}
+.reel{position:relative;height:100%;overflow:hidden;background:#1d1c1a;border-radius:var(--r-in);
+  isolation:isolate;box-shadow:0 0 0 var(--gap) #2a2926;view-transition-name:screen}
 
-/* THE SCREEN ── it reads as a monitor, not a print in a frame. Every layer
-   here is painted once; only the grain moves, and only by transform. */
-.screen{position:absolute;inset:0;z-index:5;pointer-events:none;border-radius:inherit;overflow:hidden}
-.screen .scan{position:absolute;inset:0;opacity:.55;mix-blend-mode:multiply;
+/* 04 GLASS ── what makes it a screen. Painted once; only the grain moves. */
+.glass{position:absolute;inset:0;z-index:20;pointer-events:none;border-radius:inherit;overflow:hidden}
+.glass .scan{position:absolute;inset:0;opacity:.55;mix-blend-mode:multiply;
   background:repeating-linear-gradient(0deg,rgb(0 0 0/.16) 0 1px,transparent 1px 3px)}
-.screen .grain{position:absolute;inset:-96px;opacity:.5;mix-blend-mode:overlay;
+.glass .grain{position:absolute;inset:-96px;opacity:.5;mix-blend-mode:overlay;
   background:url(brand/grain.png);animation:grain .9s steps(5) infinite}
-@keyframes grain{
-  0%{transform:translate(0,0)} 20%{transform:translate(-31px,17px)} 40%{transform:translate(22px,-41px)}
-  60%{transform:translate(-47px,-9px)} 80%{transform:translate(13px,38px)} 100%{transform:translate(0,0)}}
-.screen .glass{position:absolute;inset:0;
-  background:
-    radial-gradient(120% 90% at 50% 50%,transparent 58%,rgb(0 0 0/.42) 100%),          /* tube falloff */
-    linear-gradient(118deg,rgb(255 255 255/.11) 0%,rgb(255 255 255/0) 34%);            /* glare */
-  box-shadow:inset 2px 0 0 rgb(255 40 80/.16),inset -2px 0 0 rgb(40 170 255/.16)}       /* edge fringe */
-/* the tune: a bright band rolls down the glass as each post comes on */
-.screen .band{position:absolute;left:0;right:0;top:0;height:14%;opacity:0;mix-blend-mode:screen;
+@keyframes grain{0%,100%{transform:translate(0,0)} 20%{transform:translate(-31px,17px)}
+  40%{transform:translate(22px,-41px)} 60%{transform:translate(-47px,-9px)} 80%{transform:translate(13px,38px)}}
+.glass .tube{position:absolute;inset:0;
+  background:radial-gradient(120% 90% at 50% 50%,transparent 58%,rgb(0 0 0/.42) 100%),
+             linear-gradient(118deg,rgb(255 255 255/.11) 0%,rgb(255 255 255/0) 34%);
+  box-shadow:inset 2px 0 0 rgb(255 40 80/.16),inset -2px 0 0 rgb(40 170 255/.16),inset 0 2px 7px rgb(0 0 0/.38)}
+.glass .band{position:absolute;left:0;right:0;top:0;height:14%;opacity:0;mix-blend-mode:screen;
   background:linear-gradient(180deg,transparent,rgb(255 255 255/.10) 40%,rgb(216 16 47/.10) 55%,transparent)}
-.reel.tune .screen .band{animation:band .7s var(--ui)}
+.reel.tune .glass .band{animation:band .7s var(--ui)}
 @keyframes band{0%{opacity:1;transform:translateY(-100%)}100%{opacity:0;transform:translateY(780%)}}
+/* reading glass: lighter when a room is open, so long text stays easy */
+html[data-room] .glass .scan{opacity:.16}
+html[data-room] .glass .grain{opacity:.22}
+html[data-room] .glass .tube{opacity:.45}
+
+/* 05 REEL ─────────────────────────────────────────────────────────────── */
+.post{position:absolute;inset:0;z-index:1;margin:0;opacity:0;transition:opacity 1.4s var(--breath)}
+.post.on{opacity:1}
+.post.first{transition-duration:2s;transition-delay:.2s}
+.post img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.post.panel{background:var(--pf,var(--bone));color:var(--pi,var(--ink))}
+.post:not(.panel){color:var(--osd)}
 .post.on.tune-in img{animation:jolt .36s steps(3)}
 @keyframes jolt{0%{transform:translateX(-7px)}34%{transform:translateX(5px) scaleY(1.004)}67%{transform:translateX(-2px)}100%{transform:none}}
 
-/* colour leaking past the bezel onto the wall — one halo per door */
-.halo{position:absolute;inset:0;z-index:-1;border-radius:var(--radius);pointer-events:none;
-  animation:breathe 11s var(--breath) infinite alternate;transition:opacity .6s var(--ui)}
-.halo.h-story{box-shadow:-34px 0 90px -18px var(--story)}
-.halo.h-practice{box-shadow:34px 0 90px -18px var(--practice);animation-delay:-3.7s}
-.halo.h-world{box-shadow:0 38px 90px -18px var(--world);animation-delay:-7.3s}
-.landing[data-lean=story] .h-story,.landing[data-lean=practice] .h-practice,
-.landing[data-lean=world] .h-world{opacity:1;animation:none}
-
-/* masthead line — the top margin, like a running head */
-.masthead{grid-area:1/2;display:flex;align-items:center;justify-content:space-between;gap:var(--s2)}
-.home{display:block;line-height:0}
-.home .logo{height:clamp(30px,3.3vw,44px);vertical-align:0}
-.masthead .mono{color:var(--ink-2)}
-
-/* 04 REEL ─────────────────────────────────────────────────────────────── */
-.post{position:absolute;inset:0;margin:0;opacity:0;transition:opacity 1.4s var(--breath)}
-.post.on{opacity:1}
-.post img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.post.panel{background:var(--pf,var(--bone));color:var(--pi,var(--ink))}
-.post:not(.panel){color:#F6F3EE}
-
-/* type on designed posts — sentence case, set like a cover line */
-.pt{position:absolute;z-index:3;inset:clamp(28px,7%,96px);display:flex;flex-direction:column;
+.pt{position:absolute;inset:clamp(56px,9%,110px) clamp(28px,7%,110px);display:flex;flex-direction:column;
   opacity:0;transition:opacity 1.6s var(--breath) .4s}
 .reel.quiet .post.on .pt{opacity:1}
 .post:not(.panel) .pt{text-shadow:0 1px 18px rgb(0 0 0/.35)}
@@ -148,136 +125,127 @@ a{color:inherit}
 .pt.bl{justify-content:flex-end}
 .pt.c{align-items:center;justify-content:center;text-align:center}
 .pt-stack{font:400 13px/1.55 var(--mono);letter-spacing:.06em}
-.pt-display,.pt-title{font:500 clamp(40px,6.4vw,104px)/.95 var(--sans);letter-spacing:-.025em}
+.pt-display,.pt-title{font:500 clamp(36px,6vw,100px)/.95 var(--sans);letter-spacing:-.025em}
 .pt-title{font-weight:700;font-stretch:75%}
-.pt-script{font:400 clamp(52px,8vw,128px)/1 var(--script);color:var(--cherry);transform:rotate(-5deg)}
-.pt-hand{font:400 clamp(44px,6.6vw,104px)/1.05 var(--script);transform:rotate(-5deg)}
+.pt-script{font:400 clamp(48px,7.6vw,124px)/1 var(--script);color:var(--cherry);transform:rotate(-5deg)}
+.pt-hand{font:400 clamp(42px,6.4vw,100px)/1.05 var(--script);transform:rotate(-5deg)}
 .pt-list{width:min(560px,100%);font:400 clamp(20px,2.4vw,32px)/1.25 var(--sans)}
 .pt-list span{display:block;padding:.28em 0 .18em;border-bottom:1px solid currentColor}
 .pt .open{margin-top:var(--s3);font:400 11.5px/1 var(--mono);letter-spacing:.04em;
-  border-bottom:1px solid currentColor;padding-bottom:3px;align-self:flex-start;pointer-events:auto}
+  border-bottom:1px solid currentColor;padding-bottom:3px;align-self:flex-start}
 .pt.c .open{align-self:center}
 
-/* colour blooms — static gradients at the three doors. They breathe
-   (opacity only, one breath = 11s) and lean in when their door is near. */
-.bloom{position:absolute;inset:0;z-index:4;pointer-events:none;mix-blend-mode:screen;opacity:.55;
-  animation:breathe 11s var(--breath) infinite alternate}
-.bloom.b-story{background:radial-gradient(55% 80% at 0% 50%,rgb(232 130 28/.7),transparent 70%)}
-.bloom.b-practice{background:radial-gradient(55% 80% at 100% 50%,rgb(47 98 196/.75),transparent 70%);animation-delay:-3.7s}
-.bloom.b-world{background:radial-gradient(80% 55% at 50% 100%,rgb(138 123 204/.75),transparent 70%);animation-delay:-7.3s}
-@keyframes breathe{from{opacity:.4}to{opacity:.85}}
-.landing[data-lean=story] .b-story,
-.landing[data-lean=practice] .b-practice,
-.landing[data-lean=world] .b-world{opacity:1;animation:none;transition:opacity .6s var(--ui)}
-
-/* 05 STATEMENT ── a deep breath ─────────────────────────────────────────
-   Inhale: the first image arrives (2s). The lines follow, one at a time.
-   Hold. Exhale: the statement leaves and the reel begins to turn. */
-.statement{position:absolute;inset:0;z-index:3;display:grid;place-content:center;padding:0 8%;
-  text-align:center;color:#F6F3EE;pointer-events:none;
+/* 06 STATEMENT ── one breath ──────────────────────────────────────────── */
+.statement{position:absolute;inset:0;z-index:3;display:grid;place-content:center;padding:0 10%;
+  text-align:center;color:var(--osd);pointer-events:none;
   background:radial-gradient(70% 60% at 50% 50%,rgb(20 18 16/.42),transparent 75%);
   transition:opacity 2.2s var(--breath)}
-.statement p{margin:0;font:400 clamp(26px,3.4vw,50px)/1.18 var(--sans);letter-spacing:-.012em;
+.statement p{margin:0;font:400 clamp(24px,3.3vw,50px)/1.18 var(--sans);letter-spacing:-.012em;
   opacity:0;transform:translateY(.25em);text-shadow:0 1px 20px rgb(0 0 0/.3);
   animation:line 1.2s var(--arrive) forwards}
-.statement p:nth-child(1){animation-delay:1.6s}
+.statement p:nth-child(1){animation-delay:1.6s;padding-top:.4em}
 .statement p:nth-child(2){animation-delay:2.1s}
 .statement p:nth-child(3){animation-delay:2.6s}
-.statement p.spoken{margin-top:.55em;font:400 clamp(40px,5.2vw,78px)/1 var(--script);
+.statement p.spoken{margin-top:.55em;font:400 clamp(38px,5.2vw,78px)/1 var(--script);
   color:var(--cherry);text-shadow:0 1px 16px rgb(0 0 0/.25);animation-delay:3.4s}
 .statement .logo{height:1.9em;vertical-align:-.38em;margin-right:.08em}
 @keyframes line{to{opacity:1;transform:none}}
 .reel.quiet .statement{opacity:0}
-.post.first{transition-duration:2s;transition-delay:.2s}
 
-/* 06 MARGINS ── doors, caption, controls ─────────────────────────────────
-   Navigation lives in the margins like running heads, never on the image. */
-.door{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;
-  min-width:44px;min-height:44px;font:400 12px/1 var(--mono);letter-spacing:.04em;color:var(--ink);
-  opacity:0;animation:exhale 1s var(--arrive) 4.5s forwards;transition:color .2s var(--ui)}
+/* 07 ON-SCREEN CONTROLS ── the OSD. Each earns its place:
+   logo = home · doors = the three rooms · caption = what you're looking at
+   · pause/next = control over moving content (WCAG 2.2.2). */
+.hud{position:absolute;inset:0;z-index:4;pointer-events:none;color:var(--osd);
+  opacity:0;animation:exhale 1s var(--arrive) 4.5s forwards}
+.hud > *{position:absolute;pointer-events:auto}
+@keyframes exhale{to{opacity:1}}
+.chip{display:flex;align-items:center;gap:10px;min-height:40px;padding:0 14px;border-radius:999px;
+  background:rgb(18 17 15/.42);box-shadow:inset 0 0 0 1px rgb(255 255 255/.16);
+  font:400 12px/1 var(--mono);letter-spacing:.04em;color:var(--osd);
+  text-shadow:.6px 0 0 rgb(216 16 47/.4),-.6px 0 0 rgb(47 98 196/.4);
+  transition:background .2s var(--ui)}
+.chip:hover{background:rgb(18 17 15/.62)}
+.hud .home{top:var(--hud);left:var(--hud)}
+.hud .home .logo{height:clamp(30px,3vw,42px);vertical-align:0;filter:drop-shadow(0 1px 6px rgb(0 0 0/.4))}
+.hud .controls{top:var(--hud);right:var(--hud);display:flex;gap:8px}
+.hud .caption{left:var(--hud);bottom:var(--hud);max-width:min(46%,520px);margin:0}
+.caption .idx{white-space:nowrap;flex:none}
+.caption .cap{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.8}
 .door .dot{transition:transform .2s var(--ui)}
 .door:hover .dot,.door:focus-visible .dot{transform:scale(1.6)}
-.door-world:hover .arrow{transform:translateY(3px)}
-/* inside vertical text the arrow is set upright, then turned to point at its edge */
-.door-story .arrow{transform:rotate(-90deg)}
-.door-practice .arrow{transform:rotate(90deg)}
-.arrow{display:inline-block;writing-mode:horizontal-tb;transition:transform .2s var(--ui)}
-.door-story{grid-area:2/1;writing-mode:vertical-rl;transform:rotate(180deg);--c:var(--story)}
-.door-practice{grid-area:2/3;writing-mode:vertical-rl;--c:var(--practice)}
-.foot{grid-area:3/2;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:var(--s2)}
-.door-world{--c:var(--world)}
-.door-m{display:none}
-.caption{display:flex;align-items:center;gap:10px;color:var(--ink-2);min-width:0;
-  opacity:0;animation:exhale 1s var(--arrive) 4.5s forwards}
-.caption .idx{color:var(--ink);white-space:nowrap;flex:none}
-.caption .cap{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.controls{justify-self:end;display:flex;gap:var(--s3);opacity:0;animation:exhale 1s var(--arrive) 4.5s forwards}
-.controls button{min-height:44px;color:var(--ink-2)}
-.controls button:hover{color:var(--ink)}
-@keyframes exhale{to{opacity:1}}
+.door-story{left:var(--hud);top:50%;translate:0 -50%;--c:var(--story)}
+.door-practice{right:var(--hud);top:50%;translate:0 -50%;--c:var(--practice)}
+.door-world{bottom:var(--hud);left:50%;translate:-50% 0;--c:var(--world)}
 
-/* 07 ROOMS ─────────────────────────────────────────────────────────────── */
-.room{display:none;min-height:100vh;background:var(--paper)}
+html[data-room] .post,html[data-room] .statement,html[data-room] .hud{visibility:hidden}
+
+/* 08 ROOMS + BLOOM ── the bloom is the fill. Each room is lit from its own
+   door; the light breathes (opacity) and drifts (transform). */
+.room{position:absolute;inset:0;z-index:6;display:none;background:var(--paper);overflow:hidden}
 html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=world] #world{display:block}
-html[data-room] .landing{display:none}
+.room::before,.room::after{content:"";position:absolute;inset:-12%;pointer-events:none}
+.room::before{background:var(--bloom-a);animation:breathe 11s var(--breath) infinite alternate,drift 23s var(--breath) infinite alternate}
+.room::after{background:var(--bloom-b);animation:breathe 11s var(--breath) -5.5s infinite alternate}
+@keyframes breathe{from{opacity:.62}to{opacity:1}}
+@keyframes drift{from{transform:translate(-2%,1%)}to{transform:translate(2%,-1%)}}
+#story{--c:var(--story);
+  --bloom-a:radial-gradient(55% 75% at 6% 42%,rgb(232 130 28/.62),transparent 72%);
+  --bloom-b:radial-gradient(45% 45% at 92% 96%,rgb(216 16 47/.16),transparent 72%)}
+#practice{--c:var(--practice);
+  --bloom-a:radial-gradient(55% 75% at 94% 42%,rgb(47 98 196/.55),transparent 72%);
+  --bloom-b:radial-gradient(45% 45% at 8% 96%,rgb(232 130 28/.16),transparent 72%)}
+#world{--c:var(--world);
+  --bloom-a:radial-gradient(80% 55% at 50% 100%,rgb(138 123 204/.62),transparent 72%);
+  --bloom-b:radial-gradient(45% 45% at 96% 8%,rgb(47 98 196/.14),transparent 72%)}
+.room-scroll{position:relative;z-index:1;height:100%;overflow-y:auto;overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgb(26 26 26/.25) transparent;outline:none}
 
 .runhead{position:sticky;top:0;z-index:5;display:grid;grid-template-columns:1fr auto 1fr;
-  align-items:center;gap:var(--s2);padding:12px var(--margin);background:var(--paper);
-  border-bottom:1px solid var(--rule)}
-.runhead .home .logo{height:34px}
+  align-items:center;gap:var(--s2);padding:10px var(--pad);
+  background:rgb(241 238 232/.96);border-bottom:1px solid var(--rule)}
+.runhead .home .logo{height:32px}
 .runhead .folio{color:var(--ink-2)}
 .runhead .close{justify-self:end;display:flex;align-items:center;min-height:44px;text-decoration:none;font:400 12px/1 var(--mono);letter-spacing:.04em}
 
-.opener{min-height:72vh;display:grid;align-content:end;gap:var(--s3);
-  padding:var(--s6) var(--margin) var(--s5);background:var(--zbg);color:var(--zink)}
+.opener{min-height:64%;min-height:64cqh;display:grid;align-content:end;gap:var(--s3);
+  padding:var(--s5) var(--pad) var(--s5)}
+.room{container-type:size}
 .opener .part{display:flex;align-items:center;gap:10px}
 .opener h1{margin:0;font:800 clamp(56px,9vw,148px)/.9 var(--sans);font-stretch:75%;letter-spacing:-.02em}
 .opener .deck{margin:0;max-width:30ch;font:400 clamp(22px,2vw,30px)/1.25 var(--sans)}
-#story{--zbg:var(--story-bg);--zink:#2E1900;--c:var(--story)}
-#practice{--zbg:var(--practice-bg);--zink:#F3F1EC;--c:#F3F1EC}
-#world{--zbg:var(--world-bg);--zink:#1F1342;--c:var(--world)}
 
-/* the page: 12 columns, a sidehead column, a measured text column */
-.page{display:grid;grid-template-columns:repeat(12,1fr);column-gap:var(--gutter);
-  padding:var(--s6) var(--margin) 0}
+/* 09 PAGE ── 12 columns, a sidehead column, a measured text column ───── */
+.page{display:grid;grid-template-columns:repeat(12,1fr);column-gap:var(--gutter);padding:var(--s5) var(--pad) 0}
 .sec{grid-column:1/-1;display:grid;grid-template-columns:subgrid;padding-bottom:var(--s6);
   margin-bottom:var(--s6);border-bottom:1px solid var(--rule)}
 .sec:last-of-type{border-bottom:0;margin-bottom:0}
 .sidehead{grid-column:1/4;color:var(--ink-2)}
 .sidehead b{display:block;font-weight:400;color:var(--ink);margin-bottom:4px}
-.body{grid-column:5/12;max-width:66ch}
+.body{grid-column:5/12;max-width:66ch;min-width:0}
 .body h2{margin:0 0 var(--s3);font:600 clamp(28px,2.6vw,40px)/1.1 var(--sans);letter-spacing:-.015em}
 .body h3{margin:var(--s4) 0 var(--s2);font:600 22px/1.2 var(--sans)}
 .body p{margin:0 0 1em}
 .body .lede{font-size:clamp(20px,1.6vw,24px);line-height:1.4;margin-bottom:1.2em}
 .body .logo{height:2em;vertical-align:-.36em}
-.body p:has(.logo){padding-top:.55em}        /* the script rides above the line — give it room */
-.statement p:first-child{padding-top:.4em}
-.pull{grid-column:3/12;margin:0;padding:var(--s4) 0;font:400 clamp(44px,5.6vw,92px)/1 var(--script);
-  color:var(--cherry);transform:rotate(-3deg)}
+.body p:has(.logo){padding-top:.55em}
+.pull{grid-column:3/12;margin:0 0 var(--s6);font:400 clamp(44px,5.6vw,92px)/1.1 var(--script);
+  color:var(--cherry);transform:rotate(-3deg);transform-origin:left center}
 .notes{list-style:none;padding:var(--s2) 0 0;margin:var(--s4) 0 0;border-top:1px solid var(--rule);color:var(--ink-2)}
 .notes li{margin-bottom:6px}
-
-/* CV — set as a contents table */
 .cv{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
-.cv li{display:grid;grid-template-columns:5ch 1fr auto;gap:var(--s2);align-items:baseline;
+.cv li{display:grid;grid-template-columns:4ch 1fr auto;gap:var(--s2);align-items:baseline;
   padding:14px 0;border-bottom:1px solid var(--rule)}
 .cv .what{font-weight:600}
 .cv .what small{display:block;font-weight:400;color:var(--ink-2);font-size:15px}
-
-/* the essay */
-.essay p:first-of-type::first-letter{float:left;font:400 5.2em/.78 var(--script);color:var(--cherry);
-  padding:.06em .1em 0 0}
+.essay p:first-of-type::first-letter{float:left;font:400 5.2em/.78 var(--script);color:var(--cherry);padding:.06em .1em 0 0}
 .imperatives{counter-reset:i;list-style:none;margin:var(--s3) 0;padding:0;border-top:1px solid var(--ink)}
-.imperatives li{counter-increment:i;display:grid;grid-template-columns:5ch 1fr;padding:14px 0;border-bottom:1px solid var(--rule)}
+.imperatives li{counter-increment:i;display:grid;grid-template-columns:4ch 1fr;padding:14px 0;border-bottom:1px solid var(--rule)}
 .imperatives li::before{content:counter(i,decimal-leading-zero);font:400 11.5px/2 var(--mono);color:var(--ink-2)}
 .sign{margin-top:var(--s4)!important;font:400 34px/1 var(--script)}
 .sign small{display:block;margin-top:8px;font:400 11.5px/1 var(--mono);color:var(--ink-2)}
 .refs{color:var(--ink-2)}
-
-/* next part / colophon — the back page */
 .backpage{display:grid;grid-template-columns:repeat(12,1fr);column-gap:var(--gutter);
-  padding:var(--s5) var(--margin) var(--s4);border-top:1px solid var(--ink);margin-top:var(--s5)}
+  padding:var(--s5) var(--pad) var(--s4);border-top:1px solid var(--ink);margin:var(--s5) 0 0}
 .backpage .next{grid-column:1/8;text-decoration:none;display:block}
 .backpage .next span{display:block;color:var(--ink-2);margin-bottom:var(--s1)}
 .backpage .next b{font:800 clamp(40px,5vw,80px)/.95 var(--sans);font-stretch:75%;letter-spacing:-.02em}
@@ -285,22 +253,22 @@ html[data-room] .landing{display:none}
 .colophon{grid-column:9/13;align-self:end;color:var(--ink-2)}
 .colophon p{margin:0 0 4px}
 
-/* 09 PRACTICE ── projects as a contents page ───────────────────────────── */
+/* 10 PRACTICE ── projects as a contents page ──────────────────────────── */
 .contents{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
 .contents li{border-bottom:1px solid var(--rule)}
-.contents button{width:100%;display:grid;grid-template-columns:5ch 1fr auto;gap:var(--s2);
+.contents button{width:100%;display:grid;grid-template-columns:4ch 1fr auto;gap:var(--s2);
   align-items:baseline;text-align:left;padding:22px 0}
 .contents .t{font:600 clamp(24px,2.4vw,36px)/1.1 var(--sans);letter-spacing:-.015em;transition:transform .22s var(--ui)}
 .contents .t small{display:block;margin-top:6px;font:400 15px/1.4 var(--sans);color:var(--ink-2);letter-spacing:0}
 .contents button:hover .t{transform:translateX(8px)}
 .contents .yr{color:var(--ink-2)}
 
-/* 10 WORLD ── a column of clippings ────────────────────────────────────── */
+/* 11 WORLD ── a column of clippings ───────────────────────────────────── */
 .filters{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:var(--s1) var(--s3);padding-bottom:var(--s4)}
 .filters button{min-height:44px;color:var(--ink-2);border-bottom:1px solid transparent}
 .filters button[aria-pressed=true]{color:var(--ink);border-bottom-color:var(--ink)}
 .filters sup{font-size:9px;margin-left:3px}
-.feed{grid-column:1/-1;columns:3 300px;column-gap:var(--s5)}
+.feed{grid-column:1/-1;columns:3 280px;column-gap:var(--s5)}
 .clip{break-inside:avoid;margin:0 0 var(--s5);display:block;text-decoration:none}
 .clip .src{display:flex;align-items:center;gap:8px;color:var(--ink-2);margin-bottom:var(--s1)}
 .clip h3{margin:0 0 6px;font:600 22px/1.2 var(--sans);letter-spacing:-.01em}
@@ -312,264 +280,254 @@ a.clip.link:hover h3::after{transform:translate(3px,-3px)}
 .clip.link .price{color:var(--ink)}
 .clip[hidden]{display:none}
 
-/* 11 DIALOG ── one overlay, one way to close it ───────────────────────── */
-dialog{width:min(860px,calc(100vw - 2*var(--margin)));max-height:calc(100vh - 2*var(--margin));
-  padding:0;border:0;background:var(--paper);color:var(--ink);box-shadow:0 30px 80px rgb(0 0 0/.25);
-  opacity:0;transform:translateY(12px);transition:opacity .32s var(--arrive),transform .32s var(--arrive),
-  overlay .32s allow-discrete,display .32s allow-discrete}
-dialog[open]{opacity:1;transform:none}
-@starting-style{dialog[open]{opacity:0;transform:translateY(12px)}}
-dialog::backdrop{background:rgb(26 26 26/0);transition:background .32s var(--ui),overlay .32s allow-discrete,display .32s allow-discrete}
-dialog[open]::backdrop{background:rgb(26 26 26/.35)}
-@starting-style{dialog[open]::backdrop{background:rgb(26 26 26/0)}}
-.dlg-head{display:flex;justify-content:space-between;align-items:center;padding:12px var(--s4);
-  border-bottom:1px solid var(--rule);color:var(--ink-2)}
-.dlg-head button{min-height:44px;color:var(--ink)}
-.dlg-body{padding:var(--s4) var(--s4) var(--s5)}
-.dlg-body h2:focus{outline:none}
-.dlg-body h2{margin:0 0 var(--s2);font:800 clamp(40px,5vw,72px)/.92 var(--sans);font-stretch:75%;letter-spacing:-.02em}
-.dlg-body .meta{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:var(--s4);
+/* 12 SHEET ── the one overlay, held inside the glass ───────────────────── */
+.sheet-wrap{position:absolute;inset:0;z-index:10;display:grid;place-items:center;padding:var(--pad);
+  background:rgb(26 26 26/.32);opacity:0;visibility:hidden;
+  transition:opacity .32s var(--ui),visibility 0s linear .32s}
+.sheet-wrap.open{opacity:1;visibility:visible;transition:opacity .32s var(--ui)}
+.sheet{width:min(860px,100%);max-height:100%;overflow:auto;overscroll-behavior:contain;
+  background:var(--paper);border-radius:calc(var(--r-in) * .5);box-shadow:0 24px 60px rgb(0 0 0/.25);
+  transform:translateY(12px);transition:transform .32s var(--arrive)}
+.sheet-wrap.open .sheet{transform:none}
+.sheet-head{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;
+  padding:6px var(--s4);background:var(--paper);border-bottom:1px solid var(--rule);color:var(--ink-2)}
+.sheet-head button{min-height:44px;color:var(--ink)}
+.sheet-body{padding:var(--s4) var(--s4) var(--s5)}
+.sheet-body h2{margin:0 0 var(--s2);font:800 clamp(40px,5vw,72px)/.92 var(--sans);font-stretch:75%;letter-spacing:-.02em;outline:none}
+.sheet-body .lede{font-size:20px;line-height:1.4}
+.sheet-body .meta{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:var(--s4);
   padding:var(--s2) 0;margin:var(--s3) 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
-.dlg-body .meta span{display:block;color:var(--ink-2)}
-.dlg-body p{max-width:62ch}
+.sheet-body .meta span{display:block;color:var(--ink-2)}
+.sheet-body p{max-width:62ch}
 
-/* 12 MOTION ─────────────────────────────────────────────────────────────
-   Rooms arrive from the side of their door (View Transitions). Images in
-   rooms rise into place as they enter the viewport (scroll-driven CSS). */
-::view-transition-old(root){animation:vt-out .7s var(--arrive) both}
-::view-transition-new(root){animation:vt-in .7s var(--arrive) both}
-@keyframes vt-out{to{opacity:0;transform:scale(.985)}}
-@keyframes vt-in{from{opacity:0;transform:translate(var(--vx,0),var(--vy,0))}}
-html[data-dir=left]{--vx:-5vw}
-html[data-dir=right]{--vx:5vw}
-html[data-dir=down]{--vy:5vh}
-html[data-dir=home]{--vx:0;--vy:0}
+/* 13 MOTION ── a room wipes across the glass from its own door. The device
+   never moves; only the picture on the screen changes. */
+::view-transition-old(root),::view-transition-new(root){animation:none}
+::view-transition-old(screen){animation:none}
+::view-transition-new(screen){animation:wipe .75s var(--arrive) both}
+@keyframes wipe{from{clip-path:var(--from)}to{clip-path:inset(0 0 0 0 round var(--r-in))}}
+html{--from:inset(0 0 0 0 round var(--r-in))}
+html[data-dir=left]{--from:inset(0 100% 0 0 round var(--r-in))}
+html[data-dir=right]{--from:inset(0 0 0 100% round var(--r-in))}
+html[data-dir=down]{--from:inset(100% 0 0 0 round var(--r-in))}
+html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}   /* the channel closes to a line */
 @supports (animation-timeline:view()){
-  .clip,.contents li,.cv li,.pull{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
+  .clip,.contents li,.cv li{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
   @keyframes rise{from{opacity:0;transform:translateY(24px)}}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}
-  ::view-transition-old(root),::view-transition-new(root){animation:none}
-  .bloom{animation:none}
+  ::view-transition-new(screen){animation:none}
 }
 
-/* 13 SMALL SCREENS ────────────────────────────────────────────────────── */
+/* 14 SMALL SCREENS ────────────────────────────────────────────────────── */
 @media (max-width:760px){
-  :root{--margin:20px}
-  .landing{grid-template-columns:30px 1fr 30px;grid-template-rows:64px 1fr auto}
-  .masthead{grid-column:1/-1;padding:0 20px}
-  .masthead .issue{display:none}
-  .landing{grid-template-columns:20px 1fr 20px}
-  .door-story,.door-practice{display:none}
-  .foot{grid-column:1/-1;grid-template-columns:1fr auto 1fr;padding:6px 20px 14px;row-gap:2px}
-  .caption{grid-column:1/-1;order:-1}
-  .controls{grid-column:1/-1;order:-1;justify-self:start}
-  .foot .door-m{display:flex}
-  .foot .door-m.story{justify-self:start} .foot .door-m.practice{justify-self:end}
-  .runhead{grid-template-columns:auto 1fr;padding:10px var(--margin)}
+  :root{--pad:20px;--hud:12px;--radius:18px}
+  .chip{min-height:36px;padding:0 12px;font-size:11px}
+  .hud .caption{max-width:calc(100% - 2*var(--hud));bottom:calc(var(--hud) + 48px)}
+  .door-story,.door-practice{top:auto;bottom:var(--hud);translate:none}
+  .door-world{bottom:var(--hud)}
+  .runhead{grid-template-columns:auto 1fr;padding:6px var(--pad)}
   .runhead .folio{display:none}
-  .page,.backpage{display:block;padding-top:var(--s5)}
+  .page,.backpage{display:block;padding-top:var(--s4)}
   .sec{display:block;padding-bottom:var(--s5);margin-bottom:var(--s5)}
   .sidehead{margin-bottom:var(--s3)}
-  .pull{padding:0}
   .colophon{margin-top:var(--s4)}
-  .opener{min-height:62vh;padding:var(--s5) var(--margin) var(--s4)}
-  .dlg-head,.dlg-body{padding-left:var(--s3);padding-right:var(--s3)}
-  .dlg-body .meta{grid-template-columns:1fr 1fr}
+  .opener{padding:var(--s4) var(--pad)}
+  .sheet-wrap{padding:12px}
+  .sheet-head,.sheet-body{padding-left:var(--s3);padding-right:var(--s3)}
+  .sheet-body .meta{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
 <body>
+<div class="device">
+ <div class="frame">
+  <div class="reel" id="reel" aria-label="care of TANNER">
 
-<!-- ═══ LANDING ═════════════════════════════════════════════════════════ -->
-<div class="landing" id="landing">
-  <header class="masthead">
-    <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo"></span></a>
-    <span class="mono issue">Issue 01 — Autumn/Winter 2026</span>
-    <span class="mono">Brooklyn, NY</span>
-  </header>
+    <!-- the reel's posts are written in here, before the statement -->
+    <div class="statement" aria-label="care of TANNER is a practice. Design is a negotiation. By middle name, I'm Tanner. Let's meet in the middle.">
+      <p><span class="logo on-dark"></span> is a practice.</p>
+      <p>Design is a negotiation.</p>
+      <p>By middle name, I&rsquo;m Tanner.</p>
+      <p class="spoken">Let&rsquo;s meet in the middle.</p>
+    </div>
 
-  <button class="door door-story" data-go="story" aria-label="Story"><span class="dot"></span>Story<span class="arrow" aria-hidden="true">→</span></button>
+    <!-- ON-SCREEN CONTROLS (landing only) -->
+    <nav class="hud" aria-label="Site">
+      <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo on-dark"></span></a>
+      <div class="controls">
+        <button class="chip" id="pause" aria-pressed="false">Pause</button>
+        <button class="chip" id="next" aria-label="Next post">Next →</button>
+      </div>
+      <button class="chip door door-story" data-go="story"><span aria-hidden="true">←</span><span class="dot"></span>Story</button>
+      <button class="chip door door-practice" data-go="practice">Practice<span class="dot"></span><span aria-hidden="true">→</span></button>
+      <button class="chip door door-world" data-go="world"><span class="dot"></span>World<span aria-hidden="true">↓</span></button>
+      <p class="chip caption" aria-live="polite"><span class="dot" id="cap-dot"></span><span class="idx" id="cap-idx"></span><span class="cap" id="cap-text"></span></p>
+    </nav>
 
-  <div class="frame">
-    <div class="halo h-story"></div><div class="halo h-practice"></div><div class="halo h-world"></div>
-    <div class="reel" id="reel" aria-roledescription="carousel" aria-label="The feed">
-      <!-- posts are written here by the script -->
-      <div class="screen" aria-hidden="true"><div class="scan"></div><div class="grain"></div><div class="glass"></div><div class="band"></div></div>
-      <div class="bloom b-story"></div><div class="bloom b-practice"></div><div class="bloom b-world"></div>
-      <div class="statement" aria-label="care of TANNER is a practice. Design is a negotiation. By middle name, I'm Tanner. Let's meet in the middle.">
-        <p><span class="logo on-dark"></span> is a practice.</p>
-        <p>Design is a negotiation.</p>
-        <p>By middle name, I&rsquo;m Tanner.</p>
-        <p class="spoken">Let&rsquo;s meet in the middle.</p>
+    <!-- ═══ THE ROOMS ═══ -->
+    <article class="room" id="story" aria-label="Story">
+     <div class="room-scroll" tabindex="-1">
+        <header class="runhead">
+          <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo"></span></a>
+          <span class="folio mono">care of TANNER — Part One: Story — p. 01</span>
+          <a class="close" href="#">Close ×</a>
+        </header>
+        <section class="opener">
+          <span class="part mono"><span class="dot"></span>Part One</span>
+          <h1>Story</h1>
+          <p class="deck">A practice, a namesake, and the reasons for both.</p>
+        </section>
+      
+        <div class="page">
+          <section class="sec">
+            <div class="sidehead mono"><b>The practice</b>01</div>
+            <div class="body">
+              <p class="lede"><span class="logo"></span> is a design practice and a namesake — architecture, interiors, brand systems and editorial work, made with care for the people who use them.<sup>1</sup></p>
+              <p>People, places, projects, objects, culture. The work lives in <em>Practice</em>; the friends, makers and things that surround it live in <em>World</em>.<sup>2</sup> Good ideas, better company — the same ideas in different places.</p>
+              <ol class="notes mono">
+                <li>1 — care of: the work is addressed to someone.</li>
+                <li>2 — world: notes, sightings, and links out to the people worth knowing.</li>
+              </ol>
+            </div>
+          </section>
+      
+          <p class="pull">a brighter everyday</p>
+      
+          <section class="sec">
+            <div class="sidehead mono"><b>The author</b>02</div>
+            <div class="body">
+              <h2>Josh Harrison</h2>
+              <p>Brooklyn-based designer working across architecture, interiors, brand systems and photography. Tanner is his middle name.</p>
+              <h3>Experience</h3>
+              <ol class="cv">
+                <li><span class="mono">01</span><span class="what">Ralph Lauren<small>Project Manager, Store Design</small></span><span class="mono">2026 –</span></li>
+                <li><span class="mono">02</span><span class="what">Wesley Moon Inc.<small>Designer — architecture, interiors, urban design</small></span><span class="mono">2024–26</span></li>
+                <li><span class="mono">03</span><span class="what">Hart Howerton<small>Designer — resort, residential, master planning</small></span><span class="mono">2022–24</span></li>
+                <li><span class="mono">04</span><span class="what">Bedrock Detroit<small>Architecture Coordinator — urban development, place-making</small></span><span class="mono">2017–20</span></li>
+              </ol>
+              <h3>Education</h3>
+              <ol class="cv">
+                <li><span class="mono">01</span><span class="what">University of Virginia<small>Master of Architecture</small></span><span class="mono">2020–22</span></li>
+              </ol>
+            </div>
+          </section>
+      
+          <section class="sec essay-sec">
+            <div class="sidehead mono"><b>Manifesto</b>03 · December 2021</div>
+            <div class="body essay">
+              <h2>Home as Possibility</h2>
+              <p>I write this with an acknowledgment of my privilege as both a white gay male within the Queer community and as someone that has always had a shelter over their head. I write this from the perspective of having grown up with a single mother raising two children, from having watched her make sacrificial life decisions in order to keep us within a dwelling, from having relocated so many times that growth was never to be held in one place. I know that, because of this, I walk with both an inability to settle and an understanding of home as the overwhelming, all-encompassing emotion of arrival.</p>
+              <p>We choose to adhere to traditions of the past as our rate of change increases exponentially. We&rsquo;re taught Monopoly in order to play the game of capitalism. We clothe our bodies with the market as if it is embedded within our DNA. We assume wealth is interchangeable with value. We accept fiction as fact. We find meaning in that which we orient ourselves to. For those of us born into a world disoriented, it is in our reorientation that greater truths emerge. The reorientation process is a hunt for meaning and quest for acceptance. To consider existence is to consider the inevitable opposite: not existing. The greatest fear and truth does not discriminate; we do. Finding purpose through Queer existentialism requires coveting the sacredly-private on while we hunt and forge towards our own liberating publics. The closeted Queer body is perceived to be in a constant surveillance state of most private and most public, where heightened are performances of harsh stoicism and supercharged eruption.</p>
+              <p>Consider the closet: a room, ubiquitously understood, embedded with spatial implications. To come out of the closet is to shed the first layer of a thickened skin. Delayering the Queer body is non-linear and lifelong; it is a constant shedding of skins at varying intervals dictated by a spectrum of climate conditions one must snake through on their quest for home. &ldquo;Coming out&rdquo; does not rid the closet of what&rsquo;s inside, nor does it imply that layers once worn can&rsquo;t be put back on. The Queer body is Bachelard&rsquo;s casket; delayering (coming out) breaks the dialectics of inside and outside; the most private and most public become one.</p>
+              <p>Consider the house: a collection of rooms, one being a bedroom encompassing a closet. If the closet is acceptance within one&rsquo;s skin, the bedroom is acceptance within one&rsquo;s space, becoming the second most sacred layer. Now we have two layers that one must come out from, each bound by four walls, each with spatial implications, one within the other as a nesting doll.</p>
+              <p>Consider the home: a collection of rooms, one being a bedroom encompassing a closet. In leaving the bedroom, one may walk down the corridor, through the living room, and make a stop in the kitchen before they are able to freely exit; each additional volume within this navigational sequence, too, has its own spatial implications. To feel at home is to know the ease of navigating these layers as one; to have a house is to know the boundaries that define them.</p>
+              <p>Home is an association of place, an unbound, non-physical ideological condition of security that begins with finding comfort in one&rsquo;s skin; for the Queer body, home is first, quite literally, where the heart is.</p>
+              <h3>On How to Design for the Possibility of Home</h3>
+              <ol class="imperatives">
+              <li><b>Be the casket.</b> Make an unimpeachable case that foregrounds your being within a logical operation.</li>
+              <li><b>Unlearn conventions of domesticity</b> embedded in the patriarchal dwelling; consider alternative methods of residence that prioritize identities over formal precedent.</li>
+              <li><b>Design one sacred room</b> with the affect of the first time, every time.</li>
+              <li><b>Layer private and public.</b> Reconsider thresholds and interstitial spaces as opportunities to connect and Queer one&rsquo;s spatial experience.</li>
+              <li><b>Enable spatial autonomy</b> by prescribing the unscripted, embedding an aesthetics of access.</li>
+              <li><b>Consider the skin on your back.</b> Elevate the invisible preconditions of the site; celebrate and orient towards every edge.</li>
+              </ol>
+              <p class="sign">Josh Harrison<small>December 2021</small></p>
+              <p class="refs mono">Selected references &mdash; Ahmed, Queer Phenomenology &middot; Bachelard, The Poetics of Space &middot; Colomina &amp; Bloomer, Sexuality &amp; Space &middot; Foucault, Of Other Spaces &middot; McHarg, Design with Nature &middot; Pallasmaa, The Eyes of the Skin &middot; Potvin, Bachelors of a Different Sort &middot; Solnit, Wanderlust</p>
+            </div>
+          </section>
+        </div>
+      
+        <footer class="backpage">
+          <a class="next" href="#practice"><span class="mono">Continued — Part Two</span><b>Practice →</b></a>
+          <div class="colophon mono"><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p></div>
+        </footer>
+     </div>
+    </article>
+
+    <article class="room" id="practice" aria-label="Practice">
+     <div class="room-scroll" tabindex="-1">
+        <header class="runhead">
+          <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo"></span></a>
+          <span class="folio mono">care of TANNER — Part Two: Practice — p. 02</span>
+          <a class="close" href="#">Close ×</a>
+        </header>
+        <section class="opener">
+          <span class="part mono"><span class="dot"></span>Part Two</span>
+          <h1>Practice</h1>
+          <p class="deck">Objects, spaces, systems — for a brighter everyday.</p>
+        </section>
+      
+        <div class="page">
+          <section class="sec">
+            <div class="sidehead mono"><b>The work</b>01</div>
+            <div class="body">
+              <p class="lede"><span class="logo"></span> is a design practice. Architecture, interiors, brand systems and editorial work for people who want their place to think.</p>
+              <p>Design is a negotiation — between a client and a site, a budget and a wish, two materials meeting at a wall. The work is to find the middle and detail it well.</p>
+            </div>
+          </section>
+          <section class="sec">
+            <div class="sidehead mono"><b>Contents</b>02 · Selected projects</div>
+            <div class="body"><ol class="contents" id="contents"></ol></div>
+          </section>
+          <p class="pull">let&rsquo;s meet in the middle</p>
+        </div>
+      
+        <footer class="backpage">
+          <a class="next" href="#world"><span class="mono">Continued — Part Three</span><b>World →</b></a>
+          <div class="colophon mono"><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p></div>
+        </footer>
+     </div>
+    </article>
+
+    <article class="room" id="world" aria-label="World">
+     <div class="room-scroll" tabindex="-1">
+        <header class="runhead">
+          <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo"></span></a>
+          <span class="folio mono">care of TANNER — Part Three: World — p. 03</span>
+          <a class="close" href="#">Close ×</a>
+        </header>
+        <section class="opener">
+          <span class="part mono"><span class="dot"></span>Part Three</span>
+          <h1>World</h1>
+          <p class="deck">Notes, sightings, and the people worth knowing.</p>
+        </section>
+      
+        <div class="page">
+          <nav class="filters mono" id="filters" aria-label="Filter the world"></nav>
+          <div class="feed" id="feed"></div>
+        </div>
+      
+        <footer class="backpage">
+          <a class="next" href="#story"><span class="mono">Back to the beginning — Part One</span><b>Story →</b></a>
+          <div class="colophon mono"><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p></div>
+        </footer>
+     </div>
+    </article>
+
+    <!-- ═══ PROJECT SHEET — the one overlay, inside the glass ═══ -->
+    <div class="sheet-wrap" id="sheet-wrap">
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="pj-title">
+        <div class="sheet-head mono"><span id="pj-idx"></span><button id="pj-close">Close ×</button></div>
+        <div class="sheet-body">
+          <h2 id="pj-title" tabindex="-1"></h2>
+          <p class="lede" id="pj-tag"></p>
+          <div class="meta mono">
+            <div><span>Client</span><b id="pj-client"></b></div>
+            <div><span>Role</span><b id="pj-role"></b></div>
+            <div><span>Year</span><b id="pj-year"></b></div>
+          </div>
+          <p id="pj-desc"></p>
+        </div>
       </div>
     </div>
+
+    <!-- THE GLASS — on top of everything, catches nothing -->
+    <div class="glass" aria-hidden="true"><div class="scan"></div><div class="grain"></div><div class="tube"></div><div class="band"></div></div>
   </div>
-
-  <button class="door door-practice" data-go="practice" aria-label="Practice"><span class="dot"></span>Practice<span class="arrow" aria-hidden="true">→</span></button>
-
-  <footer class="foot">
-    <p class="caption mono" aria-live="polite"><span class="dot" id="cap-dot"></span><span class="idx" id="cap-idx"></span><span class="cap" id="cap-text"></span></p>
-    <button class="door door-m story" data-go="story" style="--c:var(--story)"><span class="arrow" aria-hidden="true">←</span><span class="dot"></span>Story</button>
-    <button class="door door-world" data-go="world"><span class="dot"></span>World<span class="arrow" aria-hidden="true">↓</span></button>
-    <button class="door door-m practice" data-go="practice" style="--c:var(--practice)">Practice<span class="dot"></span><span class="arrow" aria-hidden="true">→</span></button>
-    <div class="controls mono">
-      <button id="pause" aria-pressed="false">Pause</button>
-      <button id="next" aria-label="Next post">Next →</button>
-    </div>
-  </footer>
+ </div>
 </div>
-
-<!-- ═══ PART ONE · STORY ════════════════════════════════════════════════ -->
-<article class="room" id="story" aria-label="Story">
-  <header class="runhead">
-    <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo"></span></a>
-    <span class="folio mono">care of TANNER — Part One: Story — p. 01</span>
-    <a class="close" href="#">Close ×</a>
-  </header>
-  <section class="opener">
-    <span class="part mono"><span class="dot"></span>Part One</span>
-    <h1>Story</h1>
-    <p class="deck">A practice, a namesake, and the reasons for both.</p>
-  </section>
-
-  <div class="page">
-    <section class="sec">
-      <div class="sidehead mono"><b>The practice</b>01</div>
-      <div class="body">
-        <p class="lede"><span class="logo"></span> is a design practice and a namesake — architecture, interiors, brand systems and editorial work, made with care for the people who use them.<sup>1</sup></p>
-        <p>People, places, projects, objects, culture. The work lives in <em>Practice</em>; the friends, makers and things that surround it live in <em>World</em>.<sup>2</sup> Good ideas, better company — the same ideas in different places.</p>
-        <ol class="notes mono">
-          <li>1 — care of: the work is addressed to someone.</li>
-          <li>2 — world: notes, sightings, and links out to the people worth knowing.</li>
-        </ol>
-      </div>
-    </section>
-
-    <p class="pull">a brighter everyday</p>
-
-    <section class="sec">
-      <div class="sidehead mono"><b>The author</b>02</div>
-      <div class="body">
-        <h2>Josh Harrison</h2>
-        <p>Brooklyn-based designer working across architecture, interiors, brand systems and photography. Tanner is his middle name.</p>
-        <h3>Experience</h3>
-        <ol class="cv">
-          <li><span class="mono">01</span><span class="what">Ralph Lauren<small>Project Manager, Store Design</small></span><span class="mono">2026 –</span></li>
-          <li><span class="mono">02</span><span class="what">Wesley Moon Inc.<small>Designer — architecture, interiors, urban design</small></span><span class="mono">2024–26</span></li>
-          <li><span class="mono">03</span><span class="what">Hart Howerton<small>Designer — resort, residential, master planning</small></span><span class="mono">2022–24</span></li>
-          <li><span class="mono">04</span><span class="what">Bedrock Detroit<small>Architecture Coordinator — urban development, place-making</small></span><span class="mono">2017–20</span></li>
-        </ol>
-        <h3>Education</h3>
-        <ol class="cv">
-          <li><span class="mono">01</span><span class="what">University of Virginia<small>Master of Architecture</small></span><span class="mono">2020–22</span></li>
-        </ol>
-      </div>
-    </section>
-
-    <section class="sec essay-sec">
-      <div class="sidehead mono"><b>Manifesto</b>03 · December 2021</div>
-      <div class="body essay">
-        <h2>Home as Possibility</h2>
-        <p>I write this with an acknowledgment of my privilege as both a white gay male within the Queer community and as someone that has always had a shelter over their head. I write this from the perspective of having grown up with a single mother raising two children, from having watched her make sacrificial life decisions in order to keep us within a dwelling, from having relocated so many times that growth was never to be held in one place. I know that, because of this, I walk with both an inability to settle and an understanding of home as the overwhelming, all-encompassing emotion of arrival.</p>
-        <p>We choose to adhere to traditions of the past as our rate of change increases exponentially. We&rsquo;re taught Monopoly in order to play the game of capitalism. We clothe our bodies with the market as if it is embedded within our DNA. We assume wealth is interchangeable with value. We accept fiction as fact. We find meaning in that which we orient ourselves to. For those of us born into a world disoriented, it is in our reorientation that greater truths emerge. The reorientation process is a hunt for meaning and quest for acceptance. To consider existence is to consider the inevitable opposite: not existing. The greatest fear and truth does not discriminate; we do. Finding purpose through Queer existentialism requires coveting the sacredly-private on while we hunt and forge towards our own liberating publics. The closeted Queer body is perceived to be in a constant surveillance state of most private and most public, where heightened are performances of harsh stoicism and supercharged eruption.</p>
-        <p>Consider the closet: a room, ubiquitously understood, embedded with spatial implications. To come out of the closet is to shed the first layer of a thickened skin. Delayering the Queer body is non-linear and lifelong; it is a constant shedding of skins at varying intervals dictated by a spectrum of climate conditions one must snake through on their quest for home. &ldquo;Coming out&rdquo; does not rid the closet of what&rsquo;s inside, nor does it imply that layers once worn can&rsquo;t be put back on. The Queer body is Bachelard&rsquo;s casket; delayering (coming out) breaks the dialectics of inside and outside; the most private and most public become one.</p>
-        <p>Consider the house: a collection of rooms, one being a bedroom encompassing a closet. If the closet is acceptance within one&rsquo;s skin, the bedroom is acceptance within one&rsquo;s space, becoming the second most sacred layer. Now we have two layers that one must come out from, each bound by four walls, each with spatial implications, one within the other as a nesting doll.</p>
-        <p>Consider the home: a collection of rooms, one being a bedroom encompassing a closet. In leaving the bedroom, one may walk down the corridor, through the living room, and make a stop in the kitchen before they are able to freely exit; each additional volume within this navigational sequence, too, has its own spatial implications. To feel at home is to know the ease of navigating these layers as one; to have a house is to know the boundaries that define them.</p>
-        <p>Home is an association of place, an unbound, non-physical ideological condition of security that begins with finding comfort in one&rsquo;s skin; for the Queer body, home is first, quite literally, where the heart is.</p>
-        <h3>On How to Design for the Possibility of Home</h3>
-        <ol class="imperatives">
-        <li><b>Be the casket.</b> Make an unimpeachable case that foregrounds your being within a logical operation.</li>
-        <li><b>Unlearn conventions of domesticity</b> embedded in the patriarchal dwelling; consider alternative methods of residence that prioritize identities over formal precedent.</li>
-        <li><b>Design one sacred room</b> with the affect of the first time, every time.</li>
-        <li><b>Layer private and public.</b> Reconsider thresholds and interstitial spaces as opportunities to connect and Queer one&rsquo;s spatial experience.</li>
-        <li><b>Enable spatial autonomy</b> by prescribing the unscripted, embedding an aesthetics of access.</li>
-        <li><b>Consider the skin on your back.</b> Elevate the invisible preconditions of the site; celebrate and orient towards every edge.</li>
-        </ol>
-        <p class="sign">Josh Harrison<small>December 2021</small></p>
-        <p class="refs mono">Selected references &mdash; Ahmed, Queer Phenomenology &middot; Bachelard, The Poetics of Space &middot; Colomina &amp; Bloomer, Sexuality &amp; Space &middot; Foucault, Of Other Spaces &middot; McHarg, Design with Nature &middot; Pallasmaa, The Eyes of the Skin &middot; Potvin, Bachelors of a Different Sort &middot; Solnit, Wanderlust</p>
-      </div>
-    </section>
-  </div>
-
-  <footer class="backpage">
-    <a class="next" href="#practice"><span class="mono">Continued — Part Two</span><b>Practice →</b></a>
-    <div class="colophon mono"><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p></div>
-  </footer>
-</article>
-
-<!-- ═══ PART TWO · PRACTICE ═════════════════════════════════════════════ -->
-<article class="room" id="practice" aria-label="Practice">
-  <header class="runhead">
-    <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo"></span></a>
-    <span class="folio mono">care of TANNER — Part Two: Practice — p. 02</span>
-    <a class="close" href="#">Close ×</a>
-  </header>
-  <section class="opener">
-    <span class="part mono"><span class="dot"></span>Part Two</span>
-    <h1>Practice</h1>
-    <p class="deck">Objects, spaces, systems — for a brighter everyday.</p>
-  </section>
-
-  <div class="page">
-    <section class="sec">
-      <div class="sidehead mono"><b>The work</b>01</div>
-      <div class="body">
-        <p class="lede"><span class="logo"></span> is a design practice. Architecture, interiors, brand systems and editorial work for people who want their place to think.</p>
-        <p>Design is a negotiation — between a client and a site, a budget and a wish, two materials meeting at a wall. The work is to find the middle and detail it well.</p>
-      </div>
-    </section>
-    <section class="sec">
-      <div class="sidehead mono"><b>Contents</b>02 · Selected projects</div>
-      <div class="body"><ol class="contents" id="contents"></ol></div>
-    </section>
-    <p class="pull">let&rsquo;s meet in the middle</p>
-  </div>
-
-  <footer class="backpage">
-    <a class="next" href="#world"><span class="mono">Continued — Part Three</span><b>World →</b></a>
-    <div class="colophon mono"><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p></div>
-  </footer>
-</article>
-
-<!-- ═══ PART THREE · WORLD ══════════════════════════════════════════════ -->
-<article class="room" id="world" aria-label="World">
-  <header class="runhead">
-    <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo"></span></a>
-    <span class="folio mono">care of TANNER — Part Three: World — p. 03</span>
-    <a class="close" href="#">Close ×</a>
-  </header>
-  <section class="opener">
-    <span class="part mono"><span class="dot"></span>Part Three</span>
-    <h1>World</h1>
-    <p class="deck">Notes, sightings, and the people worth knowing.</p>
-  </section>
-
-  <div class="page">
-    <nav class="filters mono" id="filters" aria-label="Filter the world"></nav>
-    <div class="feed" id="feed"></div>
-  </div>
-
-  <footer class="backpage">
-    <a class="next" href="#story"><span class="mono">Back to the beginning — Part One</span><b>Story →</b></a>
-    <div class="colophon mono"><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p></div>
-  </footer>
-</article>
-
-<dialog id="project" aria-labelledby="pj-title">
-  <div class="dlg-head mono"><span id="pj-idx"></span><button id="pj-close">Close ×</button></div>
-  <div class="dlg-body">
-    <h2 id="pj-title" tabindex="-1" autofocus></h2>
-    <p class="lede" id="pj-tag"></p>
-    <div class="meta mono">
-      <div><span>Client</span><b id="pj-client"></b></div>
-      <div><span>Role</span><b id="pj-role"></b></div>
-      <div><span>Year</span><b id="pj-year"></b></div>
-    </div>
-    <p id="pj-desc"></p>
-  </div>
-</dialog>
 
 <script>
 /* ═══ CONTENT — edit here, nothing below needs touching ════════════════
@@ -731,7 +689,7 @@ function postEl(p, i){
     + typeHTML(p);
   return el;
 }
-const reel = $('#reel'), anchor = reel.querySelector('.bloom');
+const reel = $('#reel'), anchor = reel.querySelector('.statement');
 const posts = feed.map((p, i) => reel.insertBefore(postEl(p, i), anchor));
 function ready(i){ const img = posts[i]?.querySelector('img'); return img && img.decode ? img.decode().catch(() => {}) : Promise.resolve(); }
 function load(i){ const img = posts[i]?.querySelector('img[data-srcset]'); if (img){ img.srcset = img.dataset.srcset; img.removeAttribute('data-srcset'); } }
@@ -777,10 +735,6 @@ if (reduced){ $('#pause').textContent = 'Play'; $('#pause').setAttribute('aria-p
 reel.addEventListener('click', e => {
   const b = e.target.closest('.open'); if (b) openProject(b.dataset.project);
 });
-document.querySelectorAll('.door').forEach(d => {
-  d.addEventListener('pointerenter', () => $('#landing').dataset.lean = d.dataset.go);
-  d.addEventListener('pointerleave', () => delete $('#landing').dataset.lean);
-});
 
 /* ── rooms: the hash is the address ─────────────────────────────────── */
 const ROOMS = ['story', 'practice', 'world'];
@@ -793,7 +747,8 @@ function route(){
   showing = next;
   const swap = () => {
     if (next) document.documentElement.dataset.room = next; else delete document.documentElement.dataset.room;
-    window.scrollTo(0, 0);
+    const sc = next && document.querySelector(`#${next} .room-scroll`);
+    if (sc){ sc.scrollTop = 0; sc.focus({preventScroll:true}); }
     document.title = next ? `${next[0].toUpperCase() + next.slice(1)} — care of TANNER` : 'care of TANNER — Issue 01';
     if (next){ clearTimeout(timer); } else { schedule(); }
   };
@@ -807,7 +762,7 @@ document.querySelectorAll('.home,.close').forEach(a => a.addEventListener('click
 }));
 addEventListener('popstate', route);
 addEventListener('keydown', e => {
-  if ($('#project').open) return;
+  if (sheetOpen()){ if (e.key === 'Escape') closeProject(); return; }
   const inRoom = !!document.documentElement.dataset.room;
   if (e.key === 'Escape' && inRoom){ history.pushState(null, '', location.pathname); route(); return; }
   if (inRoom || e.metaKey || e.ctrlKey || e.altKey) return;
@@ -820,7 +775,9 @@ $('#contents').innerHTML = PROJECTS.map((p, i) =>
   `<li><button data-project="${p.id}"><span class="mono">${String(i + 1).padStart(2, '0')}</span>` +
   `<span class="t">${esc(p.title)}<small>${esc(p.client)}</small></span><span class="yr mono">${esc(p.year)}</span></button></li>`).join('');
 $('#contents').addEventListener('click', e => { const b = e.target.closest('[data-project]'); if (b) openProject(b.dataset.project); });
-const dlg = $('#project');
+const wrap = $('#sheet-wrap');
+let lastFocus = null;
+const sheetOpen = () => wrap.classList.contains('open');
 function openProject(id){
   const i = PROJECTS.findIndex(p => p.id === id); if (i < 0) return;
   const p = PROJECTS[i];
@@ -828,10 +785,13 @@ function openProject(id){
   $('#pj-title').textContent = p.title; $('#pj-tag').textContent = p.tag;
   $('#pj-client').textContent = p.client; $('#pj-role').textContent = p.role; $('#pj-year').textContent = p.year;
   $('#pj-desc').textContent = p.desc;
-  dlg.showModal();
+  lastFocus = document.activeElement;
+  wrap.classList.add('open');
+  $('#pj-title').focus({preventScroll:true});
 }
-$('#pj-close').onclick = () => dlg.close();
-dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+function closeProject(){ wrap.classList.remove('open'); lastFocus?.focus?.({preventScroll:true}); }
+$('#pj-close').onclick = closeProject;
+wrap.addEventListener('click', e => { if (e.target === wrap) closeProject(); });
 
 /* ── world: clippings + filters ─────────────────────────────────────── */
 const CATS = [['all','All'], ['idea','Ideas'], ['artifact','Artifacts'], ['sensation','Sensations'], ['link','Links']];
