@@ -236,6 +236,27 @@ html.night .lamp{mix-blend-mode:screen;opacity:.6}
 .door-world{bottom:0;left:50%;translate:-50% 0;--c:var(--world)}
 html[data-room] .post,html[data-room] .statement,html[data-room] .hud{visibility:hidden}
 html.shutting .post,html.shutting .statement,html.shutting .hud{visibility:visible}
+/* rooms keep the landing's pills, in the same places, so the way around never changes */
+.roomnav{position:absolute;inset:auto var(--m) var(--m);z-index:9;pointer-events:none;display:none;height:0}
+html[data-room] .roomnav{display:block}
+.roomnav > *{position:absolute;bottom:0;pointer-events:auto}
+.roomnav .chip{background:rgb(28 26 24/.8);box-shadow:inset 0 0 0 1px rgb(255 255 255/.14),0 6px 20px -8px rgb(0 0 0/.35);
+  -webkit-backdrop-filter:none;backdrop-filter:none}
+.roomnav .chip:hover{background:rgb(28 26 24/.92)}
+html[data-room=story] .roomnav .door-story,html[data-room=practice] .roomnav .door-practice,html[data-room=world] .roomnav .door-world{
+  background:var(--c);color:var(--on-door,#F4F1EB);text-shadow:none;cursor:default}
+html[data-room=world] .roomnav .door-world{--on-door:#1C1A18}
+/* the ask: a round stamp in the corner, above the Practice door */
+.ask{right:0;bottom:calc(clamp(34px,2.7cqi,42px) + 12px)!important;display:grid;place-items:center;align-content:center;gap:.2em;
+  width:clamp(84px,7.5cqi,112px);aspect-ratio:1;border-radius:50%;text-decoration:none;text-align:center;
+  font:500 clamp(12px,.95cqi,15px)/1.15 var(--sans);color:#1C1A18;
+  background:color-mix(in oklch,var(--blue) 14%,#FBFAF7);box-shadow:inset 0 0 0 1.5px #1C1A18,inset 0 3px 0 -1.5px rgb(255 255 255/.8),0 10px 26px -12px rgb(0 0 0/.4);
+  transition:transform .25s var(--ui),opacity .3s var(--ui)}
+.ask i{font-style:normal;color:var(--blue)}
+.ask:hover{transform:rotate(-8deg) scale(1.04)}
+html.at-contact .ask{opacity:0;pointer-events:none}
+.room-scroll{scroll-padding-bottom:120px}
+.backpage{padding-bottom:calc(var(--block) + 72px)!important}
 
 /* 08 ROOMS + BLOOM ── the bloom is the fill ───────────────────────────── */
 .room{--m:clamp(16px,6.5cqi,128px);position:absolute;inset:0;z-index:6;display:none;overflow:hidden;overflow:clip;container-type:size;background:var(--weave),var(--paper)}
@@ -334,7 +355,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .backpage .next span{display:block;color:var(--ink-2);margin-bottom:.6em}
 .backpage .next b{font:500 var(--t-h2)/1.1 var(--sans);letter-spacing:-.015em}
 .backpage .next:hover b{color:var(--red)}
-.colophon{grid-column:9/-1;align-self:end;color:var(--ink-2)}
+.colophon{grid-column:1/-1;align-self:end;color:var(--ink-2)}
 .colophon p{margin:0 0 .3em}
 .key{display:flex;flex-wrap:wrap;gap:.4em 1.2em;margin:0 0 1em;padding:0;list-style:none}
 .key li{display:flex;align-items:center;gap:.5em}
@@ -562,6 +583,14 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
       <p class="chip caption" aria-live="polite"><span class="dot" id="cap-dot"></span><span class="idx" id="cap-idx"></span><span class="cap" id="cap-text"></span></p>
     </nav>
 
+    <!-- the landing's doors, carried through every room -->
+    <nav class="roomnav" aria-label="Rooms">
+      <button class="chip door door-story" data-go="story"><span aria-hidden="true">←</span><span class="dot"></span>Story</button>
+      <button class="chip door door-world" data-go="world"><span class="dot"></span>World<span aria-hidden="true">↓</span></button>
+      <button class="chip door door-practice" data-go="practice">Practice<span class="dot"></span><span aria-hidden="true">→</span></button>
+      <a class="ask" href="#practice" data-scroll="contact"><span>Start a<br>project</span><i aria-hidden="true">→</i></a>
+    </nav>
+
     <!-- ═══ THE ROOMS ═══ -->
     <article class="room" id="story" aria-label="Story">
      <div class="room-scroll" tabindex="-1">
@@ -650,8 +679,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
         </div>
       
         <footer class="backpage">
-          <a class="next" href="#practice"><span class="mono">Continued — Part Two</span><b>Practice →</b></a>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p style="margin-top:1.2em"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul></div>
         </footer>
      </div>
     </article>
@@ -667,7 +695,6 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
           <span class="part mono"><span class="dot"></span>Part Two</span>
           <h1>Practice</h1>
           <p class="deck">Buildings, rooms, objects, pages and screens — one practice, every scale. What are we making?</p>
-          <div class="cta"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></div>
         </section>
 
         <div class="page">
@@ -784,8 +811,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
         </div>
 
         <footer class="backpage">
-          <a class="next" href="#world"><span class="mono">Continued — Part Three</span><b>World →</b></a>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p style="margin-top:1.2em"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul></div>
         </footer>
      </div>
     </article>
@@ -818,8 +844,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
         </section>
 
         <footer class="backpage">
-          <a class="next" href="#story"><span class="mono">Back to the beginning — Part One</span><b>Story →</b></a>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p style="margin-top:1.2em"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul></div>
         </footer>
      </div>
     </article>
@@ -1142,6 +1167,10 @@ function route(){
   route.t = setTimeout(() => { el.classList.remove('opening'); prev && prev.classList.remove('leaving'); root.classList.remove('shutting'); }, 950);
 }
 addEventListener('hashchange', route);
+{ const c = document.getElementById('contact'), sc = document.querySelector('#practice .room-scroll');
+  if (c && sc && 'IntersectionObserver' in window) new IntersectionObserver(es => es.forEach(e =>
+    document.documentElement.classList.toggle('at-contact', e.isIntersecting)), {root: sc, threshold: .15}).observe(c); }
+document.querySelectorAll('.roomnav [data-go]').forEach(b => b.addEventListener('click', e => { if (b.dataset.go === showing) e.stopImmediatePropagation(); }, true));
 document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => location.hash = b.dataset.go);
 document.querySelectorAll('.home,.close').forEach(a => a.addEventListener('click', e => {
   e.preventDefault(); history.pushState(null, '', location.pathname); route();
