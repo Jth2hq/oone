@@ -287,7 +287,8 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .page{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gutter);padding:0 var(--m)}
 .sec{grid-column:1/-1;display:grid;grid-template-columns:subgrid;row-gap:clamp(16px,2cqi,32px);
   padding:var(--block) 0;border-top:1px solid var(--rule)}
-.sidehead{grid-column:1/4;color:var(--ink-2)}
+.sidehead{grid-column:1/4;color:var(--ink-2);line-height:1.5}
+.sidehead .n{display:block;margin-top:.3em}
 .sidehead b{display:block;font-weight:400;color:var(--ink)}
 .sidehead .n{color:var(--red)}
 .body{grid-column:4/-1;min-width:0;font-size:var(--t-body);line-height:1.5}
@@ -305,7 +306,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
   padding:.9em 0;border-bottom:1px solid var(--rule)}
 .cv .num{color:var(--red)}
 .cv .what{font-weight:500}
-.cv .what small{display:block;font-weight:400;color:var(--ink-2);font-size:.8em;margin-top:.15em}
+.cv .what small{display:block;font-weight:400;color:var(--ink-2);font-size:.8em;margin-top:.35em}
 /* the essay — numbers hang in the margin of the list; each line stays one sentence */
 .essay .fold-body > p:first-of-type::first-letter{float:left;font:800 3.4em/.82 var(--sans);font-stretch:75%;color:var(--red);padding:.06em .1em 0 0}
 .imperatives{counter-reset:i;list-style:none;margin:1.4em 0;padding:0;border-top:1px solid var(--ink)}
@@ -314,7 +315,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
   font:400 var(--t-mono)/1 var(--mono);color:var(--red)}
 .imperatives b{font-weight:600}
 .sign{margin-top:1.6em!important;font:400 clamp(28px,2.4cqi,40px)/1 var(--script);color:var(--red)}
-.sign small{display:block;margin-top:.5em;font:400 var(--t-mono)/1 var(--mono);color:var(--ink-2)}
+.sign small{display:block;margin-top:.7em;font:400 var(--t-mono)/1.4 var(--mono);color:var(--ink-2)}
 .refs{color:var(--ink-2);font-size:var(--t-mono)}
 
 .backpage{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gutter);row-gap:var(--block);
@@ -360,12 +361,12 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .svc{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--gutter);max-width:none!important}
 .svc li{padding:1em 0 1.4em;border-top:1px solid var(--rule)}
 .svc .num{display:block;color:var(--red);margin-bottom:.6em}
-.svc h3{margin:0 0 .4em;font:500 var(--t-h3)/1.2 var(--sans)}
+.svc h3{margin:0 0 .6em;font:500 var(--t-h3)/1.2 var(--sans)}
 .svc p{margin:0;color:var(--ink-2)}
 .steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gutter);max-width:none!important}
 .steps li{padding-top:1em;border-top:1px solid var(--rule)}
 .steps .num{display:block;font:400 var(--t-mono)/1 var(--mono);color:var(--red)}
-.steps b{display:block;margin:.8em 0 .3em;font-weight:500}
+.steps b{display:block;margin:.9em 0 .5em;font-weight:500}
 .steps p{margin:0;color:var(--ink-2)}
 .contents{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink);max-width:none!important}
 .contents li{border-bottom:1px solid var(--rule)}
@@ -374,22 +375,23 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .contents .num,.contents .yr{color:var(--ink-2)}
 .contents .num{color:var(--red)}
 .contents .t{font:500 clamp(19px,1.7cqi,27px)/1.15 var(--sans);letter-spacing:-.01em;transition:transform .22s var(--ui),color .22s var(--ui)}
-.contents .t small{display:block;margin-top:.25em;font:400 var(--t-body)/1.3 var(--sans);color:var(--ink-2);letter-spacing:0}
+.contents .t small{display:block;margin-top:.45em;font:400 var(--t-body)/1.3 var(--sans);color:var(--ink-2);letter-spacing:0}
 .contents button:hover .t{transform:translateX(.3em);color:var(--red)}
 
 /* 12 CONTACT ── the ask ───────────────────────────────────────────────── */
 .contact{grid-template-columns:subgrid}
-.form{display:grid;gap:1.1em;max-width:none!important}
-.field{display:grid;gap:.4em}
-.field > span,.form legend{font:400 var(--t-mono)/1 var(--mono);letter-spacing:.04em;color:var(--ink-2)}
+.form{display:grid;gap:1.6em;max-width:none!important}
+.field{display:grid;gap:.7em}
+.field > span,.form legend{font:400 var(--t-mono)/1.4 var(--mono);letter-spacing:.04em;color:var(--ink-2)}
 .form input,.form textarea,.form select{width:100%;padding:.75em .9em;border:0;border-radius:10px;
   background:rgb(255 255 255/.66);box-shadow:inset 0 0 0 1px var(--rule);font-size:var(--t-body);
   transition:box-shadow .2s var(--ui),background .2s var(--ui)}
 .form textarea{min-height:8em;resize:vertical}
 .form input:focus,.form textarea:focus,.form select:focus{outline:none;background:#fff;box-shadow:inset 0 0 0 1.5px var(--red)}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:1.1em}
-.form fieldset{border:0;margin:0;padding:0;display:grid;gap:.5em}
-.picks{display:flex;flex-wrap:wrap;gap:.5em}
+.form fieldset{border:0;margin:0;padding:0;display:grid;gap:0}
+.form legend{display:block;padding:0;margin:0 0 .9em}
+.picks{display:flex;flex-wrap:wrap;gap:.6em}
 .picks label{position:relative;display:inline-flex}
 .picks input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;padding:0;cursor:pointer}
 .picks span{display:inline-flex;align-items:center;min-height:2.4em;padding:.45em 1em;line-height:1.25;border-radius:999px;
@@ -419,9 +421,9 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
   display:flex;flex-direction:column;justify-content:space-between;gap:.6em;text-align:left;text-decoration:none;
   background:rgb(255 255 255/.6);box-shadow:inset 0 0 0 1px var(--rule);transition:transform .25s var(--ui)}
 .tile:hover{transform:translateY(-3px)}
-.tile .meta{display:flex;align-items:center;gap:.5em;font:400 var(--t-mono)/1.3 var(--mono);letter-spacing:.04em;color:var(--ink-2)}
+.tile .meta{display:flex;align-items:center;gap:.5em;font:400 var(--t-mono)/1.45 var(--mono);letter-spacing:.04em;color:var(--ink-2)}
 .tile .tb{display:block}
-.tile .t{display:block;margin:0 0 .3em;font:500 clamp(16px,1.3cqi,21px)/1.2 var(--sans);letter-spacing:-.01em}
+.tile .t{display:block;margin:0 0 .5em;font:500 clamp(16px,1.3cqi,21px)/1.2 var(--sans);letter-spacing:-.01em}
 .tile .p{display:block;margin:0;font-size:clamp(14px,1.15cqi,18px);line-height:1.4;color:var(--ink-2);
   display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 .tile.idea{--k:var(--lilac);background:color-mix(in oklch,var(--lilac) 26%,var(--paper));box-shadow:none}
@@ -459,7 +461,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .sheet-body .lede{font:400 var(--t-lede)/1.35 var(--sans)}
 .sheet-body .meta{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:2em;
   padding:1em 0;margin:1.2em 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
-.sheet-body .meta span{display:block;color:var(--ink-2)}
+.sheet-body .meta span{display:block;color:var(--ink-2);margin-bottom:.35em}
 .sheet-body p{max-width:62ch}
 
 /* 15 MOTION ── a room wipes across the glass from its door ──────────────── */
