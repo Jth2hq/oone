@@ -128,7 +128,7 @@ p,li{text-wrap:pretty}
   box-shadow:inset 2px 0 0 rgb(255 40 80/.16),inset -2px 0 0 rgb(40 170 255/.16),inset 0 2px 7px rgb(0 0 0/.38)}
 .glass .band{position:absolute;left:0;right:0;top:0;height:14%;opacity:0;mix-blend-mode:screen;
   background:linear-gradient(180deg,transparent,rgb(255 255 255/.10) 40%,rgb(216 16 47/.10) 55%,transparent)}
-.reel.tune .glass .band{animation:band .7s var(--ui)}
+.glass .band{display:none}
 @keyframes band{0%{opacity:1;transform:translateY(-100%)}100%{opacity:0;transform:translateY(780%)}}
 html[data-room] .glass .scan{opacity:.14}
 html[data-room] .glass .grain{opacity:.2}
@@ -170,13 +170,12 @@ html[data-room] .glass .tube{opacity:.4}
 .atmos > *{position:absolute;pointer-events:none}
 /* DAY — the spa: overexposed glass, milk steam rising, every edge softened */
 .post img{transition:filter 2.4s var(--breath)}
-html:not(.night) .post img{filter:brightness(1.08) contrast(.88) saturate(.82)}
+html:not(.night) .post img{filter:none}
 .steam{inset:-24% -12%;animation:rise 24s var(--breath) infinite alternate}
-.steam.s1{background:radial-gradient(40% 30% at 22% 72%,rgb(250 246 240/.72),transparent 70%),
-  radial-gradient(34% 26% at 72% 84%,rgb(250 246 240/.66),transparent 70%),radial-gradient(46% 28% at 50% 44%,rgb(250 246 240/.34),transparent 72%),radial-gradient(60% 22% at 50% 0%,rgb(250 246 240/.3),transparent 72%)}
+.steam.s1{background:radial-gradient(22% 9% at 24% 78%,rgb(250 246 240/.34),transparent 70%),
+  radial-gradient(18% 7% at 70% 86%,rgb(250 246 240/.3),transparent 70%),radial-gradient(26% 8% at 46% 64%,rgb(250 246 240/.2),transparent 72%)}
 .steam.s2{animation-duration:33s;animation-direction:alternate-reverse;
-  background:radial-gradient(30% 24% at 82% 30%,rgb(250 246 240/.42),transparent 70%),radial-gradient(38% 30% at 12% 30%,rgb(230 222 214/.3),transparent 72%)}
-.milk{inset:0;background:linear-gradient(180deg,transparent 40%,rgb(248 244 238/.32) 78%,rgb(248 244 238/.62) 100%)}
+  background:radial-gradient(16% 7% at 82% 52%,rgb(250 246 240/.26),transparent 70%),radial-gradient(20% 8% at 12% 46%,rgb(250 246 240/.22),transparent 72%)}
 @keyframes rise{from{transform:translate3d(-2%,6%,0)}to{transform:translate3d(2%,-6%,0)}}
 /* NIGHT — the club: a dark room, haze hanging in it, cobalt and red beams through the fog */
 html.night .post img{filter:brightness(.42) saturate(1.28) contrast(1.14)}
