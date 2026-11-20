@@ -175,13 +175,13 @@ html[data-room] .glass .tube{opacity:.4}
 html:not(.night) .post img{filter:none}
 html.night .post img{filter:brightness(.46) saturate(1.2) contrast(1.1)}
 /* BLOOMS — colour at each door, breathing. Soft light by day, lit by night. */
-.lamp{inset:-10%;mix-blend-mode:soft-light;opacity:.85;filter:blur(18px);animation:breathe 11s var(--breath) infinite alternate}
-.lamp.b-story{background:radial-gradient(45% 60% at 0% 100%,rgb(255 186 110/.85),transparent 70%)}   /* the lamp, through linen */
-.lamp.b-day{background:radial-gradient(55% 45% at 85% 0%,rgb(255 252 244/.8),transparent 70%);animation-delay:-5.2s} /* the window */
-html.night .lamp.b-story{background:radial-gradient(55% 70% at 0% 100%,color-mix(in oklch,var(--red) 85%,transparent),transparent 72%)}
-html.night .lamp.b-day{background:radial-gradient(70% 55% at 50% 0%,color-mix(in oklch,var(--red) 40%,transparent),transparent 72%)} /* the red gel */
-.lamp.b-practice{background:radial-gradient(50% 60% at 100% 100%,color-mix(in oklch,var(--blue) 80%,transparent),transparent 70%);animation-delay:-3.7s}
-.lamp.b-world{background:radial-gradient(40% 40% at 50% 100%,color-mix(in oklch,var(--lilac) 80%,transparent),transparent 70%);animation-delay:-7.3s}
+.lamp{inset:-30%;mix-blend-mode:soft-light;opacity:1;filter:blur(90px);will-change:opacity;animation:breathe 11s var(--breath) infinite alternate}
+.lamp.b-story{background:radial-gradient(45% 60% at 0% 100%,rgb(255 186 110/.85),transparent 85%)}   /* the lamp, through linen */
+.lamp.b-day{background:radial-gradient(55% 45% at 85% 0%,rgb(255 252 244/.8),transparent 85%);animation-delay:-5.2s} /* the window */
+html.night .lamp.b-story{background:radial-gradient(55% 70% at 0% 100%,color-mix(in oklch,var(--red) 85%,transparent),transparent 88%)}
+html.night .lamp.b-day{background:radial-gradient(70% 55% at 50% 0%,color-mix(in oklch,var(--red) 40%,transparent),transparent 88%)} /* the red gel */
+.lamp.b-practice{background:radial-gradient(50% 60% at 100% 100%,color-mix(in oklch,var(--blue) 80%,transparent),transparent 85%);animation-delay:-3.7s}
+.lamp.b-world{background:radial-gradient(40% 40% at 50% 100%,color-mix(in oklch,var(--lilac) 80%,transparent),transparent 85%);animation-delay:-7.3s}
 html.night .lamp{mix-blend-mode:screen;opacity:.6}
 .statement{position:absolute;inset:0;z-index:3;margin:0;display:grid;place-content:center;padding:0 var(--m);
   text-align:center;color:var(--osd);pointer-events:none;
@@ -232,20 +232,20 @@ html[data-room] .post,html[data-room] .statement,html[data-room] .hud{visibility
 :root{--weave:repeating-linear-gradient(90deg,rgb(28 26 24/.022) 0 1px,transparent 1px 3px),
   repeating-linear-gradient(0deg,rgb(255 255 255/.35) 0 1px,transparent 1px 4px)}
 html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=world] #world{display:block}
-.room::before,.room::after{content:"";position:absolute;inset:-12%;pointer-events:none}
+.room::before,.room::after{content:"";position:absolute;inset:-30%;pointer-events:none;filter:blur(80px)}
 .room::before{background:var(--bloom-a);animation:breathe 11s var(--breath) infinite alternate,drift 23s var(--breath) infinite alternate}
 .room::after{background:var(--bloom-b);animation:breathe 11s var(--breath) -5.5s infinite alternate}
 @keyframes breathe{from{opacity:.62}to{opacity:1}}
 @keyframes drift{from{transform:translate(-2%,1%)}to{transform:translate(2%,-1%)}}
 #story{--c:var(--char);--c-ink:var(--char);--on-c:var(--paper);
-  --bloom-a:radial-gradient(55% 75% at 4% 40%,color-mix(in oklch,var(--char) 22%,transparent),transparent 72%);
-  --bloom-b:radial-gradient(45% 45% at 96% 96%,color-mix(in oklch,var(--red) 12%,transparent),transparent 72%)}
+  --bloom-a:radial-gradient(55% 75% at 4% 40%,color-mix(in oklch,var(--char) 22%,transparent),transparent 88%);
+  --bloom-b:radial-gradient(45% 45% at 96% 96%,color-mix(in oklch,var(--red) 12%,transparent),transparent 88%)}
 #practice{--c:var(--blue);--c-ink:var(--blue-ink);--on-c:var(--paper);
-  --bloom-a:radial-gradient(55% 75% at 96% 40%,color-mix(in oklch,var(--blue) 42%,transparent),transparent 72%);
-  --bloom-b:radial-gradient(45% 45% at 50% 100%,color-mix(in oklch,var(--red) 12%,transparent),transparent 72%)}
+  --bloom-a:radial-gradient(55% 75% at 96% 40%,color-mix(in oklch,var(--blue) 42%,transparent),transparent 88%);
+  --bloom-b:radial-gradient(45% 45% at 50% 100%,color-mix(in oklch,var(--red) 12%,transparent),transparent 88%)}
 #world{--c:var(--lilac);--c-ink:var(--lilac-ink);--on-c:var(--ink);
-  --bloom-a:radial-gradient(80% 55% at 50% 100%,color-mix(in oklch,var(--lilac) 40%,transparent),transparent 72%);
-  --bloom-b:radial-gradient(45% 45% at 4% 20%,color-mix(in oklch,var(--char) 10%,transparent),transparent 72%)}
+  --bloom-a:radial-gradient(80% 55% at 50% 100%,color-mix(in oklch,var(--lilac) 40%,transparent),transparent 88%);
+  --bloom-b:radial-gradient(45% 45% at 4% 20%,color-mix(in oklch,var(--char) 10%,transparent),transparent 88%)}
 .room ::selection{background:color-mix(in oklch,var(--red) 20%,transparent)}
 .room :focus-visible{outline-color:var(--red)}
 .room-scroll{position:relative;z-index:1;height:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;outline:none;
