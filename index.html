@@ -17,16 +17,21 @@
 /* ═══════════════════════════════════════════════════════════════════════
    care of TANNER — Issue 01, Autumn/Winter 2026
 
-   You are looking at a screen. Everything lives inside it: the reel, the
-   three rooms, the project sheet, the controls. The wall around it is
-   plaster; the bezel is a brushed-steel reveal. Nothing crosses the bezel.
+   You are looking at a screen. Everything lives inside it, set in from the
+   glass by ONE margin (--m). Anything that indents or offsets does so
+   inside that margin, never across it.
 
-   No canvas, no WebGL, no per-frame JavaScript. Motion is CSS opacity,
-   transform and one clip-path wipe.
+   Every size inside the screen is a share of the screen (cqi), so a desk
+   reads with the same boldness as a phone: the same things take the same
+   proportion of the glass.
+
+   THE KEY — three inks.  ● red: story, a voice, the call to act
+                          ● blue: practice, the work
+                          ● orange: world, the people around it
 
    01 TOKENS  02 BASE  03 DEVICE  04 GLASS  05 REEL  06 STATEMENT
-   07 ON-SCREEN CONTROLS  08 ROOMS + BLOOM  09 PAGE  10 PRACTICE
-   11 WORLD  12 SHEET  13 MOTION  14 SMALL SCREENS
+   07 ON-SCREEN CONTROLS  08 ROOMS + BLOOM  09 PAGE  10 MOMENT
+   11 PRACTICE  12 CONTACT  13 WORLD  14 SHEETS  15 MOTION  16 NARROW
    ═══════════════════════════════════════════════════════════════════════ */
 
 /* 01 TOKENS ───────────────────────────────────────────────────────────── */
@@ -35,39 +40,35 @@
   --bone:#E8E4DC; --paper:#F1EEE8; --ink:#1A1A1A; --ink-2:#5E5A54; --rule:rgb(26 26 26/.16);
   --osd:#F6F3EE;
 
-  /* THE KEY. Four inks, tuned together in OKLCH so they read as one set —
-     like the process swatches on a printer's colour bar. The three room
-     colours sit at matched chroma, a step apart in lightness; cherry is
-     the writing ink and is used for spoken lines only.
-       ● story     burnt orange    the person
-       ● practice  cobalt          the work
-       ● world     violet          the people around it
-       ● cherry    lipstick red    a voice                                */
-  --story:   oklch(.68 .165 52);     /* ≈ #E3772A */
-  --practice:oklch(.53 .175 262);    /* ≈ #2C5CC8 */
-  --world:   oklch(.60 .145 296);    /* ≈ #8A6FD0 */
-  --cherry:  oklch(.56 .215 22);     /* ≈ #D8102F */
-  /* deep cuts of each — for type and rules on light grounds (AA on paper) */
-  --story-ink:   oklch(.46 .12 52);
-  --practice-ink:oklch(.42 .15 262);
-  --world-ink:   oklch(.42 .12 296);
+  --red:   #D8102F;                   /* the "care of" red — lifted from the logo */
+  --blue:  oklch(.53 .175 262);       /* ≈ #2C5CC8 */
+  --orange:oklch(.71 .17 52);         /* ≈ #EF7D2C */
+  --blue-ink:oklch(.45 .17 262);      /* blue as text on paper (AA) */
+
+  --story:var(--red); --practice:var(--blue); --world:var(--orange);
+  --cherry:var(--red);
 
   --sans:"early-sans-variable","early-sans","Helvetica Neue",Arial,sans-serif;
   --mono:"config-mono-vf",ui-monospace,"SF Mono",monospace;
   --script:"lipstick",Georgia,serif;
 
-  --wall:clamp(10px,2.4vw,36px);          /* plaster showing around the device */
-  /* measures inside the screen are in cqi — they follow the screen, not
-     the window, so the device reads the same on a phone and on a desk */
-  --pad:clamp(20px,4.2cqi,72px);
-  --hud:clamp(12px,1.8cqi,26px);
-  --gutter:clamp(12px,1.5cqi,24px);
-  --s1:8px; --s2:16px; --s3:24px; --s4:48px; --s5:96px; --s6:144px;
-
-  --reveal:clamp(6px,.7vw,11px);          /* the metal face */
-  --gap:clamp(2px,.22vw,4px);             /* the shadow gap */
+  /* the device (window-relative) */
+  --wall:clamp(10px,2.2vw,32px);
+  --reveal:clamp(6px,.7vw,11px);
+  --gap:clamp(2px,.22vw,4px);
   --radius:clamp(16px,1.9vw,28px);
   --r-in:calc(var(--radius) - var(--reveal));
+
+  /* inside the screen (screen-relative — resolved where used) */
+  --m:clamp(16px,2.6cqi,40px);          /* THE margin */
+  --gutter:clamp(12px,1.6cqi,28px);
+  --block:clamp(40px,6.4cqi,104px);     /* space between sections */
+  --t-mono:clamp(11px,.9cqi,13.5px);
+  --t-body:clamp(17px,1.45cqi,22px);
+  --t-lede:clamp(21px,2.7cqi,42px);
+  --t-h2:clamp(30px,4.6cqi,76px);
+  --t-h3:clamp(22px,2.3cqi,36px);
+  --t-hero:clamp(64px,15cqi,250px);
 
   --breath:cubic-bezier(.37,0,.63,1);
   --arrive:cubic-bezier(.22,1,.36,1);
@@ -77,65 +78,60 @@
 /* 02 BASE ─────────────────────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box}
 html,body{height:100%;overflow:hidden}
-html{background:var(--bone);color:var(--ink);-webkit-text-size-adjust:100%}
+html{background:var(--bone);color:var(--ink);-webkit-text-size-adjust:100%;hanging-punctuation:first}
 body{margin:0;font:400 17px/1.5 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 img{display:block;max-width:100%;height:auto}
-/* set like print: balanced headings, no widows in running text */
-h1,h2,h3,.statement .ln,.deck,.pull,.pt-display,.pt-title,.lede{text-wrap:balance}
-p,li{text-wrap:pretty}
-html{hanging-punctuation:first}
-button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:0;padding:0;cursor:pointer}
 a{color:inherit}
 :focus-visible{outline:1.5px solid currentColor;outline-offset:4px;border-radius:2px}
-.mono{font-family:var(--mono);font-size:11.5px;line-height:1.4;letter-spacing:.04em}
+h1,h2,h3,.ln,.deck,.lede,.moment p{text-wrap:balance}
+p,li{text-wrap:pretty}
 .vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--c,var(--ink));flex:none}
+.mono{font-family:var(--mono);font-size:var(--t-mono);line-height:1.4;letter-spacing:.04em}
+.dot{display:inline-block;width:.62em;height:.62em;min-width:7px;min-height:7px;border-radius:50%;background:var(--c,var(--ink));flex:none}
 
-/* The logo is always the drawn mark. Ink TANNER on light, bone on dark. */
-.logo{display:inline-block;aspect-ratio:1001/472;height:2.1em;vertical-align:-.34em;
+/* The logo is always the drawn mark, cropped to its ink so its edge IS the margin. */
+.logo{display:inline-block;aspect-ratio:975/449;height:2.1em;vertical-align:-.34em;
   background:url(brand/care-of-tanner.webp) center/contain no-repeat}
 .logo.on-dark{background-image:url(brand/care-of-tanner-light.webp)}
 .home{display:block;line-height:0}
 
 /* 03 DEVICE ── plaster, steel reveal, shadow gap ───────────────────────── */
-.device{position:fixed;inset:0;display:grid;place-items:center;padding:var(--wall);
+.device{position:fixed;inset:0;
   padding:max(var(--wall),env(safe-area-inset-top)) max(var(--wall),env(safe-area-inset-right))
           max(var(--wall),env(safe-area-inset-bottom)) max(var(--wall),env(safe-area-inset-left))}
-.frame{height:100%;width:min(100%,calc((100dvh - 2 * var(--wall)) * .52));   /* portrait, always */
-  padding:var(--reveal);border-radius:var(--radius);
+.frame{height:100%;padding:var(--reveal);border-radius:var(--radius);
   background:
     repeating-linear-gradient(90deg,rgb(255 255 255/.07) 0 1px,rgb(0 0 0/.035) 1px 2px,transparent 2px 4px),
     linear-gradient(180deg,#dcdcd8 0%,#bfc0bc 47%,#d2d3cf 53%,#acada9 100%);
   box-shadow:inset 0 1px 0 rgb(255 255 255/.6),inset 0 -1px 0 rgb(0 0 0/.22),
-    0 0 0 1px rgb(26 26 26/.14),0 1px 2px rgb(26 26 26/.06),
-    0 30px 60px -30px rgb(26 26 26/.28)}           /* it stands a little off the wall */
+    0 0 0 1px rgb(26 26 26/.14),0 1px 2px rgb(26 26 26/.06),0 30px 60px -30px rgb(26 26 26/.28)}
 .reel{position:relative;height:100%;overflow:hidden;background:#1d1c1a;border-radius:var(--r-in);
   isolation:isolate;box-shadow:0 0 0 var(--gap) #2a2926;view-transition-name:screen;container:screen/size}
 
-/* 04 GLASS ── what makes it a screen. Painted once; only the grain moves. */
+/* 04 GLASS ── painted once; only the grain moves ────────────────────────── */
 .glass{position:absolute;inset:0;z-index:20;pointer-events:none;border-radius:inherit;overflow:hidden}
-.glass .scan{position:absolute;inset:0;opacity:.55;mix-blend-mode:multiply;
+.glass .scan{position:absolute;inset:0;opacity:.5;mix-blend-mode:multiply;
   background:repeating-linear-gradient(0deg,rgb(0 0 0/.16) 0 1px,transparent 1px 3px)}
 .glass .grain{position:absolute;inset:-96px;opacity:.5;mix-blend-mode:overlay;
   background:url(brand/grain.png);animation:grain .9s steps(5) infinite}
 @keyframes grain{0%,100%{transform:translate(0,0)} 20%{transform:translate(-31px,17px)}
   40%{transform:translate(22px,-41px)} 60%{transform:translate(-47px,-9px)} 80%{transform:translate(13px,38px)}}
 .glass .tube{position:absolute;inset:0;
-  background:radial-gradient(120% 90% at 50% 50%,transparent 58%,rgb(0 0 0/.42) 100%),
+  background:radial-gradient(120% 90% at 50% 50%,transparent 60%,rgb(0 0 0/.4) 100%),
              linear-gradient(118deg,rgb(255 255 255/.11) 0%,rgb(255 255 255/0) 34%);
   box-shadow:inset 2px 0 0 rgb(255 40 80/.16),inset -2px 0 0 rgb(40 170 255/.16),inset 0 2px 7px rgb(0 0 0/.38)}
 .glass .band{position:absolute;left:0;right:0;top:0;height:14%;opacity:0;mix-blend-mode:screen;
   background:linear-gradient(180deg,transparent,rgb(255 255 255/.10) 40%,rgb(216 16 47/.10) 55%,transparent)}
 .reel.tune .glass .band{animation:band .7s var(--ui)}
 @keyframes band{0%{opacity:1;transform:translateY(-100%)}100%{opacity:0;transform:translateY(780%)}}
-/* reading glass: lighter when a room is open, so long text stays easy */
-html[data-room] .glass .scan{opacity:.16}
-html[data-room] .glass .grain{opacity:.22}
-html[data-room] .glass .tube{opacity:.45}
+html[data-room] .glass .scan{opacity:.14}
+html[data-room] .glass .grain{opacity:.2}
+html[data-room] .glass .tube{opacity:.4}
 
 /* 05 REEL ─────────────────────────────────────────────────────────────── */
-.post{position:absolute;inset:0;z-index:1;margin:0;opacity:0;pointer-events:none;
-  transition:opacity .01s linear 1.4s}             /* the outgoing post holds until it is covered */
+.post{position:absolute;inset:0;z-index:1;margin:0;opacity:0;pointer-events:none;transition:opacity .01s linear 1.4s}
 .post.on{opacity:1;z-index:2;pointer-events:auto;transition:opacity 1.4s var(--breath)}
 .post.first{transition-duration:2s;transition-delay:.2s}
 .post img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -144,7 +140,8 @@ html[data-room] .glass .tube{opacity:.45}
 .post.on.tune-in img{animation:jolt .36s steps(3)}
 @keyframes jolt{0%{transform:translateX(-7px)}34%{transform:translateX(5px) scaleY(1.004)}67%{transform:translateX(-2px)}100%{transform:none}}
 
-.pt{position:absolute;inset:clamp(56px,9%,110px) clamp(28px,7%,110px);display:flex;flex-direction:column;
+/* post type sits inside the margin, clear of the control rows */
+.pt{position:absolute;inset:calc(var(--m) + clamp(52px,6cqi,84px)) var(--m) calc(var(--m) + clamp(96px,9cqi,130px));display:flex;flex-direction:column;
   opacity:0;transition:opacity 1.6s var(--breath) .4s}
 .reel.quiet .post.on .pt{opacity:1}
 .post:not(.panel) .pt{text-shadow:0 1px 18px rgb(0 0 0/.35)}
@@ -152,211 +149,261 @@ html[data-room] .glass .tube{opacity:.45}
 .pt.ml{justify-content:center}
 .pt.bl{justify-content:flex-end}
 .pt.c{align-items:center;justify-content:center;text-align:center}
-.pt-stack{font:400 13px/1.55 var(--mono);letter-spacing:.06em}
-.pt-display,.pt-title{font:500 clamp(36px,6cqi,100px)/.95 var(--sans);letter-spacing:-.025em}
-.pt-title{font-weight:700;font-stretch:75%}
-.pt-script,.pt-hand,.statement .spoken,.pull,.sign{font-synthesis:none}
-.pt-script{font:400 clamp(48px,7.6cqi,124px)/1 var(--script);color:var(--cherry);transform:rotate(-5deg)}
-.pt-hand{font:400 clamp(42px,6.4cqi,100px)/1.05 var(--script);transform:rotate(-5deg)}
-.pt-list{width:min(560px,100%);font:400 clamp(20px,2.4cqi,32px)/1.25 var(--sans)}
-.pt-list span{display:block;padding:.28em 0 .18em;border-bottom:1px solid currentColor}
-.pt .open{margin-top:var(--s3);font:400 11.5px/1 var(--mono);letter-spacing:.04em;
+.pt-stack{font:400 clamp(13px,1.5cqi,22px)/1.55 var(--mono);letter-spacing:.06em}
+.pt-display,.pt-title{font:700 clamp(40px,9cqi,160px)/.9 var(--sans);font-stretch:75%;letter-spacing:-.02em}
+.pt-title{font-weight:800}
+.pt-script,.pt-hand,.statement .spoken,.sign{font-synthesis:none}
+.pt-script{font:400 clamp(52px,10cqi,170px)/1 var(--script);color:var(--red);transform:rotate(-5deg)}
+.pt-hand{font:400 clamp(46px,8.4cqi,140px)/1.05 var(--script);transform:rotate(-5deg)}
+.pt-list{width:min(30em,100%);font:500 clamp(22px,3cqi,48px)/1.2 var(--sans)}
+.pt-list span{display:block;padding:.26em 0 .16em;border-bottom:1px solid currentColor}
+.pt .open{margin-top:1.4em;font:400 var(--t-mono)/1 var(--mono);letter-spacing:.04em;
   border-bottom:1px solid currentColor;padding-bottom:3px;align-self:flex-start}
 .pt.c .open{align-self:center}
 
 /* 06 STATEMENT ── one breath ──────────────────────────────────────────── */
-.statement{position:absolute;inset:0;z-index:3;display:grid;place-content:center;padding:0 10%;
+.statement{position:absolute;inset:0;z-index:3;margin:0;display:grid;place-content:center;padding:0 var(--m);
   text-align:center;color:var(--osd);pointer-events:none;
   background:radial-gradient(70% 60% at 50% 50%,rgb(20 18 16/.42),transparent 75%);
   transition:opacity 2.2s var(--breath)}
-.statement{margin:0}
-.statement .ln{display:block;margin:0;font:400 clamp(24px,3.3cqi,50px)/1.18 var(--sans);letter-spacing:-.012em;
-  opacity:0;transform:translateY(.25em);text-shadow:0 1px 20px rgb(0 0 0/.3);
+.statement .ln{display:block;font:600 clamp(26px,5.2cqi,92px)/1.06 var(--sans);letter-spacing:-.022em;
+  opacity:0;transform:translateY(.25em);text-shadow:0 1px 22px rgb(0 0 0/.32);
   animation:line 1.2s var(--arrive) forwards}
 .statement .ln:nth-child(1){animation-delay:1.6s;padding-top:.4em}
 .statement .ln:nth-child(2){animation-delay:2.1s}
 .statement .ln:nth-child(3){animation-delay:2.6s}
-.statement .spoken{margin-top:.55em;font:400 clamp(38px,5.2cqi,78px)/1 var(--script);
-  color:var(--cherry);text-shadow:0 1px 16px rgb(0 0 0/.25);animation-delay:3.4s}
-.statement .logo{height:1.9em;vertical-align:-.38em;margin-right:.08em}
+.statement .spoken{margin-top:.4em;font:400 clamp(42px,8cqi,140px)/1 var(--script);letter-spacing:0;
+  color:var(--red);text-shadow:0 1px 16px rgb(0 0 0/.25);animation-delay:3.4s}
+.statement .logo{height:1.9em;vertical-align:-.36em;margin-right:.1em}
 @keyframes line{to{opacity:1;transform:none}}
 .reel.quiet .statement{opacity:0}
 
-/* 07 ON-SCREEN CONTROLS ── the OSD. Each earns its place:
-   logo = home · doors = the three rooms · caption = what you're looking at
-   · pause/next = control over moving content (WCAG 2.2.2). */
-.hud{position:absolute;inset:0;z-index:4;pointer-events:none;color:var(--osd);
+/* 07 ON-SCREEN CONTROLS ── every control sits exactly on the margin ─────── */
+.hud{position:absolute;inset:var(--m);z-index:4;pointer-events:none;color:var(--osd);
   opacity:0;animation:exhale 1s var(--arrive) 4.5s forwards}
 .hud > *{position:absolute;pointer-events:auto}
 @keyframes exhale{to{opacity:1}}
-.chip{display:flex;align-items:center;gap:10px;min-height:40px;padding:0 14px;border-radius:999px;
+.chip{display:flex;align-items:center;gap:.8em;height:clamp(36px,3.4cqi,52px);padding:0 1.2em;border-radius:999px;
   background:rgb(18 17 15/.42);box-shadow:inset 0 0 0 1px rgb(255 255 255/.16);
-  font:400 12px/1 var(--mono);letter-spacing:.04em;color:var(--osd);
-  text-shadow:.6px 0 0 rgb(216 16 47/.4),-.6px 0 0 rgb(47 98 196/.4);
-  transition:background .2s var(--ui)}
+  font:400 clamp(11px,1cqi,15px)/1 var(--mono);letter-spacing:.04em;color:var(--osd);white-space:nowrap;
+  text-shadow:.6px 0 0 rgb(216 16 47/.4),-.6px 0 0 rgb(47 98 196/.4);transition:background .2s var(--ui)}
 .chip:hover{background:rgb(18 17 15/.62)}
-.door:hover,.door:focus-visible{background:color-mix(in oklch,var(--c) 52%,rgb(18 17 15/.55))}
-.hud .home{top:var(--hud);left:var(--hud)}
-.hud .home .logo{height:clamp(30px,3cqi,42px);vertical-align:0;filter:drop-shadow(0 1px 6px rgb(0 0 0/.4))}
-.hud .controls{top:var(--hud);right:var(--hud);display:flex;gap:8px}
-.hud .caption{left:var(--hud);bottom:var(--hud);max-width:min(46%,520px);margin:0}
-.caption .idx{white-space:nowrap;flex:none}
-.caption .cap{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.8}
+.door:hover,.door:focus-visible{background:color-mix(in oklch,var(--c) 55%,rgb(18 17 15/.5))}
+.hud .home{top:0;left:0}
+.hud .home .logo{height:clamp(30px,4.2cqi,64px);vertical-align:0;filter:drop-shadow(0 1px 6px rgb(0 0 0/.4))}
+.hud .controls{top:0;right:0;display:flex;gap:8px}
+.hud .caption{left:0;bottom:calc(clamp(36px,3.4cqi,52px) + 10px);max-width:100%;margin:0}
+.caption .idx{flex:none}
+.caption .cap{overflow:hidden;text-overflow:ellipsis;opacity:.8}
 .door .dot{transition:transform .2s var(--ui)}
 .door:hover .dot,.door:focus-visible .dot{transform:scale(1.6)}
-.door-story{left:var(--hud);top:50%;translate:0 -50%;--c:var(--story)}
-.door-practice{right:var(--hud);top:50%;translate:0 -50%;--c:var(--practice)}
-.door-world{bottom:var(--hud);left:50%;translate:-50% 0;--c:var(--world)}
-
+.door-story{left:0;bottom:0;--c:var(--story)}
+.door-practice{right:0;bottom:0;--c:var(--practice)}
+.door-world{bottom:0;left:50%;translate:-50% 0;--c:var(--world)}
 html[data-room] .post,html[data-room] .statement,html[data-room] .hud{visibility:hidden}
 
-/* 08 ROOMS + BLOOM ── the bloom is the fill. Each room is lit from its own
-   door; the light breathes (opacity) and drifts (transform). */
-.room{position:absolute;inset:0;z-index:6;display:none;background:var(--paper);overflow:hidden}
+/* 08 ROOMS + BLOOM ── the bloom is the fill ───────────────────────────── */
+.room{position:absolute;inset:0;z-index:6;display:none;background:var(--paper);overflow:hidden;container-type:size}
 html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=world] #world{display:block}
 .room::before,.room::after{content:"";position:absolute;inset:-12%;pointer-events:none}
 .room::before{background:var(--bloom-a);animation:breathe 11s var(--breath) infinite alternate,drift 23s var(--breath) infinite alternate}
 .room::after{background:var(--bloom-b);animation:breathe 11s var(--breath) -5.5s infinite alternate}
 @keyframes breathe{from{opacity:.62}to{opacity:1}}
 @keyframes drift{from{transform:translate(-2%,1%)}to{transform:translate(2%,-1%)}}
-/* Each room is lit by its own key colour from its own door, with a faint
-   second light from the next room along — story → practice → world → story. */
-#story{--c:var(--story);--c-ink:var(--story-ink);
-  --bloom-a:radial-gradient(55% 75% at 6% 42%,color-mix(in oklch,var(--story) 58%,transparent),transparent 72%);
-  --bloom-b:radial-gradient(45% 45% at 92% 96%,color-mix(in oklch,var(--practice) 16%,transparent),transparent 72%)}
-#practice{--c:var(--practice);--c-ink:var(--practice-ink);
-  --bloom-a:radial-gradient(55% 75% at 94% 42%,color-mix(in oklch,var(--practice) 50%,transparent),transparent 72%);
-  --bloom-b:radial-gradient(45% 45% at 50% 100%,color-mix(in oklch,var(--world) 18%,transparent),transparent 72%)}
-#world{--c:var(--world);--c-ink:var(--world-ink);
-  --bloom-a:radial-gradient(80% 55% at 50% 100%,color-mix(in oklch,var(--world) 58%,transparent),transparent 72%);
-  --bloom-b:radial-gradient(45% 45% at 4% 30%,color-mix(in oklch,var(--story) 16%,transparent),transparent 72%)}
-
-/* the key, carried through each room's furniture */
+#story{--c:var(--red);--c-ink:var(--red);--on-c:var(--paper);
+  --bloom-a:radial-gradient(55% 75% at 4% 40%,color-mix(in oklch,var(--red) 34%,transparent),transparent 72%);
+  --bloom-b:radial-gradient(45% 45% at 96% 96%,color-mix(in oklch,var(--blue) 14%,transparent),transparent 72%)}
+#practice{--c:var(--blue);--c-ink:var(--blue-ink);--on-c:var(--paper);
+  --bloom-a:radial-gradient(55% 75% at 96% 40%,color-mix(in oklch,var(--blue) 42%,transparent),transparent 72%);
+  --bloom-b:radial-gradient(45% 45% at 50% 100%,color-mix(in oklch,var(--orange) 16%,transparent),transparent 72%)}
+#world{--c:var(--orange);--c-ink:var(--ink);--on-c:var(--ink);
+  --bloom-a:radial-gradient(80% 55% at 50% 100%,color-mix(in oklch,var(--orange) 46%,transparent),transparent 72%);
+  --bloom-b:radial-gradient(45% 45% at 4% 20%,color-mix(in oklch,var(--red) 12%,transparent),transparent 72%)}
 .room ::selection{background:color-mix(in oklch,var(--c) 30%,transparent)}
 .room :focus-visible{outline-color:var(--c-ink)}
-.room-scroll{scrollbar-color:color-mix(in oklch,var(--c) 55%,transparent) transparent}
-.runhead{border-bottom:2px solid var(--c)!important}
-.runhead .folio{display:flex;align-items:center;gap:10px}
-.opener .part,.sidehead .n,.num,.imperatives li::before{color:var(--c-ink)!important}
-.filters button[aria-pressed=true]{border-bottom-color:var(--c-ink)!important}
-.contents button:hover .t,.backpage .next:hover b{color:var(--c-ink)}
-.contents .t{transition:transform .22s var(--ui),color .22s var(--ui)}
-.cv,.contents,.imperatives,.backpage{border-top-color:var(--c-ink)!important}
-
-/* the key, printed as a colour bar in every colophon */
-.key{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0 0 14px;padding:0;list-style:none}
-.key li{display:flex;align-items:center;gap:7px}
-.key .dot{width:9px;height:9px}
-.room-scroll{position:relative;z-index:1;height:100%;overflow-y:auto;overscroll-behavior:contain;
-  -webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgb(26 26 26/.25) transparent;outline:none}
+.room-scroll{position:relative;z-index:1;height:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;outline:none;
+  -webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:color-mix(in oklch,var(--c) 55%,transparent) transparent}
 
 .runhead{position:sticky;top:0;z-index:5;isolation:isolate;display:grid;grid-template-columns:1fr auto 1fr;
-  align-items:center;gap:var(--s2);padding:10px var(--pad);
-  background:var(--paper);border-bottom:1px solid var(--rule)}
-.runhead .home .logo{height:32px}
-.runhead .folio{color:var(--ink-2)}
-.runhead .close{justify-self:end;display:flex;align-items:center;min-height:44px;text-decoration:none;font:400 12px/1 var(--mono);letter-spacing:.04em}
+  align-items:center;gap:var(--gutter);padding:calc(var(--m) * .5) var(--m);
+  background:var(--paper);border-bottom:2px solid var(--c)}
+.runhead .home .logo{height:clamp(28px,3cqi,46px)}
+.runhead .folio{display:flex;align-items:center;gap:.7em;color:var(--ink-2)}
+.runhead .close{justify-self:end;display:flex;align-items:center;min-height:44px;text-decoration:none}
 
-.opener{min-height:64%;min-height:64cqh;display:grid;align-content:end;gap:var(--s3);
-  padding:var(--s5) var(--pad) var(--s5)}
-.room{container-type:size}
-.opener .part{display:flex;align-items:center;gap:10px}
-.opener h1{margin:0;font:800 clamp(56px,9cqi,148px)/.9 var(--sans);font-stretch:75%;letter-spacing:-.02em}
-.opener .deck{margin:0;max-width:30ch;font:400 clamp(22px,2cqi,30px)/1.25 var(--sans)}
+.opener,.page,.backpage,.moment{position:relative;z-index:0}
+.opener{min-height:62cqh;display:grid;align-content:end;gap:clamp(12px,1.6cqi,28px);padding:var(--block) var(--m)}
+.opener .part{display:flex;align-items:center;gap:.7em;color:var(--c-ink)}
+.opener h1{margin:0;font:800 var(--t-hero)/.84 var(--sans);font-stretch:75%;letter-spacing:-.025em}
+.opener .deck{margin:0;max-width:24ch;font:500 var(--t-lede)/1.16 var(--sans);letter-spacing:-.012em}
+.opener .cta{justify-self:start;margin-top:clamp(4px,1cqi,16px)}
 
-/* content sits on its own layer, always beneath the sticky running head */
-.opener,.page,.backpage{position:relative;z-index:0}
+/* buttons — one red call to act, one quiet outline */
+.btn{display:inline-flex;align-items:center;gap:.7em;height:clamp(44px,3.8cqi,58px);padding:0 1.5em;border-radius:999px;
+  font:500 clamp(14px,1.15cqi,18px)/1 var(--sans);text-decoration:none;cursor:pointer;
+  transition:transform .2s var(--ui),background .2s var(--ui)}
+.btn-red{background:var(--red);color:var(--paper)}
+.btn-red:hover{transform:translateY(-2px);background:color-mix(in oklch,var(--red) 88%,black)}
+.btn-line{box-shadow:inset 0 0 0 1.5px currentColor}
+.btn-line:hover{background:rgb(26 26 26/.06)}
 
-/* 09 PAGE ── 12 columns, a sidehead column, a measured text column ───── */
-.page{display:grid;grid-template-columns:repeat(12,1fr);column-gap:var(--gutter);padding:var(--s5) var(--pad) 0}
-.sec{grid-column:1/-1;display:grid;grid-template-columns:subgrid;padding-bottom:var(--s6);
-  margin-bottom:var(--s6);border-bottom:1px solid var(--rule)}
-.sec:last-of-type{border-bottom:0;margin-bottom:0}
+/* 09 PAGE ── everything inside the one margin ──────────────────────────── */
+.page{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gutter);padding:0 var(--m)}
+.sec{grid-column:1/-1;display:grid;grid-template-columns:subgrid;row-gap:clamp(16px,2cqi,32px);
+  padding:var(--block) 0;border-top:1px solid var(--rule)}
 .sidehead{grid-column:1/4;color:var(--ink-2)}
-.sidehead b{display:block;font-weight:400;color:var(--ink);margin-bottom:4px}
-.body{grid-column:5/12;max-width:66ch;min-width:0}
-.body h2{margin:0 0 var(--s3);font:600 clamp(28px,2.6cqi,40px)/1.1 var(--sans);letter-spacing:-.015em}
-.body h3{margin:var(--s4) 0 var(--s2);font:600 22px/1.2 var(--sans)}
+.sidehead b{display:block;font-weight:400;color:var(--ink)}
+.sidehead .n{color:var(--c-ink)}
+.body{grid-column:4/-1;min-width:0;font-size:var(--t-body);line-height:1.5}
+.body > *{max-width:46em}
+.body h2{margin:0 0 .5em;font:800 var(--t-h2)/.92 var(--sans);font-stretch:75%;letter-spacing:-.02em;max-width:none}
+.body h3{margin:1.8em 0 .6em;font:700 var(--t-h3)/1.1 var(--sans);letter-spacing:-.01em}
 .body p{margin:0 0 1em}
-.body .lede{font-size:clamp(20px,1.6cqi,24px);line-height:1.4;margin-bottom:1.2em}
-.body .logo{height:2em;vertical-align:-.36em}
-.body p:has(.logo){padding-top:.55em}
-.pull{grid-column:3/12;margin:0 0 var(--s6);font:400 clamp(44px,5.6cqi,92px)/1.1 var(--script);
-  color:var(--cherry);transform:rotate(-3deg);transform-origin:left center}
-.notes{list-style:none;padding:var(--s2) 0 0;margin:var(--s4) 0 0;border-top:1px solid var(--rule);color:var(--ink-2)}
-.notes li{margin-bottom:6px}
-.cv{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
-.cv li{display:grid;grid-template-columns:4ch 1fr auto;gap:var(--s2);align-items:baseline;
-  padding:14px 0;border-bottom:1px solid var(--rule)}
-.cv .what{font-weight:600}
-.cv .what small{display:block;font-weight:400;color:var(--ink-2);font-size:15px}
-/* drop cap: structure, not a voice — set in the display cut, in the room's ink */
-.essay p:first-of-type::first-letter{float:left;font:800 4.6em/.8 var(--sans);font-stretch:75%;
-  color:var(--c-ink);padding:.04em .08em 0 0}
-.imperatives{counter-reset:i;list-style:none;margin:var(--s3) 0;padding:0;border-top:1px solid var(--ink)}
-.imperatives li{counter-increment:i;display:grid;grid-template-columns:4ch 1fr;padding:14px 0;border-bottom:1px solid var(--rule)}
-.imperatives li::before{content:counter(i,decimal-leading-zero);font:400 11.5px/2 var(--mono);color:var(--ink-2)}
-.sign{margin-top:var(--s4)!important;font:400 34px/1 var(--script)}
-.sign small{display:block;margin-top:8px;font:400 11.5px/1 var(--mono);color:var(--ink-2)}
-.refs{color:var(--ink-2)}
-.backpage{display:grid;grid-template-columns:repeat(12,1fr);column-gap:var(--gutter);
-  padding:var(--s5) var(--pad) var(--s4);border-top:1px solid var(--ink);margin:var(--s5) 0 0}
+.body .lede{font:500 var(--t-lede)/1.2 var(--sans);letter-spacing:-.012em;margin-bottom:.8em;max-width:none}
+.body .logo{height:2em;vertical-align:-.34em}
+.body p:has(.logo){padding-top:.5em}
+.notes{list-style:none;padding:1em 0 0;margin:1.6em 0 0;border-top:1px solid var(--rule);color:var(--ink-2)}
+.notes li{margin-bottom:.4em}
+.cv{list-style:none;margin:0;padding:0;border-top:2px solid var(--c)}
+.cv li{display:grid;grid-template-columns:3ch minmax(0,1fr) auto;gap:var(--gutter);align-items:baseline;
+  padding:.9em 0;border-bottom:1px solid var(--rule)}
+.cv .num{color:var(--c-ink)}
+.cv .what{font-weight:700;font-size:1.15em}
+.cv .what small{display:block;font-weight:400;color:var(--ink-2);font-size:.8em;margin-top:.15em}
+/* the essay — numbers hang in the margin of the list; each line stays one sentence */
+.essay p:first-of-type::first-letter{float:left;font:800 4.4em/.8 var(--sans);font-stretch:75%;color:var(--c-ink);padding:.05em .08em 0 0}
+.imperatives{counter-reset:i;list-style:none;margin:1.4em 0;padding:0;border-top:2px solid var(--c)}
+.imperatives li{counter-increment:i;position:relative;padding:.9em 0 .9em 3.2em;border-bottom:1px solid var(--rule)}
+.imperatives li::before{content:counter(i,decimal-leading-zero);position:absolute;left:0;top:1.15em;
+  font:400 var(--t-mono)/1 var(--mono);color:var(--c-ink)}
+.imperatives b{font-weight:700}
+.sign{margin-top:1.6em!important;font:400 clamp(30px,3.2cqi,52px)/1 var(--script);color:var(--red)}
+.sign small{display:block;margin-top:.5em;font:400 var(--t-mono)/1 var(--mono);color:var(--ink-2)}
+.refs{color:var(--ink-2);font-size:var(--t-mono)}
+
+.backpage{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gutter);row-gap:var(--block);
+  padding:var(--block) var(--m) var(--m);border-top:2px solid var(--c)}
 .backpage .next{grid-column:1/8;text-decoration:none;display:block}
-.backpage .next span{display:block;color:var(--ink-2);margin-bottom:var(--s1)}
-.backpage .next b{font:800 clamp(40px,5cqi,80px)/.95 var(--sans);font-stretch:75%;letter-spacing:-.02em}
-.backpage .next:hover b{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.12em}
-.colophon{grid-column:9/13;align-self:end;color:var(--ink-2)}
-.colophon p{margin:0 0 4px}
+.backpage .next span{display:block;color:var(--ink-2);margin-bottom:.6em}
+.backpage .next b{font:800 var(--t-h2)/.9 var(--sans);font-stretch:75%;letter-spacing:-.02em}
+.backpage .next:hover b{color:var(--c-ink)}
+.colophon{grid-column:9/-1;align-self:end;color:var(--ink-2)}
+.colophon p{margin:0 0 .3em}
+.key{display:flex;flex-wrap:wrap;gap:.4em 1.2em;margin:0 0 1em;padding:0;list-style:none}
+.key li{display:flex;align-items:center;gap:.5em}
 
-/* 10 PRACTICE ── projects as a contents page ──────────────────────────── */
-.contents{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+/* 10 MOMENT ── one spoken line per room, edge to edge, on its room's ink ─ */
+.moment{background:var(--c);color:var(--on-c);padding:var(--block) var(--m);overflow:hidden}
+.moment p{margin:0;font:800 clamp(60px,16cqi,280px)/.84 var(--sans);font-stretch:75%;letter-spacing:-.03em}
+.moment .who{display:flex;align-items:center;gap:.7em;margin-top:clamp(16px,2.4cqi,40px);opacity:.85}
+.moment .who .dot{background:currentColor}
+
+/* 11 PRACTICE ── what, how, work ──────────────────────────────────────── */
+.svc{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--gutter);max-width:none!important}
+.svc li{padding:1.1em 0 1.4em;border-top:2px solid var(--c)}
+.svc .num{display:block;color:var(--c-ink);margin-bottom:.6em}
+.svc h3{margin:0 0 .4em;font:800 var(--t-h3)/1 var(--sans);font-stretch:75%;letter-spacing:-.01em;font-size:clamp(26px,3cqi,48px)}
+.svc p{margin:0;color:var(--ink-2)}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gutter);max-width:none!important}
+.steps li{padding-top:1em;border-top:2px solid var(--c)}
+.steps .num{display:block;font:800 clamp(40px,5.2cqi,88px)/.9 var(--sans);font-stretch:75%;color:var(--c-ink)}
+.steps b{display:block;margin:.5em 0 .3em;font-size:1.15em}
+.steps p{margin:0;color:var(--ink-2)}
+.contents{list-style:none;margin:0;padding:0;border-top:2px solid var(--c);max-width:none!important}
 .contents li{border-bottom:1px solid var(--rule)}
-.contents button{width:100%;display:grid;grid-template-columns:4ch 1fr auto;gap:var(--s2);
-  align-items:baseline;text-align:left;padding:22px 0}
-.contents .t{font:600 clamp(24px,2.4cqi,36px)/1.1 var(--sans);letter-spacing:-.015em;transition:transform .22s var(--ui)}
-.contents .t small{display:block;margin-top:6px;font:400 15px/1.4 var(--sans);color:var(--ink-2);letter-spacing:0}
-.contents button:hover .t{transform:translateX(8px)}
-.contents .yr{color:var(--ink-2)}
+.contents button{width:100%;display:grid;grid-template-columns:3ch minmax(0,1fr) auto;gap:var(--gutter);
+  align-items:baseline;text-align:left;padding:1em 0}
+.contents .num,.contents .yr{color:var(--ink-2)}
+.contents .num{color:var(--c-ink)}
+.contents .t{font:800 clamp(26px,3.4cqi,56px)/1 var(--sans);font-stretch:75%;letter-spacing:-.015em;transition:transform .22s var(--ui),color .22s var(--ui)}
+.contents .t small{display:block;margin-top:.3em;font:400 var(--t-body)/1.3 var(--sans);font-stretch:100%;color:var(--ink-2);letter-spacing:0}
+.contents button:hover .t{transform:translateX(.3em);color:var(--c-ink)}
 
-/* 11 WORLD ── a column of clippings ───────────────────────────────────── */
-.filters{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:var(--s1) var(--s3);padding-bottom:var(--s4)}
-.filters button{min-height:44px;color:var(--ink-2);border-bottom:1px solid transparent}
-.filters button[aria-pressed=true]{color:var(--ink);border-bottom-color:var(--ink)}
-.filters sup{font-size:9px;margin-left:3px}
-.feed{grid-column:1/-1;columns:3 280px;column-gap:var(--s5)}
-.clip{break-inside:avoid;margin:0 0 var(--s5);display:block;text-decoration:none}
-.clip .src{display:flex;align-items:center;gap:8px;color:var(--ink-2);margin-bottom:var(--s1)}
-.clip h3{margin:0 0 6px;font:600 22px/1.2 var(--sans);letter-spacing:-.01em}
-.clip p{margin:0;color:var(--ink-2)}
-.clip img{width:100%;aspect-ratio:3/2;object-fit:cover;margin-bottom:var(--s2)}
-.clip.link h3::after{content:" ↗";font-weight:400;display:inline-block;transition:transform .2s var(--ui)}
-a.clip.link:hover h3::after{transform:translate(3px,-3px)}
-.clip.link.soon{cursor:default}
-.clip.link .price{color:var(--ink)}
-.clip[hidden]{display:none}
+/* 12 CONTACT ── the ask ───────────────────────────────────────────────── */
+.contact{grid-template-columns:subgrid}
+.form{display:grid;gap:1.1em;max-width:none!important}
+.field{display:grid;gap:.4em}
+.field > span,.form legend{font:400 var(--t-mono)/1 var(--mono);letter-spacing:.04em;color:var(--ink-2)}
+.form input,.form textarea,.form select{width:100%;padding:.75em .9em;border:0;border-radius:10px;
+  background:rgb(255 255 255/.66);box-shadow:inset 0 0 0 1px var(--rule);font-size:var(--t-body);
+  transition:box-shadow .2s var(--ui),background .2s var(--ui)}
+.form textarea{min-height:8em;resize:vertical}
+.form input:focus,.form textarea:focus,.form select:focus{outline:none;background:#fff;box-shadow:inset 0 0 0 2px var(--c-ink)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:1.1em}
+.form fieldset{border:0;margin:0;padding:0;display:grid;gap:.5em}
+.picks{display:flex;flex-wrap:wrap;gap:.5em}
+.picks label{position:relative;display:inline-flex}
+.picks input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.picks span{display:inline-flex;align-items:center;height:2.4em;padding:0 1em;border-radius:999px;
+  box-shadow:inset 0 0 0 1px var(--rule);background:rgb(255 255 255/.5);font-size:.92em;transition:background .2s,color .2s,box-shadow .2s}
+.picks input:checked + span{background:var(--c);color:var(--on-c);box-shadow:none}
+.picks input:focus-visible + span{outline:1.5px solid var(--c-ink);outline-offset:3px}
+.form .send{display:flex;align-items:center;gap:1.2em;flex-wrap:wrap}
+.form .status{color:var(--ink-2)}
+.form .status.ok{color:var(--blue-ink)}
+.form .status.err{color:var(--red)}
+.direct{color:var(--ink-2)}
+.direct a{color:var(--ink);text-decoration-color:var(--c);text-underline-offset:.2em}
+.hp{position:absolute!important;width:1px;height:1px;opacity:0;pointer-events:none;clip-path:inset(50%)}   /* spam trap */
 
-/* 12 SHEET ── the one overlay, held inside the glass ───────────────────── */
-.sheet-wrap{position:absolute;inset:0;z-index:10;display:grid;place-items:center;padding:var(--pad);
-  background:rgb(26 26 26/.32);opacity:0;visibility:hidden;
-  transition:opacity .32s var(--ui),visibility 0s linear .32s}
+/* 13 WORLD ── the log: tiles, filters, and room for other people ───────── */
+.toolbar{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1em;
+  padding:var(--block) 0 clamp(16px,2cqi,28px);border-top:1px solid var(--rule)}
+.filters{display:flex;flex-wrap:wrap;gap:.3em}
+.filters button{display:inline-flex;align-items:center;gap:.5em;height:clamp(36px,3.2cqi,46px);padding:0 1em;border-radius:999px;
+  box-shadow:inset 0 0 0 1px var(--rule);background:rgb(255 255 255/.45);font:400 var(--t-mono)/1 var(--mono);letter-spacing:.04em}
+.filters button[aria-pressed=true]{background:var(--ink);color:var(--paper);box-shadow:none}
+.filters sup{font-size:.75em;opacity:.7}
+.tiles{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(150px,19cqi,300px),1fr));
+  grid-auto-rows:clamp(160px,17cqi,280px);grid-auto-flow:dense;gap:clamp(8px,1cqi,16px);padding-bottom:var(--block)}
+.tile{position:relative;overflow:hidden;border-radius:clamp(10px,1cqi,16px);padding:clamp(12px,1.3cqi,20px);
+  display:flex;flex-direction:column;justify-content:space-between;gap:.6em;text-align:left;text-decoration:none;
+  background:rgb(255 255 255/.6);box-shadow:inset 0 0 0 1px var(--rule);transition:transform .25s var(--ui)}
+.tile:hover{transform:translateY(-3px)}
+.tile .meta{display:flex;align-items:center;gap:.5em;font:400 var(--t-mono)/1.3 var(--mono);letter-spacing:.04em;color:var(--ink-2)}
+.tile .tb{display:block}
+.tile .t{display:block;margin:0 0 .3em;font:700 clamp(18px,1.7cqi,28px)/1.1 var(--sans);letter-spacing:-.01em}
+.tile .p{display:block;margin:0;font-size:clamp(14px,1.15cqi,18px);line-height:1.4;color:var(--ink-2);
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.tile.idea{--k:var(--blue);box-shadow:inset 3px 0 0 var(--k),inset 0 0 0 1px var(--rule)}
+.tile.sensation{--k:var(--red);box-shadow:inset 0 3px 0 var(--k),inset 0 0 0 1px var(--rule)}
+.tile.artifact{--k:var(--ink);background:transparent;box-shadow:inset 0 0 0 1.5px var(--ink)}
+.tile.link{--k:var(--orange);background:rgb(255 255 255/.35);box-shadow:inset 0 0 0 1.5px var(--orange)}
+.tile.link:hover{background:color-mix(in oklch,var(--orange) 16%,var(--paper))}
+.tile.link .t::after{content:" ↗";font-weight:400}
+.tile.link.soon{cursor:default}
+.tile .dot{--c:var(--k)}
+.tile.photo{grid-row:span 2;padding:0;color:var(--osd);background:#1d1c1a;box-shadow:none}
+.tile.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile.photo .cap{position:relative;margin-top:auto;padding:clamp(12px,1.3cqi,20px);
+  background:linear-gradient(transparent,rgb(0 0 0/.6))}
+.tile.photo .meta{color:rgb(255 255 255/.8)}
+.tile.photo .t{color:var(--osd)}
+.tile.wide{grid-column:span 2}
+.tile[hidden]{display:none}
+.tile.mine{box-shadow:inset 0 0 0 2px var(--red)}
+.add{margin-left:auto}
+
+/* 14 SHEETS ── overlays, held inside the glass ─────────────────────────── */
+.sheet-wrap{position:absolute;inset:0;z-index:10;display:grid;place-items:center;padding:var(--m);
+  background:rgb(26 26 26/.32);opacity:0;visibility:hidden;transition:opacity .32s var(--ui),visibility 0s linear .32s}
 .sheet-wrap.open{opacity:1;visibility:visible;transition:opacity .32s var(--ui)}
-.sheet{width:min(860px,100%);max-height:100%;overflow:auto;overscroll-behavior:contain;
-  background:var(--paper);border-radius:calc(var(--r-in) * .5);box-shadow:0 24px 60px rgb(0 0 0/.25);
-  transform:translateY(12px);transition:transform .32s var(--arrive)}
+.sheet{width:min(900px,100%);max-height:100%;overflow:auto;overscroll-behavior:contain;
+  background:var(--paper);border-radius:calc(var(--r-in) * .6);box-shadow:0 24px 60px rgb(0 0 0/.25);
+  transform:translateY(12px);transition:transform .32s var(--arrive);font-size:var(--t-body)}
 .sheet-wrap.open .sheet{transform:none}
-.sheet-head{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;
-  padding:6px var(--s4);background:var(--paper);border-bottom:1px solid var(--rule);color:var(--ink-2)}
+.sheet-head{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;align-items:center;
+  padding:calc(var(--m) * .4) var(--m);background:var(--paper);border-bottom:2px solid var(--c,var(--ink));color:var(--ink-2)}
 .sheet-head button{min-height:44px;color:var(--ink)}
-.sheet-body{padding:var(--s4) var(--s4) var(--s5)}
-.sheet-body h2{margin:0 0 var(--s2);font:800 clamp(40px,5cqi,72px)/.92 var(--sans);font-stretch:75%;letter-spacing:-.02em;outline:none}
-.sheet-body .lede{font-size:20px;line-height:1.4}
-.sheet-body .meta{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:var(--s4);
-  padding:var(--s2) 0;margin:var(--s3) 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.sheet-body{padding:var(--m) var(--m) calc(var(--m) * 1.6)}
+.sheet-body h2{margin:0 0 .4em;font:800 var(--t-h2)/.9 var(--sans);font-stretch:75%;letter-spacing:-.02em;outline:none}
+.sheet-body .lede{font:500 var(--t-lede)/1.2 var(--sans)}
+.sheet-body .meta{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:2em;
+  padding:1em 0;margin:1.2em 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
 .sheet-body .meta span{display:block;color:var(--ink-2)}
 .sheet-body p{max-width:62ch}
 
-/* 13 MOTION ── a room wipes across the glass from its own door. The device
-   never moves; only the picture on the screen changes. */
+/* 15 MOTION ── a room wipes across the glass from its door ──────────────── */
 ::view-transition-old(root),::view-transition-new(root){animation:none}
 ::view-transition-old(screen){animation:none}
 ::view-transition-new(screen){animation:wipe .75s var(--arrive) both}
@@ -365,33 +412,32 @@ html{--from:inset(0 0 0 0 round var(--r-in))}
 html[data-dir=left]{--from:inset(0 100% 0 0 round var(--r-in))}
 html[data-dir=right]{--from:inset(0 0 0 100% round var(--r-in))}
 html[data-dir=down]{--from:inset(100% 0 0 0 round var(--r-in))}
-html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}   /* the channel closes to a line */
+html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}
 @supports (animation-timeline:view()){
-  .clip,.contents li,.cv li{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
-  @keyframes rise{from{opacity:0;transform:translateY(24px)}}
+  .tile,.contents li,.cv li,.svc li,.steps li{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 55%}
+  @keyframes rise{from{opacity:0;transform:translateY(20px)}}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}
   ::view-transition-new(screen){animation:none}
 }
 
-/* 14 SMALL SCREENS ────────────────────────────────────────────────────── */
-@container screen (max-width:760px){
-  .hud,.room,.sheet-wrap{--pad:20px;--hud:12px}
-  .chip{min-height:36px;padding:0 12px;font-size:11px}
-  .hud .caption{max-width:calc(100% - 2*var(--hud));bottom:calc(var(--hud) + 48px)}
-  .door-story,.door-practice{top:auto;bottom:var(--hud);translate:none}
-  .door-world{bottom:var(--hud)}
-  .runhead{grid-template-columns:auto 1fr;padding:6px var(--pad)}
+/* 16 NARROW SCREENS ── the same proportions, restacked ─────────────────── */
+@container screen (max-width:720px){
+  .chip{padding:0 .9em;gap:.55em}
+  .door [aria-hidden]{display:none}           /* position says the direction; drop the arrow */
+  .runhead{grid-template-columns:auto 1fr}
   .runhead .folio{display:none}
-  .page,.backpage{display:block;padding-top:var(--s4)}
-  .sec{display:block;padding-bottom:var(--s5);margin-bottom:var(--s5)}
-  .sidehead{margin-bottom:var(--s3)}
-  .colophon{margin-top:var(--s4)}
-  .opener{padding:var(--s4) var(--pad)}
-  .sheet-wrap{padding:12px}
-  .sheet-head,.sheet-body{padding-left:var(--s3);padding-right:var(--s3)}
+  .page,.backpage{display:block}
+  .sec{display:block}
+  .sidehead{margin-bottom:1.4em}
+  .colophon{margin-top:2em}
+  .svc,.row2{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .tiles{grid-template-columns:1fr 1fr;grid-auto-rows:150px}
+  .tile.wide{grid-column:span 2}
   .sheet-body .meta{grid-template-columns:1fr 1fr}
+  .add{margin-left:0}
 }
 </style>
 </head>
@@ -448,7 +494,14 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}   /* the channe
             </div>
           </section>
       
-          <p class="pull">By middle name, I&rsquo;m Tanner.</p>
+        </div>
+
+        <section class="moment" aria-label="A spoken line">
+          <p>By middle name, I&rsquo;m Tanner.</p>
+          <span class="who mono"><span class="dot"></span>Josh Tanner Harrison</span>
+        </section>
+
+        <div class="page">
       
           <section class="sec">
             <div class="sidehead mono"><b>The author</b><span class="n">02</span></div>
@@ -496,7 +549,7 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}   /* the channe
       
         <footer class="backpage">
           <a class="next" href="#practice"><span class="mono">Continued — Part Two</span><b>Practice →</b></a>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--story)"></span>Story</li><li><span class="dot" style="--c:var(--practice)"></span>Practice</li><li><span class="dot" style="--c:var(--world)"></span>World</li><li><span class="dot" style="--c:var(--cherry)"></span>A spoken line</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--red)"></span>Story — a voice</li><li><span class="dot" style="--c:var(--blue)"></span>Practice — the work</li><li><span class="dot" style="--c:var(--orange)"></span>World — the people</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
         </footer>
      </div>
     </article>
@@ -511,27 +564,90 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}   /* the channe
         <section class="opener">
           <span class="part mono"><span class="dot"></span>Part Two</span>
           <h1>Practice</h1>
-          <p class="deck">Objects, spaces, systems — for a brighter everyday.</p>
+          <p class="deck">Design is a negotiation. What does your space want to become?</p>
+          <div class="cta"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></div>
         </section>
-      
+
         <div class="page">
           <section class="sec">
-            <div class="sidehead mono"><b>The work</b><span class="n">01</span></div>
+            <div class="sidehead mono"><b>The practice</b><span class="n">01</span></div>
             <div class="body">
-              <p class="lede"><span class="logo" role="img" aria-label="care of TANNER"></span> is a design practice. Architecture, interiors, brand systems and editorial work for people who want their place to think.</p>
-              <p>Design is a negotiation — between a client and a site, a budget and a wish, two materials meeting at a wall. The work is to find the middle and detail it well.</p>
+              <p class="lede"><span class="logo" role="img" aria-label="care of TANNER"></span> is an independent design practice in Brooklyn — architecture, interiors, brand systems and editorial work.</p>
+              <p>I work with clients who understand that design is not decoration: it is how a space makes an argument about the world. Every project is a negotiation — between a client and a site, a budget and a wish, two materials meeting at a wall. The work is to find the middle and detail it well.</p>
             </div>
           </section>
+
           <section class="sec">
-            <div class="sidehead mono"><b>Contents</b><span class="n">02 · Selected projects</span></div>
+            <div class="sidehead mono"><b>What I do</b><span class="n">02 · Services</span></div>
+            <div class="body">
+              <ul class="svc">
+                <li><span class="num mono">01</span><h3>Interior architecture</h3><p>From concept through construction administration. Space planning, materials, custom millwork, FF&amp;E specification.</p></li>
+                <li><span class="num mono">02</span><h3>Architecture</h3><p>Residential and small commercial. Schematic design as argument — options that disagree with each other — then rigorous documents.</p></li>
+                <li><span class="num mono">03</span><h3>Urban design &amp; visioning</h3><p>Master plans, corridor studies and public-realm strategy, at every scale from the block to the district.</p></li>
+                <li><span class="num mono">04</span><h3>Art direction &amp; graphics</h3><p>Brand identity, editorial design and environmental graphics — visual systems with the same rigour as the spatial work.</p></li>
+              </ul>
+            </div>
+          </section>
+        </div>
+
+        <section class="moment" aria-label="A spoken line">
+          <p>Design is a negotiation.</p>
+          <span class="who mono"><span class="dot"></span>care of TANNER</span>
+        </section>
+
+        <div class="page">
+          <section class="sec">
+            <div class="sidehead mono"><b>How I work</b><span class="n">03 · Approach</span></div>
+            <div class="body">
+              <ol class="steps">
+                <li><span class="num">01</span><b>Listen</b><p>What keeps you up at midnight? We start there.</p></li>
+                <li><span class="num">02</span><b>Provoke</b><p>Schematic design as argument. Options that disagree.</p></li>
+                <li><span class="num">03</span><b>Document</b><p>Rigorous drawings that builders actually trust.</p></li>
+                <li><span class="num">04</span><b>Steward</b><p>On site through completion. Design ends when the last handle is hung.</p></li>
+              </ol>
+            </div>
+          </section>
+
+          <section class="sec">
+            <div class="sidehead mono"><b>Selected work</b><span class="n">04 · Projects</span></div>
             <div class="body"><ol class="contents" id="contents"></ol></div>
           </section>
-          <p class="pull">Design is a negotiation.</p>
+
+          <section class="sec contact" id="contact">
+            <div class="sidehead mono"><b>Start a project</b><span class="n">05 · Contact</span></div>
+            <div class="body">
+              <h2>What are we building?</h2>
+              <form class="form" id="contact-form" data-subject="New project — care of TANNER">
+                <div class="row2">
+                  <label class="field"><span>Name</span><input name="name" autocomplete="name" required></label>
+                  <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
+                </div>
+                <fieldset>
+                  <legend>What do you need?</legend>
+                  <div class="picks">
+                    <label><input type="checkbox" name="services" value="Interior architecture"><span>Interior architecture</span></label>
+                    <label><input type="checkbox" name="services" value="Architecture"><span>Architecture</span></label>
+                    <label><input type="checkbox" name="services" value="Urban design"><span>Urban design</span></label>
+                    <label><input type="checkbox" name="services" value="Art direction &amp; graphics"><span>Art direction &amp; graphics</span></label>
+                    <label><input type="checkbox" name="services" value="Not sure yet"><span>Not sure yet</span></label>
+                  </div>
+                </fieldset>
+                <div class="row2">
+                  <label class="field"><span>Where</span><input name="location" placeholder="City, or the address"></label>
+                  <label class="field"><span>When</span><select name="timing"><option value="">Choose one</option><option>As soon as possible</option><option>In the next 3 months</option><option>Later this year</option><option>Just exploring</option></select></label>
+                </div>
+                <label class="field"><span>Tell me about it</span><textarea name="message" required placeholder="The space, the problem, the wish."></textarea></label>
+                <input class="hp" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+                <div class="send"><button class="btn btn-red" type="submit">Send <span aria-hidden="true">→</span></button><span class="status mono" role="status"></span></div>
+              </form>
+              <p class="direct mono">Or write directly — <a href="mailto:josh.tanner95@gmail.com">josh.tanner95@gmail.com</a></p>
+            </div>
+          </section>
         </div>
-      
+
         <footer class="backpage">
           <a class="next" href="#world"><span class="mono">Continued — Part Three</span><b>World →</b></a>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--story)"></span>Story</li><li><span class="dot" style="--c:var(--practice)"></span>Practice</li><li><span class="dot" style="--c:var(--world)"></span>World</li><li><span class="dot" style="--c:var(--cherry)"></span>A spoken line</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--red)"></span>Story — a voice</li><li><span class="dot" style="--c:var(--blue)"></span>Practice — the work</li><li><span class="dot" style="--c:var(--orange)"></span>World — the people</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
         </footer>
      </div>
     </article>
@@ -546,27 +662,34 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}   /* the channe
         <section class="opener">
           <span class="part mono"><span class="dot"></span>Part Three</span>
           <h1>World</h1>
-          <p class="deck">Notes, sightings, and the people worth knowing.</p>
+          <p class="deck">Notes, sightings, and the people worth knowing — add yours.</p>
         </section>
-      
+
         <div class="page">
-          <h2 class="vh">Clippings</h2>
-          <nav class="filters mono" id="filters" aria-label="Filter the world"></nav>
-          <div class="feed" id="feed"></div>
-          <p class="pull">Let&rsquo;s meet in the middle.</p>
+          <h2 class="vh">The log</h2>
+          <div class="toolbar">
+            <nav class="filters" id="filters" aria-label="Filter the log"></nav>
+            <button class="btn btn-red add" id="add">Add to the World <span aria-hidden="true">+</span></button>
+          </div>
+          <div class="tiles" id="tiles"></div>
         </div>
-      
+
+        <section class="moment" aria-label="A spoken line">
+          <p>Let&rsquo;s meet in the middle.</p>
+          <span class="who mono"><span class="dot"></span>care of TANNER</span>
+        </section>
+
         <footer class="backpage">
           <a class="next" href="#story"><span class="mono">Back to the beginning — Part One</span><b>Story →</b></a>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--story)"></span>Story</li><li><span class="dot" style="--c:var(--practice)"></span>Practice</li><li><span class="dot" style="--c:var(--world)"></span>World</li><li><span class="dot" style="--c:var(--cherry)"></span>A spoken line</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--red)"></span>Story — a voice</li><li><span class="dot" style="--c:var(--blue)"></span>Practice — the work</li><li><span class="dot" style="--c:var(--orange)"></span>World — the people</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
         </footer>
      </div>
     </article>
 
-    <!-- ═══ PROJECT SHEET — the one overlay, inside the glass ═══ -->
-    <div class="sheet-wrap" id="sheet-wrap">
+    <!-- ═══ SHEETS — overlays, inside the glass ═══ -->
+    <div class="sheet-wrap" id="sheet-project" style="--c:var(--blue)">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="pj-title">
-        <div class="sheet-head mono"><span id="pj-idx"></span><button id="pj-close">Close ×</button></div>
+        <div class="sheet-head mono"><span id="pj-idx"></span><button class="x">Close ×</button></div>
         <div class="sheet-body">
           <h2 id="pj-title" tabindex="-1"></h2>
           <p class="lede" id="pj-tag"></p>
@@ -576,6 +699,48 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}   /* the channe
             <div><span>Year</span><b id="pj-year"></b></div>
           </div>
           <p id="pj-desc"></p>
+          <p style="margin-top:2em"><a class="btn btn-red" data-close href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sheet-wrap" id="sheet-entry" style="--c:var(--orange)">
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="en-title">
+        <div class="sheet-head mono"><span id="en-meta"></span><button class="x">Close ×</button></div>
+        <div class="sheet-body">
+          <img id="en-img" alt="" hidden style="width:100%;border-radius:10px;margin-bottom:1.2em">
+          <h2 id="en-title" tabindex="-1"></h2>
+          <p id="en-text"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sheet-wrap" id="sheet-add" style="--c:var(--orange);--c-ink:var(--ink);--on-c:var(--ink)">
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="add-title">
+        <div class="sheet-head mono"><span>World — a submission</span><button class="x">Close ×</button></div>
+        <div class="sheet-body">
+          <h2 id="add-title" tabindex="-1">Add to the World</h2>
+          <p>A note, a sighting, a place, a person worth knowing. Everything is read before it goes up.</p>
+          <form class="form" id="add-form" data-subject="World submission — care of TANNER">
+            <fieldset>
+              <legend>What is it?</legend>
+              <div class="picks">
+                <label><input type="radio" name="kind" value="idea" checked><span>An idea</span></label>
+                <label><input type="radio" name="kind" value="sensation"><span>A sensation</span></label>
+                <label><input type="radio" name="kind" value="artifact"><span>An artifact</span></label>
+                <label><input type="radio" name="kind" value="link"><span>A link</span></label>
+              </div>
+            </fieldset>
+            <label class="field"><span>Title</span><input name="title" required maxlength="80"></label>
+            <label class="field"><span>Say it</span><textarea name="text" required maxlength="600"></textarea></label>
+            <label class="field"><span>Link (optional) — a shop, a studio, a friend, a portfolio</span><input name="url" type="url" placeholder="https://"></label>
+            <div class="row2">
+              <label class="field"><span>Your name</span><input name="name" autocomplete="name" required></label>
+              <label class="field"><span>Your email (not published)</span><input name="email" type="email" autocomplete="email" required></label>
+            </div>
+            <input class="hp" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <div class="send"><button class="btn btn-red" type="submit">Submit <span aria-hidden="true">→</span></button><span class="status mono" role="status"></span></div>
+          </form>
         </div>
       </div>
     </div>
@@ -713,9 +878,9 @@ const WORLD = [
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const FIELDS = {bone:['#E8E4DC','#1A1A1A'], ink:['#1A1A1A','#EDEAE3'],
-                story:['color-mix(in oklch,var(--story) 38%,#F1EEE8)','var(--story-ink)'],
-                practice:['var(--practice)','#F3F1EC'],
-                world:['color-mix(in oklch,var(--world) 30%,#F1EEE8)','var(--world-ink)']};
+                story:['var(--red)','#F6F3EE'],
+                practice:['var(--blue)','#F3F1EC'],
+                world:['var(--orange)','#1A1A1A']};
 const DOTS = {story:'var(--story)', practice:'var(--practice)', world:'var(--world)'};
 const srcset = k => `img/800/${PHOTOS[k].src}.webp 800w, img/1600/${PHOTOS[k].src}.webp 1600w`;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -826,25 +991,56 @@ document.querySelectorAll('.home,.close').forEach(a => a.addEventListener('click
 addEventListener('popstate', route);
 addEventListener('keydown', e => {
   if (sheetOpen()){
-    if (e.key === 'Escape') closeProject();
-    if (e.key === 'Tab'){ e.preventDefault(); $('#pj-close').focus(); }   /* one control inside: keep focus there */
+    if (e.key === 'Escape') closeSheet();
+    if (e.key === 'Tab') trapTab(e);
     return;
   }
   const inRoom = !!document.documentElement.dataset.room;
   if (e.key === 'Escape' && inRoom){ history.pushState(null, '', location.pathname); route(); return; }
-  if (inRoom || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (inRoom || e.metaKey || e.ctrlKey || e.altKey || e.target.closest('input,textarea,select')) return;
   const go = {ArrowLeft:'story', ArrowRight:'practice', ArrowDown:'world'}[e.key];
   if (go){ e.preventDefault(); location.hash = go; }
 });
 
-/* ── practice: contents + one dialog ────────────────────────────────── */
+/* ── sheets: every overlay opens inside the glass ─────────────────────── */
+let openSheetEl = null, lastFocus = null;
+const sheetOpen = () => !!openSheetEl;
+function openSheet(id, focusSel){
+  lastFocus = document.activeElement;
+  openSheetEl = $('#' + id);
+  openSheetEl.classList.add('open');
+  openSheetEl.querySelector('.sheet').scrollTop = 0;
+  openSheetEl.querySelector(focusSel || 'h2')?.focus({preventScroll:true});
+}
+function closeSheet(){
+  if (!openSheetEl) return;
+  openSheetEl.classList.remove('open'); openSheetEl = null;
+  lastFocus?.focus?.({preventScroll:true});
+}
+document.querySelectorAll('.sheet-wrap').forEach(w => {
+  w.addEventListener('click', e => { if (e.target === w || e.target.closest('.x') || e.target.closest('[data-close]')) closeSheet(); });
+});
+function trapTab(e){            /* keep focus inside the open sheet */
+  const f = [...openSheetEl.querySelectorAll('button,a[href],input:not(.hp),select,textarea')].filter(x => x.offsetParent);
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+}
+
+/* "Start a project" from anywhere: open Practice, land on the form */
+document.addEventListener('click', e => {
+  const a = e.target.closest('[data-scroll]'); if (!a) return;
+  e.preventDefault();
+  const go = () => document.getElementById(a.dataset.scroll)?.scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'start'});
+  if (showing === 'practice') go(); else { location.hash = 'practice'; setTimeout(go, 800); }
+});
+
+/* ── practice: selected work ────────────────────────────────────────── */
 $('#contents').innerHTML = PROJECTS.map((p, i) =>
   `<li><button data-project="${p.id}"><span class="mono num">${String(i + 1).padStart(2, '0')}</span>` +
   `<span class="t">${esc(p.title)}<small>${esc(p.client)}</small></span><span class="yr mono">${esc(p.year)}</span></button></li>`).join('');
 $('#contents').addEventListener('click', e => { const b = e.target.closest('[data-project]'); if (b) openProject(b.dataset.project); });
-const wrap = $('#sheet-wrap');
-let lastFocus = null;
-const sheetOpen = () => wrap.classList.contains('open');
 function openProject(id){
   const i = PROJECTS.findIndex(p => p.id === id); if (i < 0) return;
   const p = PROJECTS[i];
@@ -852,42 +1048,75 @@ function openProject(id){
   $('#pj-title').textContent = p.title; $('#pj-tag').textContent = p.tag;
   $('#pj-client').textContent = p.client; $('#pj-role').textContent = p.role; $('#pj-year').textContent = p.year;
   $('#pj-desc').textContent = p.desc;
-  lastFocus = document.activeElement;
-  wrap.classList.add('open');
-  $('#pj-title').focus({preventScroll:true});
+  openSheet('sheet-project');
 }
-function closeProject(){ wrap.classList.remove('open'); lastFocus?.focus?.({preventScroll:true}); }
-$('#pj-close').onclick = closeProject;
-wrap.addEventListener('click', e => { if (e.target === wrap) closeProject(); });
 
-/* ── world: clippings + filters ─────────────────────────────────────── */
-const CATS = [['all','All'], ['idea','Ideas'], ['artifact','Artifacts'], ['sensation','Sensations'], ['link','Links']];
+/* ── forms: delivered by FormSubmit (no account, no server). The first
+   message triggers a one-time confirmation email to the inbox below. ── */
+const INBOX = 'josh.tanner95@gmail.com';
+document.querySelectorAll('form.form').forEach(form => form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const status = form.querySelector('.status'), btn = form.querySelector('[type=submit]');
+  if (form._honey?.value) return;
+  const data = {};
+  new FormData(form).forEach((v, k) => { if (k !== '_honey') data[k] = data[k] ? data[k] + ', ' + v : v; });
+  data._subject = form.dataset.subject; data._template = 'table'; data._captcha = 'false';
+  btn.disabled = true; status.className = 'status mono'; status.textContent = 'Sending…';
+  try{
+    const r = await fetch('https://formsubmit.co/ajax/' + INBOX, {method:'POST',
+      headers:{'Content-Type':'application/json', Accept:'application/json'}, body:JSON.stringify(data)});
+    if (!r.ok) throw 0;
+    form.reset(); status.className = 'status mono ok';
+    status.textContent = form.id === 'add-form' ? 'Received — it goes up once it has been read.' : 'Sent. I’ll be in touch.';
+  }catch{
+    status.className = 'status mono err';
+    status.innerHTML = `That didn’t send. Write to <a href="mailto:${INBOX}">${INBOX}</a>.`;
+  }finally{ btn.disabled = false; }
+}));
+
+/* ── world: the log ─────────────────────────────────────────────────── */
+const CATS = [['all','All'], ['idea','Ideas'], ['sensation','Sensations'], ['artifact','Artifacts'], ['link','Links']];
+const KDOT = {idea:'var(--blue)', sensation:'var(--red)', artifact:'var(--ink)', link:'var(--orange)'};
 const fmtDate = d => new Date(d + 'T12:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
 WORLD.sort((a, b) => b.date.localeCompare(a.date));
-$('#feed').innerHTML = WORLD.map(e => {
-  const img = e.photo && PHOTOS[e.photo]
-    ? `<img srcset="${srcset(e.photo)}" sizes="(min-aspect-ratio:3/4) 48vh, 100vw" alt="" loading="lazy" decoding="async" width="800" height="530">` : '';
+{ const notes = WORLD.filter(e => e.cat !== 'link'), links = WORLD.filter(e => e.cat === 'link'), mix = [];
+  while (notes.length || links.length){ if (notes.length) mix.push(notes.shift()); if (notes.length) mix.push(notes.shift()); if (links.length) mix.push(links.shift()); }
+  WORLD.splice(0, WORLD.length, ...mix); }
+$('#tiles').innerHTML = WORLD.map((e, i) => {
+  const pic = e.photo && PHOTOS[e.photo];
+  const meta = `<span class="meta"><span class="dot"></span>${e.cat === 'link' ? esc(e.kind || 'link') + (e.price ? ' — ' + esc(e.price) : '') : e.cat + ' — ' + fmtDate(e.date)}</span>`;
+  if (pic) return `<button class="tile photo ${e.cat}" data-cat="${e.cat}" data-i="${i}">` +
+      `<img srcset="${srcset(e.photo)}" sizes="(max-width:800px) 50vw, 25vw" alt="" loading="lazy" decoding="async">` +
+      `<span class="cap">${meta}<span class="t">${esc(e.title)}</span></span></button>`;
   if (e.cat === 'link'){
     const live = e.href && e.href !== '#';
-    const tag = live ? `a href="${esc(e.href)}" target="_blank" rel="noopener"` : 'div';
-    return `<${tag} class="clip link${live ? '' : ' soon'}" data-cat="link">${img}` +
-      `<div class="src mono"><span class="dot" style="--c:var(--world)"></span>${esc(e.kind || 'link')}` +
-      `${e.price ? ` — <span class="price">${esc(e.price)}</span>` : ''}${live ? '' : ' — soon'}</div>` +
-      `<h3>${esc(e.title)}</h3><p>${esc(e.text)}</p></${tag.split(' ')[0]}>`;
+    const open = live ? `a href="${esc(e.href)}" target="_blank" rel="noopener"` : 'div';
+    return `<${open} class="tile link${live ? '' : ' soon'}" data-cat="link">${meta}<span class="tb"><span class="t">${esc(e.title)}</span><span class="p">${esc(e.text)}${live ? '' : ' — soon'}</span></span></${open.split(' ')[0]}>`;
   }
-  return `<article class="clip" data-cat="${e.cat}">${img}` +
-    `<div class="src mono"><span class="dot" style="--c:var(--ink)"></span>${e.cat} — ${fmtDate(e.date)}</div>` +
-    `<h3>${esc(e.title)}</h3><p>${esc(e.text)}</p></article>`;
+  const wide = e.text.length > 160 ? ' wide' : '';
+  return `<button class="tile ${e.cat}${wide}" data-cat="${e.cat}" data-i="${i}">${meta}<span class="tb"><span class="t">${esc(e.title)}</span><span class="p">${esc(e.text)}</span></span></button>`;
 }).join('');
+$('#tiles').addEventListener('click', ev => {
+  const t = ev.target.closest('button.tile'); if (!t) return;
+  const e = WORLD[t.dataset.i];
+  $('#en-meta').textContent = `World — ${e.cat} — ${fmtDate(e.date)}`;
+  $('#en-title').textContent = e.title; $('#en-text').textContent = e.text;
+  const img = $('#en-img');
+  if (e.photo && PHOTOS[e.photo]){ img.srcset = srcset(e.photo); img.sizes = '900px'; img.hidden = false; } else img.hidden = true;
+  openSheet('sheet-entry');
+});
+document.querySelectorAll('#tiles .tile').forEach(t => t.querySelector('.dot').style.background = KDOT[t.dataset.cat]);
 $('#filters').innerHTML = CATS.map(([k, label]) => {
   const n = k === 'all' ? WORLD.length : WORLD.filter(e => e.cat === k).length;
-  return `<button data-cat="${k}" aria-pressed="${k === 'all'}">${label}<sup>${n}</sup></button>`;
+  const dot = k === 'all' ? '' : `<span class="dot" style="background:${KDOT[k]}"></span>`;
+  return `<button data-cat="${k}" aria-pressed="${k === 'all'}">${dot}${label}<sup>${n}</sup></button>`;
 }).join('');
 $('#filters').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   document.querySelectorAll('#filters button').forEach(x => x.setAttribute('aria-pressed', x === b));
-  document.querySelectorAll('#feed .clip').forEach(c => c.hidden = b.dataset.cat !== 'all' && c.dataset.cat !== b.dataset.cat);
+  document.querySelectorAll('#tiles .tile').forEach(c => c.hidden = b.dataset.cat !== 'all' && c.dataset.cat !== b.dataset.cat);
 });
+$('#add').onclick = () => openSheet('sheet-add', '#add-title');
 
 route();
 </script>
