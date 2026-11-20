@@ -27,7 +27,7 @@
 
    THE KEY.  ● orange: story, the person
              ● blue:   practice, the work
-             ● green:  world, the people around it
+             ● mauve:  world, the people around it
              ● red:    the accent — a voice, a number, a call to act.
                        Red is never a room; it runs through all of them.
 
@@ -45,11 +45,11 @@
   --red:   #D8102F;                   /* the "care of" red — lifted from the logo */
   --blue:  oklch(.53 .175 262);       /* ≈ #2C5CC8 */
   --orange:oklch(.71 .17 52);         /* ≈ #EF7D2C */
-  --green: oklch(.6 .12 148);         /* ≈ #4E9B5F — the mood board's note panel */
+  --mauve: oklch(.57 .05 350);        /* ≈ #8E7380 — a mineral, dusty mauve */
   --blue-ink:oklch(.45 .17 262);      /* blue as text on paper (AA) */
-  --green-ink:oklch(.44 .1 148);
+  --mauve-ink:oklch(.42 .05 350);
 
-  --story:var(--orange); --practice:var(--blue); --world:var(--green);
+  --story:var(--orange); --practice:var(--blue); --world:var(--mauve);
   --cherry:var(--red);
 
   --sans:"early-sans-variable","early-sans","Helvetica Neue",Arial,sans-serif;
@@ -224,8 +224,8 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 #practice{--c:var(--blue);--c-ink:var(--blue-ink);--on-c:var(--paper);
   --bloom-a:radial-gradient(55% 75% at 96% 40%,color-mix(in oklch,var(--blue) 42%,transparent),transparent 72%);
   --bloom-b:radial-gradient(45% 45% at 50% 100%,color-mix(in oklch,var(--red) 12%,transparent),transparent 72%)}
-#world{--c:var(--green);--c-ink:var(--green-ink);--on-c:var(--paper);
-  --bloom-a:radial-gradient(80% 55% at 50% 100%,color-mix(in oklch,var(--green) 40%,transparent),transparent 72%);
+#world{--c:var(--mauve);--c-ink:var(--mauve-ink);--on-c:var(--paper);
+  --bloom-a:radial-gradient(80% 55% at 50% 100%,color-mix(in oklch,var(--mauve) 46%,transparent),transparent 72%);
   --bloom-b:radial-gradient(45% 45% at 4% 20%,color-mix(in oklch,var(--orange) 14%,transparent),transparent 72%)}
 .room ::selection{background:color-mix(in oklch,var(--red) 20%,transparent)}
 .room :focus-visible{outline-color:var(--red)}
@@ -241,18 +241,22 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .runhead .close{justify-self:end;display:flex;align-items:center;min-height:44px;text-decoration:none}
 
 .opener,.page,.backpage,.moment{position:relative;z-index:0}
-.opener{min-height:46cqh;display:grid;align-content:end;gap:clamp(12px,1.6cqi,28px);padding:var(--block) var(--m)}
-.opener .part{display:flex;align-items:center;gap:.7em;color:var(--c-ink)}
+.opener{min-height:46cqh;display:grid;align-content:end;gap:clamp(12px,1.6cqi,28px);padding:var(--block) var(--m);
+  background:var(--c);color:var(--on-c)}
+.opener .part{display:flex;align-items:center;gap:.7em;color:var(--on-c);opacity:.85}
+.opener .part .dot{background:var(--red);box-shadow:0 0 0 1.5px var(--on-c)}
 .opener h1{margin:0;font-weight:800;font-stretch:75%;font-size:var(--t-hero);line-height:.9;font-family:var(--sans);letter-spacing:-.02em}
-.opener .deck{margin:0;max-width:30ch;font:400 var(--t-lede)/1.3 var(--sans);color:var(--ink-2);letter-spacing:-.012em}
+.opener .deck{margin:0;max-width:30ch;font:400 var(--t-lede)/1.3 var(--sans);color:var(--on-c);opacity:.86;letter-spacing:-.012em}
 .opener .cta{justify-self:start;margin-top:clamp(4px,1cqi,16px)}
 
 /* buttons — one red call to act, one quiet outline */
 .btn{display:inline-flex;align-items:center;gap:.6em;height:clamp(40px,3cqi,48px);padding:0 1.3em;border-radius:999px;
   font:400 clamp(14px,1cqi,16px)/1 var(--sans);text-decoration:none;cursor:pointer;
   transition:transform .2s var(--ui),background .2s var(--ui)}
-.btn-red{background:var(--red);color:var(--paper)}
-.btn-red:hover{background:color-mix(in oklch,var(--red) 86%,black)}
+.btn-red{background:var(--ink);color:var(--paper)}                 /* the call to act: ink */
+.btn-red:hover{background:color-mix(in oklch,var(--ink) 82%,white)}
+.opener .btn-red{background:var(--paper);color:var(--ink)}         /* on a colour block, paper */
+.opener .btn-red:hover{background:#fff}
 .btn-line{box-shadow:inset 0 0 0 1.5px currentColor}
 .btn-line:hover{background:rgb(26 26 26/.06)}
 
@@ -346,7 +350,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .picks input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;padding:0;cursor:pointer}
 .picks span{display:inline-flex;align-items:center;height:2.4em;padding:0 1em;border-radius:999px;
   box-shadow:inset 0 0 0 1px var(--rule);background:rgb(255 255 255/.5);font-size:.92em;transition:background .2s,color .2s,box-shadow .2s}
-.picks input:checked + span{box-shadow:inset 0 0 0 1.5px var(--red);color:var(--red);background:#fff}
+.picks input:checked + span{box-shadow:none;color:var(--paper);background:var(--ink)}
 .picks input:focus-visible + span{outline:1.5px solid var(--red);outline-offset:3px}
 .form .send{display:flex;align-items:center;gap:1.2em;flex-wrap:wrap}
 .form .status{color:var(--ink-2)}
@@ -375,13 +379,12 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .tile .t{display:block;margin:0 0 .3em;font:500 clamp(16px,1.3cqi,21px)/1.2 var(--sans);letter-spacing:-.01em}
 .tile .p{display:block;margin:0;font-size:clamp(14px,1.15cqi,18px);line-height:1.4;color:var(--ink-2);
   display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-.tile.idea{--k:var(--blue);box-shadow:inset 2px 0 0 var(--k),inset 0 0 0 1px var(--rule)}
-.tile.sensation{--k:var(--red);box-shadow:inset 0 2px 0 var(--k),inset 0 0 0 1px var(--rule)}
-.tile.artifact{--k:var(--orange);background:transparent;box-shadow:inset 0 0 0 1px var(--ink)}
-.tile.link{--k:var(--green);background:rgb(255 255 255/.35);box-shadow:inset 0 0 0 1px var(--green)}
-.tile.link:hover{background:color-mix(in oklch,var(--green) 14%,var(--paper))}
-.tile.link .t::after{color:var(--red)}
-.tile.link .t::after{content:" ↗";font-weight:400}
+.tile.idea{--k:var(--blue);background:color-mix(in oklch,var(--blue) 13%,var(--paper));box-shadow:none}
+.tile.sensation{--k:var(--orange);background:color-mix(in oklch,var(--orange) 20%,var(--paper));box-shadow:none}
+.tile.artifact{--k:var(--mauve);background:color-mix(in oklch,var(--mauve) 22%,var(--paper));box-shadow:none}
+.tile.link{--k:var(--ink);background:#fff;box-shadow:inset 0 0 0 1px var(--rule)}
+.tile.link:hover{box-shadow:inset 0 0 0 1px var(--ink)}
+.tile.link .t::after{content:" ↗";font-weight:400;color:var(--red)}
 .tile.link.soon{cursor:default}
 .tile .dot{--c:var(--k)}
 .tile.photo{grid-row:span 2;padding:0;color:var(--osd);background:#1d1c1a;box-shadow:none}
@@ -561,7 +564,7 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}
       
         <footer class="backpage">
           <a class="next" href="#practice"><span class="mono">Continued — Part Two</span><b>Practice →</b></a>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--orange)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--green)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--orange)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--mauve)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
         </footer>
      </div>
     </article>
@@ -659,7 +662,7 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}
 
         <footer class="backpage">
           <a class="next" href="#world"><span class="mono">Continued — Part Three</span><b>World →</b></a>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--orange)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--green)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--orange)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--mauve)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
         </footer>
      </div>
     </article>
@@ -693,7 +696,7 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}
 
         <footer class="backpage">
           <a class="next" href="#story"><span class="mono">Back to the beginning — Part One</span><b>Story →</b></a>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--orange)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--green)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--orange)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--mauve)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
         </footer>
      </div>
     </article>
@@ -716,7 +719,7 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}
       </div>
     </div>
 
-    <div class="sheet-wrap" id="sheet-entry" style="--c:var(--green)">
+    <div class="sheet-wrap" id="sheet-entry" style="--c:var(--mauve)">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="en-title">
         <div class="sheet-head mono"><span id="en-meta"></span><button class="x">Close ×</button></div>
         <div class="sheet-body">
@@ -727,7 +730,7 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}
       </div>
     </div>
 
-    <div class="sheet-wrap" id="sheet-add" style="--c:var(--green);--c-ink:var(--green-ink);--on-c:var(--paper)">
+    <div class="sheet-wrap" id="sheet-add" style="--c:var(--mauve);--c-ink:var(--mauve-ink);--on-c:var(--paper)">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="add-title">
         <div class="sheet-head mono"><span>World — a submission</span><button class="x">Close ×</button></div>
         <div class="sheet-body">
@@ -890,7 +893,7 @@ const WORLD = [
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const FIELDS = {bone:['#E8E4DC','#1A1A1A'], ink:['#1A1A1A','#EDEAE3'],
-                story:['var(--orange)','#1A1A1A'], practice:['var(--blue)','#F3F1EC'], world:['var(--green)','#F3F1EC']};
+                story:['var(--orange)','#1A1A1A'], practice:['var(--blue)','#F3F1EC'], world:['var(--mauve)','#F3F1EC']};
 const LIGHT = ['bone', 'story'];   /* light fields take ink controls; the rest keep bone */
 const DOTS = {story:'var(--story)', practice:'var(--practice)', world:'var(--world)'};
 const srcset = k => `img/800/${PHOTOS[k].src}.webp 800w, img/1600/${PHOTOS[k].src}.webp 1600w`;
@@ -1088,7 +1091,7 @@ document.querySelectorAll('form.form').forEach(form => form.addEventListener('su
 
 /* ── world: the log ─────────────────────────────────────────────────── */
 const CATS = [['all','All'], ['idea','Ideas'], ['sensation','Sensations'], ['artifact','Artifacts'], ['link','Links']];
-const KDOT = {idea:'var(--blue)', sensation:'var(--red)', artifact:'var(--orange)', link:'var(--green)'};
+const KDOT = {idea:'var(--blue)', sensation:'var(--orange)', artifact:'var(--mauve)', link:'var(--red)'};
 const fmtDate = d => new Date(d + 'T12:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
 WORLD.sort((a, b) => b.date.localeCompare(a.date));
 { const notes = WORLD.filter(e => e.cat !== 'link'), links = WORLD.filter(e => e.cat === 'link'), mix = [];
