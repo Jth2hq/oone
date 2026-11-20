@@ -333,7 +333,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .form fieldset{border:0;margin:0;padding:0;display:grid;gap:.5em}
 .picks{display:flex;flex-wrap:wrap;gap:.5em}
 .picks label{position:relative;display:inline-flex}
-.picks input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.picks input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;padding:0;cursor:pointer}
 .picks span{display:inline-flex;align-items:center;height:2.4em;padding:0 1em;border-radius:999px;
   box-shadow:inset 0 0 0 1px var(--rule);background:rgb(255 255 255/.5);font-size:.92em;transition:background .2s,color .2s,box-shadow .2s}
 .picks input:checked + span{background:var(--c);color:var(--on-c);box-shadow:none}
@@ -344,7 +344,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .form .status.err{color:var(--red)}
 .direct{color:var(--ink-2)}
 .direct a{color:var(--ink);text-decoration-color:var(--c);text-underline-offset:.2em}
-.hp{position:absolute!important;width:1px;height:1px;opacity:0;pointer-events:none;clip-path:inset(50%)}   /* spam trap */
+.hp{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;opacity:0;pointer-events:none;clip-path:inset(50%)}   /* spam trap */
 
 /* 13 WORLD ── the log: tiles, filters, and room for other people ───────── */
 .toolbar{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1em;
