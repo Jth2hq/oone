@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="care of TANNER is a practice. Spatial, print and digital design by Josh Harrison, Brooklyn, NY — interiors, decoration, furniture, books, identity and websites.">
+<meta name="description" content="care of TANNER is a practice. Architecture, interiors, print and digital design by Josh Harrison, Brooklyn, NY — buildings, interiors, furniture, books, identity and websites.">
 <meta name="theme-color" content="#E8E4DC">
 <title>care of TANNER — Issue 01</title>
 <link rel="preconnect" href="https://use.typekit.net" crossorigin>
@@ -329,28 +329,17 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .key li{display:flex;align-items:center;gap:.5em}
 
 /* 10 MOMENT ── one spoken line per room, edge to edge, on its room's ink ─ */
-.moment{background:var(--c);color:var(--on-c);padding:calc(var(--block) * .9) var(--m);margin-right:var(--m);border-radius:0 999px 999px 0;
+.moment{background:var(--c);color:var(--on-c);padding:calc(var(--block) * .9) var(--m);
   display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gutter)}
 .moment p{grid-column:4/-1;margin:0;max-width:18ch;font:800 clamp(30px,4.2cqi,68px)/1 var(--sans);font-stretch:75%;letter-spacing:-.01em}
 .moment .who{grid-column:4/-1;display:flex;align-items:center;gap:.7em;margin-top:1.2em;opacity:.85}
 
-.portrait{margin:0 0 clamp(24px,3cqi,44px);width:min(100%,clamp(220px,26cqi,380px));aspect-ratio:1;border-radius:50%;padding:5px;
-  background:linear-gradient(140deg,#e7d3a6,var(--brass) 38%,#7c6237 62%,#d9c08c);box-shadow:0 18px 40px -18px rgb(28 26 24/.45)}
-.portrait img{display:block;width:100%;height:100%;object-fit:cover;object-position:36% 42%;border-radius:50%}
+.portrait{margin:0 0 clamp(20px,2.4cqi,36px);max-width:min(100%,640px)}
+.portrait img{display:block;width:100%;height:auto;border-radius:6px}
 
-.disc{max-width:none!important;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 var(--gutter)}
-.field-of{border-top:2px solid var(--ink);padding-top:1em}
-.field-of .num{display:block;color:var(--red);margin-bottom:.6em}
-.field-of h3{margin:0 0 .3em;font:800 var(--t-h3)/1.1 var(--sans);font-stretch:75%}
-.field-of > p{margin:0 0 1em;color:var(--ink-2)}
-.field-of ul{list-style:none;margin:0;padding:0}
-.field-of li{padding:.6em 0;border-top:1px solid var(--rule)}
-.scale{list-style:none;margin:0;padding:0}
-.scale li{display:grid;grid-template-columns:minmax(9em,1fr) 2fr;gap:.3em var(--gutter);padding:1em 0;border-top:1px solid var(--rule)}
-.scale .bar{grid-column:1/-1;height:6px;width:var(--w);border-radius:0 999px 999px 0;
-  background:linear-gradient(90deg,color-mix(in oklch,var(--blue) 30%,var(--paper)),var(--blue))}
-.scale b{font-weight:500}
-.scale p{margin:0;color:var(--ink-2)}
+.intro{margin:0 0 1.6em;max-width:46ch;font-size:var(--t-lede);line-height:1.35;color:var(--ink)}
+.scen h3{font-weight:600}
+.scen .tags{display:block;margin-top:.8em;color:var(--c-ink);font-size:var(--t-mono);letter-spacing:.04em}
 
 /* 11 PRACTICE ── what, how, work ──────────────────────────────────────── */
 .svc{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--gutter);max-width:none!important}
@@ -493,8 +482,7 @@ html[data-dir=home]::view-transition-new(screen){animation:fade .7s var(--arrive
   .sec{display:block}
   .sidehead{margin-bottom:1.4em}
   .colophon{margin-top:2em}
-  .svc,.row2,.disc,.scale li{grid-template-columns:1fr}
-  .field-of + .field-of{margin-top:1.6em}
+  .svc,.row2{grid-template-columns:1fr}
   .moment{display:block}
   .steps{grid-template-columns:1fr 1fr}
   .tiles{grid-template-columns:1fr 1fr;grid-auto-rows:150px}
@@ -553,7 +541,7 @@ html[data-dir=home]::view-transition-new(screen){animation:fade .7s var(--arrive
           <section class="sec">
             <div class="sidehead mono"><b>The practice</b><span class="n">01</span></div>
             <div class="body">
-              <p class="lede"><span class="logo" role="img" aria-label="care of TANNER"></span> is a creative practice and a namesake — spatial, print and digital work, made with care for the people who use them.<sup>1</sup></p>
+              <p class="lede"><span class="logo" role="img" aria-label="care of TANNER"></span> is a design practice and a namesake — architecture, interiors, objects, print and digital work, made with care for the people who use them.<sup>1</sup></p>
               <p>People, places, projects, objects, culture. The work lives in <em>Practice</em>; the friends, makers and things that surround it live in <em>World</em>.<sup>2</sup> Good ideas, better company — the same ideas in different places.</p>
               <ol class="notes mono">
                 <li>1 — care of: the work is addressed to someone.</li>
@@ -576,7 +564,7 @@ html[data-dir=home]::view-transition-new(screen){animation:fade .7s var(--arrive
             <div class="body">
               <figure class="portrait"><img src="img/800/supper.webp" srcset="img/800/supper.webp 800w, img/1600/supper.webp 1600w" sizes="(min-width:900px) 40vw, 90vw" alt="Josh Harrison at supper, laughing, in a teal room" loading="lazy" decoding="async" width="1600" height="1061"></figure>
               <h2>Josh Harrison</h2>
-              <p>Brooklyn-based designer and creative working across spaces, objects, print and screens — interiors, furniture, books, brands and photography. Trained as an architect; working as a generalist. Tanner is his middle name.</p>
+              <p>Brooklyn-based architect and designer working across buildings, interiors, furniture, print, brands and photography. Tanner is his middle name.</p>
               <h3>Experience</h3>
               <ol class="cv">
                 <li><span class="mono num">01</span><span class="what">Ralph Lauren<small>Project Manager, Store Design</small></span><span class="mono">2026 –</span></li>
@@ -633,7 +621,7 @@ html[data-dir=home]::view-transition-new(screen){animation:fade .7s var(--arrive
         <section class="opener">
           <span class="part mono"><span class="dot"></span>Part Two</span>
           <h1>Practice</h1>
-          <p class="deck">Rooms, objects, pages and screens — one practice, every scale. What are we making?</p>
+          <p class="deck">Buildings, rooms, objects, pages and screens — one practice, every scale. What are we making?</p>
           <div class="cta"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></div>
         </section>
 
@@ -641,59 +629,26 @@ html[data-dir=home]::view-transition-new(screen){animation:fade .7s var(--arrive
           <section class="sec">
             <div class="sidehead mono"><b>The practice</b><span class="n">01</span></div>
             <div class="body">
-              <p class="lede"><span class="logo" role="img" aria-label="care of TANNER"></span> is an independent creative practice in Brooklyn, working across three fields — spatial, print and digital — as one landscape.</p>
-              <p>A room, a book, a chair, a website: each is a set of decisions about how someone will feel when they meet it. I take on work at any scale, from choosing the right lamp to seeing a space from first idea through installation, and keep the same eye on every piece. Every project is a negotiation — between a client and a place, a budget and a wish, two materials meeting at an edge. The work is to find the middle and detail it well.</p>
+              <p class="lede"><span class="logo" role="img" aria-label="care of TANNER"></span> is an independent design practice in Brooklyn — architecture and interiors, objects, print and digital, worked as one landscape.</p>
+              <p>A building, a room, a chair, a book, a website: each is a set of decisions about how someone will feel when they meet it. I take on work at any scale, from choosing the right lamp to seeing a building from first sketch through construction, and keep the same eye on every piece. Every project is a negotiation — between a client and a place, a budget and a wish, two materials meeting at an edge. The work is to find the middle and detail it well.</p>
             </div>
           </section>
 
           <section class="sec">
-            <div class="sidehead mono"><b>What I do</b><span class="n">02 · Services</span></div>
+            <div class="sidehead mono"><b>Where I can help</b><span class="n">02 · Scenarios</span></div>
             <div class="body">
-              <div class="disc">
-                <div class="field-of"><span class="num mono">A</span><h3>Spatial</h3><p>Interiors, objects and the rooms between them.</p>
-                  <ul>
-                    <li>Interior design</li>
-                    <li>Interior decoration &amp; styling</li>
-                    <li>Furniture, lighting &amp; finish selection</li>
-                    <li>Space planning &amp; renovation</li>
-                    <li>Furniture &amp; object design</li>
-                    <li>Millwork &amp; detail drawings</li>
-                    <li>Installation, exhibition &amp; retail design</li>
-                    <li>Site &amp; vision planning</li>
-                  </ul></div>
-                <div class="field-of"><span class="num mono">B</span><h3>Print</h3><p>Things you hold, keep and pin to a wall.</p>
-                  <ul>
-                    <li>Identity &amp; stationery</li>
-                    <li>Books &amp; editorial design</li>
-                    <li>Posters &amp; printed ephemera</li>
-                    <li>Menus, invitations &amp; collateral</li>
-                    <li>Packaging &amp; branded objects</li>
-                    <li>Signage &amp; wayfinding</li>
-                  </ul></div>
-                <div class="field-of"><span class="num mono">C</span><h3>Digital</h3><p>The same landscape, on a screen.</p>
-                  <ul>
-                    <li>Websites &amp; digital identity</li>
-                    <li>Art direction &amp; content</li>
-                    <li>Social &amp; campaign systems</li>
-                    <li>Photography</li>
-                    <li>Renderings &amp; visualisation</li>
-                    <li>Presentations &amp; pitch decks</li>
-                  </ul></div>
-              </div>
-            </div>
-          </section>
-
-          <section class="sec">
-            <div class="sidehead mono"><b>Ways to work together</b><span class="n">03 · Small to large</span></div>
-            <div class="body">
-              <ol class="scale">
-                <li style="--w:14%"><span class="bar" aria-hidden="true"></span><b>Consult</b><p>A walk-through, a second opinion, a direction in an afternoon. One session, a clear list to act on.</p></li>
-                <li style="--w:28%"><span class="bar" aria-hidden="true"></span><b>Select &amp; style</b><p>Furniture, lighting, art and finishes chosen, sourced and placed. Decoration for a room or a whole home.</p></li>
-                <li style="--w:44%"><span class="bar" aria-hidden="true"></span><b>Vision</b><p>Concept, references and a vision plan — for a space, a brand or a launch — before anything gets built or printed.</p></li>
-                <li style="--w:60%"><span class="bar" aria-hidden="true"></span><b>Design &amp; detail</b><p>Full design development: plans, detail drawings, specifications, print-ready files, built pages.</p></li>
-                <li style="--w:80%"><span class="bar" aria-hidden="true"></span><b>Make &amp; install</b><p>Custom furniture, installations and print runs, coordinated with makers and seen through to the last fitting.</p></li>
-                <li style="--w:100%"><span class="bar" aria-hidden="true"></span><b>Full service</b><p>One project, every field — from first vision through spatial, print and digital, delivered as one landscape.</p></li>
-              </ol>
+              <p class="intro">No project is too small to ask about. Find yourself below — or tell me something new. Any of these can be as light as one conversation or as full as design, drawings and construction.</p>
+              <ul class="svc scen">
+                <li><span class="num mono">01</span><h3>You just moved in, and nothing feels like yours yet.</h3><p>We walk the place together, then choose the furniture, lighting, art and colour that make it home — as a plan you can shop at your own pace, or sourced and placed for you.</p><span class="tags mono">Interiors · Decoration</span></li>
+                <li><span class="num mono">02</span><h3>You’re renovating — a kitchen, a bath, a whole floor.</h3><p>A layout that works, finishes that last, and drawings your contractor can price and build from. I stay on through construction so nothing gets lost in translation.</p><span class="tags mono">Interior architecture</span></li>
+                <li><span class="num mono">03</span><h3>You’re building new, or adding on.</h3><p>Architecture from the first conversation about the site to the permit set and the final walkthrough — options that disagree, then documents builders trust.</p><span class="tags mono">Architecture</span></li>
+                <li><span class="num mono">04</span><h3>You’re opening a shop, a restaurant, a studio.</h3><p>The room, the counter, the sign, the menu and the website, designed together so every touchpoint feels like the same place.</p><span class="tags mono">Architecture · Interiors · Print · Digital</span></li>
+                <li><span class="num mono">05</span><h3>You’re starting something and it needs a face.</h3><p>An identity that fits — mark, colour, type — carried onto stationery, packaging, a website and the first posts.</p><span class="tags mono">Print · Digital</span></li>
+                <li><span class="num mono">06</span><h3>You have something to put in print.</h3><p>A book, a zine, a poster series, the invitations for the day that matters. Designed, typeset and seen through the press check.</p><span class="tags mono">Print</span></li>
+                <li><span class="num mono">07</span><h3>You need a piece that doesn’t exist yet.</h3><p>A table, a shelf, a light, an installation for an event or a storefront — designed, detailed and built with makers I trust.</p><span class="tags mono">Furniture · Installation</span></li>
+                <li><span class="num mono">08</span><h3>A property, a campus or a block needs a direction.</h3><p>Vision plans and master plans that turn a lot of opinions into a shared picture of what could be — clear enough to fund, build and phase.</p><span class="tags mono">Urban design · Visioning</span></li>
+                <li><span class="num mono">09</span><h3>You just want a second set of eyes.</h3><p>One conversation — on site, on a call, over a drawing or a draft. You leave with a clear list to act on, whether or not we work together again.</p><span class="tags mono">Any field</span></li>
+              </ul>
             </div>
           </section>
         </div>
@@ -705,24 +660,24 @@ html[data-dir=home]::view-transition-new(screen){animation:fade .7s var(--arrive
 
         <div class="page">
           <section class="sec">
-            <div class="sidehead mono"><b>How I work</b><span class="n">04 · Approach</span></div>
+            <div class="sidehead mono"><b>How I work</b><span class="n">03 · Approach</span></div>
             <div class="body">
               <ol class="steps">
                 <li><span class="num">01</span><b>Listen</b><p>What keeps you up at midnight? We start there.</p></li>
                 <li><span class="num">02</span><b>Provoke</b><p>Schematic design as argument. Options that disagree.</p></li>
-                <li><span class="num">03</span><b>Document</b><p>Drawings, specs and files that makers and printers actually trust.</p></li>
-                <li><span class="num">04</span><b>Steward</b><p>Through install and press check. Design ends when the last handle is hung.</p></li>
+                <li><span class="num">03</span><b>Document</b><p>Drawings, specs and files that builders, makers and printers actually trust.</p></li>
+                <li><span class="num">04</span><b>Steward</b><p>On site and on press through completion. Design ends when the last handle is hung.</p></li>
               </ol>
             </div>
           </section>
 
           <section class="sec">
-            <div class="sidehead mono"><b>Selected work</b><span class="n">05 · Projects</span></div>
+            <div class="sidehead mono"><b>Selected work</b><span class="n">04 · Projects</span></div>
             <div class="body"><ol class="contents" id="contents"></ol></div>
           </section>
 
           <section class="sec contact" id="contact">
-            <div class="sidehead mono"><b>Start a project</b><span class="n">06 · Contact</span></div>
+            <div class="sidehead mono"><b>Start a project</b><span class="n">05 · Contact</span></div>
             <div class="body">
               <h2>What are we building?</h2>
               <form class="form" id="contact-form" data-subject="New project — care of TANNER">
@@ -733,7 +688,9 @@ html[data-dir=home]::view-transition-new(screen){animation:fade .7s var(--arrive
                 <fieldset>
                   <legend>What do you need?</legend>
                   <div class="picks">
-                    <label><input type="checkbox" name="fields" value="Spatial"><span>Spatial</span></label>
+                    <label><input type="checkbox" name="fields" value="Architecture"><span>Architecture</span></label>
+                    <label><input type="checkbox" name="fields" value="Interior architecture"><span>Interior architecture</span></label>
+                    <label><input type="checkbox" name="fields" value="Urban design"><span>Urban design</span></label>
                     <label><input type="checkbox" name="fields" value="Interior design &amp; decoration"><span>Interior design &amp; decoration</span></label>
                     <label><input type="checkbox" name="fields" value="Furniture &amp; objects"><span>Furniture &amp; objects</span></label>
                     <label><input type="checkbox" name="fields" value="Print"><span>Print</span></label>
@@ -744,12 +701,12 @@ html[data-dir=home]::view-transition-new(screen){animation:fade .7s var(--arrive
                 <fieldset>
                   <legend>How much of it?</legend>
                   <div class="picks">
-                    <label><input type="radio" name="scope" value="Consult"><span>Consult</span></label>
-                    <label><input type="radio" name="scope" value="Select &amp; style"><span>Select &amp; style</span></label>
-                    <label><input type="radio" name="scope" value="Vision"><span>Vision</span></label>
-                    <label><input type="radio" name="scope" value="Design &amp; detail"><span>Design &amp; detail</span></label>
-                    <label><input type="radio" name="scope" value="Make &amp; install"><span>Make &amp; install</span></label>
-                    <label><input type="radio" name="scope" value="Full service"><span>Full service</span></label>
+                    <label><input type="radio" name="scope" value="A second opinion"><span>A second opinion</span></label>
+                    <label><input type="radio" name="scope" value="Help choosing"><span>Help choosing</span></label>
+                    <label><input type="radio" name="scope" value="A plan"><span>A plan</span></label>
+                    <label><input type="radio" name="scope" value="Design &amp; drawings"><span>Design &amp; drawings</span></label>
+                    <label><input type="radio" name="scope" value="Building &amp; making"><span>Building &amp; making</span></label>
+                    <label><input type="radio" name="scope" value="All of it"><span>All of it</span></label>
                   </div>
                 </fieldset>
                 <div class="row2">
