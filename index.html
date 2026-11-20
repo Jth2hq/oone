@@ -352,6 +352,10 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .fold-body{animation:unfold .5s var(--arrive)}
 @keyframes unfold{from{opacity:0;transform:translateY(8px)}}
 
+.form legend small{margin-left:.6em;color:var(--c-ink);font-size:1em}
+.picks.multi span::before{content:"+";display:inline-block;width:1em;margin-right:.35em;text-align:center;color:var(--ink-2)}
+.picks.multi input:checked + span::before{content:"✓";color:var(--c-ink)}
+
 /* 11 PRACTICE ── what, how, work ──────────────────────────────────────── */
 .svc{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--gutter);max-width:none!important}
 .svc li{padding:1em 0 1.4em;border-top:1px solid var(--rule)}
@@ -388,7 +392,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .picks{display:flex;flex-wrap:wrap;gap:.5em}
 .picks label{position:relative;display:inline-flex}
 .picks input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;padding:0;cursor:pointer}
-.picks span{display:inline-flex;align-items:center;height:2.4em;padding:0 1em;border-radius:999px;
+.picks span{display:inline-flex;align-items:center;min-height:2.4em;padding:.45em 1em;line-height:1.25;border-radius:999px;
   box-shadow:inset 0 0 0 1px var(--rule);background:rgb(255 255 255/.5);font-size:.92em;transition:background .2s,color .2s,box-shadow .2s}
 .picks input:checked + span{box-shadow:inset 0 0 0 1.5px var(--ink);color:var(--ink);background:color-mix(in oklch,var(--c,var(--blue)) 16%,#fff)}
 .picks input:focus-visible + span{outline:1.5px solid var(--red);outline-offset:3px}
@@ -703,20 +707,26 @@ html[data-dir=home]::view-transition-new(screen){animation:fade .7s var(--arrive
                   <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
                 </div>
                 <fieldset>
-                  <legend>What do you need?</legend>
-                  <div class="picks">
-                    <label><input type="checkbox" name="fields" value="Architecture"><span>Architecture</span></label>
-                    <label><input type="checkbox" name="fields" value="Interior architecture"><span>Interior architecture</span></label>
-                    <label><input type="checkbox" name="fields" value="Urban design"><span>Urban design</span></label>
-                    <label><input type="checkbox" name="fields" value="Interior design &amp; decoration"><span>Interior design &amp; decoration</span></label>
-                    <label><input type="checkbox" name="fields" value="Furniture &amp; objects"><span>Furniture &amp; objects</span></label>
-                    <label><input type="checkbox" name="fields" value="Print"><span>Print</span></label>
-                    <label><input type="checkbox" name="fields" value="Digital"><span>Digital</span></label>
-                    <label><input type="checkbox" name="fields" value="Not sure yet"><span>Not sure yet</span></label>
+                  <legend>What do you need? <small>Click all that apply</small></legend>
+                  <div class="picks multi">
+                    <label><input type="checkbox" name="needs" value="A design for a new building or addition"><span>A design for a new building or addition</span></label>
+                    <label><input type="checkbox" name="needs" value="Renovation &amp; layout planning"><span>Renovation &amp; layout planning</span></label>
+                    <label><input type="checkbox" name="needs" value="Architectural drawings &amp; permits"><span>Architectural drawings &amp; permits</span></label>
+                    <label><input type="checkbox" name="needs" value="Furniture selection"><span>Furniture selection</span></label>
+                    <label><input type="checkbox" name="needs" value="Lighting, paint &amp; finishes"><span>Lighting, paint &amp; finishes</span></label>
+                    <label><input type="checkbox" name="needs" value="Decorating &amp; styling a room"><span>Decorating &amp; styling a room</span></label>
+                    <label><input type="checkbox" name="needs" value="A custom piece of furniture"><span>A custom piece of furniture</span></label>
+                    <label><input type="checkbox" name="needs" value="An installation, display or shop fit-out"><span>An installation, display or shop fit-out</span></label>
+                    <label><input type="checkbox" name="needs" value="A logo &amp; brand look"><span>A logo &amp; brand look</span></label>
+                    <label><input type="checkbox" name="needs" value="Design for print — stationery, posters, books"><span>Design for print — stationery, posters, books</span></label>
+                    <label><input type="checkbox" name="needs" value="A website"><span>A website</span></label>
+                    <label><input type="checkbox" name="needs" value="Photography"><span>Photography</span></label>
+                    <label><input type="checkbox" name="needs" value="Planning for a property or neighbourhood"><span>Planning for a property or neighbourhood</span></label>
+                    <label><input type="checkbox" name="needs" value="Not sure yet — let’s talk"><span>Not sure yet — let’s talk</span></label>
                   </div>
                 </fieldset>
                 <fieldset>
-                  <legend>How much of it?</legend>
+                  <legend>How much of it? <small>Pick one</small></legend>
                   <div class="picks">
                     <label><input type="radio" name="scope" value="A second opinion"><span>A second opinion</span></label>
                     <label><input type="radio" name="scope" value="Help choosing"><span>Help choosing</span></label>
