@@ -25,10 +25,10 @@
    reads with the same boldness as a phone: the same things take the same
    proportion of the glass.
 
-   THE KEY.  ● orange: story, the person
-             ● blue:   practice, the work
-             ● mauve:  world, the people around it
-             ● red:    the accent — a voice, a number, a call to act.
+   THE KEY.  ● charcoal brown: story, the person
+             ● cobalt: practice, the work
+             ● lilac:  world — a note, never more than a tenth of a screen
+             ● red:    the accent — a voice, a number, the night light.
                        Red is never a room; it runs through all of them.
 
    01 TOKENS  02 BASE  03 DEVICE  04 GLASS  05 REEL  06 STATEMENT
@@ -44,12 +44,12 @@
 
   --red:   #D8102F;                   /* the "care of" red — lifted from the logo */
   --blue:  oklch(.53 .175 262);       /* ≈ #2C5CC8 */
-  --orange:oklch(.71 .17 52);         /* ≈ #EF7D2C */
-  --mauve: oklch(.57 .05 350);        /* ≈ #8E7380 — a mineral, dusty mauve */
+  --char:  oklch(.34 .022 55);        /* ≈ #3F3731 — charcoal brown, the mineral */
+  --lilac: oklch(.78 .07 300);        /* ≈ #BDAEDD — a note, used sparingly (~10%) */
   --blue-ink:oklch(.45 .17 262);      /* blue as text on paper (AA) */
-  --mauve-ink:oklch(.42 .05 350);
+  --lilac-ink:oklch(.42 .08 300);
 
-  --story:var(--orange); --practice:var(--blue); --world:var(--mauve);
+  --story:var(--char); --practice:var(--blue); --world:var(--lilac);
   --cherry:var(--red);
 
   --sans:"early-sans-variable","early-sans","Helvetica Neue",Arial,sans-serif;
@@ -124,7 +124,7 @@ p,li{text-wrap:pretty}
   40%{transform:translate(22px,-41px)} 60%{transform:translate(-47px,-9px)} 80%{transform:translate(13px,38px)}}
 .glass .tube{position:absolute;inset:0;
   background:radial-gradient(120% 90% at 50% 50%,transparent 60%,rgb(0 0 0/.4) 100%),
-             linear-gradient(118deg,rgb(255 255 255/.11) 0%,rgb(255 255 255/0) 34%);
+             transparent;
   box-shadow:inset 2px 0 0 rgb(255 40 80/.16),inset -2px 0 0 rgb(40 170 255/.16),inset 0 2px 7px rgb(0 0 0/.38)}
 .glass .band{position:absolute;left:0;right:0;top:0;height:14%;opacity:0;mix-blend-mode:screen;
   background:linear-gradient(180deg,transparent,rgb(255 255 255/.10) 40%,rgb(216 16 47/.10) 55%,transparent)}
@@ -166,6 +166,41 @@ html[data-room] .glass .tube{opacity:.4}
 .pt.c .open{align-self:center}
 
 /* 06 STATEMENT ── one breath ──────────────────────────────────────────── */
+.atmos{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+.atmos > *{position:absolute;pointer-events:none}
+/* DAY — the spa: overexposed glass, milk steam rising, every edge softened */
+.post img{transition:filter 2.4s var(--breath)}
+html:not(.night) .post img{filter:brightness(1.08) contrast(.88) saturate(.82)}
+.steam{inset:-24% -12%;animation:rise 24s var(--breath) infinite alternate}
+.steam.s1{background:radial-gradient(40% 30% at 22% 72%,rgb(250 246 240/.72),transparent 70%),
+  radial-gradient(34% 26% at 72% 84%,rgb(250 246 240/.66),transparent 70%),radial-gradient(46% 28% at 50% 44%,rgb(250 246 240/.34),transparent 72%),radial-gradient(60% 22% at 50% 0%,rgb(250 246 240/.3),transparent 72%)}
+.steam.s2{animation-duration:33s;animation-direction:alternate-reverse;
+  background:radial-gradient(30% 24% at 82% 30%,rgb(250 246 240/.42),transparent 70%),radial-gradient(38% 30% at 12% 30%,rgb(230 222 214/.3),transparent 72%)}
+.milk{inset:0;background:linear-gradient(180deg,transparent 40%,rgb(248 244 238/.32) 78%,rgb(248 244 238/.62) 100%)}
+@keyframes rise{from{transform:translate3d(-2%,6%,0)}to{transform:translate3d(2%,-6%,0)}}
+/* NIGHT — the club: a dark room, haze hanging in it, cobalt and red beams through the fog */
+html.night .post img{filter:brightness(.42) saturate(1.28) contrast(1.14)}
+.haze,.beam{opacity:0;transition:opacity 2.4s var(--breath)}
+html.night .haze,html.night .beam{opacity:1}
+html.night .steam,html.night .milk{opacity:0}
+.steam,.milk{transition:opacity 2.4s var(--breath)}
+.haze{inset:-15%;mix-blend-mode:screen;animation:drift 18s var(--breath) infinite alternate;
+  background:radial-gradient(50% 40% at 24% 30%,color-mix(in oklch,var(--blue) 42%,transparent),transparent 70%),
+    radial-gradient(45% 40% at 78% 34%,color-mix(in oklch,var(--red) 34%,transparent),transparent 70%),
+    radial-gradient(40% 30% at 50% 62%,color-mix(in oklch,var(--lilac) 18%,transparent),transparent 72%),
+    radial-gradient(60% 30% at 50% 100%,color-mix(in oklch,var(--red) 36%,transparent),transparent 72%)}
+@keyframes drift{from{transform:translate3d(-3%,2%,0)}to{transform:translate3d(3%,-2%,0)}}
+.beam{top:-30%;width:70%;height:170%;mix-blend-mode:screen;filter:blur(2px);transform-origin:50% 0}
+.beam.l{left:-6%;background:conic-gradient(from 168deg at 50% 0%,transparent 0deg,color-mix(in oklch,var(--blue) 55%,transparent) 10deg,transparent 22deg);animation:swingL 9s var(--breath) infinite alternate}
+.beam.r{right:-6%;background:conic-gradient(from 170deg at 50% 0%,transparent 0deg,color-mix(in oklch,var(--red) 50%,transparent) 9deg,transparent 20deg);animation:swingR 11s var(--breath) infinite alternate}
+@keyframes swingL{from{transform:rotate(-14deg)}to{transform:rotate(6deg)}}
+@keyframes swingR{from{transform:rotate(14deg)}to{transform:rotate(-6deg)}}
+/* BLOOMS — colour at each door, breathing. Soft light by day, lit by night. */
+.lamp{inset:0;mix-blend-mode:soft-light;opacity:.7;animation:breathe 11s var(--breath) infinite alternate}
+.lamp.b-story{background:radial-gradient(50% 60% at 0% 100%,color-mix(in oklch,var(--red) 70%,transparent),transparent 70%)}
+.lamp.b-practice{background:radial-gradient(50% 60% at 100% 100%,color-mix(in oklch,var(--blue) 80%,transparent),transparent 70%);animation-delay:-3.7s}
+.lamp.b-world{background:radial-gradient(40% 40% at 50% 100%,color-mix(in oklch,var(--lilac) 80%,transparent),transparent 70%);animation-delay:-7.3s}
+html.night .lamp{mix-blend-mode:screen;opacity:.55}
 .statement{position:absolute;inset:0;z-index:3;margin:0;display:grid;place-content:center;padding:0 var(--m);
   text-align:center;color:var(--osd);pointer-events:none;
   background:radial-gradient(70% 60% at 50% 50%,rgb(20 18 16/.42),transparent 75%);
@@ -218,15 +253,15 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .room::after{background:var(--bloom-b);animation:breathe 11s var(--breath) -5.5s infinite alternate}
 @keyframes breathe{from{opacity:.62}to{opacity:1}}
 @keyframes drift{from{transform:translate(-2%,1%)}to{transform:translate(2%,-1%)}}
-#story{--c:var(--orange);--c-ink:var(--ink);--on-c:var(--ink);
-  --bloom-a:radial-gradient(55% 75% at 4% 40%,color-mix(in oklch,var(--orange) 42%,transparent),transparent 72%);
+#story{--c:var(--char);--c-ink:var(--char);--on-c:var(--paper);
+  --bloom-a:radial-gradient(55% 75% at 4% 40%,color-mix(in oklch,var(--char) 22%,transparent),transparent 72%);
   --bloom-b:radial-gradient(45% 45% at 96% 96%,color-mix(in oklch,var(--red) 12%,transparent),transparent 72%)}
 #practice{--c:var(--blue);--c-ink:var(--blue-ink);--on-c:var(--paper);
   --bloom-a:radial-gradient(55% 75% at 96% 40%,color-mix(in oklch,var(--blue) 42%,transparent),transparent 72%);
   --bloom-b:radial-gradient(45% 45% at 50% 100%,color-mix(in oklch,var(--red) 12%,transparent),transparent 72%)}
-#world{--c:var(--mauve);--c-ink:var(--mauve-ink);--on-c:var(--paper);
-  --bloom-a:radial-gradient(80% 55% at 50% 100%,color-mix(in oklch,var(--mauve) 46%,transparent),transparent 72%);
-  --bloom-b:radial-gradient(45% 45% at 4% 20%,color-mix(in oklch,var(--orange) 14%,transparent),transparent 72%)}
+#world{--c:var(--lilac);--c-ink:var(--lilac-ink);--on-c:var(--ink);
+  --bloom-a:radial-gradient(80% 55% at 50% 100%,color-mix(in oklch,var(--lilac) 40%,transparent),transparent 72%);
+  --bloom-b:radial-gradient(45% 45% at 4% 20%,color-mix(in oklch,var(--char) 10%,transparent),transparent 72%)}
 .room ::selection{background:color-mix(in oklch,var(--red) 20%,transparent)}
 .room :focus-visible{outline-color:var(--red)}
 .room-scroll{position:relative;z-index:1;height:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;outline:none;
@@ -241,22 +276,18 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .runhead .close{justify-self:end;display:flex;align-items:center;min-height:44px;text-decoration:none}
 
 .opener,.page,.backpage,.moment{position:relative;z-index:0}
-.opener{min-height:46cqh;display:grid;align-content:end;gap:clamp(12px,1.6cqi,28px);padding:var(--block) var(--m);
-  background:var(--c);color:var(--on-c)}
-.opener .part{display:flex;align-items:center;gap:.7em;color:var(--on-c);opacity:.85}
-.opener .part .dot{background:var(--red);box-shadow:0 0 0 1.5px var(--on-c)}
+.opener{min-height:46cqh;display:grid;align-content:end;gap:clamp(12px,1.6cqi,28px);padding:var(--block) var(--m)}
+.opener .part{display:flex;align-items:center;gap:.7em;color:var(--c-ink)}
 .opener h1{margin:0;font-weight:800;font-stretch:75%;font-size:var(--t-hero);line-height:.9;font-family:var(--sans);letter-spacing:-.02em}
-.opener .deck{margin:0;max-width:30ch;font:400 var(--t-lede)/1.3 var(--sans);color:var(--on-c);opacity:.86;letter-spacing:-.012em}
+.opener .deck{margin:0;max-width:30ch;font:400 var(--t-lede)/1.3 var(--sans);color:var(--ink-2);letter-spacing:-.012em}
 .opener .cta{justify-self:start;margin-top:clamp(4px,1cqi,16px)}
 
 /* buttons — one red call to act, one quiet outline */
 .btn{display:inline-flex;align-items:center;gap:.6em;height:clamp(40px,3cqi,48px);padding:0 1.3em;border-radius:999px;
   font:400 clamp(14px,1cqi,16px)/1 var(--sans);text-decoration:none;cursor:pointer;
   transition:transform .2s var(--ui),background .2s var(--ui)}
-.btn-red{background:var(--ink);color:var(--paper)}                 /* the call to act: ink */
-.btn-red:hover{background:color-mix(in oklch,var(--ink) 82%,white)}
-.opener .btn-red{background:var(--paper);color:var(--ink)}         /* on a colour block, paper */
-.opener .btn-red:hover{background:#fff}
+.btn-red{background:var(--ink);color:var(--paper)}
+.btn-red:hover{background:color-mix(in oklch,var(--ink) 80%,white)}
 .btn-line{box-shadow:inset 0 0 0 1.5px currentColor}
 .btn-line:hover{background:rgb(26 26 26/.06)}
 
@@ -379,10 +410,10 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .tile .t{display:block;margin:0 0 .3em;font:500 clamp(16px,1.3cqi,21px)/1.2 var(--sans);letter-spacing:-.01em}
 .tile .p{display:block;margin:0;font-size:clamp(14px,1.15cqi,18px);line-height:1.4;color:var(--ink-2);
   display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-.tile.idea{--k:var(--blue);background:color-mix(in oklch,var(--blue) 13%,var(--paper));box-shadow:none}
-.tile.sensation{--k:var(--orange);background:color-mix(in oklch,var(--orange) 20%,var(--paper));box-shadow:none}
-.tile.artifact{--k:var(--mauve);background:color-mix(in oklch,var(--mauve) 22%,var(--paper));box-shadow:none}
-.tile.link{--k:var(--ink);background:#fff;box-shadow:inset 0 0 0 1px var(--rule)}
+.tile.idea{--k:var(--lilac);background:color-mix(in oklch,var(--lilac) 26%,var(--paper));box-shadow:none}
+.tile.sensation{--k:var(--blue);background:color-mix(in oklch,var(--blue) 11%,var(--paper));box-shadow:none}
+.tile.artifact{--k:var(--char);background:color-mix(in oklch,var(--char) 9%,var(--paper));box-shadow:none}
+.tile.link{--k:var(--red);background:#fff;box-shadow:inset 0 0 0 1px var(--rule)}
 .tile.link:hover{box-shadow:inset 0 0 0 1px var(--ink)}
 .tile.link .t::after{content:" ↗";font-weight:400;color:var(--red)}
 .tile.link.soon{cursor:default}
@@ -462,6 +493,11 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}
   <div class="reel" id="reel" aria-label="care of TANNER">
 
     <!-- the reel's posts are written in here, before the statement -->
+    <div class="atmos" aria-hidden="true">
+      <div class="steam s1"></div><div class="steam s2"></div><div class="milk"></div>
+      <div class="haze"></div><div class="beam l"></div><div class="beam r"></div>
+      <div class="lamp b-story"></div><div class="lamp b-practice"></div><div class="lamp b-world"></div>
+    </div>
     <h1 class="statement">
       <span class="ln"><span class="logo on-dark" role="img" aria-label="care of TANNER"></span> is a practice.</span>
       <span class="ln">Design is a negotiation.</span>
@@ -473,6 +509,7 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}
     <nav class="hud" aria-label="Site">
       <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo on-dark" aria-hidden="true"></span></a>
       <div class="controls">
+        <button class="chip" id="mode" aria-label="Switch to night">Night</button>
         <button class="chip" id="pause" aria-pressed="false">Pause</button>
         <button class="chip" id="next" aria-label="Next post">Next →</button>
       </div>
@@ -564,7 +601,7 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}
       
         <footer class="backpage">
           <a class="next" href="#practice"><span class="mono">Continued — Part Two</span><b>Practice →</b></a>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--orange)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--mauve)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
         </footer>
      </div>
     </article>
@@ -662,7 +699,7 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}
 
         <footer class="backpage">
           <a class="next" href="#world"><span class="mono">Continued — Part Three</span><b>World →</b></a>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--orange)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--mauve)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
         </footer>
      </div>
     </article>
@@ -696,7 +733,7 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}
 
         <footer class="backpage">
           <a class="next" href="#story"><span class="mono">Back to the beginning — Part One</span><b>Story →</b></a>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--orange)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--mauve)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul><p>care of TANNER — Issue 01, Autumn/Winter 2026</p><p>Set in Early Sans, Config Mono and TG Lipstick</p><p>Photographs on a Nikon F100</p><p>Brooklyn, NY</p><p style="margin-top:1.2em"><a class="btn btn-red" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p></div>
         </footer>
      </div>
     </article>
@@ -719,7 +756,7 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}
       </div>
     </div>
 
-    <div class="sheet-wrap" id="sheet-entry" style="--c:var(--mauve)">
+    <div class="sheet-wrap" id="sheet-entry" style="--c:var(--lilac)">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="en-title">
         <div class="sheet-head mono"><span id="en-meta"></span><button class="x">Close ×</button></div>
         <div class="sheet-body">
@@ -730,7 +767,7 @@ html[data-dir=home]{--from:inset(50% 0 50% 0 round var(--r-in))}
       </div>
     </div>
 
-    <div class="sheet-wrap" id="sheet-add" style="--c:var(--mauve);--c-ink:var(--mauve-ink);--on-c:var(--paper)">
+    <div class="sheet-wrap" id="sheet-add" style="--c:var(--lilac);--c-ink:var(--lilac-ink);--on-c:var(--ink)">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="add-title">
         <div class="sheet-head mono"><span>World — a submission</span><button class="x">Close ×</button></div>
         <div class="sheet-body">
@@ -893,8 +930,8 @@ const WORLD = [
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const FIELDS = {bone:['#E8E4DC','#1A1A1A'], ink:['#1A1A1A','#EDEAE3'],
-                story:['var(--orange)','#1A1A1A'], practice:['var(--blue)','#F3F1EC'], world:['var(--mauve)','#F3F1EC']};
-const LIGHT = ['bone', 'story'];   /* light fields take ink controls; the rest keep bone */
+                story:['var(--char)','#F1EEE8'], practice:['var(--blue)','#F3F1EC'], world:['var(--lilac)','#1A1A1A']};
+const LIGHT = ['bone', 'world'];   /* light fields take ink controls; the rest keep bone */
 const DOTS = {story:'var(--story)', practice:'var(--practice)', world:'var(--world)'};
 const srcset = k => `img/800/${PHOTOS[k].src}.webp 800w, img/1600/${PHOTOS[k].src}.webp 1600w`;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -963,6 +1000,18 @@ function show(i){
 function schedule(){ clearTimeout(timer); if (!paused) timer = setTimeout(() => { show(at + 1); schedule(); }, HOLD + FADE); }
 caption();
 document.addEventListener('visibilitychange', () => { if (document.hidden) clearTimeout(timer); else if (!document.documentElement.dataset.room) schedule(); });
+
+/* day is the spa, night is the club — set by the clock, or by hand */
+function setMode(night){
+  document.documentElement.classList.toggle('night', night);
+  $('#mode').textContent = night ? 'Day' : 'Night';
+  $('#mode').setAttribute('aria-label', night ? 'Switch to day' : 'Switch to night');
+}
+{ let saved = null; try{ saved = localStorage.getItem('cot-mode'); }catch{}
+  const h = new Date().getHours();
+  setMode(saved ? saved === 'night' : (h >= 19 || h < 6)); }
+$('#mode').onclick = () => { const n = !document.documentElement.classList.contains('night'); setMode(n);
+  try{ localStorage.setItem('cot-mode', n ? 'night' : 'day'); }catch{} };
 
 /* the breath: inhale (image), hold (statement), exhale (statement leaves) */
 setTimeout(() => { reel.classList.add('quiet'); schedule(); }, reduced ? 0 : 11000);
@@ -1091,7 +1140,7 @@ document.querySelectorAll('form.form').forEach(form => form.addEventListener('su
 
 /* ── world: the log ─────────────────────────────────────────────────── */
 const CATS = [['all','All'], ['idea','Ideas'], ['sensation','Sensations'], ['artifact','Artifacts'], ['link','Links']];
-const KDOT = {idea:'var(--blue)', sensation:'var(--orange)', artifact:'var(--mauve)', link:'var(--red)'};
+const KDOT = {idea:'var(--lilac)', sensation:'var(--blue)', artifact:'var(--char)', link:'var(--red)'};
 const fmtDate = d => new Date(d + 'T12:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
 WORLD.sort((a, b) => b.date.localeCompare(a.date));
 { const notes = WORLD.filter(e => e.cat !== 'link'), links = WORLD.filter(e => e.cat === 'link'), mix = [];
