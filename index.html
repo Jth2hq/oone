@@ -243,18 +243,6 @@ html[data-room] .roomnav{display:block}
 .roomnav .chip{background:rgb(28 26 24/.8);box-shadow:inset 0 0 0 1px rgb(255 255 255/.14),0 6px 20px -8px rgb(0 0 0/.35);
   -webkit-backdrop-filter:none;backdrop-filter:none}
 .roomnav .chip:hover{background:rgb(28 26 24/.92)}
-html[data-room=story] .roomnav .door-story,html[data-room=practice] .roomnav .door-practice,html[data-room=world] .roomnav .door-world{
-  background:var(--c);color:var(--on-door,#F4F1EB);text-shadow:none;cursor:default}
-html[data-room=world] .roomnav .door-world{--on-door:#1C1A18}
-/* the ask: a round stamp in the corner, above the Practice door */
-.ask{right:0;bottom:calc(clamp(34px,2.7cqi,42px) + 12px)!important;display:grid;place-items:center;align-content:center;gap:.2em;
-  width:clamp(84px,7.5cqi,112px);aspect-ratio:1;border-radius:50%;text-decoration:none;text-align:center;
-  font:500 clamp(12px,.95cqi,15px)/1.15 var(--sans);color:#1C1A18;
-  background:color-mix(in oklch,var(--blue) 14%,#FBFAF7);box-shadow:inset 0 0 0 1.5px #1C1A18,inset 0 3px 0 -1.5px rgb(255 255 255/.8),0 10px 26px -12px rgb(0 0 0/.4);
-  transition:transform .25s var(--ui),opacity .3s var(--ui)}
-.ask i{font-style:normal;color:var(--blue)}
-.ask:hover{transform:rotate(-8deg) scale(1.04)}
-html.at-contact .ask{opacity:0;pointer-events:none}
 .room-scroll{scroll-padding-bottom:120px}
 .backpage{padding-bottom:calc(var(--block) + 72px)!important}
 
@@ -339,7 +327,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .cv .what{font-weight:500}
 .cv .what small{display:block;font-weight:400;color:var(--ink-2);font-size:.8em;margin-top:.35em}
 /* the essay — numbers hang in the margin of the list; each line stays one sentence */
-.essay .fold-body > p:first-of-type::first-letter{float:left;font:800 3.4em/.82 var(--sans);font-stretch:75%;color:var(--red);padding:.06em .1em 0 0}
+.essay #man-title + p::first-letter{float:left;font:800 3.4em/.82 var(--sans);font-stretch:75%;color:var(--red);padding:.06em .1em 0 0}
 .imperatives{counter-reset:i;list-style:none;margin:1.4em 0;padding:0;border-top:1px solid var(--ink)}
 .imperatives li{counter-increment:i;position:relative;padding:.9em 0 .9em 3.2em;border-bottom:1px solid var(--rule)}
 .imperatives li::before{content:counter(i,decimal-leading-zero);position:absolute;left:0;top:1.15em;
@@ -374,15 +362,6 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .scen .tags{display:block;margin-top:.8em;color:var(--c-ink);font-size:var(--t-mono);letter-spacing:.04em}
 
 .essay-deck{margin:0 0 1.4em;max-width:44ch;color:var(--ink-2);font-size:var(--t-lede);line-height:1.35}
-.fold > summary{list-style:none;width:max-content}
-.fold > summary::-webkit-details-marker{display:none}
-.fold .close-l,.fold[open] .open-l{display:none}
-.fold[open] .close-l{display:inline}
-.fold .chev{display:inline-block;transition:transform .25s var(--ui)}
-.fold[open] .chev{transform:rotate(180deg)}
-.fold[open] > summary{margin-bottom:clamp(24px,3cqi,44px)}
-.fold-body{animation:unfold .5s var(--arrive)}
-@keyframes unfold{from{opacity:0;transform:translateY(8px)}}
 
 .form legend small{margin-left:.6em;color:var(--c-ink);font-size:1em}
 .picks.multi span::before{content:"+";display:inline-block;width:1em;margin-right:.35em;text-align:center;color:var(--ink-2)}
@@ -578,7 +557,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
         <button class="chip" id="next" aria-label="Next post">Next →</button>
       </div>
       <button class="chip door door-story" data-go="story"><span aria-hidden="true">←</span><span class="dot"></span>Story</button>
-      <button class="chip door door-practice" data-go="practice">Practice<span class="dot"></span><span aria-hidden="true">→</span></button>
+      <button class="chip door door-practice" data-go="practice"><span class="dot"></span>Practice<span aria-hidden="true">→</span></button>
       <button class="chip door door-world" data-go="world"><span class="dot"></span>World<span aria-hidden="true">↓</span></button>
       <p class="chip caption" aria-live="polite"><span class="dot" id="cap-dot"></span><span class="idx" id="cap-idx"></span><span class="cap" id="cap-text"></span></p>
     </nav>
@@ -587,8 +566,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
     <nav class="roomnav" aria-label="Rooms">
       <button class="chip door door-story" data-go="story"><span aria-hidden="true">←</span><span class="dot"></span>Story</button>
       <button class="chip door door-world" data-go="world"><span class="dot"></span>World<span aria-hidden="true">↓</span></button>
-      <button class="chip door door-practice" data-go="practice">Practice<span class="dot"></span><span aria-hidden="true">→</span></button>
-      <a class="ask" href="#practice" data-scroll="contact"><span>Start a<br>project</span><i aria-hidden="true">→</i></a>
+      <button class="chip door door-practice" data-go="practice"><span class="dot"></span>Practice<span aria-hidden="true">→</span></button>
     </nav>
 
     <!-- ═══ THE ROOMS ═══ -->
@@ -652,28 +630,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
             <div class="body essay">
               <h2>Home as Possibility</h2>
               <p class="essay-deck">On the closet, the bedroom, the house and the home — and six ways to design for the possibility of home.</p>
-              <details class="fold">
-                <summary class="btn btn-act"><span class="open-l">Read the manifesto</span><span class="close-l">Close the manifesto</span> <span aria-hidden="true" class="chev">↓</span></summary>
-                <div class="fold-body">
-              <p>I write this with an acknowledgment of my privilege as both a white gay male within the Queer community and as someone that has always had a shelter over their head. I write this from the perspective of having grown up with a single mother raising two children, from having watched her make sacrificial life decisions in order to keep us within a dwelling, from having relocated so many times that growth was never to be held in one place. I know that, because of this, I walk with both an inability to settle and an understanding of home as the overwhelming, all-encompassing emotion of arrival.</p>
-              <p>We choose to adhere to traditions of the past as our rate of change increases exponentially. We&rsquo;re taught Monopoly in order to play the game of capitalism. We clothe our bodies with the market as if it is embedded within our DNA. We assume wealth is interchangeable with value. We accept fiction as fact. We find meaning in that which we orient ourselves to. For those of us born into a world disoriented, it is in our reorientation that greater truths emerge. The reorientation process is a hunt for meaning and quest for acceptance. To consider existence is to consider the inevitable opposite: not existing. The greatest fear and truth does not discriminate; we do. Finding purpose through Queer existentialism requires coveting the sacredly-private on while we hunt and forge towards our own liberating publics. The closeted Queer body is perceived to be in a constant surveillance state of most private and most public, where heightened are performances of harsh stoicism and supercharged eruption.</p>
-              <p>Consider the closet: a room, ubiquitously understood, embedded with spatial implications. To come out of the closet is to shed the first layer of a thickened skin. Delayering the Queer body is non-linear and lifelong; it is a constant shedding of skins at varying intervals dictated by a spectrum of climate conditions one must snake through on their quest for home. &ldquo;Coming out&rdquo; does not rid the closet of what&rsquo;s inside, nor does it imply that layers once worn can&rsquo;t be put back on. The Queer body is Bachelard&rsquo;s casket; delayering (coming out) breaks the dialectics of inside and outside; the most private and most public become one.</p>
-              <p>Consider the house: a collection of rooms, one being a bedroom encompassing a closet. If the closet is acceptance within one&rsquo;s skin, the bedroom is acceptance within one&rsquo;s space, becoming the second most sacred layer. Now we have two layers that one must come out from, each bound by four walls, each with spatial implications, one within the other as a nesting doll.</p>
-              <p>Consider the home: a collection of rooms, one being a bedroom encompassing a closet. In leaving the bedroom, one may walk down the corridor, through the living room, and make a stop in the kitchen before they are able to freely exit; each additional volume within this navigational sequence, too, has its own spatial implications. To feel at home is to know the ease of navigating these layers as one; to have a house is to know the boundaries that define them.</p>
-              <p>Home is an association of place, an unbound, non-physical ideological condition of security that begins with finding comfort in one&rsquo;s skin; for the Queer body, home is first, quite literally, where the heart is.</p>
-              <h3>On How to Design for the Possibility of Home</h3>
-              <ol class="imperatives">
-              <li><b>Be the casket.</b> Make an unimpeachable case that foregrounds your being within a logical operation.</li>
-              <li><b>Unlearn conventions of domesticity</b> embedded in the patriarchal dwelling; consider alternative methods of residence that prioritize identities over formal precedent.</li>
-              <li><b>Design one sacred room</b> with the affect of the first time, every time.</li>
-              <li><b>Layer private and public.</b> Reconsider thresholds and interstitial spaces as opportunities to connect and Queer one&rsquo;s spatial experience.</li>
-              <li><b>Enable spatial autonomy</b> by prescribing the unscripted, embedding an aesthetics of access.</li>
-              <li><b>Consider the skin on your back.</b> Elevate the invisible preconditions of the site; celebrate and orient towards every edge.</li>
-              </ol>
-              <p class="sign">Josh Harrison<small>December 2021</small></p>
-              <p class="refs mono">Selected references &mdash; Ahmed, Queer Phenomenology &middot; Bachelard, The Poetics of Space &middot; Colomina &amp; Bloomer, Sexuality &amp; Space &middot; Foucault, Of Other Spaces &middot; McHarg, Design with Nature &middot; Pallasmaa, The Eyes of the Skin &middot; Potvin, Bachelors of a Different Sort &middot; Solnit, Wanderlust</p>
-                </div>
-              </details>
+              <button class="btn btn-act" data-sheet="sheet-manifesto">Read the manifesto <span aria-hidden="true">+</span></button>
             </div>
           </section>
         </div>
@@ -752,60 +709,8 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
             <div class="sidehead mono"><b>Start a project</b><span class="n">05 · Contact</span></div>
             <div class="body">
               <h2>What are we building?</h2>
-              <form class="form" id="contact-form" data-subject="New project — care of TANNER">
-                <div class="row2">
-                  <label class="field"><span>Name</span><input name="name" autocomplete="name" required></label>
-                  <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
-                </div>
-                <fieldset>
-                  <legend>What do you need? <small>Click all that apply</small></legend>
-                  <p class="dim mono"><b>2D</b> Flat — on paper and on screen</p>
-                  <div class="picks multi">
-                    <label><input type="checkbox" name="needs" value="2D · A logo &amp; brand look"><span>A logo &amp; brand look</span></label>
-                    <label><input type="checkbox" name="needs" value="2D · Design for print — stationery, posters, books"><span>Design for print — stationery, posters, books</span></label>
-                    <label><input type="checkbox" name="needs" value="2D · A website"><span>A website</span></label>
-                    <label><input type="checkbox" name="needs" value="2D · Photography"><span>Photography</span></label>
-                  </div>
-                  <p class="dim mono"><b>3D</b> Space and object — things you walk into or hold</p>
-                  <div class="picks multi">
-                    <label><input type="checkbox" name="needs" value="3D · A design for a new building or addition"><span>A design for a new building or addition</span></label>
-                    <label><input type="checkbox" name="needs" value="3D · Renovation &amp; layout planning"><span>Renovation &amp; layout planning</span></label>
-                    <label><input type="checkbox" name="needs" value="3D · Architectural drawings &amp; permits"><span>Architectural drawings &amp; permits</span></label>
-                    <label><input type="checkbox" name="needs" value="3D · Furniture selection"><span>Furniture selection</span></label>
-                    <label><input type="checkbox" name="needs" value="3D · Lighting, paint &amp; finishes"><span>Lighting, paint &amp; finishes</span></label>
-                    <label><input type="checkbox" name="needs" value="3D · Decorating &amp; styling a room"><span>Decorating &amp; styling a room</span></label>
-                    <label><input type="checkbox" name="needs" value="3D · A custom piece of furniture"><span>A custom piece of furniture</span></label>
-                  </div>
-                  <p class="dim mono"><b>4D</b> Time — things that unfold, move or change</p>
-                  <div class="picks multi">
-                    <label><input type="checkbox" name="needs" value="4D · An installation, display or event"><span>An installation, display or event</span></label>
-                    <label><input type="checkbox" name="needs" value="4D · A shop or restaurant fit-out, opening to opening"><span>A shop or restaurant fit-out, opening to opening</span></label>
-                    <label><input type="checkbox" name="needs" value="4D · Motion, video &amp; social content"><span>Motion, video &amp; social content</span></label>
-                    <label><input type="checkbox" name="needs" value="4D · Planning for a property or neighbourhood, in phases"><span>Planning for a property or neighbourhood, in phases</span></label>
-                  </div>
-                  <div class="picks multi">
-                    <label><input type="checkbox" name="needs" value="Not sure yet"><span>Not sure yet — let’s talk</span></label>
-                  </div>
-                </fieldset>
-                <fieldset>
-                  <legend>How much of it? <small>Pick one</small></legend>
-                  <div class="picks">
-                    <label><input type="radio" name="scope" value="A second opinion"><span>A second opinion</span></label>
-                    <label><input type="radio" name="scope" value="Help choosing"><span>Help choosing</span></label>
-                    <label><input type="radio" name="scope" value="A plan"><span>A plan</span></label>
-                    <label><input type="radio" name="scope" value="Design &amp; drawings"><span>Design &amp; drawings</span></label>
-                    <label><input type="radio" name="scope" value="Building &amp; making"><span>Building &amp; making</span></label>
-                    <label><input type="radio" name="scope" value="All of it"><span>All of it</span></label>
-                  </div>
-                </fieldset>
-                <div class="row2">
-                  <label class="field"><span>Where</span><input name="location" placeholder="City, or the address"></label>
-                  <label class="field"><span>When</span><select name="timing"><option value="">Choose one</option><option>As soon as possible</option><option>In the next 3 months</option><option>Later this year</option><option>Just exploring</option></select></label>
-                </div>
-                <label class="field"><span>Tell me about it</span><textarea name="message" required placeholder="The room, the thing, the problem, the wish."></textarea></label>
-                <input class="hp" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
-                <div class="send"><button class="btn btn-act" type="submit">Send <span aria-hidden="true">→</span></button><span class="status mono" role="status"></span></div>
-              </form>
+              <p class="essay-deck">Tell me about the room, the thing, the problem or the wish — big or small.</p>
+              <button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">+</span></button>
             </div>
           </section>
         </div>
@@ -862,7 +767,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
             <div><span>Year</span><b id="pj-year"></b></div>
           </div>
           <p id="pj-desc"></p>
-          <p style="margin-top:clamp(24px,3cqi,44px)"><a class="btn btn-act" data-close href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p>
+          <p style="margin-top:clamp(24px,3cqi,44px)"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p>
         </div>
       </div>
     </div>
@@ -874,6 +779,96 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
           <img id="en-img" alt="" hidden style="width:100%;border-radius:10px;margin-bottom:1.2em">
           <h2 id="en-title" tabindex="-1"></h2>
           <p id="en-text"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sheet-wrap" id="sheet-manifesto" style="--c:var(--char);--c-ink:var(--char);--on-c:var(--paper)">
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="man-title">
+        <div class="sheet-head mono"><span>Story — manifesto, December 2021</span><button class="x">Close ×</button></div>
+        <div class="sheet-body essay">
+          <h2 id="man-title" tabindex="-1">Home as Possibility</h2>
+              <p>I write this with an acknowledgment of my privilege as both a white gay male within the Queer community and as someone that has always had a shelter over their head. I write this from the perspective of having grown up with a single mother raising two children, from having watched her make sacrificial life decisions in order to keep us within a dwelling, from having relocated so many times that growth was never to be held in one place. I know that, because of this, I walk with both an inability to settle and an understanding of home as the overwhelming, all-encompassing emotion of arrival.</p>
+              <p>We choose to adhere to traditions of the past as our rate of change increases exponentially. We&rsquo;re taught Monopoly in order to play the game of capitalism. We clothe our bodies with the market as if it is embedded within our DNA. We assume wealth is interchangeable with value. We accept fiction as fact. We find meaning in that which we orient ourselves to. For those of us born into a world disoriented, it is in our reorientation that greater truths emerge. The reorientation process is a hunt for meaning and quest for acceptance. To consider existence is to consider the inevitable opposite: not existing. The greatest fear and truth does not discriminate; we do. Finding purpose through Queer existentialism requires coveting the sacredly-private on while we hunt and forge towards our own liberating publics. The closeted Queer body is perceived to be in a constant surveillance state of most private and most public, where heightened are performances of harsh stoicism and supercharged eruption.</p>
+              <p>Consider the closet: a room, ubiquitously understood, embedded with spatial implications. To come out of the closet is to shed the first layer of a thickened skin. Delayering the Queer body is non-linear and lifelong; it is a constant shedding of skins at varying intervals dictated by a spectrum of climate conditions one must snake through on their quest for home. &ldquo;Coming out&rdquo; does not rid the closet of what&rsquo;s inside, nor does it imply that layers once worn can&rsquo;t be put back on. The Queer body is Bachelard&rsquo;s casket; delayering (coming out) breaks the dialectics of inside and outside; the most private and most public become one.</p>
+              <p>Consider the house: a collection of rooms, one being a bedroom encompassing a closet. If the closet is acceptance within one&rsquo;s skin, the bedroom is acceptance within one&rsquo;s space, becoming the second most sacred layer. Now we have two layers that one must come out from, each bound by four walls, each with spatial implications, one within the other as a nesting doll.</p>
+              <p>Consider the home: a collection of rooms, one being a bedroom encompassing a closet. In leaving the bedroom, one may walk down the corridor, through the living room, and make a stop in the kitchen before they are able to freely exit; each additional volume within this navigational sequence, too, has its own spatial implications. To feel at home is to know the ease of navigating these layers as one; to have a house is to know the boundaries that define them.</p>
+              <p>Home is an association of place, an unbound, non-physical ideological condition of security that begins with finding comfort in one&rsquo;s skin; for the Queer body, home is first, quite literally, where the heart is.</p>
+              <h3>On How to Design for the Possibility of Home</h3>
+              <ol class="imperatives">
+              <li><b>Be the casket.</b> Make an unimpeachable case that foregrounds your being within a logical operation.</li>
+              <li><b>Unlearn conventions of domesticity</b> embedded in the patriarchal dwelling; consider alternative methods of residence that prioritize identities over formal precedent.</li>
+              <li><b>Design one sacred room</b> with the affect of the first time, every time.</li>
+              <li><b>Layer private and public.</b> Reconsider thresholds and interstitial spaces as opportunities to connect and Queer one&rsquo;s spatial experience.</li>
+              <li><b>Enable spatial autonomy</b> by prescribing the unscripted, embedding an aesthetics of access.</li>
+              <li><b>Consider the skin on your back.</b> Elevate the invisible preconditions of the site; celebrate and orient towards every edge.</li>
+              </ol>
+              <p class="sign">Josh Harrison<small>December 2021</small></p>
+              <p class="refs mono">Selected references &mdash; Ahmed, Queer Phenomenology &middot; Bachelard, The Poetics of Space &middot; Colomina &amp; Bloomer, Sexuality &amp; Space &middot; Foucault, Of Other Spaces &middot; McHarg, Design with Nature &middot; Pallasmaa, The Eyes of the Skin &middot; Potvin, Bachelors of a Different Sort &middot; Solnit, Wanderlust</p>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="sheet-wrap" id="sheet-contact" style="--c:var(--blue);--c-ink:var(--blue-ink);--on-c:var(--paper)">
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="contact-title">
+        <div class="sheet-head mono"><span>Practice — start a project</span><button class="x">Close ×</button></div>
+        <div class="sheet-body">
+          <h2 id="contact-title" tabindex="-1">What are we building?</h2>
+              <form class="form" id="contact-form" data-subject="New project — care of TANNER">
+            <div class="row2">
+              <label class="field"><span>Name</span><input name="name" autocomplete="name" required></label>
+              <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
+            </div>
+            <fieldset>
+              <legend>What do you need? <small>Click all that apply</small></legend>
+              <p class="dim mono"><b>2D</b> Flat — on paper and on screen</p>
+              <div class="picks multi">
+                <label><input type="checkbox" name="needs" value="2D · A logo &amp; brand look"><span>A logo &amp; brand look</span></label>
+                <label><input type="checkbox" name="needs" value="2D · Design for print — stationery, posters, books"><span>Design for print — stationery, posters, books</span></label>
+                <label><input type="checkbox" name="needs" value="2D · A website"><span>A website</span></label>
+                <label><input type="checkbox" name="needs" value="2D · Photography"><span>Photography</span></label>
+              </div>
+              <p class="dim mono"><b>3D</b> Space and object — things you walk into or hold</p>
+              <div class="picks multi">
+                <label><input type="checkbox" name="needs" value="3D · A design for a new building or addition"><span>A design for a new building or addition</span></label>
+                <label><input type="checkbox" name="needs" value="3D · Renovation &amp; layout planning"><span>Renovation &amp; layout planning</span></label>
+                <label><input type="checkbox" name="needs" value="3D · Architectural drawings &amp; permits"><span>Architectural drawings &amp; permits</span></label>
+                <label><input type="checkbox" name="needs" value="3D · Furniture selection"><span>Furniture selection</span></label>
+                <label><input type="checkbox" name="needs" value="3D · Lighting, paint &amp; finishes"><span>Lighting, paint &amp; finishes</span></label>
+                <label><input type="checkbox" name="needs" value="3D · Decorating &amp; styling a room"><span>Decorating &amp; styling a room</span></label>
+                <label><input type="checkbox" name="needs" value="3D · A custom piece of furniture"><span>A custom piece of furniture</span></label>
+              </div>
+              <p class="dim mono"><b>4D</b> Time — things that unfold, move or change</p>
+              <div class="picks multi">
+                <label><input type="checkbox" name="needs" value="4D · An installation, display or event"><span>An installation, display or event</span></label>
+                <label><input type="checkbox" name="needs" value="4D · A shop or restaurant fit-out, opening to opening"><span>A shop or restaurant fit-out, opening to opening</span></label>
+                <label><input type="checkbox" name="needs" value="4D · Motion, video &amp; social content"><span>Motion, video &amp; social content</span></label>
+                <label><input type="checkbox" name="needs" value="4D · Planning for a property or neighbourhood, in phases"><span>Planning for a property or neighbourhood, in phases</span></label>
+              </div>
+              <div class="picks multi">
+                <label><input type="checkbox" name="needs" value="Not sure yet"><span>Not sure yet — let’s talk</span></label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>How much of it? <small>Pick one</small></legend>
+              <div class="picks">
+                <label><input type="radio" name="scope" value="A second opinion"><span>A second opinion</span></label>
+                <label><input type="radio" name="scope" value="Help choosing"><span>Help choosing</span></label>
+                <label><input type="radio" name="scope" value="A plan"><span>A plan</span></label>
+                <label><input type="radio" name="scope" value="Design &amp; drawings"><span>Design &amp; drawings</span></label>
+                <label><input type="radio" name="scope" value="Building &amp; making"><span>Building &amp; making</span></label>
+                <label><input type="radio" name="scope" value="All of it"><span>All of it</span></label>
+              </div>
+            </fieldset>
+            <div class="row2">
+              <label class="field"><span>Where</span><input name="location" placeholder="City, or the address"></label>
+              <label class="field"><span>When</span><select name="timing"><option value="">Choose one</option><option>As soon as possible</option><option>In the next 3 months</option><option>Later this year</option><option>Just exploring</option></select></label>
+            </div>
+            <label class="field"><span>Tell me about it</span><textarea name="message" required placeholder="The room, the thing, the problem, the wish."></textarea></label>
+            <input class="hp" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <div class="send"><button class="btn btn-act" type="submit">Send <span aria-hidden="true">→</span></button><span class="status mono" role="status"></span></div>
+          </form>
         </div>
       </div>
     </div>
@@ -1167,9 +1162,6 @@ function route(){
   route.t = setTimeout(() => { el.classList.remove('opening'); prev && prev.classList.remove('leaving'); root.classList.remove('shutting'); }, 950);
 }
 addEventListener('hashchange', route);
-{ const c = document.getElementById('contact'), sc = document.querySelector('#practice .room-scroll');
-  if (c && sc && 'IntersectionObserver' in window) new IntersectionObserver(es => es.forEach(e =>
-    document.documentElement.classList.toggle('at-contact', e.isIntersecting)), {root: sc, threshold: .15}).observe(c); }
 document.querySelectorAll('.roomnav [data-go]').forEach(b => b.addEventListener('click', e => { if (b.dataset.go === showing) e.stopImmediatePropagation(); }, true));
 document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => location.hash = b.dataset.go);
 document.querySelectorAll('.home,.close').forEach(a => a.addEventListener('click', e => {
@@ -1215,18 +1207,14 @@ function trapTab(e){            /* keep focus inside the open sheet */
   else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
 }
 
-/* "Start a project" from anywhere: open Practice, land on the form */
+/* every button that opens a tile does it the same way, in place */
 document.addEventListener('click', e => {
-  const a = e.target.closest('[data-scroll]'); if (!a) return;
+  const t = e.target.closest('[data-sheet],[data-scroll="contact"]'); if (!t) return;
   e.preventDefault();
-  const go = () => document.getElementById(a.dataset.scroll)?.scrollIntoView({behavior: reduced ? 'auto' : 'smooth', block:'start'});
-  if (showing === 'practice') go(); else { location.hash = 'practice'; setTimeout(go, 800); }
+  const id = t.dataset.sheet || 'sheet-contact';
+  if (openSheetEl) closeSheet();
+  openSheet(id, id === 'sheet-contact' ? '#contact-title' : id === 'sheet-manifesto' ? '#man-title' : null);
 });
-
-/* ── practice: selected work ────────────────────────────────────────── */
-$('#contents').innerHTML = PROJECTS.map((p, i) =>
-  `<li><button data-project="${p.id}"><span class="mono num">${String(i + 1).padStart(2, '0')}</span>` +
-  `<span class="t">${esc(p.title)}<small>${esc(p.client)}</small></span><span class="yr mono">${esc(p.year)}</span></button></li>`).join('');
 $('#contents').addEventListener('click', e => { const b = e.target.closest('[data-project]'); if (b) openProject(b.dataset.project); });
 function openProject(id){
   const i = PROJECTS.findIndex(p => p.id === id); if (i < 0) return;
