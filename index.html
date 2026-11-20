@@ -307,7 +307,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .cv .what{font-weight:500}
 .cv .what small{display:block;font-weight:400;color:var(--ink-2);font-size:.8em;margin-top:.15em}
 /* the essay — numbers hang in the margin of the list; each line stays one sentence */
-.essay p:first-of-type::first-letter{float:left;font:800 3.4em/.82 var(--sans);font-stretch:75%;color:var(--red);padding:.06em .1em 0 0}
+.essay .fold-body > p:first-of-type::first-letter{float:left;font:800 3.4em/.82 var(--sans);font-stretch:75%;color:var(--red);padding:.06em .1em 0 0}
 .imperatives{counter-reset:i;list-style:none;margin:1.4em 0;padding:0;border-top:1px solid var(--ink)}
 .imperatives li{counter-increment:i;position:relative;padding:.9em 0 .9em 3.2em;border-bottom:1px solid var(--rule)}
 .imperatives li::before{content:counter(i,decimal-leading-zero);position:absolute;left:0;top:1.15em;
@@ -340,6 +340,17 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .intro{margin:0 0 1.6em;max-width:46ch;font-size:var(--t-lede);line-height:1.35;color:var(--ink)}
 .scen h3{font-weight:600}
 .scen .tags{display:block;margin-top:.8em;color:var(--c-ink);font-size:var(--t-mono);letter-spacing:.04em}
+
+.essay-deck{margin:0 0 1.4em;max-width:44ch;color:var(--ink-2);font-size:var(--t-lede);line-height:1.35}
+.fold > summary{list-style:none;width:max-content}
+.fold > summary::-webkit-details-marker{display:none}
+.fold .close-l,.fold[open] .open-l{display:none}
+.fold[open] .close-l{display:inline}
+.fold .chev{display:inline-block;transition:transform .25s var(--ui)}
+.fold[open] .chev{transform:rotate(180deg)}
+.fold[open] > summary{margin-bottom:clamp(24px,3cqi,44px)}
+.fold-body{animation:unfold .5s var(--arrive)}
+@keyframes unfold{from{opacity:0;transform:translateY(8px)}}
 
 /* 11 PRACTICE ── what, how, work ──────────────────────────────────────── */
 .svc{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--gutter);max-width:none!important}
@@ -583,6 +594,10 @@ html[data-dir=home]::view-transition-new(screen){animation:fade .7s var(--arrive
             <div class="sidehead mono"><b>Manifesto</b><span class="n">03 · December 2021</span></div>
             <div class="body essay">
               <h2>Home as Possibility</h2>
+              <p class="essay-deck">On the closet, the bedroom, the house and the home — and six ways to design for the possibility of home.</p>
+              <details class="fold">
+                <summary class="btn btn-act"><span class="open-l">Read the manifesto</span><span class="close-l">Close the manifesto</span> <span aria-hidden="true" class="chev">↓</span></summary>
+                <div class="fold-body">
               <p>I write this with an acknowledgment of my privilege as both a white gay male within the Queer community and as someone that has always had a shelter over their head. I write this from the perspective of having grown up with a single mother raising two children, from having watched her make sacrificial life decisions in order to keep us within a dwelling, from having relocated so many times that growth was never to be held in one place. I know that, because of this, I walk with both an inability to settle and an understanding of home as the overwhelming, all-encompassing emotion of arrival.</p>
               <p>We choose to adhere to traditions of the past as our rate of change increases exponentially. We&rsquo;re taught Monopoly in order to play the game of capitalism. We clothe our bodies with the market as if it is embedded within our DNA. We assume wealth is interchangeable with value. We accept fiction as fact. We find meaning in that which we orient ourselves to. For those of us born into a world disoriented, it is in our reorientation that greater truths emerge. The reorientation process is a hunt for meaning and quest for acceptance. To consider existence is to consider the inevitable opposite: not existing. The greatest fear and truth does not discriminate; we do. Finding purpose through Queer existentialism requires coveting the sacredly-private on while we hunt and forge towards our own liberating publics. The closeted Queer body is perceived to be in a constant surveillance state of most private and most public, where heightened are performances of harsh stoicism and supercharged eruption.</p>
               <p>Consider the closet: a room, ubiquitously understood, embedded with spatial implications. To come out of the closet is to shed the first layer of a thickened skin. Delayering the Queer body is non-linear and lifelong; it is a constant shedding of skins at varying intervals dictated by a spectrum of climate conditions one must snake through on their quest for home. &ldquo;Coming out&rdquo; does not rid the closet of what&rsquo;s inside, nor does it imply that layers once worn can&rsquo;t be put back on. The Queer body is Bachelard&rsquo;s casket; delayering (coming out) breaks the dialectics of inside and outside; the most private and most public become one.</p>
@@ -600,6 +615,8 @@ html[data-dir=home]::view-transition-new(screen){animation:fade .7s var(--arrive
               </ol>
               <p class="sign">Josh Harrison<small>December 2021</small></p>
               <p class="refs mono">Selected references &mdash; Ahmed, Queer Phenomenology &middot; Bachelard, The Poetics of Space &middot; Colomina &amp; Bloomer, Sexuality &amp; Space &middot; Foucault, Of Other Spaces &middot; McHarg, Design with Nature &middot; Pallasmaa, The Eyes of the Skin &middot; Potvin, Bachelors of a Different Sort &middot; Solnit, Wanderlust</p>
+                </div>
+              </details>
             </div>
           </section>
         </div>
