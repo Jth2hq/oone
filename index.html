@@ -501,6 +501,10 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
   padding:1em 0;margin:1.2em 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
 .sheet-body .meta span{display:block;color:var(--ink-2);margin-bottom:.35em}
 .sheet-body p{max-width:62ch}
+.pj-gal{display:grid;gap:clamp(14px,1.6cqi,24px);margin-top:clamp(24px,3cqi,44px)}
+.pj-gal figure{margin:0}
+.pj-gal img{display:block;width:100%;height:auto;border-radius:6px;background:#eceae5}
+.pj-gal figcaption{margin-top:.6em;color:var(--ink-2);font-size:.82em}
 
 /* 15 MOTION ── a room wipes across the glass from its door ──────────────── */
 /* rooms open and close by animating the room itself — no full-screen snapshots (iOS freezes on them) */
@@ -797,6 +801,7 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
             <div><span>Year</span><b id="pj-year"></b></div>
           </div>
           <p id="pj-desc"></p>
+          <div class="pj-gal" id="pj-gal"></div>
           <p style="margin-top:clamp(24px,3cqi,44px)"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p>
         </div>
       </div>
@@ -1037,6 +1042,8 @@ const PROJECTS = [
   {id:'troub',dims:['3D'],needs:[],title:'Troubadour Club',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2023',role:'Designer',client:'Hart Howerton',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
   {id:'ranch',dims:['3D'],needs:[],title:'Covert Ranch',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2023',role:'Designer',client:'Hart Howerton',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
   {id:'wtto',dims:['3D'],needs:[],title:'When Time Takes Over',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2022–23',role:'Author',client:'UVA',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
+  {id:'bcn',dims:['3D'],needs:[],title:'The Meeting Line',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2021',role:'Author',client:'UVA — ARCH 8010: Barcelona',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
+   imgs:[['bcn-frames',''],['bcn-waterfront',''],['bcn-axon','many authors, many functions'],['bcn-path','creating a new path'],['bcn-framing','constellation: framing binary between land and sea'],['bcn-diffusing','constellation: diffusing binary of land and sea']]},
   {id:'cor',dims:['3D'],needs:[],title:'COR Wellness Center',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2020',role:'Coordinator',client:'Bedrock Detroit',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
 ];
 
@@ -1343,6 +1350,7 @@ function openProject(id){
   $('#pj-title').textContent = p.title; $('#pj-tag').textContent = p.tag;
   $('#pj-client').textContent = p.client; $('#pj-role').textContent = p.role; $('#pj-year').textContent = p.year;
   $('#pj-desc').textContent = p.desc;
+  $('#pj-gal').innerHTML = (p.imgs || []).map(([k, c]) => `<figure><img src="img/800/${k}.webp" srcset="img/800/${k}.webp 800w, img/1600/${k}.webp 1600w" sizes="(min-width:900px) 820px, 90vw" alt="${esc(c || p.title)}" loading="lazy" decoding="async">${c ? `<figcaption class="mono">${esc(c)}</figcaption>` : ''}</figure>`).join('');
   openSheet('sheet-project');
 }
 
