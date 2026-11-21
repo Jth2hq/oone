@@ -230,8 +230,8 @@ html.night .lamp{mix-blend-mode:color;opacity:.13}
 .door .dot{transition:transform .2s var(--ui)}
 .door:hover .dot,.door:focus-visible .dot{transform:scale(1.6)}
 .door-story{left:0;bottom:0;--c:var(--story)}
-.door-practice{right:0;bottom:0;--c:var(--practice)}
-.door-world{bottom:0;left:50%;translate:-50% 0;--c:var(--world)}
+.door-practice{bottom:0;left:50%;translate:-50% 0;--c:var(--practice)}
+.door-world{right:0;bottom:0;--c:var(--world)}
 html[data-room] .post,html[data-room] .statement,html[data-room] .hud{visibility:hidden}
 html.shutting .post,html.shutting .statement,html.shutting .hud{visibility:visible}
 /* rooms keep the landing's pills, in the same places, so the way around never changes */
@@ -370,6 +370,22 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .form .dim b{display:inline-block;min-width:2.4em;font-weight:400;color:var(--red)}
 .form fieldset .picks + .dim{margin-top:1.8em}
 .form fieldset .picks.multi + .picks.multi{margin-top:1.8em}
+
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin:0}
+.picks .pp{margin-left:.6em;font:normal 400 .82em/1 var(--mono);letter-spacing:.02em;color:var(--c-ink,var(--blue-ink))}
+.tally{display:grid;gap:4px;padding:16px 18px;border-radius:14px;background:color-mix(in oklch,var(--blue) 9%,var(--paper));box-shadow:inset 0 0 0 1px var(--rule)}
+.tally p{margin:0}.tally .sum{font:700 clamp(26px,2.6cqi,36px)/1 var(--sans);letter-spacing:-.01em}
+.tally .note{color:var(--ink-2)}
+.vows{margin:0 0 clamp(24px,3cqi,40px);padding-left:1.4em;display:grid;gap:.5em;max-width:62ch}
+.vows b{font-weight:600}
+.m-group{margin-top:clamp(18px,2.4cqi,32px)}
+.m-group h3{margin:0 0 .4em;color:var(--red);font-weight:400}
+.m-svc{padding:14px 0;border-top:1px solid var(--rule)}
+.m-svc h4{margin:0 0 .5em;font:600 var(--t-body)/1.3 var(--sans)}
+.m-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 18px;align-items:baseline;padding:.35em 0}
+.m-name small{display:block;margin-top:.3em;color:var(--ink-2)}
+.m-price{font:500 var(--t-body)/1 var(--mono);white-space:nowrap}
+.m-price.talk{color:var(--c-ink,var(--blue-ink))}
 
 /* 11 PRACTICE ── what, how, work ──────────────────────────────────────── */
 .svc{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--gutter);max-width:none!important}
@@ -574,8 +590,8 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
     <!-- the landing's doors, carried through every room -->
     <nav class="roomnav" aria-label="Rooms">
       <button class="chip door door-story" data-go="story"><span aria-hidden="true">←</span><span class="dot"></span>Story</button>
-      <button class="chip door door-world" data-go="world"><span class="dot"></span>World<span aria-hidden="true">↓</span></button>
       <button class="chip door door-practice" data-go="practice"><span class="dot"></span>Practice<span aria-hidden="true">→</span></button>
+      <button class="chip door door-world" data-go="world"><span class="dot"></span>World<span aria-hidden="true">↓</span></button>
     </nav>
 
     <!-- ═══ THE ROOMS ═══ -->
@@ -723,7 +739,8 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
             <div class="body">
               <h2>What are we building?</h2>
               <p class="essay-deck">Tell me about the room, the thing, the problem or the wish — big or small.</p>
-              <button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">+</span></button>
+              <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">+</span></button>
+              <button class="btn btn-act" data-sheet="sheet-prices">See prices <span aria-hidden="true">+</span></button></p>
             </div>
           </section>
         </div>
@@ -823,6 +840,18 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
       </div>
     </div>
 
+    <div class="sheet-wrap" id="sheet-prices" style="--c:var(--blue);--c-ink:var(--blue-ink);--on-c:var(--paper)">
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="prices-title">
+        <div class="sheet-head mono"><span>Practice — prices</span><button class="x">Close ×</button></div>
+        <div class="sheet-body">
+          <h2 id="prices-title" tabindex="-1">What it costs</h2>
+          <ol class="vows" id="vows"></ol>
+          <div class="menu" id="menu"></div>
+          <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">+</span></button></p>
+        </div>
+      </div>
+    </div>
+
     <div class="sheet-wrap" id="sheet-contact" style="--c:var(--blue);--c-ink:var(--blue-ink);--on-c:var(--paper)">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="contact-title">
         <div class="sheet-head mono"><span>Practice — start a project</span><button class="x">Close ×</button></div>
@@ -880,6 +909,10 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
             </div>
             <label class="field"><span>Tell me about it</span><textarea name="message" required placeholder="The room, the thing, the problem, the wish."></textarea></label>
             <input class="hp" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+              <div class="tally" id="tally" aria-live="polite" hidden>
+                <p class="mono">Your ballpark</p><p class="sum" id="tally-sum"></p><p class="mono note" id="tally-note"></p>
+                <input type="hidden" name="ballpark" id="tally-field">
+              </div>
             <div class="send"><button class="btn btn-act" type="submit">Send <span aria-hidden="true">→</span></button><span class="status mono" role="status"></span></div>
           </form>
         </div>
@@ -1228,6 +1261,9 @@ document.addEventListener('click', e => {
   if (openSheetEl) closeSheet();
   openSheet(id, id === 'sheet-contact' ? '#contact-title' : id === 'sheet-manifesto' ? '#man-title' : null);
 });
+/* ── prices: one list for the menu and the request form ── */
+const PRICE = {"rate": 85, "prices": {"A logo & brand look": [{"name": "Starter identity — mark, colours, type, a one-page guide", "price": 1275, "hours": 15, "parts": "kickoff chat 2h · three directions 6h · refine one 4h · files + guide 3h"}, {"name": "Full brand system", "from": 3400, "note": "Let’s talk first"}], "Design for print — stationery, posters, books": [{"name": "Menu, one or two pages", "price": 425, "hours": 5, "parts": "concept 1.5h · layout 2.5h · one round of edits 1h"}, {"name": "Business cards", "price": 255, "hours": 3, "parts": "layout 2h · print-ready files 1h"}, {"name": "Poster", "price": 340, "hours": 4, "parts": "concept 1.5h · design 2h · files 0.5h"}, {"name": "Invitation suite — invite, details card, envelope", "price": 595, "hours": 7, "parts": "concept 2h · three pieces 4h · press-ready 1h"}, {"name": "Book or zine", "from": 2550, "note": "Let’s talk first · printing at cost"}], "A website": [{"name": "One-page site", "price": 1275, "hours": 15, "parts": "structure 3h · design 7h · build + launch 5h"}, {"name": "Multi-page site", "from": 3400, "note": "Let’s talk first"}], "Photography": [{"name": "Half-day film shoot", "price": 510, "hours": 6, "parts": "shoot 4h · scan edit + selects 2h", "note": "film + developing at cost"}], "A design for a new building or addition": [{"name": "Schematic design, then documents", "from": 8500, "note": "Let’s talk first · consultants + fees at cost"}], "Renovation & layout planning": [{"name": "One room — two layout options, one final plan", "price": 425, "hours": 5, "parts": "site visit + measure 1.5h · options 2.5h · final plan 1h"}, {"name": "Whole apartment", "price": 1275, "hours": 15, "parts": "site visit + measure 3h · options 8h · final plans 4h"}], "Architectural drawings & permits": [{"name": "Drawing set for filing", "from": 3400, "note": "Let’s talk first · filing fees + expediter at cost"}], "Furniture selection": [{"name": "One room — a shoppable list", "price": 425, "hours": 5, "parts": "chat 1h · sourcing 3h · the list + links 1h"}, {"name": "Each additional room", "price": 255, "hours": 3, "parts": "sourcing 2h · list 1h"}], "Lighting, paint & finishes": [{"name": "One room — palette + finish schedule", "price": 255, "hours": 3, "parts": "samples + palette 2h · schedule 1h"}, {"name": "Whole home", "price": 765, "hours": 9, "parts": "samples + palette 5h · schedules 4h"}], "Decorating & styling a room": [{"name": "Room plan — concept, layout, shopping list", "price": 595, "hours": 7, "parts": "visit 1.5h · concept board 2h · plan 2h · list 1.5h"}, {"name": "On-site styling day", "price": 85, "note": "per hour, as long as it takes"}], "A custom piece of furniture": [{"name": "Design + shop drawings", "price": 1020, "hours": 12, "parts": "sketch options 4h · design 4h · shop drawings 4h", "note": "fabrication billed by the maker, no markup"}], "An installation, display or event": [{"name": "Concept to install", "from": 1700, "note": "Let’s talk first · materials at cost"}], "A shop or restaurant fit-out, opening to opening": [{"name": "Space, signage, menu, site — one language", "from": 8500, "note": "Let’s talk first"}], "Motion, video & social content": [{"name": "Social kit — twelve templates", "price": 680, "hours": 8, "parts": "system 3h · templates 4h · handover 1h"}, {"name": "Short film or motion piece", "from": 1700, "note": "Let’s talk first"}], "Planning for a property or neighbourhood, in phases": [{"name": "Vision plan", "from": 5100, "note": "Let’s talk first"}]}, "scope": {"A second opinion": "first 30 min free · then $85/hr", "Help choosing": "fixed prices", "A plan": "fixed prices", "Design & drawings": "fixed or quoted", "Building & making": "$85/hr · makers at cost", "All of it": "let’s talk"}};
+
 /* ── practice: selected work, filtered by the same words as the contact form ── */
 const NEEDS = [...document.querySelectorAll('#contact-form .dim')].map(d => ({
   dim: d.querySelector('b').textContent.trim(),
@@ -1258,6 +1294,42 @@ $('#pfilters').addEventListener('click', e => {
   renderWork();
 });
 renderWork();
+
+/* prices on the menu and in the form — a vow, not a checkout */
+const $$m = n => '$' + n.toLocaleString('en-US');
+const priceOf = it => it.from ? `from ${$$m(it.from)}` : $$m(it.price) + (it.note && it.note.startsWith('per hour') ? '/hr' : '');
+$('#vows').innerHTML = [
+  `My rate is <b>${$$m(PRICE.rate)} an hour</b>. Every price here is that rate times honest hours.`,
+  'Concrete jobs get <b>whole-dollar prices</b>. What you see is what you pay.',
+  'The <b>first 30 minutes are free</b>. Asking costs nothing.',
+  '<b>No markup</b> on furniture, materials or printing. Trade discounts go to you.',
+  'Bigger projects get a <b>written estimate</b> before anything starts — no surprise invoices.',
+  'Artists, nonprofits and small independents can ask for the <b>community rate</b>: 25% off, no questions.'
+].map(v => `<li>${v}</li>`).join('');
+$('#menu').innerHTML = NEEDS.map(g => `<section class="m-group"><h3 class="mono"><b>${g.dim}</b></h3>` + g.options.map(o => {
+  const list = PRICE.prices[o] || [];
+  return `<div class="m-svc"><h4>${esc(o)}</h4>` + list.map(it => `<div class="m-item"><span class="m-name">${esc(it.name)}` +
+    (it.parts ? `<small class="mono">${esc(it.parts)}</small>` : '') + (it.note ? `<small class="mono">${esc(it.note)}</small>` : '') +
+    `</span><span class="m-price ${it.from ? 'talk' : ''}">${priceOf(it)}</span></div>`).join('') + `</div>`;
+}).join('') + `</section>`).join('');
+document.querySelectorAll('#contact-form input[name=needs]').forEach(inp => {
+  const o = inp.nextElementSibling.textContent.trim(), list = PRICE.prices[o]; if (!list) return;
+  const fixed = list.filter(x => !x.from && !(x.note || '').startsWith('per hour')), min = fixed.length ? Math.min(...fixed.map(x => x.price)) : null;
+  inp.nextElementSibling.insertAdjacentHTML('beforeend', `<em class="pp">${min != null ? (fixed.length > 1 || list.length > 1 ? 'from ' : '') + $$m(min) : 'let’s talk'}</em>`);
+});
+document.querySelectorAll('#contact-form input[name=scope]').forEach(inp => {
+  const t = PRICE.scope[inp.value]; if (t) inp.nextElementSibling.insertAdjacentHTML('beforeend', `<em class="pp">${t}</em>`);
+});
+function tally(){
+  const picked = [...document.querySelectorAll('#contact-form input[name=needs]:checked')].map(i => PRICE.prices[i.nextElementSibling.firstChild.textContent.trim()]).filter(Boolean);
+  let sum = 0, talks = 0;
+  picked.forEach(list => { const f = list.filter(x => !x.from && !(x.note || '').startsWith('per hour')); if (f.length) sum += Math.min(...f.map(x => x.price)); else talks++; });
+  const box = $('#tally'); box.hidden = !picked.length; if (!picked.length) return;
+  $('#tally-sum').textContent = sum ? `from ${$$m(sum)}` : 'Let’s talk';
+  $('#tally-note').textContent = (sum && talks ? `+ ${talks} we’ll talk through · ` : talks ? `${talks} we’ll talk through · ` : '') + 'No checkout. Just the number, up front.';
+  $('#tally-field').value = $('#tally-sum').textContent + (talks ? ` + ${talks} to discuss` : '');
+}
+$('#contact-form').addEventListener('change', tally);
 $('#contents').addEventListener('click', e => { const b = e.target.closest('[data-project]'); if (b) openProject(b.dataset.project); });
 function openProject(id){
   const i = PROJECTS.findIndex(p => p.id === id); if (i < 0) return;
