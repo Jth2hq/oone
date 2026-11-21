@@ -60,7 +60,7 @@
 
   /* the device (window-relative) */
   --wall:clamp(10px,2.2vw,32px);
-  --reveal:clamp(4px,.45vw,7px);
+  --reveal:clamp(6px,.7vw,11px);
   --gap:clamp(2px,.22vw,4px);
   --radius:clamp(16px,1.9vw,28px);
   --r-in:calc(var(--radius) - var(--reveal));
@@ -532,6 +532,34 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
   .add{margin-left:0}
   .filters{border-radius:14px}
 }
+
+/* NIGHT inside the rooms: the same pages, inverted — night-sky paper, light ink */
+html.night .room,html.night .sheet-wrap{
+  --paper:#12111E;--bone:#12111E;--linen:#1B1A2A;--ink:#EEEAE3;--ink-2:#A9A4B6;--rule:rgb(238 234 227/.16);
+  --blue-ink:oklch(.76 .12 262);--lilac-ink:oklch(.84 .07 300);
+  --weave:repeating-linear-gradient(90deg,rgb(255 255 255/.018) 0 1px,transparent 1px 3px),repeating-linear-gradient(0deg,rgb(0 0 0/.25) 0 1px,transparent 1px 4px);
+  color:var(--ink)}
+html.night #story{--c-ink:oklch(.78 .03 55);--on-c:#F1EEE8}
+html.night #practice{--on-c:#F4F2EE}
+html.night #world{--on-c:#1C1A18}
+html.night .room .logo,html.night .sheet .logo{background-image:url(brand/care-of-tanner-light.webp)}
+html.night .room .btn-act,html.night .sheet .btn-act{background:color-mix(in oklch,var(--c,var(--blue)) 18%,rgb(255 255 255/.04));box-shadow:inset 0 0 0 1.5px var(--ink)}
+html.night .room .btn-act:hover,html.night .sheet .btn-act:hover{background:color-mix(in oklch,var(--c,var(--blue)) 32%,rgb(255 255 255/.06))}
+html.night .form input,html.night .form textarea,html.night .form select{background:rgb(255 255 255/.06);color:var(--ink)}
+html.night .form input:focus,html.night .form textarea:focus,html.night .form select:focus{background:rgb(255 255 255/.1)}
+html.night .picks span{background:rgb(255 255 255/.05)}
+html.night .picks input:checked + span{background:color-mix(in oklch,var(--c,var(--blue)) 30%,#12111E)}
+html.night .tile{background:rgb(255 255 255/.05)}
+html.night .tile.idea{background:color-mix(in oklch,var(--lilac) 18%,#12111E)}
+html.night .tile.sensation{background:color-mix(in oklch,var(--blue) 18%,#12111E)}
+html.night .tile.artifact{background:color-mix(in oklch,var(--char) 45%,#12111E)}
+html.night .tile.link{background:rgb(255 255 255/.06)}
+html.night .filters button{background:color-mix(in oklch,var(--k,#fff) 14%,#12111E)}
+html.night .filters button[aria-pressed=true]{background:color-mix(in oklch,var(--k,#fff) 34%,#12111E)}
+html.night .roomnav .chip{background:rgb(244 241 235/.88);color:#1C1A18;box-shadow:inset 0 0 0 1px rgb(0 0 0/.12),0 6px 20px -8px rgb(0 0 0/.5);text-shadow:none}
+html.night .roomnav .chip:hover{background:#F4F1EB}
+html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.6),inset 0 0 0 1px var(--rule)}
+html.night .room select option{background:#12111E}
 </style>
 </head>
 <body>
