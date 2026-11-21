@@ -382,6 +382,14 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .steps .num{display:block;font:400 var(--t-mono)/1 var(--mono);color:var(--red)}
 .steps b{display:block;margin:.9em 0 .5em;font-weight:500}
 .steps p{margin:0;color:var(--ink-2)}
+.pfilters{display:grid;gap:12px;margin:0 0 clamp(18px,2cqi,28px)}
+.pfilters .filters{width:max-content;max-width:100%}
+.needs-f{display:flex;flex-wrap:wrap;gap:.5em}
+.needs-f button{border:0;padding:0;background:none;cursor:pointer;font:inherit}
+.needs-f button span{display:inline-flex;align-items:center;min-height:2.4em;padding:.45em 1em;line-height:1.25;border-radius:999px;
+  box-shadow:inset 0 0 0 1px var(--rule);background:rgb(255 255 255/.45);font-size:var(--t-small,14px)}
+.needs-f button[aria-pressed=true] span{box-shadow:inset 0 0 0 1.5px var(--ink);background:color-mix(in oklch,var(--blue) 16%,#fff)}
+.pempty{color:var(--ink-2);margin:1em 0 0}
 .contents{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink);max-width:none!important}
 .contents li{border-bottom:1px solid var(--rule)}
 .contents button{width:100%;display:grid;grid-template-columns:3ch minmax(0,1fr) auto;gap:var(--gutter);
@@ -703,7 +711,11 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
 
           <section class="sec">
             <div class="sidehead mono"><b>Selected work</b><span class="n">04 · Projects</span></div>
-            <div class="body"><ol class="contents" id="contents"></ol></div>
+            <div class="body">
+              <div class="pfilters" id="pfilters" role="group" aria-label="Filter projects"></div>
+              <ol class="contents" id="contents"></ol>
+              <p class="pempty mono" id="pempty" hidden>Nothing filed under this yet.</p>
+            </div>
           </section>
 
           <section class="sec contact" id="contact">
@@ -979,13 +991,15 @@ const POSTS = [
 ];
 const FIRST = 'counter-long';   // the photograph the statement is written over
 
+/* Projects. needs: any of the options in the contact form's "What do you need?" (exact wording),
+   dims: '2D' | '3D' | '4D'. Both drive the filters above Selected work. */
 const PROJECTS = [
-  {id:'spa',title:'Cellar Spa',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2024–26',role:'Designer',client:'Wesley Moon Inc',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
-  {id:'bigsky',title:'Stargazer Compound',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2024–26',role:'Designer',client:'Wesley Moon Inc',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
-  {id:'troub',title:'Troubadour Club',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2023',role:'Designer',client:'Hart Howerton',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
-  {id:'ranch',title:'Covert Ranch',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2023',role:'Designer',client:'Hart Howerton',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
-  {id:'wtto',title:'When Time Takes Over',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2022–23',role:'Author',client:'UVA',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
-  {id:'cor',title:'COR Wellness Center',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2020',role:'Coordinator',client:'Bedrock Detroit',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
+  {id:'spa',dims:['3D'],needs:[],title:'Cellar Spa',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2024–26',role:'Designer',client:'Wesley Moon Inc',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
+  {id:'bigsky',dims:['3D'],needs:[],title:'Stargazer Compound',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2024–26',role:'Designer',client:'Wesley Moon Inc',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
+  {id:'troub',dims:['3D'],needs:[],title:'Troubadour Club',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2023',role:'Designer',client:'Hart Howerton',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
+  {id:'ranch',dims:['3D'],needs:[],title:'Covert Ranch',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2023',role:'Designer',client:'Hart Howerton',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
+  {id:'wtto',dims:['3D'],needs:[],title:'When Time Takes Over',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2022–23',role:'Author',client:'UVA',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
+  {id:'cor',dims:['3D'],needs:[],title:'COR Wellness Center',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2020',role:'Coordinator',client:'Bedrock Detroit',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
 ];
 
 /* World: notes and links in one feed, newest first.
@@ -1214,6 +1228,36 @@ document.addEventListener('click', e => {
   if (openSheetEl) closeSheet();
   openSheet(id, id === 'sheet-contact' ? '#contact-title' : id === 'sheet-manifesto' ? '#man-title' : null);
 });
+/* ── practice: selected work, filtered by the same words as the contact form ── */
+const NEEDS = [...document.querySelectorAll('#contact-form .dim')].map(d => ({
+  dim: d.querySelector('b').textContent.trim(),
+  options: [...d.nextElementSibling.querySelectorAll('span')].map(x => x.textContent.trim())
+}));
+const pf = {dim:'all', need:null};
+const dimsOf = p => new Set([...(p.dims || []), ...NEEDS.filter(g => g.options.some(o => (p.needs || []).includes(o))).map(g => g.dim)]);
+function renderWork(){
+  const list = PROJECTS.map((p, i) => [p, i]).filter(([p]) =>
+    (pf.dim === 'all' || dimsOf(p).has(pf.dim)) && (!pf.need || (p.needs || []).includes(pf.need)));
+  $('#contents').innerHTML = list.map(([p, i]) =>
+    `<li><button data-project="${p.id}"><span class="mono num">${String(i + 1).padStart(2, '0')}</span>` +
+    `<span class="t">${esc(p.title)}<small>${esc(p.client)}</small></span><span class="yr mono">${esc(p.year)}</span></button></li>`).join('');
+  $('#pempty').hidden = list.length > 0;
+  const groups = NEEDS.filter(g => pf.dim === 'all' || g.dim === pf.dim);
+  const used = groups.flatMap(g => g.options).filter(o => PROJECTS.some(p => (p.needs || []).includes(o)));
+  $('#pfilters').innerHTML =
+    `<div class="filters">${['all', ...NEEDS.map(g => g.dim)].map(d => {
+      const n = d === 'all' ? PROJECTS.length : PROJECTS.filter(p => dimsOf(p).has(d)).length;
+      return `<button data-dim="${d}" aria-pressed="${pf.dim === d}">${d === 'all' ? 'All' : d}<sup>${n}</sup></button>`; }).join('')}</div>` +
+    (used.length ? `<div class="picks needs-f">${used.map(o => `<button data-need="${esc(o)}" aria-pressed="${pf.need === o}"><span>${esc(o)}</span></button>`).join('')}</div>` : '');
+}
+$('#pfilters').addEventListener('click', e => {
+  const d = e.target.closest('[data-dim]'), n = e.target.closest('[data-need]');
+  if (d){ pf.dim = d.dataset.dim; pf.need = null; }
+  else if (n){ pf.need = pf.need === n.dataset.need ? null : n.dataset.need; }
+  else return;
+  renderWork();
+});
+renderWork();
 $('#contents').addEventListener('click', e => { const b = e.target.closest('[data-project]'); if (b) openProject(b.dataset.project); });
 function openProject(id){
   const i = PROJECTS.findIndex(p => p.id === id); if (i < 0) return;
