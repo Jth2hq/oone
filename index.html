@@ -517,8 +517,8 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
   padding:1em 0;margin:1.2em 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
 .sheet-body .meta span{display:block;color:var(--ink-2);margin-bottom:.35em}
 .sheet-body p{max-width:62ch}
-@font-face{font-family:"Colom";src:url(fonts/Colom-Regular.woff2) format("woff2");font-display:swap}
-@font-face{font-family:"Railwitch";src:url(fonts/Railwitch-Regular.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Type Study 01";src:url(fonts/TypeStudy01-Regular.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Type Study 02";src:url(fonts/TypeStudy02-Regular.woff2) format("woff2");font-display:swap}
 .spec{padding:clamp(20px,3cqi,40px) 0;border-top:1px solid var(--rule);color:var(--cherry,#c8102e)}
 .spec p{max-width:none;margin:0 0 .35em;line-height:1.05;text-wrap:balance}
 .spec .s-xl{font-size:clamp(48px,7cqi,104px)}.spec .s-l{font-size:clamp(32px,4.4cqi,64px)}.spec .s-m{font-size:clamp(22px,2.6cqi,36px)}
@@ -528,6 +528,9 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
 .tbar{display:flex;align-items:center;gap:1em;padding:.7em 1em;border-bottom:1px solid var(--rule);color:var(--ink-2);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
 .tbar input{flex:1;max-width:220px;accent-color:var(--red)}
 .tbar a{margin-left:auto}
+.tbar .tf{padding:.35em .8em;border-radius:999px;box-shadow:inset 0 0 0 1px var(--rule);font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--ink)}
+.tbar .tf[aria-pressed=true]{background:var(--red);color:#fff;box-shadow:none}
+.spec .tabc{line-height:1.25;color:var(--red)}
 .tarea{padding:.25em .35em;line-height:1.05;min-height:1.3em;outline:none;color:var(--red);overflow-wrap:anywhere}
 .tarea:focus{background:color-mix(in oklch,var(--red) 4%,#fff)}
 .pj-gal{display:grid;gap:clamp(14px,1.6cqi,24px);margin-top:clamp(24px,3cqi,44px)}
@@ -614,17 +617,17 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
         <button class="chip" id="pause" aria-pressed="false">Pause</button>
         <button class="chip" id="next" aria-label="Next post">Next →</button>
       </div>
-      <button class="chip door door-story" data-go="story"><span aria-hidden="true">←</span><span class="dot"></span>Story</button>
-      <button class="chip door door-practice" data-go="practice"><span class="dot"></span>Practice<span aria-hidden="true">→</span></button>
-      <button class="chip door door-world" data-go="world"><span class="dot"></span>World<span aria-hidden="true">↓</span></button>
+      <button class="chip door door-story" data-go="story"><span class="dot"></span>Story</button>
+      <button class="chip door door-practice" data-go="practice"><span class="dot"></span>Practice</button>
+      <button class="chip door door-world" data-go="world"><span class="dot"></span>World</button>
       <p class="chip caption" aria-live="polite"><span class="dot" id="cap-dot"></span><span class="idx" id="cap-idx"></span><span class="cap" id="cap-text"></span></p>
     </nav>
 
     <!-- the landing's doors, carried through every room -->
     <nav class="roomnav" aria-label="Rooms">
-      <button class="chip door door-story" data-go="story"><span aria-hidden="true">←</span><span class="dot"></span>Story</button>
-      <button class="chip door door-practice" data-go="practice"><span class="dot"></span>Practice<span aria-hidden="true">→</span></button>
-      <button class="chip door door-world" data-go="world"><span class="dot"></span>World<span aria-hidden="true">↓</span></button>
+      <button class="chip door door-story" data-go="story"><span class="dot"></span>Story</button>
+      <button class="chip door door-practice" data-go="practice"><span class="dot"></span>Practice</button>
+      <button class="chip door door-world" data-go="world"><span class="dot"></span>World</button>
     </nav>
 
     <!-- ═══ THE ROOMS ═══ -->
@@ -666,7 +669,7 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
           <section class="sec">
             <div class="sidehead mono"><b>The author</b><span class="n">02</span></div>
             <div class="body">
-              <figure class="portrait"><img src="img/800/josh-table.webp" srcset="img/800/josh-table.webp 800w, img/1600/josh-table.webp 1600w" sizes="(min-width:900px) 40vw, 90vw" alt="Josh Harrison, chin on hand, smiling — black and white film" loading="lazy" decoding="async" width="1600" height="1061"></figure>
+              <figure class="portrait"><img src="img/800/supper.webp" srcset="img/800/supper.webp 800w, img/1600/supper.webp 1600w" sizes="(min-width:900px) 40vw, 90vw" alt="Josh Harrison at supper, laughing, in a teal room" loading="lazy" decoding="async" width="1600" height="1061"></figure>
               <h2>Josh Harrison</h2>
               <p>Brooklyn-based architect and designer working across buildings, interiors, furniture, print, brands and photography. Tanner is his middle name.</p>
               <h3>Experience</h3>
@@ -1065,36 +1068,35 @@ const FIRST = 'counter-long';   // the photograph the statement is written over
 /* Projects. needs: any of the options in the contact form's "What do you need?" (exact wording),
    dims: '2D' | '3D' | '4D'. Both drive the filters above Selected work. */
 const PROJECTS = [
+  {id:'types',dims:['2D'],needs:[],title:'Type Studies',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2026',role:'Type design',client:'Two alphabets, drawn by hand',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
+   spec:[{family:'Type Study 01',file:'fonts/TypeStudy01-Regular.otf'},{family:'Type Study 02',file:'fonts/TypeStudy02-Regular.otf'}],
+   imgs:[['type-sketch-01','study 01 — sketch'],['type-digital-01','study 01 — digital concept'],['type-sketch-02','study 02 — sketch'],['type-digital-02','study 02 — digital concept']]},
   {id:'studies',dims:['3D'],needs:[],title:'Studies in Detail',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'Ongoing',role:'Designer',client:'Interior architecture',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
-   imgs:[['studies-niche','elevation'],['studies-mosaic','mosaic'],['studies-sink','stone sink'],['studies-elevations','elevations']]},
-  {id:'colom',dims:['2D'],needs:[],title:'Colom',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2026',role:'Type designer',client:'Typeface — care of TANNER',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
-   spec:{family:'Colom',file:'fonts/Colom-Regular.otf'},imgs:[['type-colom','Colom type system — regular style'],['type-notebook','the drawn alphabet']]},
-  {id:'railwitch',dims:['2D'],needs:[],title:'Railwitch',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2026',role:'Type designer',client:'Typeface — care of TANNER',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
-   spec:{family:'Railwitch',file:'fonts/Railwitch-Regular.otf'},imgs:[['type-railwitch','Railwitch — gothic display typeface'],['type-ruled','the drawn alphabet, on its guide lines']]},
+   imgs:[['studies-sink','']]},
   {id:'matildahunter',dims:['2D'],needs:['Design for print — stationery, posters, books'],title:'Matilda + Hunter',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2026',role:'Designer',client:'Wedding print suite',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
-   imgs:[['mh-suite',''],['mh-seating',''],['mh-drinks',''],['mh-napkin',''],['mh-dinner','']]},
+   imgs:[['mh-suite','']]},
   {id:'fungbet',dims:['2D'],needs:['Design for print — stationery, posters, books'],title:'Xo, E+A',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2025',role:'Designer',client:'Emily Fung & Andreas Betancourt — wedding',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
-   imgs:[['fb-menu-tattoo',''],['fb-tattoos',''],['fb-bar',''],['fb-place','']]},
+   imgs:[['fb-menu-tattoo','']]},
   {id:'bigbaby',dims:['2D'],needs:['Design for print — stationery, posters, books'],title:'Big Baby Turns 30!',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2024',role:'Designer',client:'New Year’s Eve dinner',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
-   imgs:[['nye-stack',''],['nye-menu',''],['nye-guests',''],['nye-photo','']]},
-  {id:'troub',dims:['3D'],needs:[],title:'Troubadour Club',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2023',role:'Designer',client:'Hart Howerton',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',imgs:[['troub-elevation',''],['troub-plan','']]},
+   imgs:[['nye-stack','']]},
+  {id:'troub',dims:['3D'],needs:[],title:'Troubadour Club',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2023',role:'Designer',client:'Hart Howerton',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',imgs:[['troub-elevation','']]},
   {id:'ranch',dims:['3D'],needs:[],title:'Covert Ranch',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2023',role:'Designer',client:'Hart Howerton',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',imgs:[['ranch-section','']]},
   {id:'wtto',dims:['3D'],needs:[],title:'When Time Takes Over',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2022–23',role:'Author',client:'UVA',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
   {id:'bcn',dims:['3D'],needs:[],title:'The Meeting Line',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2021',role:'Author',client:'UVA — ARCH 8010: Barcelona',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
-   imgs:[['bcn-frames',''],['bcn-waterfront',''],['bcn-axon',''],['bcn-path',''],['bcn-diffusing','']]},
+   imgs:[['bcn-frames','']]},
   {id:'pantry',dims:['3D'],needs:[],title:'Pantry for the Arts',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2022',role:'Author',client:'UVA — ARCH 7020: Foundation Studio IV',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
-   imgs:[['pfa-lawn',''],['pfa-courtyard',''],['pfa-street',''],['pfa-pavilion',''],['pfa-axon','']]},
+   imgs:[['pfa-lawn','']]},
   {id:'edge',dims:['3D'],needs:[],title:'Centering the Edge',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2021',role:'Author',client:'UVA — ARCH 7010: Foundation Studio III',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
-   imgs:[['cte-towers',''],['cte-plaza',''],['cte-overview',''],['cte-units',''],['cte-eastwing','']]},
+   imgs:[['cte-towers','']]},
   {id:'cityspace',dims:['3D'],needs:[],title:'Library as Cityspace',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2021',role:'Author',client:'UVA — ARCH 6020',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
-   imgs:[['lac-street',''],['lac-alley',''],['lac-aerial',''],['lac-interior',''],['lac-model','']]},
+   imgs:[['lac-street','']]},
   {id:'pac',dims:['3D'],needs:[],title:'Performing Arts Center',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2021',role:'Renderings',client:'MGA Partners, Architects',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
-   imgs:[['pac-exterior',''],['pac-lobby',''],['pac-theatre','']]},
+   imgs:[['pac-exterior','']]},
   {id:'detroit',dims:['2D'],needs:['Design for print — stationery, posters, books'],title:'Design for the City',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2017–19',role:'Designer',client:'Bedrock Detroit',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
-   imgs:[['ddc-street',''],['ddc-exhibit',''],['ddc-poster','']]},
+   imgs:[['ddc-street','']]},
   {id:'staging',dims:['3D'],needs:[],title:'Staging',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2019–20',role:'Designer',client:'Bedrock Detroit',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
-   imgs:[['stage-living',''],['stage-bedroom','']]},
-  {id:'cor',dims:['3D'],needs:[],title:'COR Wellness Center',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2020',role:'Coordinator',client:'Bedrock Detroit',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',imgs:[['cor-lobby',''],['cor-lockers','']]},
+   imgs:[['stage-living','']]},
+  {id:'cor',dims:['3D'],needs:[],title:'COR Wellness Center',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2020',role:'Coordinator',client:'Bedrock Detroit',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',imgs:[['cor-lobby','']]},
 ];
 
 /* World: notes and links in one feed, newest first.
@@ -1407,9 +1409,13 @@ function openProject(id){
   $('#pj-client').textContent = p.client; $('#pj-role').textContent = p.role; $('#pj-year').textContent = p.year;
   $('#pj-desc').textContent = p.desc;
   const SPEC = ['A more considered world', 'Ideas Spaces Objects People', 'Good ideas better company', 'The quick brown fox jumps over the lazy dog'];
-  $('#pj-gal').innerHTML = (p.spec ? `<div class="spec" style="font-family:'${p.spec.family}',var(--sans)"><div class="tester"><div class="tbar mono" style="font-family:var(--mono)"><span>Type here</span><input type="range" min="20" max="160" value="72" aria-label="Size"><a href="${p.spec.file}" download>Download .otf ↓</a></div><div class="tarea" contenteditable="true" spellcheck="false" style="font-size:72px">${SPEC[0]}</div></div><p class="s-l">${SPEC[1]}</p><p class="s-m">${SPEC[2]}</p><p class="s-m">${SPEC[3]}</p><p class="s-abc">abcdefghijklmnopqrstuvwxyz</p><p class="s-abc">ABCDEFGHIJKLMNOPQRSTUVWXYZ</p><p class="s-abc">0123456789</p></div>` : '') + (p.imgs || []).map(([k, c]) => `<figure><img src="img/800/${k}.webp" srcset="img/800/${k}.webp 800w, img/1600/${k}.webp 1600w" sizes="(min-width:900px) 820px, 90vw" alt="${esc(c || p.title)}" loading="lazy" decoding="async">${c ? `<figcaption class="mono">${esc(c)}</figcaption>` : ''}</figure>`).join('');
+  $('#pj-gal').innerHTML = (p.spec ? `<div class="spec"><div class="tester"><div class="tbar mono">${p.spec.map((f, k) => `<button type="button" class="tf" data-k="${k}" aria-pressed="${k === 0}">${esc(f.family)}</button>`).join('')}<input type="range" min="20" max="160" value="72" aria-label="Size"><a class="tdl" href="${p.spec[0].file}" download>Download .otf</a></div><div class="tarea" contenteditable="true" spellcheck="false" style="font-size:72px;font-family:'${p.spec[0].family}',var(--sans)">${SPEC[0]}</div></div><p class="s-abc tabc" style="font-family:'${p.spec[0].family}',var(--sans)">abcdefghijklmnopqrstuvwxyz<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>0123456789</p></div>` : '') + (p.imgs || []).map(([k, c]) => `<figure><img src="img/800/${k}.webp" srcset="img/800/${k}.webp 800w, img/1600/${k}.webp 1600w" sizes="(min-width:900px) 820px, 90vw" alt="${esc(c || p.title)}" loading="lazy" decoding="async">${c ? `<figcaption class="mono">${esc(c)}</figcaption>` : ''}</figure>`).join('');
   const rng = $('#pj-gal .tester input'), ta = $('#pj-gal .tarea');
   if (rng && ta) rng.oninput = () => { ta.style.fontSize = rng.value + 'px'; };
+  document.querySelectorAll('#pj-gal .tf').forEach(b => b.onclick = () => {
+    const f = p.spec[+b.dataset.k]; ta.style.fontFamily = `'${f.family}',var(--sans)`; $('#pj-gal .tabc').style.fontFamily = ta.style.fontFamily;
+    $('#pj-gal .tdl').href = f.file; document.querySelectorAll('#pj-gal .tf').forEach(x => x.setAttribute('aria-pressed', x === b));
+  });
   openSheet('sheet-project');
 }
 
