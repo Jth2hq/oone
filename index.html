@@ -692,6 +692,25 @@ html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
   .contents.rows .row{grid-template-columns:1fr;gap:14px}
   .room .opener{min-height:58cqh}
 }
+
+/* 18 SURPRISE SHEETS ── every pop-up opens in a full field of cherry, cobalt or lilac; white type, or tone-on-tone on lilac */
+.sheet-wrap[data-hue=red]{--hue:#D8102F;--on:#fff}
+.sheet-wrap[data-hue=blue]{--hue:var(--blue);--on:#fff}
+.sheet-wrap[data-hue=lilac]{--hue:var(--lilac);--on:oklch(.3 .09 300)}
+.sheet-wrap[data-hue] .sheet{--paper:var(--hue);--linen:color-mix(in oklch,var(--on) 12%,var(--hue));--ink:var(--on);--ink-2:color-mix(in oklch,var(--on) 80%,var(--hue));
+  --rule:color-mix(in oklch,var(--on) 32%,transparent);--red:var(--on);--c:var(--on);--c-ink:var(--on);--blue-ink:var(--on);--lilac-ink:var(--on);--on-c:var(--hue);
+  background:var(--hue);color:var(--on)}
+.sheet-wrap[data-hue] .sheet-head{background:var(--hue);color:var(--on);border-bottom-color:var(--rule)}
+.sheet-wrap[data-hue] .sheet-head button,.sheet-wrap[data-hue] a{color:inherit}
+.sheet-wrap[data-hue] .btn-act{background:var(--on);color:var(--hue)}
+.sheet-wrap[data-hue] .btn-act:hover{background:color-mix(in oklch,var(--on) 82%,var(--hue));color:var(--hue)}
+.sheet-wrap[data-hue] ::selection{background:var(--on);color:var(--hue)}
+html.night .sheet-wrap[data-hue] .sheet{filter:brightness(.88)}
+/* room buttons: light, not gloomy */
+.roomnav .chip{background:var(--paper);color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);text-shadow:none}
+.roomnav .chip:hover{background:var(--ink);color:var(--paper)}
+html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0 0 0 1px rgb(255 255 255/.4)}
+.door:hover,.door:focus-visible{background:rgb(18 17 15/.55)}
 </style>
 </head>
 <body>
@@ -1404,6 +1423,9 @@ const sheetOpen = () => !!openSheetEl;
 function openSheet(id, focusSel){
   lastFocus = document.activeElement;
   openSheetEl = $('#' + id);
+  const hues = ['red', 'blue', 'lilac'].filter(h => h !== window.__lastHue);
+  window.__lastHue = hues[Math.floor(Math.random() * hues.length)];
+  openSheetEl.dataset.hue = window.__lastHue;
   openSheetEl.classList.add('open');
   openSheetEl.querySelector('.sheet').scrollTop = 0;
   openSheetEl.querySelector(focusSel || 'h2')?.focus({preventScroll:true});
