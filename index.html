@@ -672,13 +672,22 @@ html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
 .room .btn-act:hover,.sheet .btn-act:hover{background:var(--red)}
 .sheet-body h2{font-weight:900;text-transform:uppercase;font-size:clamp(32px,4cqi,64px);line-height:.88}
 .sheet-head{text-transform:uppercase;letter-spacing:.09em}
-/* red, sparingly: labels, small numbers, markers, the link line and hovers */
-.room .sidehead .n,.room .svc .num,.room .cv .num,.room .imperatives li::before,.room .opener .part{color:var(--red)}
-.room .opener .part .dot,.room .folio .dot,.room .sidehead .dot{background:var(--red)}
-.contents.rows .go{border-bottom-color:var(--red)}
-.contents.rows button:hover .t,.room .backpage .next:hover b{color:var(--red)}
-.room .svc li:hover{border-color:var(--red)}
-.room .opener h1{border-bottom:2px solid var(--red)}
+/* rooms aren't colour-coded: every break is charcoal. Each room carries one accent, sparingly —
+   Story blue, Practice red, World lilac — on labels, small numbers, markers, the title rule, the link line and hovers */
+#story,#practice,#world{--c:var(--char);--c-ink:var(--char);--on-c:var(--paper)}
+#story{--acc:var(--blue);--acc-ink:var(--blue-ink)}
+#practice{--acc:var(--red);--acc-ink:var(--red)}
+#world{--acc:var(--lilac);--acc-ink:var(--lilac-ink)}
+.room .moment{background:var(--char);color:var(--paper)}
+.room .sidehead .n,.room .svc .num,.room .cv .num,.room .imperatives li::before,.room .opener .part{color:var(--acc-ink)}
+.room .opener .part .dot,.room .folio .dot,.room .sidehead .dot{background:var(--acc)}
+.contents.rows .go{border-bottom-color:var(--acc)}
+.contents.rows button:hover .t,.room .backpage .next:hover b{color:var(--acc-ink)}
+.room .svc li:hover{border-color:var(--acc)}
+.room .opener h1{border-bottom:2px solid var(--acc)}
+.room .btn-act:hover{background:var(--acc);color:var(--paper)}
+#world .btn-act:hover{color:var(--ink)}
+.roomnav .chip .dot{background:var(--paper)}
 @media (max-width:640px){
   .contents.rows .row{grid-template-columns:1fr;gap:14px}
   .room .opener{min-height:58cqh}
