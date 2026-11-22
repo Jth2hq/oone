@@ -595,6 +595,87 @@ html.night .room img,html.night .sheet img{filter:brightness(.8) sepia(.06) satu
 html.night .tile{background:color-mix(in oklch,var(--paper) 82%,#fff3)}
 html.night .picks span,html.night .form input,html.night .form textarea,html.night .form select{background:color-mix(in oklch,var(--paper) 80%,#fff)}
 html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
+
+/* 17 EDITORIAL PASS ── after studiomila.work: one ink, huge condensed capitals, small tracked mono labels, hairlines, air.
+   Same palette, same two families — only space, hierarchy and UI change. */
+.room{--block:clamp(64px,9cqi,150px);--rule:rgb(28 26 24/.22)}
+.room::before,.room::after{opacity:0}
+.room .mono,.room .sidehead,.room .folio,.room .part,.room .colophon,.room .tags,.room .who{text-transform:uppercase;letter-spacing:.09em;font-size:var(--t-mono)}
+.room .dot{background:var(--ink)}
+.room .runhead .close{font:400 var(--t-mono)/1 var(--mono);text-transform:uppercase;letter-spacing:.09em}
+.room .runhead::after{background:var(--ink);height:1px;bottom:0}
+/* opener: the room's name as a masthead, a hairline, the deck beneath */
+.room .opener{min-height:70cqh;align-content:end;gap:0;padding:var(--block) var(--m) calc(var(--block) * .55)}
+.room .opener .part{margin-bottom:clamp(12px,1.6cqi,24px);color:var(--ink)}
+.room .opener h1{font-size:clamp(50px,14.5cqi,260px);font-weight:900;line-height:.8;text-transform:uppercase;letter-spacing:-.03em;
+  padding-bottom:clamp(14px,1.8cqi,30px);border-bottom:1px solid var(--ink)}
+.room .opener .deck{max-width:34ch;margin-top:clamp(18px,2.2cqi,34px);color:var(--ink);font-size:var(--t-lede)}
+/* sections: label, then a loud heading, then the content — stacked, full measure */
+.room .sec{border-top:1px solid var(--ink);row-gap:clamp(24px,3cqi,48px)}
+.room .sidehead{grid-column:1/-1;display:flex;flex-direction:column-reverse;gap:clamp(10px,1.2cqi,18px);color:var(--ink)}
+.room .sidehead .n{margin:0;color:var(--ink-2)}
+.room .sidehead b{font:900 clamp(40px,6.4cqi,112px)/.86 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.02em;color:var(--ink)}
+.room .body{grid-column:1/-1}
+.room .body > *{max-width:52em}
+.room .body .lede{font-size:clamp(22px,2.4cqi,40px);line-height:1.2;max-width:28em}
+.room .body h2{font:900 clamp(32px,4.4cqi,72px)/.9 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.015em}
+.room .intro{font-size:var(--t-lede);max-width:40ch}
+/* scenarios: outlined cards */
+.room .svc{grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:clamp(12px,1.4cqi,22px)}
+.room .svc li{display:flex;flex-direction:column;gap:.8em;padding:clamp(20px,2.2cqi,32px);border:1px solid var(--ink);border-radius:clamp(14px,1.4cqi,22px);min-height:clamp(240px,22cqi,340px)}
+.room .svc .num{color:var(--ink-2);margin:0}
+.room .svc h3{margin:0;font:800 clamp(22px,2cqi,32px)/1 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.01em;color:var(--ink)}
+.room .svc p{color:var(--ink)}
+.room .scen .tags{margin-top:auto;color:var(--ink)}
+/* steps: big numerals */
+.room .steps{grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))}
+.room .steps li{border-top:1px solid var(--ink)}
+.room .steps .num{font:900 clamp(44px,5cqi,84px)/1 var(--sans);font-stretch:75%;color:var(--ink);margin-top:.15em}
+.room .steps b{font:800 clamp(20px,1.7cqi,28px)/1 var(--sans);font-stretch:75%;text-transform:uppercase}
+.room .steps p{color:var(--ink)}
+/* the spoken line */
+.room .moment p{grid-column:1/-1;max-width:16ch;font-size:clamp(44px,7.5cqi,132px);line-height:.86;text-transform:uppercase;font-weight:900}
+.room .moment .who{grid-column:1/-1}
+/* lists */
+.room .cv{border-top:1px solid var(--ink)}
+.room .cv .num,.room .imperatives li::before{color:var(--ink-2)}
+.room .cv .what{font-weight:700}
+/* selected work: one project per row — name loud left, the line and the link right, the picture full width beneath */
+.room .pfilters{margin-bottom:clamp(24px,3cqi,48px)}
+.contents.rows{columns:auto;border-top:0;padding:0}
+.contents.rows li{margin:0;padding:0;border-top:1px solid var(--ink)}
+.contents.rows li:nth-child(n){padding-top:0}
+.contents.rows button{display:block;width:100%;padding:0;text-align:left;cursor:pointer;background:none;border:0;color:inherit}
+.contents.rows .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(16px,3cqi,64px);align-items:center;padding:clamp(28px,3.6cqi,60px) 0}
+.contents.rows .t{display:block;font:900 clamp(38px,5.6cqi,100px)/.84 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.02em}
+.contents.rows .cat{display:block;margin-top:1em;font:400 var(--t-mono)/1.5 var(--mono);text-transform:uppercase;letter-spacing:.09em}
+.contents.rows .say{display:block;max-width:36ch;font-size:var(--t-body);line-height:1.45}
+.contents.rows .go{display:inline-block;margin-top:1.2em;padding-bottom:.35em;border-bottom:1px solid var(--ink);font:400 var(--t-mono)/1 var(--mono);text-transform:uppercase;letter-spacing:.09em}
+.contents.rows .strip{display:block;height:clamp(240px,38cqi,620px);background:var(--linen);margin-bottom:clamp(28px,3.6cqi,60px)}
+.contents.rows .strip img{display:block;width:100%;height:100%;object-fit:contain;filter:url(#one-ink);transition:filter .4s var(--ui)}
+.contents.rows .strip .blank{display:grid;place-items:center;height:100%;font:900 clamp(30px,4cqi,64px)/1 var(--sans);font-stretch:75%;text-transform:uppercase;color:var(--ink-2)}
+.contents.rows button:hover .strip img,.contents.rows button:focus-visible .strip img{filter:none}
+.contents.rows button:hover .go{border-bottom-width:2px}
+html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
+/* world: flat, outlined, one voice */
+.room .toolbar{border-top:1px solid var(--ink)}
+.room .tile{border-radius:clamp(12px,1.2cqi,18px)}
+.room .tile.idea,.room .tile.sensation,.room .tile.artifact,.room .tile.link{background:transparent;box-shadow:inset 0 0 0 1px var(--ink)}
+.room .tile .t{font:800 clamp(18px,1.6cqi,26px)/1.02 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.005em}
+.room .tile .meta{text-transform:uppercase;letter-spacing:.09em}
+.room .tile .dot{background:var(--k)}
+/* the next room, and the buttons — solid ink pills */
+.room .backpage{border-top:1px solid var(--ink)}
+.room .backpage .next b{font:900 clamp(40px,6cqi,110px)/.86 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.02em}
+.room .btn-act,.sheet .btn-act{background:var(--ink);color:var(--paper);box-shadow:none;font:800 clamp(15px,1.15cqi,18px)/1 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:.02em}
+.room .btn-act span,.sheet .btn-act span{color:inherit}
+.room .btn-act:hover,.sheet .btn-act:hover{background:var(--red)}
+.sheet-body h2{font-weight:900;text-transform:uppercase;font-size:clamp(32px,4cqi,64px);line-height:.88}
+.sheet-head{text-transform:uppercase;letter-spacing:.09em}
+@media (max-width:640px){
+  .contents.rows .row{grid-template-columns:1fr;gap:14px}
+  .room .opener{min-height:58cqh}
+}
 </style>
 </head>
 <body>
@@ -770,7 +851,7 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
             <div class="body">
               <div class="pfilters" id="pfilters" role="group" aria-label="Filter projects"></div>
               <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="one-ink" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues="0.12 0.957"/><feFuncG type="table" tableValues="0.23 0.945"/><feFuncB type="table" tableValues="0.58 0.922"/></feComponentTransfer></filter></svg>
-              <ol class="contents wall" id="contents"></ol>
+              <ol class="contents rows" id="contents"></ol>
               <p class="pempty mono" id="pempty" hidden>Nothing filed under this yet.</p>
             </div>
           </section>
@@ -1351,11 +1432,12 @@ function renderWork(){
   $('#contents').innerHTML = list.map(([p, i]) => {
     const cover = p.imgs && p.imgs[0] && p.imgs[0][0];
     const pic = cover
-      ? `<img src="img/800/${cover}.webp" srcset="img/800/${cover}.webp 800w, img/1600/${cover}.webp 1600w" sizes="(min-width:900px) 30vw, 90vw" alt="" loading="lazy" decoding="async">`
+      ? `<img src="img/800/${cover}.webp" srcset="img/800/${cover}.webp 800w, img/1600/${cover}.webp 1600w" sizes="90vw" alt="" loading="lazy" decoding="async">`
       : `<span class="blank">${esc(p.title)}</span>`;
     return `<li><button data-project="${p.id}" aria-label="${esc(p.title)} — ${esc(p.client)}, ${esc(p.year)}">` +
-      `<span class="num">${String(i + 1).padStart(2, '0')}</span><span class="pin">${pic}</span>` +
-      `<span class="lab"><span class="t">${esc(p.title)}</span><span class="yr mono">${esc(p.year)}</span></span></button></li>`;
+      `<span class="row"><span><span class="t">${esc(p.title)}</span><span class="cat">${esc([p.client, p.role, p.year].filter(Boolean).join(' / '))}</span></span>` +
+      `<span><span class="say">${esc(p.tag || '')}</span><span class="go">View project ›</span></span></span>` +
+      `<span class="strip">${pic}</span></button></li>`;
   }).join('');
   $('#pempty').hidden = list.length > 0;
   const groups = NEEDS.filter(g => pf.dim === 'all' || g.dim === pf.dim);
