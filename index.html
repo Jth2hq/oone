@@ -386,6 +386,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .m-name small{display:block;margin-top:.3em;color:var(--ink-2)}
 .m-price{font:500 var(--t-body)/1 var(--mono);white-space:nowrap}
 .m-price.talk{color:var(--c-ink,var(--blue-ink))}
+.m-hand{margin:.5em 0 0;color:var(--ink-2);font-size:.86em}
 
 /* 11 PRACTICE ── what, how, work ──────────────────────────────────────── */
 .svc{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--gutter);max-width:none!important}
@@ -915,6 +916,7 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
               <div class="picks multi">
                 <label><input type="checkbox" name="needs" value="2D · A logo &amp; brand look"><span>A logo &amp; brand look</span></label>
                 <label><input type="checkbox" name="needs" value="2D · Design for print — stationery, posters, books"><span>Design for print — stationery, posters, books</span></label>
+                <label><input type="checkbox" name="needs" value="2D · A website"><span>A website</span></label>
                 <label><input type="checkbox" name="needs" value="2D · Photography"><span>Photography</span></label>
               </div>
               <p class="dim mono"><b>3D</b> Space and object — things you walk into or hold</p>
@@ -931,6 +933,8 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
               <div class="picks multi">
                 <label><input type="checkbox" name="needs" value="4D · An installation, display or event"><span>An installation, display or event</span></label>
                 <label><input type="checkbox" name="needs" value="4D · A shop or restaurant fit-out, opening to opening"><span>A shop or restaurant fit-out, opening to opening</span></label>
+                <label><input type="checkbox" name="needs" value="4D · Motion, video &amp; social content"><span>Motion, video &amp; social content</span></label>
+                <label><input type="checkbox" name="needs" value="4D · Planning for a property or neighbourhood, in phases"><span>Planning for a property or neighbourhood, in phases</span></label>
               </div>
               <div class="picks multi">
                 <label><input type="checkbox" name="needs" value="Not sure yet"><span>Not sure yet — let’s talk</span></label>
@@ -1332,7 +1336,7 @@ document.addEventListener('click', e => {
   openSheet(id, id === 'sheet-contact' ? '#contact-title' : id === 'sheet-manifesto' ? '#man-title' : null);
 });
 /* ── prices: one list for the menu and the request form ── */
-const PRICE = {"rate": 85, "prices": {"A logo & brand look": [{"name": "Starter identity — mark, colours, type, a one-page guide", "price": 1275, "hours": 15, "parts": "kickoff chat 2h · three directions 6h · refine one 4h · files + guide 3h"}, {"name": "Full brand system", "from": 3400, "note": "Let’s talk first"}], "Design for print — stationery, posters, books": [{"name": "Menu, one or two pages", "price": 425, "hours": 5, "parts": "concept 1.5h · layout 2.5h · one round of edits 1h"}, {"name": "Business cards", "price": 255, "hours": 3, "parts": "layout 2h · print-ready files 1h"}, {"name": "Poster", "price": 340, "hours": 4, "parts": "concept 1.5h · design 2h · files 0.5h"}, {"name": "Invitation suite — invite, details card, envelope", "price": 595, "hours": 7, "parts": "concept 2h · three pieces 4h · press-ready 1h"}, {"name": "Book or zine", "from": 2550, "note": "Let’s talk first · printing at cost"}], "Photography": [{"name": "Half-day film shoot", "price": 510, "hours": 6, "parts": "shoot 4h · scan edit + selects 2h", "note": "film + developing at cost"}], "A design for a new building or addition": [{"name": "Schematic design, then documents", "from": 8500, "note": "Let’s talk first · consultants + fees at cost"}], "Renovation & layout planning": [{"name": "One room — two layout options, one final plan", "price": 425, "hours": 5, "parts": "site visit + measure 1.5h · options 2.5h · final plan 1h"}, {"name": "Whole apartment", "price": 1275, "hours": 15, "parts": "site visit + measure 3h · options 8h · final plans 4h"}], "Architectural drawings & permits": [{"name": "Drawing set for filing", "from": 3400, "note": "Let’s talk first · filing fees + expediter at cost"}], "Furniture selection": [{"name": "One room — a shoppable list", "price": 425, "hours": 5, "parts": "chat 1h · sourcing 3h · the list + links 1h"}, {"name": "Each additional room", "price": 255, "hours": 3, "parts": "sourcing 2h · list 1h"}], "Lighting, paint & finishes": [{"name": "One room — palette + finish schedule", "price": 255, "hours": 3, "parts": "samples + palette 2h · schedule 1h"}, {"name": "Whole home", "price": 765, "hours": 9, "parts": "samples + palette 5h · schedules 4h"}], "Decorating & styling a room": [{"name": "Room plan — concept, layout, shopping list", "price": 595, "hours": 7, "parts": "visit 1.5h · concept board 2h · plan 2h · list 1.5h"}, {"name": "On-site styling day", "price": 85, "note": "per hour, as long as it takes"}], "A custom piece of furniture": [{"name": "Design + shop drawings", "price": 1020, "hours": 12, "parts": "sketch options 4h · design 4h · shop drawings 4h", "note": "fabrication billed by the maker, no markup"}], "An installation, display or event": [{"name": "Concept to install", "from": 1700, "note": "Let’s talk first · materials at cost"}], "A shop or restaurant fit-out, opening to opening": [{"name": "Space, signage, menu — one language", "from": 8500, "note": "Let’s talk first"}]}, "scope": {"A second opinion": "first 30 min free · then $85/hr", "Help choosing": "fixed prices", "A plan": "fixed prices", "Design & drawings": "fixed or quoted", "Building & making": "$85/hr · makers at cost", "All of it": "let’s talk"}};
+const PRICE = {"consult": 100, "low": 55, "high": 85, "prices": {"A logo & brand look": [{"name": "Starter identity — mark, colours, type, a one-page guide", "price": 825, "hours": 15, "parts": "kickoff chat 2h · three directions 6h · refine one 4h · files + guide 3h"}, {"name": "Full brand system", "from": 2200, "note": "Let’s talk first"}], "Design for print — stationery, posters, books": [{"name": "Menu, one or two pages", "price": 375, "hours": 5, "parts": "concept 1.5h · layout 2.5h · one round of edits 1h"}, {"name": "Business cards", "price": 225, "hours": 3, "parts": "layout 2h · print-ready files 1h"}, {"name": "Poster", "price": 300, "hours": 4, "parts": "concept 1.5h · design 2h · files 0.5h"}, {"name": "Invitation suite — invite, details card, envelope", "price": 525, "hours": 7, "parts": "concept 2h · three pieces 4h · press-ready 1h"}, {"name": "Book or zine", "from": 2250, "note": "Let’s talk first"}], "A website": [], "Photography": [{"name": "Half-day film shoot", "price": 390, "hours": 6, "parts": "shoot 4h · scan edit + selects 2h"}], "A design for a new building or addition": [{"name": "Schematic design", "from": 8500, "note": "Let’s talk first"}], "Renovation & layout planning": [{"name": "One room — two layout options, one final plan", "price": 425, "hours": 5, "parts": "site visit + measure 1.5h · options 2.5h · final plan 1h"}, {"name": "Whole apartment", "price": 1275, "hours": 15, "parts": "site visit + measure 3h · options 8h · final plans 4h"}], "Architectural drawings & permits": [], "Furniture selection": [{"name": "One room — a shoppable list", "price": 425, "hours": 5, "parts": "chat 1h · sourcing 3h · the list + links 1h"}, {"name": "Each additional room", "price": 255, "hours": 3, "parts": "sourcing 2h · list 1h"}], "Lighting, paint & finishes": [{"name": "One room — palette + finish schedule", "price": 255, "hours": 3, "parts": "samples + palette 2h · schedule 1h"}, {"name": "Whole home", "price": 765, "hours": 9, "parts": "samples + palette 5h · schedules 4h"}], "Decorating & styling a room": [{"name": "Room plan — concept, layout, shopping list", "price": 525, "hours": 7, "parts": "visit 1.5h · concept board 2h · plan 2h · list 1.5h"}, {"name": "On-site styling day", "price": 75, "note": "per hour, as long as it takes"}], "A custom piece of furniture": [{"name": "Design + shop drawings", "price": 780, "hours": 12, "parts": "sketch options 4h · design 4h · shop drawings 4h"}], "An installation, display or event": [{"name": "Design drawings + coordination", "from": 1100, "note": "Let’s talk first"}], "A shop or restaurant fit-out, opening to opening": [{"name": "Design + coordination through opening", "from": 7500, "note": "Let’s talk first"}], "Motion, video & social content": [], "Planning for a property or neighbourhood, in phases": []}, "svc": {"A logo & brand look": {"rate": 55, "concept": true, "handoff": null}, "Design for print — stationery, posters, books": {"rate": 75, "concept": true, "handoff": "Printer — printing at cost"}, "A website": {"rate": 65, "concept": true, "handoff": "Developer builds it"}, "Photography": {"rate": 65, "concept": true, "handoff": "Lab — film + developing at cost"}, "A design for a new building or addition": {"rate": 85, "concept": true, "handoff": "Licensed architect of record for the permit set; general contractor builds"}, "Renovation & layout planning": {"rate": 85, "concept": true, "handoff": "General contractor builds"}, "Architectural drawings & permits": {"rate": 65, "concept": true, "handoff": "Licensed architect stamps and files; filing fees + expediter at cost"}, "Furniture selection": {"rate": 85, "concept": true, "handoff": null}, "Lighting, paint & finishes": {"rate": 85, "concept": true, "handoff": "Painter / electrician install"}, "Decorating & styling a room": {"rate": 75, "concept": true, "handoff": null}, "A custom piece of furniture": {"rate": 65, "concept": true, "handoff": "Fabricator builds — billed by the maker, no markup"}, "An installation, display or event": {"rate": 55, "concept": true, "handoff": "Fabricator and install crew build and hang — materials at cost"}, "A shop or restaurant fit-out, opening to opening": {"rate": 75, "concept": true, "handoff": "General contractor builds; architect of record where permits apply"}, "Motion, video & social content": {"rate": 55, "concept": true, "handoff": "Editor / animator produces"}, "Planning for a property or neighbourhood, in phases": {"rate": 75, "concept": true, "handoff": "Planners + civil engineers carry it forward"}}, "scope": {"A second opinion": "first 30 min free · then $100/hr", "Help choosing": "fixed prices", "A plan": "fixed prices", "Design & drawings": "fixed or quoted", "Building & making": "$55–85/hr · makers at cost", "All of it": "let’s talk"}};
 
 /* ── practice: selected work, filtered by the same words as the contact form ── */
 const NEEDS = [...document.querySelectorAll('#contact-form .dim')].map(d => ({
@@ -1375,21 +1379,27 @@ renderWork();
 const $$m = n => '$' + n.toLocaleString('en-US');
 const priceOf = it => it.from ? `from ${$$m(it.from)}` : $$m(it.price) + (it.note && it.note.startsWith('per hour') ? '/hr' : '');
 $('#vows').innerHTML = [
-  `My rate is <b>${$$m(PRICE.rate)} an hour</b>. Every price here is that rate times honest hours.`,
+  `<b>Consulting is ${$$m(PRICE.consult)} an hour</b>, on anything listed here.`,
+  `Design work is <b>${$$m(PRICE.low)}–${$$m(PRICE.high)} an hour</b>, set by how deep the skill runs. Every price is that rate times honest hours.`,
+  'Where a job needs a licensed architect, a contractor or a maker, <b>I say so up front</b> and hand it off cleanly.',
   'Concrete jobs get <b>whole-dollar prices</b>. What you see is what you pay.',
   'The <b>first 30 minutes are free</b>. Asking costs nothing.',
   '<b>No markup</b> on furniture, materials or printing. Trade discounts go to you.',
   'Bigger projects get a <b>written estimate</b> before anything starts — no surprise invoices.',
   'Artists, nonprofits and small independents can ask for the <b>community rate</b>: 25% off, no questions.'
 ].map(v => `<li>${v}</li>`).join('');
+const mRow = (name, price, sub, talk) => `<div class="m-item"><span class="m-name">${esc(name)}${sub ? `<small class="mono">${esc(sub)}</small>` : ''}</span><span class="m-price ${talk ? 'talk' : ''}">${price}</span></div>`;
 $('#menu').innerHTML = NEEDS.map(g => `<section class="m-group"><h3 class="mono"><b>${g.dim}</b></h3>` + g.options.map(o => {
-  const list = PRICE.prices[o] || [];
-  return `<div class="m-svc"><h4>${esc(o)}</h4>` + list.map(it => `<div class="m-item"><span class="m-name">${esc(it.name)}` +
-    (it.parts ? `<small class="mono">${esc(it.parts)}</small>` : '') + (it.note ? `<small class="mono">${esc(it.note)}</small>` : '') +
-    `</span><span class="m-price ${it.from ? 'talk' : ''}">${priceOf(it)}</span></div>`).join('') + `</div>`;
+  const list = PRICE.prices[o], m = PRICE.svc[o]; if (!list || !m) return '';
+  return `<div class="m-svc"><h4>${esc(o)}</h4>` +
+    mRow('Consult', `${$$m(PRICE.consult)}/hr`, 'advice, review, a second set of eyes') +
+    (m.concept ? mRow('Concept & visioning', `${$$m(m.rate)}/hr`, 'direction, drawings, the idea made clear') : '') +
+    list.map(it => mRow(it.name, priceOf(it), [it.parts, it.note].filter(Boolean).join(' · '), it.from)).join('') +
+    (m.handoff ? `<p class="m-hand mono">Hands off to — ${esc(m.handoff)}</p>` : '') + `</div>`;
 }).join('') + `</section>`).join('');
 document.querySelectorAll('#contact-form input[name=needs]').forEach(inp => {
   const o = inp.nextElementSibling.textContent.trim(), list = PRICE.prices[o]; if (!list) return;
+  if (!list.length){ inp.nextElementSibling.insertAdjacentHTML('beforeend', `<em class="pp">consult · ${$$m(PRICE.consult)}/hr</em>`); return; }
   const fixed = list.filter(x => !x.from && !(x.note || '').startsWith('per hour')), min = fixed.length ? Math.min(...fixed.map(x => x.price)) : null;
   inp.nextElementSibling.insertAdjacentHTML('beforeend', `<em class="pp">${min != null ? (fixed.length > 1 || list.length > 1 ? 'from ' : '') + $$m(min) : 'let’s talk'}</em>`);
 });
@@ -1399,7 +1409,7 @@ document.querySelectorAll('#contact-form input[name=scope]').forEach(inp => {
 function tally(){
   const picked = [...document.querySelectorAll('#contact-form input[name=needs]:checked')].map(i => PRICE.prices[i.nextElementSibling.firstChild.textContent.trim()]).filter(Boolean);
   let sum = 0, talks = 0;
-  picked.forEach(list => { const f = list.filter(x => !x.from && !(x.note || '').startsWith('per hour')); if (f.length) sum += Math.min(...f.map(x => x.price)); else talks++; });
+  picked.forEach(list => { if (!list.length){ talks++; return; } const f = list.filter(x => !x.from && !(x.note || '').startsWith('per hour')); if (f.length) sum += Math.min(...f.map(x => x.price)); else talks++; });
   const box = $('#tally'); box.hidden = !picked.length; if (!picked.length) return;
   $('#tally-sum').textContent = sum ? `from ${$$m(sum)}` : 'Let’s talk';
   $('#tally-note').textContent = (sum && talks ? `+ ${talks} we’ll talk through · ` : talks ? `${talks} we’ll talk through · ` : '') + 'No checkout. Just the number, up front.';
