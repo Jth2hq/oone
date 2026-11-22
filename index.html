@@ -672,6 +672,13 @@ html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
 .room .btn-act:hover,.sheet .btn-act:hover{background:var(--red)}
 .sheet-body h2{font-weight:900;text-transform:uppercase;font-size:clamp(32px,4cqi,64px);line-height:.88}
 .sheet-head{text-transform:uppercase;letter-spacing:.09em}
+/* red, sparingly: labels, small numbers, markers, the link line and hovers */
+.room .sidehead .n,.room .svc .num,.room .cv .num,.room .imperatives li::before,.room .opener .part{color:var(--red)}
+.room .opener .part .dot,.room .folio .dot,.room .sidehead .dot{background:var(--red)}
+.contents.rows .go{border-bottom-color:var(--red)}
+.contents.rows button:hover .t,.room .backpage .next:hover b{color:var(--red)}
+.room .svc li:hover{border-color:var(--red)}
+.room .opener h1{border-bottom:2px solid var(--red)}
 @media (max-width:640px){
   .contents.rows .row{grid-template-columns:1fr;gap:14px}
   .room .opener{min-height:58cqh}
