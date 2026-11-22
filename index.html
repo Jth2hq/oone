@@ -533,6 +533,9 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
 .spec .tabc{line-height:1.25;color:var(--red)}
 .tarea{padding:.25em .35em;line-height:1.05;min-height:1.3em;outline:none;color:var(--red);overflow-wrap:anywhere}
 .tarea:focus{background:color-mix(in oklch,var(--red) 4%,#fff)}
+.proc{display:grid;gap:14px}
+.proc img{display:block;width:100%;height:auto;background:#eceae5}
+.pj-doc{margin-top:clamp(18px,2cqi,28px)}
 .pj-gal{display:grid;gap:clamp(14px,1.6cqi,24px);margin-top:clamp(24px,3cqi,44px)}
 .pj-gal figure{margin:0}
 .pj-gal img{display:block;width:100%;height:auto;border-radius:6px;background:#eceae5}
@@ -851,6 +854,12 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
       </div>
     </div>
 
+    <div class="sheet-wrap" id="sheet-process" style="--c:var(--char);--c-ink:var(--char);--on-c:var(--paper)">
+      <div class="sheet" role="dialog" aria-modal="true" aria-label="Process">
+        <div class="sheet-head mono"><span id="proc-title"></span><button class="x">Close ×</button></div>
+        <div class="sheet-body proc" id="proc-pages"></div>
+      </div>
+    </div>
     <div class="sheet-wrap" id="sheet-manifesto" style="--c:var(--char);--c-ink:var(--char);--on-c:var(--paper)">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="man-title">
         <div class="sheet-head mono"><span>Story — manifesto, December 2021</span><button class="x">Close ×</button></div>
@@ -1081,7 +1090,7 @@ const PROJECTS = [
    imgs:[['nye-stack','']]},
   {id:'troub',dims:['3D'],needs:[],title:'Troubadour Club',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2023',role:'Designer',client:'Hart Howerton',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',imgs:[['troub-elevation','']]},
   {id:'ranch',dims:['3D'],needs:[],title:'Covert Ranch',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2023',role:'Designer',client:'Hart Howerton',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',imgs:[['ranch-section','']]},
-  {id:'wtto',dims:['3D'],needs:[],title:'When Time Takes Over',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2022–23',role:'Author',client:'UVA',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
+  {id:'wtto',dims:['3D'],needs:[],title:'When Time Takes Over',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2022–23',role:'Author',client:'UVA',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',imgs:[['wtto-cover','']],doc:{label:'Click to view process',dir:'docs/wtto-process',pages:53,title:'When Time Takes Over — the making of, lecture at CU Denver, November 2022'}},
   {id:'bcn',dims:['3D'],needs:[],title:'The Meeting Line',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2021',role:'Author',client:'UVA — ARCH 8010: Barcelona',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['bcn-frames','']]},
   {id:'pantry',dims:['3D'],needs:[],title:'Pantry for the Arts',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2022',role:'Author',client:'UVA — ARCH 7020: Foundation Studio IV',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
@@ -1410,6 +1419,14 @@ function openProject(id){
   $('#pj-desc').textContent = p.desc;
   const SPEC = ['A more considered world', 'Ideas Spaces Objects People', 'Good ideas better company', 'The quick brown fox jumps over the lazy dog'];
   $('#pj-gal').innerHTML = (p.spec ? `<div class="spec"><div class="tester"><div class="tbar mono">${p.spec.map((f, k) => `<button type="button" class="tf" data-k="${k}" aria-pressed="${k === 0}">${esc(f.family)}</button>`).join('')}<input type="range" min="20" max="160" value="72" aria-label="Size"><a class="tdl" href="${p.spec[0].file}" download>Download .otf</a></div><div class="tarea" contenteditable="true" spellcheck="false" style="font-size:72px;font-family:'${p.spec[0].family}',var(--sans)">${SPEC[0]}</div></div><p class="s-abc tabc" style="font-family:'${p.spec[0].family}',var(--sans)">abcdefghijklmnopqrstuvwxyz<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>0123456789</p></div>` : '') + (p.imgs || []).map(([k, c]) => `<figure><img src="img/800/${k}.webp" srcset="img/800/${k}.webp 800w, img/1600/${k}.webp 1600w" sizes="(min-width:900px) 820px, 90vw" alt="${esc(c || p.title)}" loading="lazy" decoding="async">${c ? `<figcaption class="mono">${esc(c)}</figcaption>` : ''}</figure>`).join('');
+  if (p.doc) {
+    $('#pj-gal').insertAdjacentHTML('beforeend', `<div class="pj-doc"><button class="btn btn-act" type="button" id="pj-doc">${esc(p.doc.label)} <span aria-hidden="true">+</span></button></div>`);
+    $('#pj-doc').onclick = () => {
+      $('#proc-title').textContent = p.doc.title;
+      $('#proc-pages').innerHTML = Array.from({length: p.doc.pages}, (_, k) => `<img src="${p.doc.dir}/p${String(k + 1).padStart(2, '0')}.webp" alt="Page ${k + 1}" loading="lazy" decoding="async" width="1632" height="1056">`).join('');
+      closeSheet(); openSheet('sheet-process', '.x');
+    };
+  }
   const rng = $('#pj-gal .tester input'), ta = $('#pj-gal .tarea');
   if (rng && ta) rng.oninput = () => { ta.style.fontSize = rng.value + 'px'; };
   document.querySelectorAll('#pj-gal .tf').forEach(b => b.onclick = () => {
