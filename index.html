@@ -220,7 +220,8 @@ html.night .lamp{mix-blend-mode:color;opacity:.13}
 .reel.light .chip{background:rgb(255 255 255/.6);color:var(--ink);box-shadow:inset 0 0 0 1px var(--rule);text-shadow:none}
 .reel.light .chip:hover{background:#fff}
 .reel.light .hud .home .logo{background-image:url(brand/care-of-tanner.webp);filter:none}
-.door:hover,.door:focus-visible{background:color-mix(in oklch,var(--c) 55%,rgb(18 17 15/.5))}
+button.chip{text-transform:uppercase;letter-spacing:.09em}
+.door:hover,.door:focus-visible{background:rgb(18 17 15/.72)}
 .hud .home{top:0;left:0}
 .hud .home .logo{height:clamp(28px,3cqi,46px);vertical-align:0;filter:drop-shadow(0 1px 6px rgb(0 0 0/.4))}
 .hud .controls{top:0;right:0;display:flex;gap:8px}
@@ -687,7 +688,6 @@ html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
 .room .opener h1{border-bottom:2px solid var(--acc)}
 .room .btn-act:hover{background:var(--acc);color:var(--paper)}
 #world .btn-act:hover{color:var(--ink)}
-.roomnav .chip .dot{background:var(--paper)}
 @media (max-width:640px){
   .contents.rows .row{grid-template-columns:1fr;gap:14px}
   .room .opener{min-height:58cqh}
@@ -718,17 +718,17 @@ html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
         <button class="chip" id="pause" aria-pressed="false">Pause</button>
         <button class="chip" id="next" aria-label="Next post">Next →</button>
       </div>
-      <button class="chip door door-story" data-go="story"><span class="dot"></span>Story</button>
-      <button class="chip door door-practice" data-go="practice"><span class="dot"></span>Practice</button>
-      <button class="chip door door-world" data-go="world"><span class="dot"></span>World</button>
+      <button class="chip door door-story" data-go="story">Story</button>
+      <button class="chip door door-practice" data-go="practice">Practice</button>
+      <button class="chip door door-world" data-go="world">World</button>
       <p class="chip caption" aria-live="polite"><span class="dot" id="cap-dot"></span><span class="idx" id="cap-idx"></span><span class="cap" id="cap-text"></span></p>
     </nav>
 
     <!-- the landing's doors, carried through every room -->
     <nav class="roomnav" aria-label="Rooms">
-      <button class="chip door door-story" data-go="story"><span class="dot"></span>Story</button>
-      <button class="chip door door-practice" data-go="practice"><span class="dot"></span>Practice</button>
-      <button class="chip door door-world" data-go="world"><span class="dot"></span>World</button>
+      <button class="chip door door-story" data-go="story">Story</button>
+      <button class="chip door door-practice" data-go="practice">Practice</button>
+      <button class="chip door door-world" data-go="world">World</button>
     </nav>
 
     <!-- ═══ THE ROOMS ═══ -->
