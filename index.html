@@ -408,7 +408,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .needs-f button[aria-pressed=true] span{box-shadow:inset 0 0 0 1.5px var(--ink);background:color-mix(in oklch,var(--blue) 16%,#fff)}
 .pempty{color:var(--ink-2);margin:1em 0 0}
 .contents{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink);max-width:none!important}
-/* the wall — one ink: every piece pulled through cobalt on bone; real colour on hover and inside the project */
+/* the wall — one ink: every piece pulled through ink on paper; real colour on hover and inside the project */
 .contents.wall{position:relative;border-top:0;columns:3 15em;column-gap:clamp(18px,2.4cqi,40px);padding:clamp(14px,1.6cqi,24px) 0 0}
 .contents.wall li{border:0;break-inside:avoid;margin:0 0 clamp(28px,3.4cqi,52px)}
 .contents.wall li:nth-child(3n+2){padding-top:clamp(0px,4cqi,64px)}
@@ -850,7 +850,7 @@ html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
             <div class="sidehead mono"><b>Selected work</b><span class="n">04 · Projects</span></div>
             <div class="body">
               <div class="pfilters" id="pfilters" role="group" aria-label="Filter projects"></div>
-              <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="one-ink" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues="0.12 0.957"/><feFuncG type="table" tableValues="0.23 0.945"/><feFuncB type="table" tableValues="0.58 0.922"/></feComponentTransfer></filter></svg>
+              <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="one-ink" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".3 .59 .11 0 0 .3 .59 .11 0 0 .3 .59 .11 0 0 0 0 0 1 0"/><feComponentTransfer><feFuncR type="table" tableValues="0.11 0.957"/><feFuncG type="table" tableValues="0.102 0.945"/><feFuncB type="table" tableValues="0.094 0.922"/></feComponentTransfer></filter></svg>
               <ol class="contents rows" id="contents"></ol>
               <p class="pempty mono" id="pempty" hidden>Nothing filed under this yet.</p>
             </div>
