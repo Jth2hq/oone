@@ -45,12 +45,11 @@
   --osd:#F6F3EE;
 
   --red:   #D8102F;                   /* the "care of" red — lifted from the logo */
-  --blue:  oklch(.53 .175 262);       /* ≈ #2C5CC8 */
+  --blue:  #2C30D3;                   /* ultramarine — the loft's blue light */
   --char:  oklch(.36 .022 50);        /* ≈ #453B34 — walnut gone charcoal: worn, desaturated */
-  --green: oklch(.6 .085 160);       /* garden green — people in my orbit */
-  --lilac: oklch(.78 .07 300);        /* ≈ #BDAEDD — a note, used sparingly (~10%) */
+  --lilac: #6A2FC0;                   /* violet — the loft's purple wash (token name kept) */
   --blue-ink:oklch(.45 .17 262);      /* blue as text on paper (AA) */
-  --lilac-ink:oklch(.42 .08 300);
+  --lilac-ink:#5424A3;
 
   --story:var(--char); --practice:var(--blue); --world:var(--lilac);
   --cherry:var(--red);
@@ -486,7 +485,7 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
 .tile.idea{--k:var(--lilac);background:color-mix(in oklch,var(--lilac) 26%,var(--paper));box-shadow:none}
 .tile.sensation{--k:var(--blue);background:color-mix(in oklch,var(--blue) 11%,var(--paper));box-shadow:none}
 .tile.artifact{--k:var(--red);background:color-mix(in oklch,var(--char) 9%,var(--paper));box-shadow:none}
-.tile.link{--k:var(--green);background:#fff;box-shadow:inset 0 0 0 1px var(--rule)}
+.tile.link{--k:var(--char);background:#fff;box-shadow:inset 0 0 0 1px var(--rule)}
 .tile.link:hover{box-shadow:inset 0 0 0 1px var(--ink)}
 .tile.link .t::after{content:""}
 .tile.link.soon{cursor:default}
@@ -586,8 +585,8 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
 html.night .room,html.night .sheet-wrap{
   --paper:oklch(.68 .014 50);--bone:oklch(.66 .014 50);--linen:oklch(.64 .016 48);
   --ink:#1E1B17;--ink-2:#463F37;--rule:rgb(30 27 23/.2);
-  --blue:oklch(.45 .14 262);--blue-ink:oklch(.37 .13 262);
-  --char:oklch(.30 .02 50);--lilac:oklch(.64 .06 305);--lilac-ink:oklch(.34 .07 300);
+  --blue:#4A4EE6;--blue-ink:#7C80F0;
+  --char:oklch(.30 .02 50);--lilac:#8A55DA;--lilac-ink:#B48CF0;
   --red:#B8122C;
   --weave:repeating-linear-gradient(90deg,rgb(30 27 23/.03) 0 1px,transparent 1px 3px),repeating-linear-gradient(0deg,rgb(255 236 220/.05) 0 1px,transparent 1px 4px);
   color:var(--ink)}
@@ -727,7 +726,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 .room .tile .dot{background:var(--k)}
 .room .filters .dot{display:inline-block}
 .room .key .dot{background:var(--c)}
-.room .tile.link .t::after{color:var(--green)}
+.room .tile.link .t::after{color:var(--char)}
 /* full-bleed bands meet the next section with no stray inset rule */
 .room .moment + .page > .sec:first-child,.room .moment + .page > :first-child,.room .moment + .backpage{border-top:0}
 
@@ -743,7 +742,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 
 /* links: no emoji arrow — a drawn hairline corner arrow, same colour as the dot */
 .tile.link .t::after,.room .tile.link .t::after{content:"";display:inline-block;width:.62em;height:.62em;margin-left:.32em;vertical-align:.12em;
-  background:currentColor;color:var(--green);
+  background:currentColor;color:var(--char);
   -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2 8 8 2M3.2 2H8v4.8' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='square'/%3E%3C/svg%3E") center/contain no-repeat;
           mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2 8 8 2M3.2 2H8v4.8' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='square'/%3E%3C/svg%3E") center/contain no-repeat;
   transition:transform .25s cubic-bezier(.2,.7,.2,1)}
@@ -751,10 +750,10 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 .form .picks small{color:var(--ink-2);font-size:.88em}
 
 /* 22 ORBIT COLOUR IN POP-UPS ── the category's colour carries the head band, the marker and the action */
-#sheet-entry[data-k=idea],#sheet-add[data-k=idea]{--k:var(--lilac);--kon:var(--ink)}
+#sheet-entry[data-k=idea],#sheet-add[data-k=idea]{--k:var(--lilac);--kon:#fff}
 #sheet-entry[data-k=artifact],#sheet-add[data-k=artifact]{--k:var(--red);--kon:#fff}
 #sheet-entry[data-k=sensation],#sheet-add[data-k=sensation]{--k:var(--blue);--kon:#fff}
-#sheet-entry[data-k=link],#sheet-add[data-k=link]{--k:var(--green);--kon:#fff}
+#sheet-entry[data-k=link],#sheet-add[data-k=link]{--k:var(--char);--kon:#fff}
 #sheet-entry[data-k] .sheet,#sheet-add[data-k] .sheet{box-shadow:0 24px 60px rgb(0 0 0/.25),inset 0 0 0 3px var(--k)}
 #sheet-entry[data-k] .sheet-head,#sheet-add[data-k] .sheet-head{background:var(--k)!important;color:var(--kon);border-bottom:0;transition:background .3s ease}
 #sheet-entry[data-k] .sheet-head button,#sheet-add[data-k] .sheet-head button{color:var(--kon)}
@@ -769,7 +768,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 #sheet-add .picks label{--kk:var(--lilac)}
 #sheet-add .picks label:has([value=sensation]){--kk:var(--blue)}
 #sheet-add .picks label:has([value=artifact]){--kk:var(--red)}
-#sheet-add .picks label:has([value=link]){--kk:var(--green)}
+#sheet-add .picks label:has([value=link]){--kk:var(--char)}
 #sheet-add .picks span{display:flex;align-items:baseline;gap:.5em}
 #sheet-add .picks span::before{content:"";flex:none;width:.75em;height:.75em;border-radius:50%;background:var(--kk);transform:translateY(.05em)}
 #sheet-add .picks input:checked + span{box-shadow:inset 0 0 0 2px var(--kk);background:color-mix(in oklch,var(--kk) 14%,var(--paper))}
@@ -1003,7 +1002,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
         </section>
 
         <footer class="backpage">
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--lilac)"></span>Idea — words</li><li><span class="dot" style="--c:var(--red)"></span>Artifact — things made by hand: objects, ceramics, photographs</li><li><span class="dot" style="--c:var(--blue)"></span>Sensation — things lived: songs, clips, nights out</li><li><span class="dot" style="--c:var(--green)"></span>In orbit — people and what they make</li></ul></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--lilac)"></span>Idea — words</li><li><span class="dot" style="--c:var(--red)"></span>Artifact — things made by hand: objects, ceramics, photographs</li><li><span class="dot" style="--c:var(--blue)"></span>Sensation — things lived: songs, clips, nights out</li><li><span class="dot" style="--c:var(--char)"></span>In orbit — people and what they make</li></ul></div>
         </footer>
      </div>
     </article>
@@ -1328,8 +1327,8 @@ const WORLD = [
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const FIELDS = {bone:['#E8E4DC','#1A1A1A'], ink:['#1A1A1A','#EDEAE3'],
-                story:['var(--char)','#F1EEE8'], practice:['var(--blue)','#F3F1EC'], world:['var(--lilac)','#1A1A1A']};
-const LIGHT = ['bone', 'world'];   /* light fields take ink controls; the rest keep bone */
+                story:['var(--char)','#F1EEE8'], practice:['var(--blue)','#F3F1EC'], world:['var(--lilac)','#F3F1EC']};
+const LIGHT = ['bone'];   /* light fields take ink controls; the rest keep bone */
 const DOTS = {story:'var(--story)', practice:'var(--practice)', world:'var(--world)'};
 const srcset = k => `img/800/${PHOTOS[k].src}.webp 800w, img/1600/${PHOTOS[k].src}.webp 1600w`;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1664,7 +1663,7 @@ document.querySelectorAll('form.form').forEach(form => form.addEventListener('su
 
 /* ── world: the log ─────────────────────────────────────────────────── */
 const CATS = [['all','All'], ['idea','Ideas'], ['sensation','Sensations'], ['artifact','Artifacts'], ['link','In orbit']];
-const KDOT = {idea:'var(--lilac)', sensation:'var(--blue)', artifact:'var(--red)', link:'var(--green)'};
+const KDOT = {idea:'var(--lilac)', sensation:'var(--blue)', artifact:'var(--red)', link:'var(--char)'};
 const fmtDate = d => new Date(d + 'T12:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
 WORLD.sort((a, b) => b.date.localeCompare(a.date));
 { const notes = WORLD.filter(e => e.cat !== 'link'), links = WORLD.filter(e => e.cat === 'link'), mix = [];
