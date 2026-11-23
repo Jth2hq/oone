@@ -749,6 +749,35 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
   transition:transform .25s cubic-bezier(.2,.7,.2,1)}
 .tile.link:hover .t::after{transform:translate(2px,-2px)}
 .form .picks small{color:var(--ink-2);font-size:.88em}
+
+/* 22 ORBIT COLOUR IN POP-UPS ── the category's colour carries the head band, the marker and the action */
+#sheet-entry[data-k=idea],#sheet-add[data-k=idea]{--k:var(--lilac);--kon:var(--ink)}
+#sheet-entry[data-k=artifact],#sheet-add[data-k=artifact]{--k:var(--red);--kon:#fff}
+#sheet-entry[data-k=sensation],#sheet-add[data-k=sensation]{--k:var(--blue);--kon:#fff}
+#sheet-entry[data-k=link],#sheet-add[data-k=link]{--k:var(--green);--kon:#fff}
+#sheet-entry[data-k] .sheet,#sheet-add[data-k] .sheet{box-shadow:0 24px 60px rgb(0 0 0/.25),inset 0 0 0 3px var(--k)}
+#sheet-entry[data-k] .sheet-head,#sheet-add[data-k] .sheet-head{background:var(--k)!important;color:var(--kon);border-bottom:0;transition:background .3s ease}
+#sheet-entry[data-k] .sheet-head button,#sheet-add[data-k] .sheet-head button{color:var(--kon)}
+.en-kind{display:flex;align-items:center;gap:.6em;margin:0 0 .8em;text-transform:uppercase;letter-spacing:.09em;color:var(--ink)}
+.en-kind .dot{width:.9em;height:.9em;background:var(--k)}
+#sheet-entry .btn-act.en-go{background:var(--k);color:var(--kon)}
+#sheet-entry .btn-act.en-go:hover{background:var(--ink);color:var(--paper)}
+.en-go.off{opacity:.5;pointer-events:none}
+.en-go .arr{display:inline-block;width:.7em;height:.7em;margin-left:.4em;background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2 8 8 2M3.2 2H8v4.8' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='square'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2 8 8 2M3.2 2H8v4.8' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='square'/%3E%3C/svg%3E") center/contain no-repeat}
+#sheet-add .picks label{--kk:var(--lilac)}
+#sheet-add .picks label:has([value=sensation]){--kk:var(--blue)}
+#sheet-add .picks label:has([value=artifact]){--kk:var(--red)}
+#sheet-add .picks label:has([value=link]){--kk:var(--green)}
+#sheet-add .picks span{display:flex;align-items:baseline;gap:.5em}
+#sheet-add .picks span::before{content:"";flex:none;width:.75em;height:.75em;border-radius:50%;background:var(--kk);transform:translateY(.05em)}
+#sheet-add .picks input:checked + span{box-shadow:inset 0 0 0 2px var(--kk);background:color-mix(in oklch,var(--kk) 14%,var(--paper))}
+.hud .caption.go{cursor:pointer;pointer-events:auto}
+.hud .caption.go .cap{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.25em}
+
+.en-go[hidden]{display:none!important}
+.sheet{background:var(--paper)!important}
 </style>
 </head>
 <body>
@@ -1001,8 +1030,10 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
         <div class="sheet-head mono"><span id="en-meta"></span><button class="x">Close ×</button></div>
         <div class="sheet-body">
           <img id="en-img" alt="" hidden style="width:100%;border-radius:10px;margin-bottom:1.2em">
+          <p class="en-kind mono" id="en-kind"></p>
           <h2 id="en-title" tabindex="-1"></h2>
           <p id="en-text"></p>
+          <p><a class="btn btn-act en-go" id="en-go" target="_blank" rel="noopener" hidden></a></p>
         </div>
       </div>
     </div>
@@ -1346,7 +1377,20 @@ function caption(){
   $('#cap-dot').style.background = (p.project || p.photo) ? 'var(--red)' : 'var(--lilac)';
   $('#cap-idx').textContent = p.idx;
   $('#cap-text').textContent = p.cap;
+  $('.hud .caption').classList.toggle('go', !!(p.photo || p.project));
 }
+$('.hud .caption').addEventListener('click', () => {
+  const p = feed[at]; if (!p) return;
+  if (p.project){ location.hash = 'practice'; setTimeout(() => openProject(p.project), 650); return; }
+  if (!p.photo) return;
+  location.hash = 'world';
+  setTimeout(() => {
+    const i = WORLD.findIndex(e => e.photo === p.photo);
+    const btn = i >= 0 ? document.querySelector(`#tiles .tile[data-i="${i}"]`) : null;
+    if (btn){ document.querySelector('#filters [data-cat="all"]').click(); btn.scrollIntoView({block:'center', behavior:'smooth'}); setTimeout(() => btn.click(), 700); }
+    else { document.querySelector('#filters [data-cat="artifact"]').click(); document.getElementById('tiles').scrollIntoView({block:'start', behavior:'smooth'}); }
+  }, 650);
+});
 let busy = false;
 function show(i){
   if (busy) return; busy = true;
@@ -1632,19 +1676,22 @@ $('#tiles').innerHTML = WORLD.map((e, i) => {
   if (pic) return `<button class="tile photo ${e.cat}" data-cat="${e.cat}" data-i="${i}">` +
       `<img srcset="${srcset(e.photo)}" sizes="(max-width:800px) 50vw, 25vw" alt="" loading="lazy" decoding="async">` +
       `<span class="cap">${meta}<span class="t">${esc(e.title)}</span></span></button>`;
-  if (e.cat === 'link'){
-    const live = e.href && e.href !== '#';
-    const open = live ? `a href="${esc(e.href)}" target="_blank" rel="noopener"` : 'div';
-    return `<${open} class="tile link${live ? '' : ' soon'}" data-cat="link">${meta}<span class="tb"><span class="t">${esc(e.title)}</span><span class="p">${esc(e.text)}${live ? '' : ' — soon'}</span></span></${open.split(' ')[0]}>`;
-  }
+  if (e.cat === 'link')
+    return `<button class="tile link" data-cat="link" data-i="${i}">${meta}<span class="tb"><span class="t">${esc(e.title)}</span><span class="p">${esc(e.text)}</span></span></button>`;
   const wide = e.text.length > 160 ? ' wide' : '';
   return `<button class="tile ${e.cat}${wide}" data-cat="${e.cat}" data-i="${i}">${meta}<span class="tb"><span class="t">${esc(e.title)}</span><span class="p">${esc(e.text)}</span></span></button>`;
 }).join('');
 $('#tiles').addEventListener('click', ev => {
   const t = ev.target.closest('button.tile'); if (!t) return;
   const e = WORLD[t.dataset.i];
-  $('#en-meta').textContent = `Orbit — ${e.cat} — ${fmtDate(e.date)}`;
+  const NAME = {idea:'Idea', sensation:'Sensation', artifact:'Artifact', link:'People'};
+  const sh = $('#sheet-entry'); sh.dataset.k = e.cat;
+  $('#en-meta').textContent = `Orbit — ${NAME[e.cat]}`;
+  $('#en-kind').innerHTML = `<span class="dot"></span>${esc(NAME[e.cat])}${e.cat === 'link' ? ' — ' + esc(e.kind || '') : ' — ' + fmtDate(e.date)}`;
   $('#en-title').textContent = e.title; $('#en-text').textContent = e.text;
+  const live = e.href && e.href !== '#', go = $('#en-go');
+  go.hidden = e.cat !== 'link';
+  if (e.cat === 'link'){ go.innerHTML = live ? `Visit ${esc(new URL(e.href).hostname.replace(/^www\./, ''))} <i class="arr" aria-hidden="true"></i>` : 'Link coming soon'; go.href = live ? e.href : '#'; go.classList.toggle('off', !live); }
   const img = $('#en-img');
   if (e.photo && PHOTOS[e.photo]){ img.srcset = srcset(e.photo); img.sizes = '900px'; img.hidden = false; } else img.hidden = true;
   openSheet('sheet-entry');
@@ -1660,7 +1707,8 @@ $('#filters').addEventListener('click', e => {
   document.querySelectorAll('#filters button').forEach(x => x.setAttribute('aria-pressed', x === b));
   document.querySelectorAll('#tiles .tile').forEach(c => c.hidden = b.dataset.cat !== 'all' && c.dataset.cat !== b.dataset.cat);
 });
-$('#add').onclick = () => openSheet('sheet-add', '#add-title');
+$('#add').onclick = () => { const k = document.querySelector('#add-form [name=kind]:checked'); $('#sheet-add').dataset.k = k ? k.value : 'idea'; openSheet('sheet-add', '#add-title'); };
+document.querySelectorAll('#add-form [name=kind]').forEach(r => r.addEventListener('change', () => { $('#sheet-add').dataset.k = r.value; }));
 
 route();
 </script>
