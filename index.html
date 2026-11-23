@@ -485,7 +485,7 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
 .tile.idea{--k:var(--lilac);background:color-mix(in oklch,var(--lilac) 26%,var(--paper));box-shadow:none}
 .tile.sensation{--k:var(--blue);background:color-mix(in oklch,var(--blue) 11%,var(--paper));box-shadow:none}
 .tile.artifact{--k:var(--char);background:color-mix(in oklch,var(--char) 9%,var(--paper));box-shadow:none}
-.tile.link{--k:var(--red);background:#fff;box-shadow:inset 0 0 0 1px var(--rule)}
+.tile.link{--k:var(--ink);background:#fff;box-shadow:inset 0 0 0 1px var(--rule)}
 .tile.link:hover{box-shadow:inset 0 0 0 1px var(--ink)}
 .tile.link .t::after{content:" ↗";font-weight:400;color:var(--red)}
 .tile.link.soon{cursor:default}
@@ -682,7 +682,6 @@ html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
 .contents.rows button:hover .t,.room .backpage .next:hover b{color:var(--acc-ink)}
 .room .svc li:hover{border-color:var(--acc)}
 .room .opener h1{border-bottom:0;padding-bottom:0}
-.room .tile .dot,.filters .dot{background:var(--ink)!important}
 .room .filters button{background:var(--paper)}
 .room .filters button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
 .room .tile.link .t::after{color:var(--red)}
@@ -722,6 +721,16 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 
 .contents.rows .strip{aspect-ratio:16/7;height:auto;background:var(--linen)}
 .contents.rows .strip img{object-fit:cover}
+
+/* 20 COLOUR LOGIC ── red = made by me (projects, my film, what I offer), everywhere.
+   World alone keeps the inspiration key: lilac ideas, blue sensations, charcoal artifacts. Links are plain ink. No room dots. */
+.room .folio .dot,.room .part .dot,.room .opener .part .dot{display:none}
+.room .tile .dot{background:var(--k)}
+.room .filters .dot{display:inline-block}
+.room .key .dot{background:var(--c)}
+.room .tile.link .t::after{color:var(--ink)}
+/* full-bleed bands meet the next section with no stray inset rule */
+.room .moment + .page > .sec:first-child,.room .moment + .page > :first-child,.room .moment + .backpage{border-top:0}
 </style>
 </head>
 <body>
@@ -766,11 +775,11 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
      <div class="room-scroll" tabindex="-1">
         <header class="runhead">
           <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo" aria-hidden="true"></span></a>
-          <span class="folio mono"><span class="dot"></span>care of TANNER — Part One: Story — p. 01</span>
+          <span class="folio mono">care of TANNER — Part One: Story — p. 01</span>
           <a class="close" href="#">Close ×</a>
         </header>
         <section class="opener">
-          <span class="part mono"><span class="dot"></span>Part One</span>
+          <span class="part mono">Part One</span>
           <h1>Story</h1>
           <p class="deck">A practice, a namesake, and the reasons for both.</p>
         </section>
@@ -828,7 +837,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
         </div>
       
         <footer class="backpage">
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul></div>
+          
         </footer>
      </div>
     </article>
@@ -837,11 +846,11 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
      <div class="room-scroll" tabindex="-1">
         <header class="runhead">
           <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo" aria-hidden="true"></span></a>
-          <span class="folio mono"><span class="dot"></span>care of TANNER — Part Two: Practice — p. 02</span>
+          <span class="folio mono">care of TANNER — Part Two: Practice — p. 02</span>
           <a class="close" href="#">Close ×</a>
         </header>
         <section class="opener">
-          <span class="part mono"><span class="dot"></span>Part Two</span>
+          <span class="part mono">Part Two</span>
           <h1>Practice</h1>
           <p class="deck">One practice, every scale. What are we making?</p>
         </section>
@@ -914,7 +923,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
         </div>
 
         <footer class="backpage">
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul></div>
+          
         </footer>
      </div>
     </article>
@@ -923,11 +932,11 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
      <div class="room-scroll" tabindex="-1">
         <header class="runhead">
           <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo" aria-hidden="true"></span></a>
-          <span class="folio mono"><span class="dot"></span>care of TANNER — Part Three: World — p. 03</span>
+          <span class="folio mono">care of TANNER — Part Three: World — p. 03</span>
           <a class="close" href="#">Close ×</a>
         </header>
         <section class="opener">
-          <span class="part mono"><span class="dot"></span>Part Three</span>
+          <span class="part mono">Part Three</span>
           <h1>World</h1>
           <p class="deck">Notes, sightings, and the people worth knowing — add yours.</p>
         </section>
@@ -947,7 +956,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
         </section>
 
         <footer class="backpage">
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--char)"></span>Story</li><li><span class="dot" style="--c:var(--blue)"></span>Practice</li><li><span class="dot" style="--c:var(--lilac)"></span>World</li><li><span class="dot" style="--c:var(--red)"></span>A voice</li></ul></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--red)"></span>Made by me</li><li><span class="dot" style="--c:var(--lilac)"></span>Idea</li><li><span class="dot" style="--c:var(--blue)"></span>Sensation</li><li><span class="dot" style="--c:var(--char)"></span>Artifact</li></ul></div>
         </footer>
      </div>
     </article>
@@ -1239,19 +1248,19 @@ const PROJECTS = [
      link  href (use '#' for "soon"), kind (the source line), price (for sale) */
 const WORLD = [
   {id:'l1',cat:'idea',date:'2026-05-12',title:'Lorem ipsum dolor',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'p1',cat:'artifact',date:'2026-05-02',title:'Consectetur adipiscing',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'piazza-sphere'},
+  {id:'p1',cat:'artifact',date:'2026-05-02',title:'Consectetur adipiscing',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'piazza-sphere',mine:1},
   {id:'l2',cat:'artifact',date:'2026-04-28',title:'Sed do eiusmod',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'l3',cat:'idea',date:'2026-04-10',title:'Tempor incididunt',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'p2',cat:'sensation',date:'2026-04-04',title:'Ut labore et dolore',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'kelp-rocks'},
   {id:'l4',cat:'sensation',date:'2026-03-22',title:'Magna aliqua',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'p3',cat:'artifact',date:'2026-03-12',title:'Quis nostrud',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'checker-threshold'},
+  {id:'p3',cat:'artifact',date:'2026-03-12',title:'Quis nostrud',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'checker-threshold',mine:1},
   {id:'l5',cat:'idea',date:'2026-03-08',title:'Ullamco laboris',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'p4',cat:'sensation',date:'2026-02-22',title:'Nisi ut aliquip',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'gorse-hill'},
   {id:'l6',cat:'sensation',date:'2026-02-14',title:'Ex ea commodo',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'l7',cat:'artifact',date:'2026-02-02',title:'Duis aute irure',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'p5',cat:'sensation',date:'2025-12-20',title:'Reprehenderit voluptate',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'bouquet-park'},
   {id:'l8',cat:'sensation',date:'2026-01-15',title:'Velit esse cillum',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'p6',cat:'artifact',date:'2025-11-22',title:'Excepteur sint',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'powder-room'},
+  {id:'p6',cat:'artifact',date:'2025-11-22',title:'Excepteur sint',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'powder-room',mine:1},
   {id:'l9',cat:'idea',date:'2025-12-04',title:'Occaecat cupidatat',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'l10',cat:'artifact',date:'2025-11-15',title:'Non proident',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'l11',cat:'sensation',date:'2025-10-30',title:'Sunt in culpa',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
@@ -1322,7 +1331,7 @@ let at = 0, timer = null, paused = reduced;
 function caption(){
   const p = feed[at];
   reel.classList.toggle('light', !p.photo && LIGHT.includes(p.field || 'bone'));
-  $('#cap-dot').style.background = DOTS[p.zone] || DOTS.world;
+  $('#cap-dot').style.background = (p.photo || p.project) ? 'var(--red)' : 'var(--lilac)';
   $('#cap-idx').textContent = p.idx;
   $('#cap-text').textContent = p.cap;
 }
@@ -1599,7 +1608,7 @@ document.querySelectorAll('form.form').forEach(form => form.addEventListener('su
 
 /* ── world: the log ─────────────────────────────────────────────────── */
 const CATS = [['all','All'], ['idea','Ideas'], ['sensation','Sensations'], ['artifact','Artifacts'], ['link','Links']];
-const KDOT = {idea:'var(--lilac)', sensation:'var(--blue)', artifact:'var(--char)', link:'var(--red)'};
+const KDOT = {idea:'var(--lilac)', sensation:'var(--blue)', artifact:'var(--char)', link:'var(--ink)'};
 const fmtDate = d => new Date(d + 'T12:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
 WORLD.sort((a, b) => b.date.localeCompare(a.date));
 { const notes = WORLD.filter(e => e.cat !== 'link'), links = WORLD.filter(e => e.cat === 'link'), mix = [];
@@ -1607,7 +1616,7 @@ WORLD.sort((a, b) => b.date.localeCompare(a.date));
   WORLD.splice(0, WORLD.length, ...mix); }
 $('#tiles').innerHTML = WORLD.map((e, i) => {
   const pic = e.photo && PHOTOS[e.photo];
-  const meta = `<span class="meta"><span class="dot"></span>${e.cat === 'link' ? esc(e.kind || 'link') + (e.price ? ' — ' + esc(e.price) : '') : e.cat + ' — ' + fmtDate(e.date)}</span>`;
+  const meta = `<span class="meta"><span class="dot"${e.mine ? ' style="background:var(--red)"' : ''}></span>${e.mine ? 'made by me — ' : ''}${e.cat === 'link' ? esc(e.kind || 'link') + (e.price ? ' — ' + esc(e.price) : '') : e.cat + ' — ' + fmtDate(e.date)}</span>`;
   if (pic) return `<button class="tile photo ${e.cat}" data-cat="${e.cat}" data-i="${i}">` +
       `<img srcset="${srcset(e.photo)}" sizes="(max-width:800px) 50vw, 25vw" alt="" loading="lazy" decoding="async">` +
       `<span class="cap">${meta}<span class="t">${esc(e.title)}</span></span></button>`;
