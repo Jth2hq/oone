@@ -485,7 +485,7 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
   display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 .tile.idea{--k:var(--lilac);background:color-mix(in oklch,var(--lilac) 26%,var(--paper));box-shadow:none}
 .tile.sensation{--k:var(--blue);background:color-mix(in oklch,var(--blue) 11%,var(--paper));box-shadow:none}
-.tile.artifact{--k:var(--char);background:color-mix(in oklch,var(--char) 9%,var(--paper));box-shadow:none}
+.tile.artifact{--k:var(--red);background:color-mix(in oklch,var(--char) 9%,var(--paper));box-shadow:none}
 .tile.link{--k:var(--green);background:#fff;box-shadow:inset 0 0 0 1px var(--rule)}
 .tile.link:hover{box-shadow:inset 0 0 0 1px var(--ink)}
 .tile.link .t::after{content:" ↗";font-weight:400;color:var(--red)}
@@ -965,7 +965,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
         </section>
 
         <footer class="backpage">
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--lilac)"></span>Idea — words</li><li><span class="dot" style="--c:var(--blue)"></span>Sensation — songs, clips, nights out</li><li><span class="dot" style="--c:var(--char)"></span>Artifact — film photographs</li><li><span class="dot" style="--c:var(--green)"></span>Orbit — people and what they make</li></ul></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--lilac)"></span>Idea — words</li><li><span class="dot" style="--c:var(--blue)"></span>Sensation — songs, clips, nights out</li><li><span class="dot" style="--c:var(--red)"></span>Artifact — film photographs</li><li><span class="dot" style="--c:var(--green)"></span>Orbit — people and what they make</li></ul></div>
         </footer>
      </div>
     </article>
@@ -1334,7 +1334,7 @@ let at = 0, timer = null, paused = reduced;
 function caption(){
   const p = feed[at];
   reel.classList.toggle('light', !p.photo && LIGHT.includes(p.field || 'bone'));
-  $('#cap-dot').style.background = p.project ? 'var(--red)' : p.photo ? 'var(--char)' : 'var(--lilac)';
+  $('#cap-dot').style.background = (p.project || p.photo) ? 'var(--red)' : 'var(--lilac)';
   $('#cap-idx').textContent = p.idx;
   $('#cap-text').textContent = p.cap;
 }
@@ -1611,7 +1611,7 @@ document.querySelectorAll('form.form').forEach(form => form.addEventListener('su
 
 /* ── world: the log ─────────────────────────────────────────────────── */
 const CATS = [['all','All'], ['idea','Ideas'], ['sensation','Sensations'], ['artifact','Artifacts'], ['link','Orbit']];
-const KDOT = {idea:'var(--lilac)', sensation:'var(--blue)', artifact:'var(--char)', link:'var(--green)'};
+const KDOT = {idea:'var(--lilac)', sensation:'var(--blue)', artifact:'var(--red)', link:'var(--green)'};
 const fmtDate = d => new Date(d + 'T12:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
 WORLD.sort((a, b) => b.date.localeCompare(a.date));
 { const notes = WORLD.filter(e => e.cat !== 'link'), links = WORLD.filter(e => e.cat === 'link'), mix = [];
