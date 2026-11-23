@@ -697,6 +697,31 @@ html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
 .roomnav .chip:hover{background:var(--ink);color:var(--paper)}
 html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0 0 0 1px rgb(255 255 255/.4)}
 .door:hover,.door:focus-visible{background:rgb(18 17 15/.55)}
+
+/* 19 PROJECT VIEW ── the row you clicked, opened up: same title, same caption line, same picture — now full width */
+.sheet-wrap:has(.sheet.pj){padding:0;place-items:stretch}
+.sheet.pj{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;padding:0 var(--m) var(--m);background:var(--paper)!important}
+.pj-bar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;margin:0 calc(-1 * var(--m));padding:clamp(14px,1.6cqi,22px) var(--m);background:var(--paper);border-bottom:1px solid var(--ink)}
+.pj-bar>*{text-transform:uppercase;letter-spacing:.09em}
+.pj-bar #pj-idx{color:var(--red)}
+.pj-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(16px,3cqi,64px);align-items:end;padding:clamp(40px,6cqi,110px) 0 clamp(24px,3cqi,48px)}
+.sheet.pj h2{margin:0;font:900 clamp(48px,8.4cqi,150px)/.82 var(--sans);font-stretch:75%;letter-spacing:-.035em;text-transform:uppercase}
+.sheet.pj h2:focus{outline:none}
+.pj-cat{margin:1.1em 0 0;text-transform:uppercase;letter-spacing:.09em}
+.pj-say{margin:0;max-width:36ch;font-size:var(--t-lede);line-height:1.3}
+.pj-hero{margin:0 calc(-1 * var(--m));height:clamp(300px,62cqh,820px);background:var(--linen)}
+.pj-hero img{display:block;width:100%;height:100%;object-fit:cover}
+.pj-cols{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(16px,3cqi,64px);padding:clamp(28px,3.6cqi,60px) 0;border-bottom:1px solid var(--ink)}
+.pj-cols #pj-desc{margin:0;max-width:34ch}
+.pj-cols .pj-gal{margin:0}
+.pj-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding-top:clamp(24px,3cqi,48px)}
+.pj-next{text-align:right;font:900 clamp(28px,3.6cqi,64px)/.86 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.02em;cursor:pointer}
+.pj-next .mono{display:block;margin-bottom:.6em;font-size:var(--t-mono);letter-spacing:.09em;color:var(--red)}
+.pj-next:hover{color:var(--red)}
+@media (max-width:640px){.pj-row,.pj-cols{grid-template-columns:1fr}.pj-hero{height:46cqh}}
+
+.contents.rows .strip{aspect-ratio:16/7;height:auto;background:var(--linen)}
+.contents.rows .strip img{object-fit:cover}
 </style>
 </head>
 <body>
@@ -818,7 +843,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
         <section class="opener">
           <span class="part mono"><span class="dot"></span>Part Two</span>
           <h1>Practice</h1>
-          <p class="deck">Buildings, rooms, objects, pages and screens — one practice, every scale. What are we making?</p>
+          <p class="deck">One practice, every scale. What are we making?</p>
         </section>
 
         <div class="page">
@@ -929,20 +954,18 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 
     <!-- ═══ SHEETS — overlays, inside the glass ═══ -->
     <div class="sheet-wrap" id="sheet-project">
-      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="pj-title">
-        <div class="sheet-head mono"><span id="pj-idx"></span><button class="x">Close ×</button></div>
-        <div class="sheet-body">
-          <h2 id="pj-title" tabindex="-1"></h2>
-          <p class="lede" id="pj-tag"></p>
-          <div class="meta mono">
-            <div><span>Client</span><b id="pj-client"></b></div>
-            <div><span>Role</span><b id="pj-role"></b></div>
-            <div><span>Year</span><b id="pj-year"></b></div>
-          </div>
+      <div class="sheet pj" role="dialog" aria-modal="true" aria-labelledby="pj-title">
+        <div class="pj-bar mono"><span id="pj-idx"></span><button class="x">Close ×</button></div>
+        <div class="pj-row">
+          <div><h2 id="pj-title" tabindex="-1"></h2><p class="pj-cat mono" id="pj-cat"></p></div>
+          <div><p class="pj-say" id="pj-tag"></p></div>
+        </div>
+        <figure class="pj-hero"><img id="pj-hero" alt=""></figure>
+        <div class="pj-cols">
           <p id="pj-desc"></p>
           <div class="pj-gal" id="pj-gal"></div>
-          <p style="margin-top:clamp(24px,3cqi,44px)"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a></p>
         </div>
+        <div class="pj-foot"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a><button type="button" class="pj-next" id="pj-next"></button></div>
       </div>
     </div>
 
@@ -1525,10 +1548,14 @@ function openProject(id){
   const p = PROJECTS[i];
   $('#pj-idx').textContent = `Practice — ${String(i + 1).padStart(2, '0')} / ${String(PROJECTS.length).padStart(2, '0')}`;
   $('#pj-title').textContent = p.title; $('#pj-tag').textContent = p.tag;
-  $('#pj-client').textContent = p.client; $('#pj-role').textContent = p.role; $('#pj-year').textContent = p.year;
+  $('#pj-cat').textContent = [p.client, p.role, p.year].filter(Boolean).join(' / ');
+  const cov = p.imgs && p.imgs[0] && p.imgs[0][0], nx = PROJECTS[(i + 1) % PROJECTS.length];
+  $('#pj-hero').src = cov ? `img/1600/${cov}.webp` : ''; $('#pj-hero').parentElement.hidden = !cov;
+  $('#pj-next').innerHTML = `<span class="mono">Next</span>${esc(nx.title)} →`; $('#pj-next').onclick = () => openProject(nx.id);
   $('#pj-desc').textContent = p.desc;
   const SPEC = ['A more considered world', 'Ideas Spaces Objects People', 'Good ideas better company', 'The quick brown fox jumps over the lazy dog'];
-  $('#pj-gal').innerHTML = (p.spec ? `<div class="spec"><div class="tester"><div class="tbar mono">${p.spec.map((f, k) => `<button type="button" class="tf" data-k="${k}" aria-pressed="${k === 0}">${esc(f.family)}</button>`).join('')}<input type="range" min="20" max="160" value="72" aria-label="Size"><a class="tdl" href="${p.spec[0].file}" download>Download .otf</a></div><div class="tarea" contenteditable="true" spellcheck="false" style="font-size:72px;font-family:'${p.spec[0].family}',var(--sans)">${SPEC[0]}</div></div><p class="s-abc tabc" style="font-family:'${p.spec[0].family}',var(--sans)">abcdefghijklmnopqrstuvwxyz<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>0123456789</p></div>` : '') + (p.imgs || []).map(([k, c]) => `<figure><img src="img/800/${k}.webp" srcset="img/800/${k}.webp 800w, img/1600/${k}.webp 1600w" sizes="(min-width:900px) 820px, 90vw" alt="${esc(c || p.title)}" loading="lazy" decoding="async">${c ? `<figcaption class="mono">${esc(c)}</figcaption>` : ''}</figure>`).join('');
+  const rest = (p.imgs || []).slice(1);
+  $('#pj-gal').innerHTML = (p.spec ? `<div class="spec"><div class="tester"><div class="tbar mono">${p.spec.map((f, k) => `<button type="button" class="tf" data-k="${k}" aria-pressed="${k === 0}">${esc(f.family)}</button>`).join('')}<input type="range" min="20" max="160" value="72" aria-label="Size"><a class="tdl" href="${p.spec[0].file}" download>Download .otf</a></div><div class="tarea" contenteditable="true" spellcheck="false" style="font-size:72px;font-family:'${p.spec[0].family}',var(--sans)">${SPEC[0]}</div></div><p class="s-abc tabc" style="font-family:'${p.spec[0].family}',var(--sans)">abcdefghijklmnopqrstuvwxyz<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>0123456789</p></div>` : '') + rest.map(([k, c]) => `<figure><img src="img/800/${k}.webp" srcset="img/800/${k}.webp 800w, img/1600/${k}.webp 1600w" sizes="(min-width:900px) 820px, 90vw" alt="${esc(c || p.title)}" loading="lazy" decoding="async">${c ? `<figcaption class="mono">${esc(c)}</figcaption>` : ''}</figure>`).join('');
   if (p.doc) {
     $('#pj-gal').insertAdjacentHTML('beforeend', `<div class="pj-doc"><button class="btn btn-act" type="button" id="pj-doc">${esc(p.doc.label)} <span aria-hidden="true">+</span></button></div>`);
     $('#pj-doc').onclick = () => {
