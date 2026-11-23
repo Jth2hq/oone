@@ -47,6 +47,7 @@
   --red:   #D8102F;                   /* the "care of" red — lifted from the logo */
   --blue:  oklch(.53 .175 262);       /* ≈ #2C5CC8 */
   --char:  oklch(.36 .022 50);        /* ≈ #453B34 — walnut gone charcoal: worn, desaturated */
+  --green: oklch(.6 .085 160);       /* garden green — people in my orbit */
   --lilac: oklch(.78 .07 300);        /* ≈ #BDAEDD — a note, used sparingly (~10%) */
   --blue-ink:oklch(.45 .17 262);      /* blue as text on paper (AA) */
   --lilac-ink:oklch(.42 .08 300);
@@ -485,7 +486,7 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
 .tile.idea{--k:var(--lilac);background:color-mix(in oklch,var(--lilac) 26%,var(--paper));box-shadow:none}
 .tile.sensation{--k:var(--blue);background:color-mix(in oklch,var(--blue) 11%,var(--paper));box-shadow:none}
 .tile.artifact{--k:var(--char);background:color-mix(in oklch,var(--char) 9%,var(--paper));box-shadow:none}
-.tile.link{--k:var(--ink);background:#fff;box-shadow:inset 0 0 0 1px var(--rule)}
+.tile.link{--k:var(--green);background:#fff;box-shadow:inset 0 0 0 1px var(--rule)}
 .tile.link:hover{box-shadow:inset 0 0 0 1px var(--ink)}
 .tile.link .t::after{content:" ↗";font-weight:400;color:var(--red)}
 .tile.link.soon{cursor:default}
@@ -498,7 +499,6 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
 .tile.photo .t{color:var(--osd)}
 .tile.wide{grid-column:span 2}
 .tile[hidden]{display:none}
-.tile.mine{box-shadow:inset 0 0 0 2px var(--red)}
 .add{margin-left:0}
 
 /* 14 SHEETS ── overlays, held inside the glass ─────────────────────────── */
@@ -698,7 +698,6 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 .door:hover,.door:focus-visible{background:rgb(18 17 15/.55)}
 
 /* 19 PROJECT VIEW ── the row you clicked, opened up: same title, same caption line, same picture — now full width */
-.sheet-wrap:has(.sheet.pj){padding:0;place-items:stretch}
 .sheet.pj{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;padding:0 var(--m) var(--m);background:var(--paper)!important}
 .pj-bar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;margin:0 calc(-1 * var(--m));padding:clamp(14px,1.6cqi,22px) var(--m);background:var(--paper);border-bottom:1px solid var(--ink)}
 .pj-bar>*{text-transform:uppercase;letter-spacing:.09em}
@@ -728,9 +727,19 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 .room .tile .dot{background:var(--k)}
 .room .filters .dot{display:inline-block}
 .room .key .dot{background:var(--c)}
-.room .tile.link .t::after{color:var(--ink)}
+.room .tile.link .t::after{color:var(--green)}
 /* full-bleed bands meet the next section with no stray inset rule */
 .room .moment + .page > .sec:first-child,.room .moment + .page > :first-child,.room .moment + .backpage{border-top:0}
+
+/* 21 SOFT ARRIVALS ── pop-ups fade and rise on the GPU only; no layout or visibility snap (iOS) */
+.sheet-wrap{transition:opacity .45s cubic-bezier(.2,.7,.2,1),visibility 0s linear .45s;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.sheet-wrap.open{transition:opacity .45s cubic-bezier(.2,.7,.2,1),visibility 0s}
+.sheet-wrap .sheet{transform:translate3d(0,28px,0) scale(.985);opacity:.001;transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .4s cubic-bezier(.2,.7,.2,1);will-change:transform,opacity;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.sheet-wrap.open .sheet{transform:translate3d(0,0,0) scale(1);opacity:1}
+#sheet-project{padding:0;place-items:stretch}
+.sheet.pj #pj-hero,.sheet.pj .pj-row,.sheet.pj .pj-cols{transition:opacity .35s ease}
+.sheet.pj.swap #pj-hero,.sheet.pj.swap .pj-row,.sheet.pj.swap .pj-cols{opacity:0}
+@media (prefers-reduced-motion:reduce){.sheet-wrap,.sheet-wrap .sheet{transition:opacity .2s linear}.sheet-wrap .sheet{transform:none}}
 </style>
 </head>
 <body>
@@ -956,7 +965,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
         </section>
 
         <footer class="backpage">
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--red)"></span>Made by me</li><li><span class="dot" style="--c:var(--lilac)"></span>Idea</li><li><span class="dot" style="--c:var(--blue)"></span>Sensation</li><li><span class="dot" style="--c:var(--char)"></span>Artifact</li></ul></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--lilac)"></span>Idea — words</li><li><span class="dot" style="--c:var(--blue)"></span>Sensation — songs, clips, nights out</li><li><span class="dot" style="--c:var(--char)"></span>Artifact — film photographs</li><li><span class="dot" style="--c:var(--green)"></span>Orbit — people and what they make</li></ul></div>
         </footer>
      </div>
     </article>
@@ -1248,35 +1257,29 @@ const PROJECTS = [
      link  href (use '#' for "soon"), kind (the source line), price (for sale) */
 const WORLD = [
   {id:'l1',cat:'idea',date:'2026-05-12',title:'Lorem ipsum dolor',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'p1',cat:'artifact',date:'2026-05-02',title:'Consectetur adipiscing',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'piazza-sphere',mine:1},
-  {id:'l2',cat:'artifact',date:'2026-04-28',title:'Sed do eiusmod',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
+  {id:'p1',cat:'artifact',date:'2026-05-02',title:'Consectetur adipiscing',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'piazza-sphere'},
+  {id:'l2',cat:'sensation',date:'2026-04-28',title:'Sed do eiusmod',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'l3',cat:'idea',date:'2026-04-10',title:'Tempor incididunt',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'p2',cat:'sensation',date:'2026-04-04',title:'Ut labore et dolore',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'kelp-rocks'},
+  {id:'p2',cat:'artifact',date:'2026-04-04',title:'Ut labore et dolore',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'kelp-rocks'},
   {id:'l4',cat:'sensation',date:'2026-03-22',title:'Magna aliqua',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'p3',cat:'artifact',date:'2026-03-12',title:'Quis nostrud',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'checker-threshold',mine:1},
+  {id:'p3',cat:'artifact',date:'2026-03-12',title:'Quis nostrud',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'checker-threshold'},
   {id:'l5',cat:'idea',date:'2026-03-08',title:'Ullamco laboris',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'p4',cat:'sensation',date:'2026-02-22',title:'Nisi ut aliquip',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'gorse-hill'},
+  {id:'p4',cat:'artifact',date:'2026-02-22',title:'Nisi ut aliquip',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'gorse-hill'},
   {id:'l6',cat:'sensation',date:'2026-02-14',title:'Ex ea commodo',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'l7',cat:'artifact',date:'2026-02-02',title:'Duis aute irure',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'p5',cat:'sensation',date:'2025-12-20',title:'Reprehenderit voluptate',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'bouquet-park'},
+  {id:'l7',cat:'sensation',date:'2026-02-02',title:'Duis aute irure',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
+  {id:'p5',cat:'artifact',date:'2025-12-20',title:'Reprehenderit voluptate',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'bouquet-park'},
   {id:'l8',cat:'sensation',date:'2026-01-15',title:'Velit esse cillum',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'p6',cat:'artifact',date:'2025-11-22',title:'Excepteur sint',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'powder-room',mine:1},
+  {id:'p6',cat:'artifact',date:'2025-11-22',title:'Excepteur sint',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'powder-room'},
   {id:'l9',cat:'idea',date:'2025-12-04',title:'Occaecat cupidatat',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'l10',cat:'artifact',date:'2025-11-15',title:'Non proident',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
+  {id:'l10',cat:'sensation',date:'2025-11-15',title:'Non proident',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'l11',cat:'sensation',date:'2025-10-30',title:'Sunt in culpa',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'l12',cat:'idea',date:'2025-09-22',title:'Deserunt mollit',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
-  {id:'w01',cat:'link',date:'2026-11-12',kind:'studio',title:'Wesley Moon Inc.',text:'Designer, 2024–26.',href:'https://wesleymoon.com'},
-  {id:'w02',cat:'link',date:'2026-11-08',kind:'reference',title:'Are.na',text:'The research board behind the work.',href:'https://www.are.na/josh-harrison-tzcbbdxiro8'},
   {id:'w03',cat:'link',date:'2026-11-02',kind:'scent',title:'Liza Pittard',text:'Lorem ipsum dolor sit amet.',href:'https://lizapittard.com'},
   {id:'w04',cat:'link',date:'2026-10-28',kind:'wine',title:'Irving Bottle',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',href:'https://irvingbottle.com'},
   {id:'w05',cat:'link',date:'2026-10-20',kind:'cake',title:'Love Song',text:'Lorem ipsum dolor sit amet.',href:'https://lovesongva.com'},
   {id:'w06',cat:'link',date:'2026-10-14',kind:'barber',title:'Trios for Hair',text:'Lorem ipsum dolor sit amet.',href:'https://triosforhair.com'},
   {id:'w07',cat:'link',date:'2026-10-06',kind:'acupuncture',title:'TAP Acupuncture',text:'Lorem ipsum dolor sit amet.',href:'https://tapacupuncture.com'},
   {id:'w08',cat:'link',date:'2026-09-30',kind:'textile',title:'Cidney Cher',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',href:'https://cidneycher.com'},
-  {id:'w09',cat:'link',date:'2026-09-22',kind:'shop',title:'c/o pin · v1',text:'Lorem ipsum dolor sit amet.',price:'$18',href:'#'},
-  {id:'w10',cat:'link',date:'2026-09-12',kind:'past life',title:'Hart Howerton',text:'Designer, 2022–24.',href:'https://harthowerton.com'},
-  {id:'w11',cat:'link',date:'2026-09-04',kind:'past life',title:'Bedrock Detroit',text:'Architecture Coordinator, 2017–20.',href:'https://bedrockdetroit.com'},
-  {id:'w12',cat:'link',date:'2026-08-26',kind:'shop',title:'Thesis print',text:'Lorem ipsum dolor sit amet.',price:'$45',href:'#'},
   {id:'w13',cat:'link',date:'2026-08-18',kind:'type',title:'Klim Type Foundry',text:'Lorem ipsum dolor sit amet.',href:'https://klim.co.nz'},
   {id:'w14',cat:'link',date:'2026-08-10',kind:'friend',title:'Out of Office Studio',text:'Lorem ipsum dolor sit amet.',href:'#'}
 ];
@@ -1331,7 +1334,7 @@ let at = 0, timer = null, paused = reduced;
 function caption(){
   const p = feed[at];
   reel.classList.toggle('light', !p.photo && LIGHT.includes(p.field || 'bone'));
-  $('#cap-dot').style.background = (p.photo || p.project) ? 'var(--red)' : 'var(--lilac)';
+  $('#cap-dot').style.background = p.project ? 'var(--red)' : p.photo ? 'var(--char)' : 'var(--lilac)';
   $('#cap-idx').textContent = p.idx;
   $('#cap-text').textContent = p.cap;
 }
@@ -1441,9 +1444,9 @@ const sheetOpen = () => !!openSheetEl;
 function openSheet(id, focusSel){
   lastFocus = document.activeElement;
   openSheetEl = $('#' + id);
-  openSheetEl.classList.add('open');
-  openSheetEl.querySelector('.sheet').scrollTop = 0;
-  openSheetEl.querySelector(focusSel || 'h2')?.focus({preventScroll:true});
+  const el = openSheetEl; el.querySelector('.sheet').scrollTop = 0;
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('open')));
+  setTimeout(() => el.querySelector(focusSel || 'h2')?.focus({preventScroll:true}), 460);
 }
 function closeSheet(){
   if (!openSheetEl) return;
@@ -1560,7 +1563,7 @@ function openProject(id){
   $('#pj-cat').textContent = [p.client, p.role, p.year].filter(Boolean).join(' / ');
   const cov = p.imgs && p.imgs[0] && p.imgs[0][0], nx = PROJECTS[(i + 1) % PROJECTS.length];
   $('#pj-hero').src = cov ? `img/1600/${cov}.webp` : ''; $('#pj-hero').parentElement.hidden = !cov;
-  $('#pj-next').innerHTML = `<span class="mono">Next</span>${esc(nx.title)} →`; $('#pj-next').onclick = () => openProject(nx.id);
+  $('#pj-next').innerHTML = `<span class="mono">Next</span>${esc(nx.title)} →`; $('#pj-next').onclick = () => { const sh = $('.sheet.pj'); sh.classList.add('swap'); setTimeout(() => { openProject(nx.id); sh.scrollTo({top:0}); requestAnimationFrame(() => sh.classList.remove('swap')); }, 320); };
   $('#pj-desc').textContent = p.desc;
   const SPEC = ['A more considered world', 'Ideas Spaces Objects People', 'Good ideas better company', 'The quick brown fox jumps over the lazy dog'];
   const rest = (p.imgs || []).slice(1);
@@ -1607,8 +1610,8 @@ document.querySelectorAll('form.form').forEach(form => form.addEventListener('su
 }));
 
 /* ── world: the log ─────────────────────────────────────────────────── */
-const CATS = [['all','All'], ['idea','Ideas'], ['sensation','Sensations'], ['artifact','Artifacts'], ['link','Links']];
-const KDOT = {idea:'var(--lilac)', sensation:'var(--blue)', artifact:'var(--char)', link:'var(--ink)'};
+const CATS = [['all','All'], ['idea','Ideas'], ['sensation','Sensations'], ['artifact','Artifacts'], ['link','Orbit']];
+const KDOT = {idea:'var(--lilac)', sensation:'var(--blue)', artifact:'var(--char)', link:'var(--green)'};
 const fmtDate = d => new Date(d + 'T12:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
 WORLD.sort((a, b) => b.date.localeCompare(a.date));
 { const notes = WORLD.filter(e => e.cat !== 'link'), links = WORLD.filter(e => e.cat === 'link'), mix = [];
@@ -1616,7 +1619,7 @@ WORLD.sort((a, b) => b.date.localeCompare(a.date));
   WORLD.splice(0, WORLD.length, ...mix); }
 $('#tiles').innerHTML = WORLD.map((e, i) => {
   const pic = e.photo && PHOTOS[e.photo];
-  const meta = `<span class="meta"><span class="dot"${e.mine ? ' style="background:var(--red)"' : ''}></span>${e.mine ? 'made by me — ' : ''}${e.cat === 'link' ? esc(e.kind || 'link') + (e.price ? ' — ' + esc(e.price) : '') : e.cat + ' — ' + fmtDate(e.date)}</span>`;
+  const meta = `<span class="meta"><span class="dot"></span>${e.cat === 'link' ? esc(e.kind || 'link') + (e.price ? ' — ' + esc(e.price) : '') : e.cat + ' — ' + fmtDate(e.date)}</span>`;
   if (pic) return `<button class="tile photo ${e.cat}" data-cat="${e.cat}" data-i="${i}">` +
       `<img srcset="${srcset(e.photo)}" sizes="(max-width:800px) 50vw, 25vw" alt="" loading="lazy" decoding="async">` +
       `<span class="cap">${meta}<span class="t">${esc(e.title)}</span></span></button>`;
