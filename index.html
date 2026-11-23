@@ -47,9 +47,9 @@
   --red:   #D8102F;                   /* the "care of" red — lifted from the logo */
   --blue:  #2C30D3;                   /* ultramarine — the loft's blue light */
   --char:  oklch(.36 .022 50);        /* ≈ #453B34 — walnut gone charcoal: worn, desaturated */
-  --lilac: #A783F4;                   /* electric lavender — the loft's purple light, lifted */
+  --lilac: #946CE6;                   /* deep lavender — the loft's purple light; takes white text */
   --blue-ink:oklch(.45 .17 262);      /* blue as text on paper (AA) */
-  --lilac-ink:#6B45C9;
+  --lilac-ink:#6A45C4;
 
   --story:var(--char); --practice:var(--blue); --world:var(--lilac);
   --cherry:var(--red);
@@ -586,7 +586,7 @@ html.night .room,html.night .sheet-wrap{
   --paper:oklch(.68 .014 50);--bone:oklch(.66 .014 50);--linen:oklch(.64 .016 48);
   --ink:#1E1B17;--ink-2:#463F37;--rule:rgb(30 27 23/.2);
   --blue:#4A4EE6;--blue-ink:#7C80F0;
-  --char:oklch(.30 .02 50);--lilac:#B497F7;--lilac-ink:#C9B2FA;
+  --char:oklch(.30 .02 50);--lilac:#A584EE;--lilac-ink:#C2A9F8;
   --red:#B8122C;
   --weave:repeating-linear-gradient(90deg,rgb(30 27 23/.03) 0 1px,transparent 1px 3px),repeating-linear-gradient(0deg,rgb(255 236 220/.05) 0 1px,transparent 1px 4px);
   color:var(--ink)}
@@ -750,7 +750,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 .form .picks small{color:var(--ink-2);font-size:.88em}
 
 /* 22 ORBIT COLOUR IN POP-UPS ── the category's colour carries the head band, the marker and the action */
-#sheet-entry[data-k=idea],#sheet-add[data-k=idea]{--k:var(--lilac);--kon:var(--ink)}
+#sheet-entry[data-k=idea],#sheet-add[data-k=idea]{--k:var(--lilac);--kon:#fff}
 #sheet-entry[data-k=artifact],#sheet-add[data-k=artifact]{--k:var(--red);--kon:#fff}
 #sheet-entry[data-k=sensation],#sheet-add[data-k=sensation]{--k:var(--blue);--kon:#fff}
 #sheet-entry[data-k=link],#sheet-add[data-k=link]{--k:var(--char);--kon:#fff}
@@ -1327,8 +1327,8 @@ const WORLD = [
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const FIELDS = {bone:['#E8E4DC','#1A1A1A'], ink:['#1A1A1A','#EDEAE3'],
-                story:['var(--char)','#F1EEE8'], practice:['var(--blue)','#F3F1EC'], world:['var(--lilac)','#1A1A1A']};
-const LIGHT = ['bone', 'world'];   /* light fields take ink controls; the rest keep bone */
+                story:['var(--char)','#F1EEE8'], practice:['var(--blue)','#F3F1EC'], world:['var(--lilac)','#F3F1EC']};
+const LIGHT = ['bone'];   /* light fields take ink controls; the rest keep bone */
 const DOTS = {story:'var(--story)', practice:'var(--practice)', world:'var(--world)'};
 const srcset = k => `img/800/${PHOTOS[k].src}.webp 800w, img/1600/${PHOTOS[k].src}.webp 1600w`;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
