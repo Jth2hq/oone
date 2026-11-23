@@ -673,39 +673,25 @@ html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
 .room .btn-act:hover,.sheet .btn-act:hover{background:var(--red)}
 .sheet-body h2{font-weight:900;text-transform:uppercase;font-size:clamp(32px,4cqi,64px);line-height:.88}
 .sheet-head{text-transform:uppercase;letter-spacing:.09em}
-/* rooms aren't colour-coded: every break is charcoal. Each room carries one accent, sparingly —
-   Story blue, Practice red, World lilac — on labels, small numbers, markers, the title rule, the link line and hovers */
-#story,#practice,#world{--c:var(--char);--c-ink:var(--char);--on-c:var(--paper)}
-#story{--acc:var(--blue);--acc-ink:var(--blue-ink)}
-#practice{--acc:var(--red);--acc-ink:var(--red)}
-#world{--acc:var(--lilac);--acc-ink:var(--lilac-ink)}
+/* baseline: monochrome — ink, paper, charcoal for breaks — and one accent, red, used sparingly. Pop-ups follow the same rules. */
+#story,#practice,#world,.sheet-wrap{--c:var(--char);--c-ink:var(--char);--on-c:var(--paper);--acc:var(--red);--acc-ink:var(--red);--blue-ink:var(--ink);--lilac-ink:var(--ink)}
 .room .moment{background:var(--char);color:var(--paper)}
-.room .sidehead .n,.room .svc .num,.room .cv .num,.room .imperatives li::before,.room .opener .part{color:var(--acc-ink)}
+.room .sidehead .n,.room .svc .num,.room .cv .num,.room .imperatives li::before,.room .opener .part,.sheet-head{color:var(--acc-ink)}
 .room .opener .part .dot,.room .folio .dot,.room .sidehead .dot{background:var(--acc)}
 .contents.rows .go{border-bottom-color:var(--acc)}
 .contents.rows button:hover .t,.room .backpage .next:hover b{color:var(--acc-ink)}
 .room .svc li:hover{border-color:var(--acc)}
-.room .opener h1{border-bottom:2px solid var(--acc)}
-.room .btn-act:hover{background:var(--acc);color:var(--paper)}
-#world .btn-act:hover{color:var(--ink)}
+.room .opener h1{border-bottom:0;padding-bottom:0}
+.room .tile .dot,.filters .dot{background:var(--ink)!important}
+.room .filters button{background:var(--paper)}
+.room .filters button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.room .tile.link .t::after{color:var(--red)}
+.sheet .btn-act:hover,.room .btn-act:hover{background:var(--red);color:#fff}
 @media (max-width:640px){
   .contents.rows .row{grid-template-columns:1fr;gap:14px}
   .room .opener{min-height:58cqh}
 }
 
-/* 18 SURPRISE SHEETS ── every pop-up opens in a full field of cherry, cobalt or lilac; white type, or tone-on-tone on lilac */
-.sheet-wrap[data-hue=red]{--hue:#D8102F;--on:#fff}
-.sheet-wrap[data-hue=blue]{--hue:var(--blue);--on:#fff}
-.sheet-wrap[data-hue=lilac]{--hue:var(--lilac);--on:oklch(.3 .09 300)}
-.sheet-wrap[data-hue] .sheet{--paper:var(--hue);--linen:color-mix(in oklch,var(--on) 12%,var(--hue));--ink:var(--on);--ink-2:color-mix(in oklch,var(--on) 80%,var(--hue));
-  --rule:color-mix(in oklch,var(--on) 32%,transparent);--red:var(--on);--c:var(--on);--c-ink:var(--on);--blue-ink:var(--on);--lilac-ink:var(--on);--on-c:var(--hue);
-  background:var(--hue);color:var(--on)}
-.sheet-wrap[data-hue] .sheet-head{background:var(--hue);color:var(--on);border-bottom-color:var(--rule)}
-.sheet-wrap[data-hue] .sheet-head button,.sheet-wrap[data-hue] a{color:inherit}
-.sheet-wrap[data-hue] .btn-act{background:var(--on);color:var(--hue)}
-.sheet-wrap[data-hue] .btn-act:hover{background:color-mix(in oklch,var(--on) 82%,var(--hue));color:var(--hue)}
-.sheet-wrap[data-hue] ::selection{background:var(--on);color:var(--hue)}
-html.night .sheet-wrap[data-hue] .sheet{filter:brightness(.88)}
 /* room buttons: light, not gloomy */
 .roomnav .chip{background:var(--paper);color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);text-shadow:none}
 .roomnav .chip:hover{background:var(--ink);color:var(--paper)}
@@ -942,7 +928,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
     </article>
 
     <!-- ═══ SHEETS — overlays, inside the glass ═══ -->
-    <div class="sheet-wrap" id="sheet-project" style="--c:var(--blue)">
+    <div class="sheet-wrap" id="sheet-project">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="pj-title">
         <div class="sheet-head mono"><span id="pj-idx"></span><button class="x">Close ×</button></div>
         <div class="sheet-body">
@@ -960,7 +946,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
       </div>
     </div>
 
-    <div class="sheet-wrap" id="sheet-entry" style="--c:var(--lilac)">
+    <div class="sheet-wrap" id="sheet-entry">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="en-title">
         <div class="sheet-head mono"><span id="en-meta"></span><button class="x">Close ×</button></div>
         <div class="sheet-body">
@@ -971,13 +957,13 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
       </div>
     </div>
 
-    <div class="sheet-wrap" id="sheet-process" style="--c:var(--char);--c-ink:var(--char);--on-c:var(--paper)">
+    <div class="sheet-wrap" id="sheet-process">
       <div class="sheet" role="dialog" aria-modal="true" aria-label="Process">
         <div class="sheet-head mono"><span id="proc-title"></span><button class="x">Close ×</button></div>
         <div class="sheet-body proc" id="proc-pages"></div>
       </div>
     </div>
-    <div class="sheet-wrap" id="sheet-manifesto" style="--c:var(--char);--c-ink:var(--char);--on-c:var(--paper)">
+    <div class="sheet-wrap" id="sheet-manifesto">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="man-title">
         <div class="sheet-head mono"><span>Story — manifesto, December 2021</span><button class="x">Close ×</button></div>
         <div class="sheet-body essay">
@@ -1004,7 +990,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
       </div>
     </div>
 
-    <div class="sheet-wrap" id="sheet-prices" style="--c:var(--blue);--c-ink:var(--blue-ink);--on-c:var(--paper)">
+    <div class="sheet-wrap" id="sheet-prices">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="prices-title">
         <div class="sheet-head mono"><span>Practice — prices</span><button class="x">Close ×</button></div>
         <div class="sheet-body">
@@ -1016,7 +1002,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
       </div>
     </div>
 
-    <div class="sheet-wrap" id="sheet-contact" style="--c:var(--blue);--c-ink:var(--blue-ink);--on-c:var(--paper)">
+    <div class="sheet-wrap" id="sheet-contact">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="contact-title">
         <div class="sheet-head mono"><span>Practice — start a project</span><button class="x">Close ×</button></div>
         <div class="sheet-body">
@@ -1083,7 +1069,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
       </div>
     </div>
 
-    <div class="sheet-wrap" id="sheet-add" style="--c:var(--lilac);--c-ink:var(--lilac-ink);--on-c:var(--paper)">
+    <div class="sheet-wrap" id="sheet-add">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="add-title">
         <div class="sheet-head mono"><span>World — a submission</span><button class="x">Close ×</button></div>
         <div class="sheet-body">
@@ -1423,9 +1409,6 @@ const sheetOpen = () => !!openSheetEl;
 function openSheet(id, focusSel){
   lastFocus = document.activeElement;
   openSheetEl = $('#' + id);
-  const hues = ['red', 'blue', 'lilac'].filter(h => h !== window.__lastHue);
-  window.__lastHue = hues[Math.floor(Math.random() * hues.length)];
-  openSheetEl.dataset.hue = window.__lastHue;
   openSheetEl.classList.add('open');
   openSheetEl.querySelector('.sheet').scrollTop = 0;
   openSheetEl.querySelector(focusSel || 'h2')?.focus({preventScroll:true});
