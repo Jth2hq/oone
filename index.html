@@ -45,9 +45,9 @@
   --osd:#F6F3EE;
 
   --red:   #D8102F;                   /* the "care of" red — lifted from the logo */
-  --blue:  #2C30D3;                   /* ultramarine — the loft's blue light */
+  --blue:  #3A55C9;                   /* cobalt, softened — the loft's blue light */
   --char:  oklch(.36 .022 50);        /* ≈ #453B34 — walnut gone charcoal: worn, desaturated */
-  --lilac: #946CE6;                   /* deep lavender — the loft's purple light; takes white text */
+  --lilac: #9479D2;                   /* soft lavender — the loft's purple light; takes white text */
   --blue-ink:oklch(.45 .17 262);      /* blue as text on paper (AA) */
   --lilac-ink:#6A45C4;
 
@@ -585,8 +585,8 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
 html.night .room,html.night .sheet-wrap{
   --paper:oklch(.68 .014 50);--bone:oklch(.66 .014 50);--linen:oklch(.64 .016 48);
   --ink:#1E1B17;--ink-2:#463F37;--rule:rgb(30 27 23/.2);
-  --blue:#4A4EE6;--blue-ink:#7C80F0;
-  --char:oklch(.30 .02 50);--lilac:#A584EE;--lilac-ink:#C2A9F8;
+  --blue:#5A72DD;--blue-ink:#8C9EEC;
+  --char:oklch(.30 .02 50);--lilac:#A28BDC;--lilac-ink:#C3B2EE;
   --red:#B8122C;
   --weave:repeating-linear-gradient(90deg,rgb(30 27 23/.03) 0 1px,transparent 1px 3px),repeating-linear-gradient(0deg,rgb(255 236 220/.05) 0 1px,transparent 1px 4px);
   color:var(--ink)}
@@ -777,6 +777,9 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 
 .en-go[hidden]{display:none!important}
 .sheet{background:var(--paper)!important}
+
+/* the door you chose: black, and still black once you're inside */
+.door[aria-current],.door:active,.roomnav .chip[aria-current],.roomnav .chip:active{background:var(--ink)!important;color:var(--paper)!important;box-shadow:none!important}
 </style>
 </head>
 <body>
@@ -1449,6 +1452,7 @@ function route(){
   showing = next;
   const swap = () => {
     if (next) document.documentElement.dataset.room = next; else delete document.documentElement.dataset.room;
+    document.querySelectorAll('[data-go]').forEach(b => b.toggleAttribute('aria-current', b.dataset.go === next));
     const sc = next && document.querySelector(`#${next} .room-scroll`);
     if (sc){ sc.scrollTop = 0; sc.focus({preventScroll:true}); }
     document.title = next ? `${next[0].toUpperCase() + next.slice(1)} — care of TANNER` : 'care of TANNER — Issue 01';
@@ -1472,7 +1476,7 @@ function route(){
 }
 addEventListener('hashchange', route);
 document.querySelectorAll('.roomnav [data-go]').forEach(b => b.addEventListener('click', e => { if (b.dataset.go === showing) e.stopImmediatePropagation(); }, true));
-document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => location.hash = b.dataset.go);
+document.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { document.querySelectorAll('[data-go]').forEach(x => x.toggleAttribute('aria-current', x.dataset.go === b.dataset.go)); location.hash = b.dataset.go; });
 document.querySelectorAll('.home,.close').forEach(a => a.addEventListener('click', e => {
   e.preventDefault(); history.pushState(null, '', location.pathname); route();
 }));
