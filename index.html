@@ -1003,7 +1003,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
         </section>
 
         <footer class="backpage">
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--lilac)"></span>Idea — words</li><li><span class="dot" style="--c:var(--red)"></span>Artifact — things made by hand: objects, ceramics, photographs</li><li><span class="dot" style="--c:var(--blue)"></span>Sensation — things lived: songs, clips, nights out</li><li><span class="dot" style="--c:var(--green)"></span>People — and what they make</li></ul></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--lilac)"></span>Idea — words</li><li><span class="dot" style="--c:var(--red)"></span>Artifact — things made by hand: objects, ceramics, photographs</li><li><span class="dot" style="--c:var(--blue)"></span>Sensation — things lived: songs, clips, nights out</li><li><span class="dot" style="--c:var(--green)"></span>In orbit — people and what they make</li></ul></div>
         </footer>
      </div>
     </article>
@@ -1663,7 +1663,7 @@ document.querySelectorAll('form.form').forEach(form => form.addEventListener('su
 }));
 
 /* ── world: the log ─────────────────────────────────────────────────── */
-const CATS = [['all','All'], ['idea','Ideas'], ['sensation','Sensations'], ['artifact','Artifacts'], ['link','People']];
+const CATS = [['all','All'], ['idea','Ideas'], ['sensation','Sensations'], ['artifact','Artifacts'], ['link','In orbit']];
 const KDOT = {idea:'var(--lilac)', sensation:'var(--blue)', artifact:'var(--red)', link:'var(--green)'};
 const fmtDate = d => new Date(d + 'T12:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
 WORLD.sort((a, b) => b.date.localeCompare(a.date));
@@ -1684,7 +1684,7 @@ $('#tiles').innerHTML = WORLD.map((e, i) => {
 $('#tiles').addEventListener('click', ev => {
   const t = ev.target.closest('button.tile'); if (!t) return;
   const e = WORLD[t.dataset.i];
-  const NAME = {idea:'Idea', sensation:'Sensation', artifact:'Artifact', link:'People'};
+  const NAME = {idea:'Idea', sensation:'Sensation', artifact:'Artifact', link:'In orbit'};
   const sh = $('#sheet-entry'); sh.dataset.k = e.cat;
   $('#en-meta').textContent = `Orbit — ${NAME[e.cat]}`;
   $('#en-kind').innerHTML = `<span class="dot"></span>${esc(NAME[e.cat])}${e.cat === 'link' ? ' — ' + esc(e.kind || '') : ' — ' + fmtDate(e.date)}`;
