@@ -614,7 +614,7 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
 .room .sec{border-top:var(--hair) solid var(--ink);row-gap:clamp(24px,3cqi,48px)}
 .room .sidehead{grid-column:1/-1;display:flex;flex-direction:column-reverse;gap:clamp(10px,1.2cqi,18px);color:var(--ink)}
 .room .sidehead .n{margin:0;color:var(--ink-2)}
-.room .sidehead b{font:900 clamp(40px,6.4cqi,112px)/.86 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.02em;color:var(--ink)}
+.room .sidehead b{font:900 clamp(40px,6.4cqi,112px)/.86 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.02em;color:transparent;-webkit-text-stroke:1px var(--ink)}
 .room .body{grid-column:1/-1}
 .room .body > *{max-width:52em}
 .room .body .lede{font-size:clamp(22px,2.4cqi,40px);line-height:1.2;max-width:28em}
@@ -751,13 +751,13 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 .form .picks small{color:var(--ink-2);font-size:.88em}
 
 /* 22 ORBIT COLOUR IN POP-UPS ── the category's colour carries the head band, the marker and the action */
-#sheet-entry[data-k=idea],#sheet-add[data-k=idea]{--k:var(--lilac);--kon:#fff}
+#sheet-entry[data-k=idea],#sheet-add[data-k=idea],#sheet-manifesto[data-k=idea]{--k:var(--lilac);--kon:#fff}
 #sheet-entry[data-k=artifact],#sheet-add[data-k=artifact]{--k:var(--red);--kon:#fff}
 #sheet-entry[data-k=sensation],#sheet-add[data-k=sensation]{--k:var(--blue);--kon:#fff}
 #sheet-entry[data-k=link],#sheet-add[data-k=link]{--k:var(--char);--kon:#fff}
-#sheet-entry[data-k] .sheet,#sheet-add[data-k] .sheet{box-shadow:0 24px 60px rgb(0 0 0/.25),inset 0 0 0 3px var(--k)}
-#sheet-entry[data-k] .sheet-head,#sheet-add[data-k] .sheet-head{background:var(--k)!important;color:var(--kon);border-bottom:0;transition:background .3s ease}
-#sheet-entry[data-k] .sheet-head button,#sheet-add[data-k] .sheet-head button{color:var(--kon)}
+#sheet-entry[data-k] .sheet,#sheet-add[data-k] .sheet,#sheet-manifesto[data-k] .sheet{box-shadow:0 24px 60px rgb(0 0 0/.25),inset 0 0 0 3px var(--k)}
+#sheet-entry[data-k] .sheet-head,#sheet-add[data-k] .sheet-head,#sheet-manifesto[data-k] .sheet-head{background:var(--k)!important;color:var(--kon);border-bottom:0;transition:background .3s ease}
+#sheet-entry[data-k] .sheet-head button,#sheet-add[data-k] .sheet-head button,#sheet-manifesto[data-k] .sheet-head button{color:var(--kon)}
 .en-kind{display:flex;align-items:center;gap:.6em;margin:0 0 .8em;text-transform:uppercase;letter-spacing:.09em;color:var(--ink)}
 .en-kind .dot{width:.9em;height:.9em;background:var(--k)}
 #sheet-entry .btn-act.en-go{background:var(--k);color:var(--kon)}
@@ -881,15 +881,6 @@ html.night .roomnav .chip{background:rgb(244 241 235/.14);color:var(--osd);box-s
                 <li><span class="mono num">01</span><span class="what">University of Virginia<small>Master of Architecture</small></span><span class="mono">2020–22</span></li>
                 <li><span class="mono num">02</span><span class="what">University of Virginia<small>Bachelor of Science, Architecture — Design Thinking</small><small>Bachelor of Arts, American Studies — Visual and Popular Culture</small></span><span class="mono">2013–17</span></li>
               </ol>
-            </div>
-          </section>
-      
-          <section class="sec essay-sec">
-            <div class="sidehead mono"><b>Manifesto</b><span class="n">03 · December 2021</span></div>
-            <div class="body essay">
-              <h2>Home as Possibility</h2>
-              <p class="essay-deck">On the closet, the bedroom, the house and the home — and six ways to design for the possibility of home.</p>
-              <button class="btn btn-act" data-sheet="sheet-manifesto">Read the manifesto <span aria-hidden="true">+</span></button>
             </div>
           </section>
         </div>
@@ -1057,9 +1048,9 @@ html.night .roomnav .chip{background:rgb(244 241 235/.14);color:var(--osd);box-s
         <div class="sheet-body proc" id="proc-pages"></div>
       </div>
     </div>
-    <div class="sheet-wrap" id="sheet-manifesto">
+    <div class="sheet-wrap" id="sheet-manifesto" data-k="idea">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="man-title">
-        <div class="sheet-head mono"><span>Story — manifesto, December 2021</span><button class="x">Close ×</button></div>
+        <div class="sheet-head mono"><span>Orbit — Idea, December 2021</span><button class="x">Close ×</button></div>
         <div class="sheet-body essay">
           <h2 id="man-title" tabindex="-1">Home as Possibility</h2>
               <p>I write this with an acknowledgment of my privilege as both a white gay male within the Queer community and as someone that has always had a shelter over their head. I write this from the perspective of having grown up with a single mother raising two children, from having watched her make sacrificial life decisions in order to keep us within a dwelling, from having relocated so many times that growth was never to be held in one place. I know that, because of this, I walk with both an inability to settle and an understanding of home as the overwhelming, all-encompassing emotion of arrival.</p>
@@ -1309,6 +1300,7 @@ const PROJECTS = [
      cat   idea | artifact | sensation | link
      link  href (use '#' for "soon"), kind (the source line), price (for sale) */
 const WORLD = [
+  {id:'manifesto',cat:'idea',date:'2021-12-01',title:'Home as Possibility',text:'On the closet, the bedroom, the house and the home — and six ways to design for the possibility of home.',sheet:'sheet-manifesto'},
   {id:'l1',cat:'idea',date:'2026-05-12',title:'Lorem ipsum dolor',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'p1',cat:'artifact',date:'2026-05-02',title:'Consectetur adipiscing',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'piazza-sphere'},
   {id:'l2',cat:'sensation',date:'2026-04-28',title:'Sed do eiusmod',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
@@ -1698,6 +1690,7 @@ $('#tiles').innerHTML = WORLD.map((e, i) => {
 $('#tiles').addEventListener('click', ev => {
   const t = ev.target.closest('button.tile'); if (!t) return;
   const e = WORLD[t.dataset.i];
+  if (e.sheet){ openSheet(e.sheet, '#man-title'); return; }
   const NAME = {idea:'Idea', sensation:'Sensation', artifact:'Artifact', link:'In orbit'};
   const sh = $('#sheet-entry'); sh.dataset.k = e.cat;
   $('#en-meta').textContent = `Orbit — ${NAME[e.cat]}`;
