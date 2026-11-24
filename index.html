@@ -643,7 +643,7 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
 /* selected work: one project per row — name loud left, the line and the link right, the picture full width beneath */
 .room .pfilters{margin-bottom:clamp(24px,3cqi,48px)}
 .contents.rows{columns:auto;border-top:0;padding:0}
-.contents.rows li{margin:0;padding:0;border-top:var(--hair) solid var(--ink)}
+.contents.rows li{margin:0;padding:0;border-top:var(--hair) solid var(--ink);border-bottom:0}
 .contents.rows li:nth-child(n){padding-top:0}
 .contents.rows button{display:block;width:100%;padding:0;text-align:left;cursor:pointer;background:none;border:0;color:inherit}
 .contents.rows .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(16px,3cqi,64px);align-items:center;padding:clamp(28px,3.6cqi,60px) 0}
@@ -709,6 +709,12 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 .pj-say{margin:0;max-width:36ch;font-size:var(--t-lede);line-height:1.3}
 .pj-hero{margin:0 calc(-1 * var(--m));height:clamp(300px,62cqh,820px);background:var(--linen)}
 .pj-hero img{display:block;width:100%;height:100%;object-fit:cover}
+.sheet.pj .pj-hero{background:transparent;height:auto}
+.wf-hero{display:block;padding:clamp(16px,2cqi,32px) var(--m)}
+.wf{position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:.5em;width:100%;box-sizing:border-box;padding:1em;border:1px solid var(--ink);border-radius:6px;text-align:center;color:var(--ink);background:linear-gradient(to top right,transparent calc(50% - .5px),var(--rule) 50%,transparent calc(50% + .5px)),linear-gradient(to bottom right,transparent calc(50% - .5px),var(--rule) 50%,transparent calc(50% + .5px))}
+.wf-m{font-size:var(--t-mono);text-transform:uppercase;letter-spacing:.09em;background:var(--paper);padding:.2em .5em}
+.wf-s{max-width:28ch;font-size:.82em;color:var(--ink-2);background:var(--paper);padding:.1em .4em}
+.wf-r{position:absolute;right:.8em;bottom:.6em;font-size:var(--t-mono);color:var(--ink-2)}
 .pj-cols{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(16px,3cqi,64px);padding:clamp(28px,3.6cqi,60px) 0;border-bottom:var(--hair) solid var(--ink)}
 .pj-cols #pj-desc{margin:0;max-width:34ch}
 .pj-cols .pj-gal{margin:0}
@@ -1270,9 +1276,9 @@ const PROJECTS = [
    imgs:[['type-sketch-01','study 01 — sketch'],['type-digital-01','study 01 — digital concept'],['type-sketch-02','study 02 — sketch'],['type-digital-02','study 02 — digital concept']]},
   {id:'studies',dims:['3D'],needs:[],title:'Studies in Detail',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'Ongoing',role:'Designer',client:'Interior architecture',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['studies-sink','']]},
-  {id:'matildahunter',dims:['2D'],needs:['Design for print — stationery, posters, books'],title:'Matilda + Hunter',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2026',role:'Designer',client:'Wedding print suite',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
+  {id:'matildahunter',dims:['2D','4D'],needs:['Design for print — stationery, posters, books'],title:'Matilda + Hunter',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2026',role:'Designer',client:'Wedding print suite',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['mh-suite','']]},
-  {id:'fungbet',dims:['2D'],needs:['Design for print — stationery, posters, books'],title:'Xo, E+A',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2025',role:'Designer',client:'Emily Fung & Andreas Betancourt — wedding',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
+  {id:'fungbet',dims:['2D','4D'],needs:['Design for print — stationery, posters, books'],title:'Xo, E+A',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2025',role:'Designer',client:'Emily Fung & Andreas Betancourt — wedding',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['fb-menu-tattoo','']]},
   {id:'bigbaby',dims:['2D'],needs:['Design for print — stationery, posters, books'],title:'Big Baby Turns 30!',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2024',role:'Designer',client:'New Year’s Eve dinner',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['nye-stack','']]},
@@ -1289,12 +1295,38 @@ const PROJECTS = [
    imgs:[['lac-street','']]},
   {id:'pac',dims:['3D'],needs:[],title:'Performing Arts Center',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2021',role:'Renderings',client:'MGA Partners, Architects',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['pac-exterior','']]},
-  {id:'detroit',dims:['2D'],needs:['Design for print — stationery, posters, books'],title:'Design for the City',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2017–19',role:'Designer',client:'Bedrock Detroit',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
+  {id:'dd139',dims:['4D'],needs:[],title:'Detroit Design 139',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2018',role:'Designer',client:'Exhibition',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
+  {id:'detroit',dims:['2D','4D'],needs:['Design for print — stationery, posters, books'],title:'Design for the City',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2017–19',role:'Designer',client:'Bedrock Detroit',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['ddc-street','']]},
   {id:'staging',dims:['3D'],needs:[],title:'Staging',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2019–20',role:'Designer',client:'Bedrock Detroit',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['stage-living','']]},
   {id:'cor',dims:['3D'],needs:[],title:'COR Wellness Center',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2020',role:'Coordinator',client:'Bedrock Detroit',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',imgs:[['cor-lobby','']]},
 ];
+
+/* Image plan — wireframes until the real images go in. One look across the site:
+   photographs carry the landing reel's film grade; drawings are ink on paper; print is shot flat on paper. */
+const WF_T = {
+  photo:  ['Photograph', 'colour film grade · daylight · level verticals', '3:2'],
+  film:   ['Film photograph', '35mm · same grade as the landing reel', '3:2'],
+  draw:   ['Drawing', 'ink linework on paper · one weight', '3:2'],
+  plan:   ['Plan or section', 'ink on paper · one weight · no colour fills', '3:2'],
+  model:  ['Model photo', 'white model on paper ground · soft side light', '3:2'],
+  render: ['Rendering', 'paper-toned · no sky gradient · matches the photographs', '16:9'],
+  flat:   ['Flat lay', 'overhead on paper ground · even light', '4:5'],
+  detail: ['Detail', 'close crop · paper texture visible', '1:1'],
+  scan:   ['Scan', 'pencil on paper · high contrast', '3:2'],
+  spec:   ['Specimen', 'black type on paper ground', '3:2'],
+  clip:   ['Clip', '10-second loop · no sound · same film grade', '16:9']
+};
+const WF = {
+  types:['scan','spec','detail'], studies:['draw','detail','photo'],
+  matildahunter:['flat','detail','film'], fungbet:['flat','detail','film'], bigbaby:['flat','detail','film'],
+  troub:['photo','photo','plan'], ranch:['photo','photo','plan'],
+  wtto:['draw','model','plan'], bcn:['draw','model','plan'], pantry:['draw','model','plan'], edge:['draw','model','plan'], cityspace:['draw','model','plan'],
+  pac:['render','render','plan'], dd139:['film','photo','clip'], detroit:['film','flat','photo'],
+  staging:['photo','photo','detail'], cor:['photo','plan','detail']
+};
+const wfBox = k => { const [m, st, r] = WF_T[k]; return `<span class="wf" style="aspect-ratio:${r.replace(':', '/')}"><span class="wf-m mono">${m}</span><span class="wf-s">${st}</span><span class="wf-r mono">${r}</span></span>`; };
 
 /* World: notes and links in one feed, newest first.
      cat   idea | artifact | sensation | link
@@ -1552,7 +1584,7 @@ function renderWork(){
     return `<li><button data-project="${p.id}" aria-label="${esc(p.title)} — ${esc(p.client)}, ${esc(p.year)}">` +
       `<span class="row"><span><span class="t">${esc(p.title)}</span><span class="cat">${esc([p.client, p.role, p.year].filter(Boolean).join(' / '))}</span></span>` +
       `<span><span class="say">${esc(p.tag || '')}</span><span class="go">View project ›</span></span></span>` +
-      `<span class="strip">${pic}</span></button></li>`;
+      `</button></li>`;
   }).join('');
   $('#pempty').hidden = list.length > 0;
   const groups = NEEDS.filter(g => pf.dim === 'all' || g.dim === pf.dim);
@@ -1621,12 +1653,13 @@ function openProject(id){
   $('#pj-title').textContent = p.title; $('#pj-tag').textContent = p.tag;
   $('#pj-cat').textContent = [p.client, p.role, p.year].filter(Boolean).join(' / ');
   const cov = p.imgs && p.imgs[0] && p.imgs[0][0], nx = PROJECTS[(i + 1) % PROJECTS.length];
-  $('#pj-hero').src = cov ? `img/1600/${cov}.webp` : ''; $('#pj-hero').parentElement.hidden = !cov;
+  const wf = WF[p.id] || ['photo'];
+  $('#pj-hero').parentElement.innerHTML = '<span id="pj-hero" class="wf-hero">' + wfBox(wf[0]) + '</span>';
   $('#pj-next').innerHTML = `<span class="mono">Next</span>${esc(nx.title)} →`; $('#pj-next').onclick = () => { const sh = $('.sheet.pj'); sh.classList.add('swap'); setTimeout(() => { openProject(nx.id); sh.scrollTo({top:0}); requestAnimationFrame(() => sh.classList.remove('swap')); }, 320); };
   $('#pj-desc').textContent = p.desc;
   const SPEC = ['A more considered world', 'Ideas Spaces Objects People', 'Good ideas better company', 'The quick brown fox jumps over the lazy dog'];
   const rest = (p.imgs || []).slice(1);
-  $('#pj-gal').innerHTML = (p.spec ? `<div class="spec"><div class="tester"><div class="tbar mono">${p.spec.map((f, k) => `<button type="button" class="tf" data-k="${k}" aria-pressed="${k === 0}">${esc(f.family)}</button>`).join('')}<input type="range" min="20" max="160" value="72" aria-label="Size"><a class="tdl" href="${p.spec[0].file}" download>Download .otf</a></div><div class="tarea" contenteditable="true" spellcheck="false" style="font-size:72px;font-family:'${p.spec[0].family}',var(--sans)">${SPEC[0]}</div></div><p class="s-abc tabc" style="font-family:'${p.spec[0].family}',var(--sans)">abcdefghijklmnopqrstuvwxyz<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>0123456789</p></div>` : '') + rest.map(([k, c]) => `<figure><img src="img/800/${k}.webp" srcset="img/800/${k}.webp 800w, img/1600/${k}.webp 1600w" sizes="(min-width:900px) 820px, 90vw" alt="${esc(c || p.title)}" loading="lazy" decoding="async">${c ? `<figcaption class="mono">${esc(c)}</figcaption>` : ''}</figure>`).join('');
+  $('#pj-gal').innerHTML = (p.spec ? `<div class="spec"><div class="tester"><div class="tbar mono">${p.spec.map((f, k) => `<button type="button" class="tf" data-k="${k}" aria-pressed="${k === 0}">${esc(f.family)}</button>`).join('')}<input type="range" min="20" max="160" value="72" aria-label="Size"><a class="tdl" href="${p.spec[0].file}" download>Download .otf</a></div><div class="tarea" contenteditable="true" spellcheck="false" style="font-size:72px;font-family:'${p.spec[0].family}',var(--sans)">${SPEC[0]}</div></div><p class="s-abc tabc" style="font-family:'${p.spec[0].family}',var(--sans)">abcdefghijklmnopqrstuvwxyz<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>0123456789</p></div>` : '') + wf.slice(1).map(k => `<figure>${wfBox(k)}</figure>`).join('');
   if (p.doc) {
     $('#pj-gal').insertAdjacentHTML('beforeend', `<div class="pj-doc"><button class="btn btn-act" type="button" id="pj-doc">${esc(p.doc.label)} <span aria-hidden="true">+</span></button></div>`);
     $('#pj-doc').onclick = () => {
