@@ -1350,7 +1350,7 @@ const HOLD = 5400, FADE = 1600;   // one breath per post
 const feed = (() => {
   const used = new Set([FIRST]);
   const film = Object.keys(PHOTOS).filter(k => !used.has(k))
-    .map((k, i) => ({f:'plain', photo:k, idx:'F-' + String(i + 1).padStart(2, '0'), zone:'world', cap:PHOTOS[k].title + ' — Nikon F100'}));
+    .map((k, i) => ({f:'plain', photo:k, idx:'F-' + String(i + 1).padStart(2, '0'), zone:'world', cap:PHOTOS[k].title}));
   const out = [{f:'plain', photo:FIRST, idx:'001', zone:'story', cap:'care of TANNER — Issue 01'}];
   return out.concat(film);
 })();
