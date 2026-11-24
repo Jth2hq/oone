@@ -40,7 +40,7 @@
 @font-face{font-family:"lipstick";src:url(fonts/lipstick.woff2) format("woff2");font-display:swap}
 :root{
   /* The loft: wall white, linen sheers, painted brick, stainless, a brass edge */
-  --bone:#E8E4DC; --paper:#F4F1EB; --linen:#EAE4D9; --ink:#1C1A18; --ink-2:#5E5A54; --rule:rgb(28 26 24/.16);
+  --bone:#E8E4DC; --paper:#F4F1EB; --linen:#EAE4D9; --ink:#1C1A18; --ink-2:#5E5A54; --rule:rgb(28 26 24/.16); --hair:.5px;
   --brass:#B39260; --steel:#C9CAC6;
   --osd:#F6F3EE;
 
@@ -167,9 +167,9 @@ to{opacity:1;-webkit-mask-position:0 0;mask-position:0 0}}
 .pt-script{font:400 clamp(40px,6cqi,100px)/1 var(--script);color:var(--red);transform:rotate(-5deg)}
 .pt-hand{font:400 clamp(36px,5.2cqi,88px)/1.05 var(--script);transform:rotate(-5deg)}
 .pt-list{width:min(24em,100%);font:400 clamp(18px,1.9cqi,30px)/1.25 var(--sans)}
-.pt-list span{display:block;padding:.26em 0 .16em;border-bottom:1px solid currentColor}
+.pt-list span{display:block;padding:.26em 0 .16em;border-bottom:var(--hair) solid currentColor}
 .pt .open{margin-top:1.4em;font:400 var(--t-mono)/1 var(--mono);letter-spacing:.04em;
-  border-bottom:1px solid currentColor;padding-bottom:3px;align-self:flex-start}
+  border-bottom:var(--hair) solid currentColor;padding-bottom:3px;align-self:flex-start}
 .pt.c .open{align-self:center}
 
 /* 06 STATEMENT ── one breath ──────────────────────────────────────────── */
@@ -304,7 +304,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 /* 09 PAGE ── everything inside the one margin ──────────────────────────── */
 .page{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gutter);padding:0 var(--m)}
 .sec{grid-column:1/-1;display:grid;grid-template-columns:subgrid;row-gap:clamp(16px,2cqi,32px);
-  padding:var(--block) 0;border-top:1px solid var(--rule)}
+  padding:var(--block) 0;border-top:var(--hair) solid var(--ink)}
 .sidehead{grid-column:1/4;color:var(--ink-2);line-height:1.5}
 .sidehead .n{display:block;margin-top:.3em}
 .sidehead b{display:block;font-weight:400;color:var(--ink)}
@@ -317,18 +317,18 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .body .lede{font:400 var(--t-lede)/1.35 var(--sans);letter-spacing:-.012em;margin-bottom:.8em;max-width:none}
 .body .logo{height:2em;vertical-align:-.34em}
 .body p:has(.logo){padding-top:.5em}
-.notes{list-style:none;padding:1em 0 0;margin:1.6em 0 0;border-top:1px solid var(--rule);color:var(--ink-2)}
+.notes{list-style:none;padding:1em 0 0;margin:1.6em 0 0;border-top:var(--hair) solid var(--ink);color:var(--ink-2)}
 .notes li{margin-bottom:.4em}
-.cv{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+.cv{list-style:none;margin:0;padding:0;border-top:var(--hair) solid var(--ink)}
 .cv li{display:grid;grid-template-columns:3ch minmax(0,1fr) auto;gap:var(--gutter);align-items:baseline;
-  padding:.9em 0;border-bottom:1px solid var(--rule)}
+  padding:.9em 0;border-bottom:var(--hair) solid var(--ink)}
 .cv .num{color:var(--red)}
 .cv .what{font-weight:500}
 .cv .what small{display:block;font-weight:400;color:var(--ink-2);font-size:.8em;margin-top:.35em}
 /* the essay — numbers hang in the margin of the list; each line stays one sentence */
 .essay #man-title + p::first-letter{float:left;font:800 3.4em/.82 var(--sans);font-stretch:75%;color:var(--red);padding:.06em .1em 0 0}
-.imperatives{counter-reset:i;list-style:none;margin:1.4em 0;padding:0;border-top:1px solid var(--ink)}
-.imperatives li{counter-increment:i;position:relative;padding:.9em 0 .9em 3.2em;border-bottom:1px solid var(--rule)}
+.imperatives{counter-reset:i;list-style:none;margin:1.4em 0;padding:0;border-top:var(--hair) solid var(--ink)}
+.imperatives li{counter-increment:i;position:relative;padding:.9em 0 .9em 3.2em;border-bottom:var(--hair) solid var(--ink)}
 .imperatives li::before{content:counter(i,decimal-leading-zero);position:absolute;left:0;top:1.15em;
   font:400 var(--t-mono)/1 var(--mono);color:var(--red)}
 .imperatives b{font-weight:600}
@@ -337,7 +337,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .refs{color:var(--ink-2);font-size:var(--t-mono)}
 
 .backpage{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gutter);row-gap:var(--block);
-  padding:var(--block) var(--m) var(--m);border-top:1px solid var(--rule)}
+  padding:var(--block) var(--m) var(--m);border-top:var(--hair) solid var(--ink)}
 .backpage .next{grid-column:1/8;text-decoration:none;display:block}
 .backpage .next span{display:block;color:var(--ink-2);margin-bottom:.6em}
 .backpage .next b{font:500 var(--t-h2)/1.1 var(--sans);letter-spacing:-.015em}
@@ -381,7 +381,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .vows b{font-weight:600}
 .m-group{margin-top:clamp(18px,2.4cqi,32px)}
 .m-group h3{margin:0 0 .4em;color:var(--red);font-weight:400}
-.m-svc{padding:14px 0;border-top:1px solid var(--rule)}
+.m-svc{padding:14px 0;border-top:var(--hair) solid var(--ink)}
 .m-svc h4{margin:0 0 .5em;font:600 var(--t-body)/1.3 var(--sans)}
 .m-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 18px;align-items:baseline;padding:.35em 0}
 .m-name small{display:block;margin-top:.3em;color:var(--ink-2)}
@@ -391,12 +391,12 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 
 /* 11 PRACTICE ── what, how, work ──────────────────────────────────────── */
 .svc{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--gutter);max-width:none!important}
-.svc li{padding:1em 0 1.4em;border-top:1px solid var(--rule)}
+.svc li{padding:1em 0 1.4em;border-top:var(--hair) solid var(--ink)}
 .svc .num{display:block;color:var(--red);margin-bottom:.6em}
 .svc h3{margin:0 0 .6em;font:500 var(--t-h3)/1.2 var(--sans)}
 .svc p{margin:0;color:var(--ink-2)}
 .steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--gutter);max-width:none!important}
-.steps li{padding-top:1em;border-top:1px solid var(--rule)}
+.steps li{padding-top:1em;border-top:var(--hair) solid var(--ink)}
 .steps .num{display:block;font:400 var(--t-mono)/1 var(--mono);color:var(--red)}
 .steps b{display:block;margin:.9em 0 .5em;font-weight:500}
 .steps p{margin:0;color:var(--ink-2)}
@@ -408,7 +408,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
   box-shadow:inset 0 0 0 1px var(--rule);background:rgb(255 255 255/.45);font-size:var(--t-small,14px)}
 .needs-f button[aria-pressed=true] span{box-shadow:inset 0 0 0 1.5px var(--ink);background:color-mix(in oklch,var(--blue) 16%,#fff)}
 .pempty{color:var(--ink-2);margin:1em 0 0}
-.contents{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink);max-width:none!important}
+.contents{list-style:none;margin:0;padding:0;border-top:var(--hair) solid var(--ink);max-width:none!important}
 /* the wall — one ink: every piece pulled through ink on paper; real colour on hover and inside the project */
 .contents.wall{position:relative;border-top:0;columns:3 15em;column-gap:clamp(18px,2.4cqi,40px);padding:clamp(14px,1.6cqi,24px) 0 0}
 .contents.wall li{border:0;break-inside:avoid;margin:0 0 clamp(28px,3.4cqi,52px)}
@@ -418,14 +418,14 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .contents.wall .pin{display:block;background:var(--linen)}
 .contents.wall .pin img{display:block;width:100%;height:auto;filter:url(#one-ink);transition:filter .4s var(--ui)}
 .contents.wall .blank{display:grid;place-items:center;aspect-ratio:4/5;background:var(--blue);color:var(--paper);font:800 clamp(24px,2.4cqi,36px)/1 var(--sans);font-stretch:75%;text-align:center;padding:1em}
-.contents.wall .lab{display:flex;align-items:baseline;gap:1em;margin-top:.7em;padding-top:.55em;border-top:1px solid var(--blue-ink);color:var(--blue-ink)}
+.contents.wall .lab{display:flex;align-items:baseline;gap:1em;margin-top:.7em;padding-top:.55em;border-top:var(--hair) solid var(--blue-ink);color:var(--blue-ink)}
 .contents.wall .t{font:400 11px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:inherit;transform:none!important}
 .contents.wall .yr{margin-left:auto;color:inherit}
 .contents.wall button:hover .pin img,.contents.wall button:focus-visible .pin img{filter:none}
 .contents.wall button:hover .t{color:var(--red)}
 html.night .contents.wall .pin img{filter:url(#one-ink) brightness(.82)}
 html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
-.contents li{border-bottom:1px solid var(--rule)}
+.contents li{border-bottom:var(--hair) solid var(--ink)}
 .contents button{width:100%;display:grid;grid-template-columns:3ch minmax(0,1fr) auto;gap:var(--gutter);
   align-items:baseline;text-align:left;padding:1em 0}
 .contents .num,.contents .yr{color:var(--ink-2)}
@@ -464,7 +464,7 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
 
 /* 13 WORLD ── the log: tiles, filters, and room for other people ───────── */
 .toolbar{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1em;
-  padding:var(--block) 0 clamp(16px,2cqi,28px);border-top:1px solid var(--rule)}
+  padding:var(--block) 0 clamp(16px,2cqi,28px);border-top:var(--hair) solid var(--ink)}
 .filters{display:flex;flex-wrap:wrap;gap:0;border-radius:999px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--rule)}
 .filters button{display:inline-flex;align-items:center;gap:.5em;height:clamp(36px,3.2cqi,46px);padding:0 1.2em;border-radius:0;
   background:color-mix(in oklch,var(--k,#fff) 20%,var(--paper));font:400 var(--t-mono)/1 var(--mono);letter-spacing:.04em}
@@ -509,24 +509,24 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
   transform:translateY(12px);transition:transform .32s var(--arrive);font-size:var(--t-body)}
 .sheet-wrap.open .sheet{transform:none}
 .sheet-head{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;align-items:center;
-  padding:calc(var(--m) * .4) var(--m);background:var(--paper);border-bottom:1px solid var(--rule);color:var(--ink-2)}
+  padding:calc(var(--m) * .4) var(--m);background:var(--paper);border-bottom:var(--hair) solid var(--ink);color:var(--ink-2)}
 .sheet-head button{min-height:44px;color:var(--ink)}
 .sheet-body{padding:var(--m) var(--m) calc(var(--m) * 1.6)}
 .sheet-body h2{margin:0 0 .5em;font:800 var(--t-h2)/1 var(--sans);font-stretch:75%;letter-spacing:-.01em;outline:none}
 .sheet-body .lede{font:400 var(--t-lede)/1.35 var(--sans)}
 .sheet-body .meta{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;gap:2em;
-  padding:1em 0;margin:1.2em 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  padding:1em 0;margin:1.2em 0;border-top:var(--hair) solid var(--ink);border-bottom:var(--hair) solid var(--ink)}
 .sheet-body .meta span{display:block;color:var(--ink-2);margin-bottom:.35em}
 .sheet-body p{max-width:62ch}
 @font-face{font-family:"Type Study 01";src:url(fonts/TypeStudy01-Regular.woff2) format("woff2");font-display:swap}
 @font-face{font-family:"Type Study 02";src:url(fonts/TypeStudy02-Regular.woff2) format("woff2");font-display:swap}
-.spec{padding:clamp(20px,3cqi,40px) 0;border-top:1px solid var(--rule);color:var(--cherry,#c8102e)}
+.spec{padding:clamp(20px,3cqi,40px) 0;border-top:var(--hair) solid var(--ink);color:var(--cherry,#c8102e)}
 .spec p{max-width:none;margin:0 0 .35em;line-height:1.05;text-wrap:balance}
 .spec .s-xl{font-size:clamp(48px,7cqi,104px)}.spec .s-l{font-size:clamp(32px,4.4cqi,64px)}.spec .s-m{font-size:clamp(22px,2.6cqi,36px)}
 .spec .s-abc{font-size:clamp(26px,3cqi,44px);letter-spacing:.04em;word-break:break-all}
 .spec a{color:var(--ink)}
-.tester{margin:0 0 1.2em;border:1px solid var(--rule);background:#fff}
-.tbar{display:flex;align-items:center;gap:1em;padding:.7em 1em;border-bottom:1px solid var(--rule);color:var(--ink-2);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.tester{margin:0 0 1.2em;border:var(--hair) solid var(--ink);background:#fff}
+.tbar{display:flex;align-items:center;gap:1em;padding:.7em 1em;border-bottom:var(--hair) solid var(--ink);color:var(--ink-2);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
 .tbar input{flex:1;max-width:220px;accent-color:var(--red)}
 .tbar a{margin-left:auto}
 .tbar .tf{padding:.35em .8em;border-radius:999px;box-shadow:inset 0 0 0 1px var(--rule);font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--ink)}
@@ -608,10 +608,10 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
 .room .opener{min-height:70cqh;align-content:end;gap:0;padding:var(--block) var(--m) calc(var(--block) * .55)}
 .room .opener .part{margin-bottom:clamp(12px,1.6cqi,24px);color:var(--ink)}
 .room .opener h1{font-size:clamp(50px,max(14.5cqi,min(64px,17.4cqi)),260px);font-weight:900;line-height:.8;text-transform:uppercase;letter-spacing:-.03em;
-  padding-bottom:clamp(14px,1.8cqi,30px);border-bottom:1px solid var(--ink)}
+  padding-bottom:clamp(14px,1.8cqi,30px);border-bottom:var(--hair) solid var(--ink)}
 .room .opener .deck{max-width:34ch;margin-top:clamp(18px,2.2cqi,34px);color:var(--ink);font-size:var(--t-lede)}
 /* sections: label, then a loud heading, then the content — stacked, full measure */
-.room .sec{border-top:1px solid var(--ink);row-gap:clamp(24px,3cqi,48px)}
+.room .sec{border-top:var(--hair) solid var(--ink);row-gap:clamp(24px,3cqi,48px)}
 .room .sidehead{grid-column:1/-1;display:flex;flex-direction:column-reverse;gap:clamp(10px,1.2cqi,18px);color:var(--ink)}
 .room .sidehead .n{margin:0;color:var(--ink-2)}
 .room .sidehead b{font:900 clamp(40px,6.4cqi,112px)/.86 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.02em;color:var(--ink)}
@@ -622,14 +622,14 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
 .room .intro{font-size:var(--t-lede);max-width:40ch}
 /* scenarios: outlined cards */
 .room .svc{grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:clamp(12px,1.4cqi,22px)}
-.room .svc li{display:flex;flex-direction:column;gap:.8em;padding:clamp(20px,2.2cqi,32px);border:1px solid var(--ink);border-radius:clamp(14px,1.4cqi,22px);min-height:clamp(240px,22cqi,340px)}
+.room .svc li{display:flex;flex-direction:column;gap:.8em;padding:clamp(20px,2.2cqi,32px);border:var(--hair) solid var(--ink);border-radius:clamp(14px,1.4cqi,22px);min-height:clamp(240px,22cqi,340px)}
 .room .svc .num{color:var(--ink-2);margin:0}
 .room .svc h3{margin:0;font:800 clamp(22px,2cqi,32px)/1 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.01em;color:var(--ink)}
 .room .svc p{color:var(--ink)}
 .room .scen .tags{margin-top:auto;color:var(--ink)}
 /* steps: big numerals */
 .room .steps{grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))}
-.room .steps li{border-top:1px solid var(--ink)}
+.room .steps li{border-top:var(--hair) solid var(--ink)}
 .room .steps .num{font:900 clamp(44px,5cqi,84px)/1 var(--sans);font-stretch:75%;color:var(--ink);margin-top:.15em}
 .room .steps b{font:800 clamp(20px,1.7cqi,28px)/1 var(--sans);font-stretch:75%;text-transform:uppercase}
 .room .steps p{color:var(--ink)}
@@ -637,20 +637,20 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
 .room .moment p{grid-column:1/-1;max-width:16ch;font-size:clamp(44px,7.5cqi,132px);line-height:.86;text-transform:uppercase;font-weight:900}
 .room .moment .who{grid-column:1/-1}
 /* lists */
-.room .cv{border-top:1px solid var(--ink)}
+.room .cv{border-top:var(--hair) solid var(--ink)}
 .room .cv .num,.room .imperatives li::before{color:var(--ink-2)}
 .room .cv .what{font-weight:700}
 /* selected work: one project per row — name loud left, the line and the link right, the picture full width beneath */
 .room .pfilters{margin-bottom:clamp(24px,3cqi,48px)}
 .contents.rows{columns:auto;border-top:0;padding:0}
-.contents.rows li{margin:0;padding:0;border-top:1px solid var(--ink)}
+.contents.rows li{margin:0;padding:0;border-top:var(--hair) solid var(--ink)}
 .contents.rows li:nth-child(n){padding-top:0}
 .contents.rows button{display:block;width:100%;padding:0;text-align:left;cursor:pointer;background:none;border:0;color:inherit}
 .contents.rows .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(16px,3cqi,64px);align-items:center;padding:clamp(28px,3.6cqi,60px) 0}
 .contents.rows .t{display:block;font:900 clamp(38px,5.6cqi,100px)/.84 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.02em}
 .contents.rows .cat{display:block;margin-top:1em;font:400 var(--t-mono)/1.5 var(--mono);text-transform:uppercase;letter-spacing:.09em}
 .contents.rows .say{display:block;max-width:36ch;font-size:var(--t-body);line-height:1.45}
-.contents.rows .go{display:inline-block;margin-top:1.2em;padding-bottom:.35em;border-bottom:1px solid var(--ink);font:400 var(--t-mono)/1 var(--mono);text-transform:uppercase;letter-spacing:.09em}
+.contents.rows .go{display:inline-block;margin-top:1.2em;padding-bottom:.35em;border-bottom:var(--hair) solid var(--ink);font:400 var(--t-mono)/1 var(--mono);text-transform:uppercase;letter-spacing:.09em}
 .contents.rows .strip{display:block;height:clamp(240px,38cqi,620px);background:var(--linen);margin-bottom:clamp(28px,3.6cqi,60px)}
 .contents.rows .strip img{display:block;width:100%;height:100%;object-fit:contain;filter:url(#one-ink);transition:filter .4s var(--ui)}
 .contents.rows .strip .blank{display:grid;place-items:center;height:100%;font:900 clamp(30px,4cqi,64px)/1 var(--sans);font-stretch:75%;text-transform:uppercase;color:var(--ink-2)}
@@ -658,14 +658,14 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
 .contents.rows button:hover .go{border-bottom-width:2px}
 html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
 /* world: flat, outlined, one voice */
-.room .toolbar{border-top:1px solid var(--ink)}
+.room .toolbar{border-top:var(--hair) solid var(--ink)}
 .room .tile{border-radius:clamp(12px,1.2cqi,18px)}
 .room .tile.idea,.room .tile.sensation,.room .tile.artifact,.room .tile.link{background:transparent;box-shadow:inset 0 0 0 1px var(--ink)}
 .room .tile .t{font:800 clamp(18px,1.6cqi,26px)/1.02 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.005em}
 .room .tile .meta{text-transform:uppercase;letter-spacing:.09em}
 .room .tile .dot{background:var(--k)}
 /* the next room, and the buttons — solid ink pills */
-.room .backpage{border-top:1px solid var(--ink)}
+.room .backpage{border-top:var(--hair) solid var(--ink)}
 .room .backpage .next b{font:900 clamp(40px,6cqi,110px)/.86 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.02em}
 .room .btn-act,.sheet .btn-act{background:var(--ink);color:var(--paper);box-shadow:none;font:800 clamp(15px,1.15cqi,18px)/1 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:.02em}
 .room .btn-act span,.sheet .btn-act span{color:inherit}
@@ -698,7 +698,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 
 /* 19 PROJECT VIEW ── the row you clicked, opened up: same title, same caption line, same picture — now full width */
 .sheet.pj{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;padding:0 var(--m) var(--m);background:var(--paper)!important}
-.pj-bar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;margin:0 calc(-1 * var(--m));padding:clamp(14px,1.6cqi,22px) var(--m);background:var(--paper);border-bottom:1px solid var(--ink)}
+.pj-bar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;margin:0 calc(-1 * var(--m));padding:clamp(14px,1.6cqi,22px) var(--m);background:var(--paper);border-bottom:var(--hair) solid var(--ink)}
 .pj-bar>*{text-transform:uppercase;letter-spacing:.09em}
 .pj-bar #pj-idx{color:var(--red)}
 .pj-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(16px,3cqi,64px);align-items:end;padding:clamp(40px,6cqi,110px) 0 clamp(24px,3cqi,48px)}
@@ -708,7 +708,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 .pj-say{margin:0;max-width:36ch;font-size:var(--t-lede);line-height:1.3}
 .pj-hero{margin:0 calc(-1 * var(--m));height:clamp(300px,62cqh,820px);background:var(--linen)}
 .pj-hero img{display:block;width:100%;height:100%;object-fit:cover}
-.pj-cols{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(16px,3cqi,64px);padding:clamp(28px,3.6cqi,60px) 0;border-bottom:1px solid var(--ink)}
+.pj-cols{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(16px,3cqi,64px);padding:clamp(28px,3.6cqi,60px) 0;border-bottom:var(--hair) solid var(--ink)}
 .pj-cols #pj-desc{margin:0;max-width:34ch}
 .pj-cols .pj-gal{margin:0}
 .pj-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding-top:clamp(24px,3cqi,48px)}
@@ -785,7 +785,7 @@ html.night .door[aria-current],html.night .door:active,html.night .roomnav .chip
 .roomnav .chip{background:rgb(18 17 15/.38);color:#F4F1EB;box-shadow:inset 0 0 0 1px rgb(255 255 255/.18),0 6px 20px -10px rgb(0 0 0/.3);text-shadow:none}
 .roomnav .chip:hover{background:rgb(18 17 15/.55);color:#F4F1EB}
 html.night .roomnav .chip{background:rgb(244 241 235/.14);color:var(--osd);box-shadow:inset 0 0 0 1px rgb(255 255 255/.3)}
-.ai-note{margin-top:28px;padding-top:18px;border-top:1px solid var(--rule)}
+.ai-note{margin-top:28px;padding-top:18px;border-top:var(--hair) solid var(--ink)}
 .ai-note h3{margin:0 0 8px}
 </style>
 </head>
@@ -878,6 +878,7 @@ html.night .roomnav .chip{background:rgb(244 241 235/.14);color:var(--osd);box-s
               <h3>Education</h3>
               <ol class="cv">
                 <li><span class="mono num">01</span><span class="what">University of Virginia<small>Master of Architecture</small></span><span class="mono">2020–22</span></li>
+                <li><span class="mono num">02</span><span class="what">University of Virginia<small>Bachelor of Science, Architecture — Design Thinking; Bachelor of Arts, American Studies — Visual and Popular Culture</small></span><span class="mono">2013–17</span></li>
               </ol>
             </div>
           </section>
