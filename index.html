@@ -779,8 +779,14 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 .sheet{background:var(--paper)!important}
 
 /* the door you chose: black, and still black once you're inside */
-.door[aria-current],.door:active,.roomnav .chip[aria-current],.roomnav .chip:active{background:var(--ink)!important;color:var(--paper)!important;box-shadow:none!important}
-html.night .door[aria-current],html.night .door:active,html.night .roomnav .chip[aria-current],html.night .roomnav .chip:active{background:#F4F1EB!important;color:#1C1A18!important;box-shadow:none!important}
+.door[aria-current],.door:active,.roomnav .chip[aria-current],.roomnav .chip:active{background:rgb(18 17 15/.72)!important;color:#F4F1EB!important;box-shadow:inset 0 0 0 1px rgb(255 255 255/.22)!important;-webkit-backdrop-filter:blur(12px) saturate(1.3);backdrop-filter:blur(12px) saturate(1.3)}
+html.night .door[aria-current],html.night .door:active,html.night .roomnav .chip[aria-current],html.night .roomnav .chip:active{background:rgb(244 241 235/.72)!important;color:#1C1A18!important;box-shadow:inset 0 0 0 1px rgb(255 255 255/.5)!important}
+.door,.roomnav .chip{-webkit-backdrop-filter:blur(12px) saturate(1.3);backdrop-filter:blur(12px) saturate(1.3)}
+.roomnav .chip{background:rgb(18 17 15/.38);color:#F4F1EB;box-shadow:inset 0 0 0 1px rgb(255 255 255/.18),0 6px 20px -10px rgb(0 0 0/.3);text-shadow:none}
+.roomnav .chip:hover{background:rgb(18 17 15/.55);color:#F4F1EB}
+html.night .roomnav .chip{background:rgb(244 241 235/.14);color:var(--osd);box-shadow:inset 0 0 0 1px rgb(255 255 255/.3)}
+.ai-note{margin-top:28px;padding-top:18px;border-top:1px solid var(--rule)}
+.ai-note h3{margin:0 0 8px}
 </style>
 </head>
 <body>
@@ -917,17 +923,15 @@ html.night .door[aria-current],html.night .door:active,html.night .roomnav .chip
           <section class="sec">
             <div class="sidehead mono"><b>Where I can help</b><span class="n">02 · Scenarios</span></div>
             <div class="body">
-              <p class="intro">No project is too small to ask about. Find yourself below — or tell me something new. Any of these can be as light as one conversation or as full as design, drawings and construction.</p>
+              <p class="intro">Film photography is a hobby. I’ve designed wedding pieces for friends and helped my aunt through a house renovation. All of it by hand and by eye, and I’d like to help with yours. No project is too small to ask about.</p>
               <ul class="svc scen">
-                <li><span class="num mono">01</span><h3>You just moved in, and nothing feels like yours yet.</h3><p>We walk the place together, then choose the furniture, lighting, art and colour that make it home — as a plan you can shop at your own pace, or sourced and placed for you.</p><span class="tags mono">Interiors · Decoration</span></li>
-                <li><span class="num mono">02</span><h3>You’re renovating — a kitchen, a bath, a whole floor.</h3><p>A layout that works, finishes that last, and drawings your contractor can price and build from. I stay on through construction so nothing gets lost in translation.</p><span class="tags mono">Interior architecture</span></li>
-                <li><span class="num mono">03</span><h3>You’re building new, or adding on.</h3><p>Architecture from the first conversation about the site to the permit set and the final walkthrough — options that disagree, then documents builders trust.</p><span class="tags mono">Architecture</span></li>
-                <li><span class="num mono">04</span><h3>You’re opening a shop, a restaurant, a studio.</h3><p>The room, the counter, the sign and the menu, designed together so every touchpoint feels like the same place.</p><span class="tags mono">Architecture · Interiors · Print · Digital</span></li>
-                <li><span class="num mono">05</span><h3>You’re starting something and it needs a face.</h3><p>An identity that fits — mark, colour, type — carried onto stationery and packaging.</p><span class="tags mono">Print · Digital</span></li>
-                <li><span class="num mono">06</span><h3>You have something to put in print.</h3><p>A book, a zine, a poster series, the invitations for the day that matters. Designed, typeset and seen through the press check.</p><span class="tags mono">Print</span></li>
-                <li><span class="num mono">07</span><h3>You need a piece that doesn’t exist yet.</h3><p>A table, a shelf, a light, an installation for an event or a storefront — designed, detailed and built with makers I trust.</p><span class="tags mono">Furniture · Installation</span></li>
-                <li><span class="num mono">08</span><h3>A property, a campus or a block needs a direction.</h3><p>Vision plans and master plans that turn a lot of opinions into a shared picture of what could be — clear enough to fund, build and phase.</p><span class="tags mono">Urban design · Visioning</span></li>
-                <li><span class="num mono">09</span><h3>You just want a second set of eyes.</h3><p>One conversation — on site, on a call, over a drawing or a draft. You leave with a clear list to act on, whether or not we work together again.</p><span class="tags mono">Any field</span></li>
+                <li><span class="num mono">01</span><h3>You just moved in, and nothing feels like yours yet.</h3><p>We walk the place together, then pick the furniture, lighting, art and colour that make it home: a plan you can shop at your own pace.</p><span class="tags mono">Interiors · Decoration</span></li>
+                <li><span class="num mono">02</span><h3>You’re renovating: a kitchen, a bath, a whole house.</h3><p>A layout that works, finishes that last, and a plan your contractor can price. Anything that needs a licensed pro, I say so up front.</p><span class="tags mono">Renovation · Layout</span></li>
+                <li><span class="num mono">03</span><h3>You’re getting married, or throwing something worth remembering.</h3><p>Invitations, details cards, signs and menus, designed as one set and seen through the printer.</p><span class="tags mono">Print</span></li>
+                <li><span class="num mono">04</span><h3>You want it on film.</h3><p>A half-day shoot on film, for a portrait, a party or a place. Developed and scanned.</p><span class="tags mono">Photography</span></li>
+                <li><span class="num mono">05</span><h3>You’re starting something and it needs a face.</h3><p>A mark, colours and type that fit, with cards to hand out.</p><span class="tags mono">Print · Digital</span></li>
+                <li><span class="num mono">06</span><h3>You need a piece that doesn’t exist yet.</h3><p>A table, a shelf, a light, drawn up and built with makers I trust.</p><span class="tags mono">Furniture</span></li>
+                <li><span class="num mono">07</span><h3>You just want a second set of eyes.</h3><p>One conversation, on site or on a call. You leave with a clear list to act on.</p><span class="tags mono">Any field</span></li>
               </ul>
             </div>
           </section>
@@ -948,6 +952,10 @@ html.night .door[aria-current],html.night .door:active,html.night .roomnav .chip
                 <li><span class="num">03</span><b>Document</b><p>Drawings, specs and files that builders, makers and printers actually trust.</p></li>
                 <li><span class="num">04</span><b>Steward</b><p>On site and on press through completion. Design ends when the last handle is hung.</p></li>
               </ol>
+              <div class="ai-note">
+                <h3>On AI, plainly</h3>
+                <p>I use AI early, for ideation: to get options on the table fast, gather references and test a direction before committing to it. It saves hours I’d otherwise bill you for. The judgment, the drawings, the details and the final touch are mine, and you’ll always know where it was used.</p>
+              </div>
             </div>
           </section>
 
@@ -1584,19 +1592,19 @@ $('#vows').innerHTML = [
   'Artists, nonprofits and small independents can ask for the <b>community rate</b>: 25% off, no questions.'
 ].map(v => `<li>${v}</li>`).join('');
 const mRow = (name, price, sub, talk) => `<div class="m-item"><span class="m-name">${esc(name)}${sub ? `<small class="mono">${esc(sub)}</small>` : ''}</span><span class="m-price ${talk ? 'talk' : ''}">${price}</span></div>`;
+const SMALL = 1000, small = it => !it.from && it.price < SMALL;
 $('#menu').innerHTML = NEEDS.map(g => `<section class="m-group"><h3 class="mono"><b>${g.dim}</b></h3>` + g.options.map(o => {
-  const list = PRICE.prices[o], m = PRICE.svc[o]; if (!list || !m) return '';
+  const m = PRICE.svc[o], list = (PRICE.prices[o] || []).filter(small); if (!list.length || !m) return '';
   return `<div class="m-svc"><h4>${esc(o)}</h4>` +
     mRow('Consult', `${$$m(PRICE.consult)}/hr`, 'advice, review, a second set of eyes') +
-    (m.concept ? mRow('Concept & visioning', `${$$m(m.rate)}/hr`, 'direction, drawings, the idea made clear') : '') +
-    list.map(it => mRow(it.name, priceOf(it), [it.parts, it.note].filter(Boolean).join(' · '), it.from)).join('') +
+    list.map(it => mRow(it.name, priceOf(it), [it.parts, it.note].filter(Boolean).join(' · '))).join('') +
     (m.handoff ? `<p class="m-hand mono">Hands off to — ${esc(m.handoff)}</p>` : '') + `</div>`;
-}).join('') + `</section>`).join('');
+}).join('') + `</section>`).filter(h => h.includes('m-svc')).join('');
 document.querySelectorAll('#contact-form input[name=needs]').forEach(inp => {
-  const o = inp.nextElementSibling.textContent.trim(), list = PRICE.prices[o]; if (!list) return;
+  const o = inp.nextElementSibling.textContent.trim(), list = (PRICE.prices[o] || []).filter(small); if (!PRICE.prices[o]) return;
   if (!list.length){ inp.nextElementSibling.insertAdjacentHTML('beforeend', `<em class="pp">consult · ${$$m(PRICE.consult)}/hr</em>`); return; }
-  const fixed = list.filter(x => !x.from && !(x.note || '').startsWith('per hour')), min = fixed.length ? Math.min(...fixed.map(x => x.price)) : null;
-  inp.nextElementSibling.insertAdjacentHTML('beforeend', `<em class="pp">${min != null ? (fixed.length > 1 || list.length > 1 ? 'from ' : '') + $$m(min) : 'let’s talk'}</em>`);
+  const fixed = list.filter(x => !(x.note || '').startsWith('per hour')), use = fixed.length ? fixed : list, min = Math.min(...use.map(x => x.price));
+  inp.nextElementSibling.insertAdjacentHTML('beforeend', `<em class="pp">${list.length > 1 ? 'from ' : ''}${$$m(min)}${fixed.length ? '' : '/hr'}</em>`);
 });
 document.querySelectorAll('#contact-form input[name=scope]').forEach(inp => {
   const t = PRICE.scope[inp.value]; if (t) inp.nextElementSibling.insertAdjacentHTML('beforeend', `<em class="pp">${t}</em>`);
