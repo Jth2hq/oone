@@ -721,8 +721,14 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 .pj-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;padding-top:clamp(24px,3cqi,48px)}
 .pj-next{text-align:right;font:900 clamp(28px,3.6cqi,64px)/.86 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.02em;cursor:pointer}
 .pj-next .mono{display:block;margin-bottom:.6em;font-size:var(--t-mono);letter-spacing:.09em;color:var(--red)}
-.pj-next:hover{color:var(--red)}
-@media (max-width:640px){.pj-row,.pj-cols{grid-template-columns:1fr}.pj-hero{height:46cqh}}
+.pj-next:hover,.pj-prev:hover{color:var(--red)}
+.pj-foot{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);row-gap:clamp(24px,3cqi,48px)}
+.pj-foot>.btn{grid-column:1/-1;grid-row:1;justify-self:start}
+.pj-foot .pj-next{grid-column:2;justify-self:end}
+.pj-prev{text-align:left;font:900 clamp(28px,3.6cqi,64px)/.86 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.02em;cursor:pointer}
+.pj-prev .mono{display:block;margin-bottom:.6em;font-size:var(--t-mono);letter-spacing:.09em;color:var(--red)}
+@media (min-width:641px){.pj-row{row-gap:0}.pj-row>div:first-child{display:contents}.sheet.pj h2{grid-column:1;grid-row:1;align-self:last baseline}.pj-cat{grid-column:1;grid-row:2}.pj-row>div:last-child{grid-column:2;grid-row:1;align-self:last baseline}}
+@media (max-width:640px){.pj-row,.pj-cols{grid-template-columns:1fr}.pj-hero{height:46cqh}.tbar{flex-wrap:wrap}.tbar input{flex:1 1 60%;max-width:none}}
 
 .contents.rows .strip{aspect-ratio:16/7;height:auto;background:var(--linen)}
 .contents.rows .strip img{object-fit:cover}
@@ -1031,7 +1037,7 @@ html.night .roomnav .chip{background:rgb(244 241 235/.14);color:var(--osd);box-s
           <p id="pj-desc"></p>
           <div class="pj-gal" id="pj-gal"></div>
         </div>
-        <div class="pj-foot"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a><button type="button" class="pj-next" id="pj-next"></button></div>
+        <div class="pj-foot"><button type="button" class="pj-prev" id="pj-prev"></button><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a><button type="button" class="pj-next" id="pj-next"></button></div>
       </div>
     </div>
 
@@ -1655,7 +1661,10 @@ function openProject(id){
   const cov = p.imgs && p.imgs[0] && p.imgs[0][0], nx = PROJECTS[(i + 1) % PROJECTS.length];
   const wf = WF[p.id] || ['photo'];
   $('#pj-hero').parentElement.innerHTML = '<span id="pj-hero" class="wf-hero">' + wfBox(wf[0]) + '</span>';
-  $('#pj-next').innerHTML = `<span class="mono">Next</span>${esc(nx.title)} →`; $('#pj-next').onclick = () => { const sh = $('.sheet.pj'); sh.classList.add('swap'); setTimeout(() => { openProject(nx.id); sh.scrollTo({top:0}); requestAnimationFrame(() => sh.classList.remove('swap')); }, 320); };
+  const pv = PROJECTS[(i - 1 + PROJECTS.length) % PROJECTS.length];
+  const go = to => () => { const sh = $('.sheet.pj'); sh.classList.add('swap'); setTimeout(() => { openProject(to.id); sh.scrollTo({top:0}); requestAnimationFrame(() => sh.classList.remove('swap')); }, 320); };
+  $('#pj-next').innerHTML = `<span class="mono">Next</span>${esc(nx.title)} →`; $('#pj-next').onclick = go(nx);
+  $('#pj-prev').innerHTML = `<span class="mono">Previous</span>← ${esc(pv.title)}`; $('#pj-prev').onclick = go(pv);
   $('#pj-desc').textContent = p.desc;
   const SPEC = ['A more considered world', 'Ideas Spaces Objects People', 'Good ideas better company', 'The quick brown fox jumps over the lazy dog'];
   const rest = (p.imgs || []).slice(1);
