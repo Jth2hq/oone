@@ -1668,7 +1668,7 @@ $('#vows').innerHTML = [
   [`${$$m(PRICE.consult)}/hr`, 'Consulting, on anything here. The first 30 minutes are free.'],
   [`${$$m(PRICE.low)}–${PRICE.high}/hr`, 'Design work: that rate times honest hours, in whole dollars. Bigger jobs get a written estimate first.'],
   ['No markup', 'Furniture, materials and printing at cost. Trade discounts go to you.'],
-  ['25% off', 'The community rate, for artists, nonprofits and small independents.']
+  ['Up front', 'Where a job needs a licensed architect, a contractor or a maker, I say so and hand it off cleanly.']
 ].map(([h, t], i) => `<li><span class="num">0${i + 1}</span><h3>${h}</h3><p>${t}</p></li>`).join('');
 const mRow = (name, price, sub, talk) => `<div class="m-item"><span class="m-name">${esc(name)}${sub ? `<small class="mono">${esc(sub)}</small>` : ''}</span><span class="m-price ${talk ? 'talk' : ''}">${price}</span></div>`;
 const SMALL = 1000, small = it => !it.from && it.price < SMALL;
