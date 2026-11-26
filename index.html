@@ -404,6 +404,8 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .steps p{margin:0;color:var(--ink-2)}
 .pfilters{display:grid;gap:12px;margin:0 0 clamp(18px,2cqi,28px)}
 .pfilters .filters{width:max-content;max-width:100%}
+.room .pfilters .needs-f{width:auto}
+.room .pfilters .needs-f button{height:auto;min-height:32px;padding:.4em 0;text-align:left;white-space:normal;line-height:1.3}
 .needs-f{display:flex;flex-wrap:wrap;gap:.5em}
 .needs-f button{border:0;padding:0;background:none;cursor:pointer;font:inherit}
 .needs-f button span{display:inline-flex;align-items:center;min-height:2.4em;padding:.45em 1em;line-height:1.25;border-radius:999px;
@@ -876,6 +878,7 @@ html .backpage.closer{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp
 html .backpage.closer .blurb{margin:0;max-width:46ch;font:400 var(--t-body)/1.5 var(--sans);color:var(--ink)}
 html .backpage.closer .blurb:empty{display:none}
 html .body > .cta-row{margin-top:clamp(20px,2.4cqi,36px)}
+html .cta-row.stack{flex-direction:column;align-items:flex-start;gap:14px}
 </style>
 </head>
 <body>
@@ -999,7 +1002,7 @@ html .body > .cta-row{margin-top:clamp(20px,2.4cqi,36px)}
             <div class="body">
               <p class="lede"><span class="logo" role="img" aria-label="care of TANNER"></span> is an independent design practice in Brooklyn — architecture and interiors, objects, print and digital, worked as one landscape.</p>
               <p>A building, a room, a chair, a book, a website: each is a set of decisions about how someone will feel when they meet it. I take on work at any scale, from choosing the right lamp to seeing a building from first sketch through construction, and keep the same eye on every piece. Every project is a negotiation — between a client and a place, a budget and a wish, two materials meeting at an edge. The work is to find the middle and detail it well.</p>
-              <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">→</span></button><button type="button" class="btn-link" data-sheet="sheet-prices">See prices <span aria-hidden="true">→</span></button></p>
+              <p class="cta-row stack"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">→</span></button><button type="button" class="btn-link" data-sheet="sheet-prices">or see prices <span aria-hidden="true">→</span></button></p>
             </div>
           </section>
 
@@ -1078,17 +1081,14 @@ html .body > .cta-row{margin-top:clamp(20px,2.4cqi,36px)}
           <h2 class="vh">The log</h2>
           <div class="toolbar">
             <nav class="filters" id="filters" aria-label="Filter the log"></nav>
-            <button class="btn btn-act add" id="add">Add to Orbit <span aria-hidden="true">→</span></button>
           </div>
           <div class="tiles" id="tiles"></div>
         </div>
 
-        <section class="moment" aria-label="A spoken line">
-          <p>Let&rsquo;s meet in the middle.</p>
-          <span class="who mono">care of TANNER</span>
-        </section>
 
-        <footer class="backpage">
+        <footer class="backpage closer">
+          <p class="blurb" id="blurb-orbit"></p>
+          <p class="cta-row"><button class="btn btn-act add" id="add">Add to Orbit <span aria-hidden="true">→</span></button></p>
         </footer>
      </div>
     </article>
@@ -1689,7 +1689,7 @@ function renderWork(){
     `<div class="filters">${['all', ...NEEDS.map(g => g.dim)].map(d => {
       const n = d === 'all' ? PROJECTS.length : PROJECTS.filter(p => dimsOf(p).has(d)).length;
       return `<button data-dim="${d}" aria-pressed="${pf.dim === d}">${d === 'all' ? 'All' : d}<sup>${n}</sup></button>`; }).join('')}</div>` +
-    (used.length ? `<div class="picks needs-f">${used.map(o => `<button data-need="${esc(o)}" aria-pressed="${pf.need === o}"><span>${esc(o)}</span></button>`).join('')}</div>` : '');
+    (used.length ? `<div class="filters needs-f">${used.map(o => `<button data-need="${esc(o)}" aria-pressed="${pf.need === o}">${esc(o)}</button>`).join('')}</div>` : '');
 }
 $('#pfilters').addEventListener('click', e => {
   const d = e.target.closest('[data-dim]'), n = e.target.closest('[data-need]');
