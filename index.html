@@ -377,11 +377,13 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .tally{display:grid;gap:4px;padding:16px 18px;border-radius:14px;background:color-mix(in oklch,var(--blue) 9%,var(--paper));box-shadow:inset 0 0 0 1px var(--rule)}
 .tally p{margin:0}.tally .sum{font:700 clamp(26px,2.6cqi,36px)/1 var(--sans);letter-spacing:-.01em}
 .tally .note{color:var(--ink-2)}
-.vows{margin:0 0 clamp(24px,3cqi,40px);padding-left:1.4em;display:grid;gap:.5em;max-width:62ch}
-.vows b{font-weight:600}
-.vows-more{margin:0 0 clamp(24px,3cqi,40px)}
-@media (max-width:640px){#vows:not(.all) li:nth-child(n+4){display:none}#vows{margin-bottom:.9em}}
-@media (min-width:641px){#vows-more{display:none}#sheet-prices .sheet{width:min(1120px,100%)}#sheet-prices .sheet-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);column-gap:clamp(32px,4cqi,64px);align-items:start}#sheet-prices h2,#sheet-prices .cta-row{grid-column:1/-1}#sheet-prices .vows{grid-column:1;margin:0;position:sticky;top:96px}#sheet-prices .menu{grid-column:2}}
+.vows{list-style:none;margin:0 0 clamp(28px,3.4cqi,44px);padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,130px),1fr));gap:clamp(10px,1.2cqi,18px);max-width:none}
+.vows li{display:flex;flex-direction:column;gap:.55em;padding:clamp(14px,1.8cqi,24px);border:var(--hair) solid var(--ink);border-radius:clamp(12px,1.2cqi,18px)}
+.vows .num{font:400 var(--t-mono)/1 var(--mono);color:var(--acc-ink,var(--red))}
+.vows h3{margin:0;font:800 clamp(22px,2cqi,30px)/1 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.01em;color:var(--ink);white-space:nowrap}
+.vows p{margin:0;font-size:.92em;line-height:1.35;color:var(--ink)}
+@media (min-width:641px){.vows{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:640px){.vows li{padding:14px 12px}.vows h3{font-size:19px}}
 .m-group{margin-top:clamp(18px,2.4cqi,32px)}
 .m-group h3{margin:0 0 .4em;color:var(--red);font-weight:400}
 .m-svc{padding:14px 0;border-top:var(--hair) solid var(--ink)}
@@ -1121,7 +1123,6 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
         <div class="sheet-body">
           <h2 id="prices-title" tabindex="-1">What it costs</h2>
           <ol class="vows" id="vows"></ol>
-          <button type="button" class="btn-link vows-more" id="vows-more" aria-expanded="false"></button>
           <div class="menu" id="menu"></div>
           <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">→</span></button></p>
         </div>
@@ -1664,18 +1665,11 @@ renderWork();
 const $$m = n => '$' + n.toLocaleString('en-US');
 const priceOf = it => it.from ? `from ${$$m(it.from)}` : $$m(it.price) + (it.note && it.note.startsWith('per hour') ? '/hr' : '');
 $('#vows').innerHTML = [
-  `<b>Consulting is ${$$m(PRICE.consult)} an hour</b>, on anything listed here.`,
-  `Design work is <b>${$$m(PRICE.low)}–${$$m(PRICE.high)} an hour</b>, set by how deep the skill runs. Every price is that rate times honest hours.`,
-  'Where a job needs a licensed architect, a contractor or a maker, <b>I say so up front</b> and hand it off cleanly.',
-  'Concrete jobs get <b>whole-dollar prices</b>. What you see is what you pay.',
-  'The <b>first 30 minutes are free</b>. Asking costs nothing.',
-  '<b>No markup</b> on furniture, materials or printing. Trade discounts go to you.',
-  'Bigger projects get a <b>written estimate</b> before anything starts — no surprise invoices.',
-  'Artists, nonprofits and small independents can ask for the <b>community rate</b>: 25% off, no questions.'
-].map(v => `<li>${v}</li>`).join('');
-const vowsMore = () => $('#vows-more').textContent = $('#vows').classList.contains('all') ? 'Show less' : `+ ${$('#vows').children.length - 3} more`;
-vowsMore();
-$('#vows-more').addEventListener('click', e => { e.currentTarget.setAttribute('aria-expanded', $('#vows').classList.toggle('all')); vowsMore(); });
+  [`${$$m(PRICE.consult)}/hr`, 'Consulting, on anything here. The first 30 minutes are free.'],
+  [`${$$m(PRICE.low)}–${PRICE.high}/hr`, 'Design work: that rate times honest hours, in whole dollars. Bigger jobs get a written estimate first.'],
+  ['No markup', 'Furniture, materials and printing at cost. Trade discounts go to you.'],
+  ['25% off', 'The community rate, for artists, nonprofits and small independents.']
+].map(([h, t], i) => `<li><span class="num">0${i + 1}</span><h3>${h}</h3><p>${t}</p></li>`).join('');
 const mRow = (name, price, sub, talk) => `<div class="m-item"><span class="m-name">${esc(name)}${sub ? `<small class="mono">${esc(sub)}</small>` : ''}</span><span class="m-price ${talk ? 'talk' : ''}">${price}</span></div>`;
 const SMALL = 1000, small = it => !it.from && it.price < SMALL;
 $('#menu').innerHTML = NEEDS.map(g => `<section class="m-group"><h3 class="mono"><b>${g.dim}</b></h3>` + g.options.map(o => {
