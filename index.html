@@ -484,8 +484,8 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
   display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .tile.idea{--k:var(--lilac);background:color-mix(in oklch,var(--lilac) 26%,var(--paper));box-shadow:none}
 .tile.sensation{--k:var(--blue);background:color-mix(in oklch,var(--blue) 11%,var(--paper));box-shadow:none}
-.tile.artifact{--k:var(--red);background:color-mix(in oklch,var(--char) 9%,var(--paper));box-shadow:none}
-.tile.link{--k:var(--char);background:#fff;box-shadow:inset 0 0 0 1px var(--rule)}
+.tile.artifact{--k:var(--char);background:color-mix(in oklch,var(--char) 9%,var(--paper));box-shadow:none}
+.tile.link{--k:var(--red);background:#fff;box-shadow:inset 0 0 0 1px var(--rule)}
 .tile.link:hover{box-shadow:inset 0 0 0 1px var(--ink)}
 .tile.link .t::after{content:""}
 .tile.link.soon{cursor:default}
@@ -577,10 +577,6 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
   .tile.wide{grid-column:span 2}
   .sheet-body .meta{grid-template-columns:1fr 1fr}
   .add{margin-left:0}
-  .filters{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;max-width:100%}
-  .filters::-webkit-scrollbar{display:none}
-  .filters button{flex:none;white-space:nowrap}
-  .room .add.btn{height:38px;padding:0 1.2em;font-size:13px}
 }
 
 /* NIGHT inside the rooms: not an inverse — the same pages under a dimmed, warmed lamp.
@@ -664,7 +660,7 @@ html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
 .room .toolbar{border-top:var(--hair) solid var(--ink)}
 .room .tile{border-radius:clamp(12px,1.2cqi,18px)}
 .room .tile.idea,.room .tile.sensation,.room .tile.artifact,.room .tile.link{background:color-mix(in srgb,var(--k) 18%,var(--paper));box-shadow:inset 0 0 0 1px var(--ink)}
-.room .tile.link{background:color-mix(in srgb,var(--k) 8%,var(--paper))}
+.room .tile.link{background:color-mix(in srgb,var(--k) 12%,var(--paper))}
 .room .tile .t{font:800 clamp(18px,1.6cqi,26px)/1.02 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.005em}
 .room .tile .meta{text-transform:uppercase;letter-spacing:.09em}
 .room .tile .dot{background:var(--k)}
@@ -768,9 +764,9 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 
 /* 22 ORBIT COLOUR IN POP-UPS ── the category's colour carries the head band, the marker and the action */
 #sheet-entry[data-k=idea],#sheet-add[data-k=idea],#sheet-manifesto[data-k=idea]{--k:var(--lilac);--kon:#fff}
-#sheet-entry[data-k=artifact],#sheet-add[data-k=artifact]{--k:var(--red);--kon:#fff}
+#sheet-entry[data-k=artifact],#sheet-add[data-k=artifact]{--k:var(--char);--kon:#fff}
 #sheet-entry[data-k=sensation],#sheet-add[data-k=sensation]{--k:var(--blue);--kon:#fff}
-#sheet-entry[data-k=link],#sheet-add[data-k=link]{--k:var(--char);--kon:#fff}
+#sheet-entry[data-k=link],#sheet-add[data-k=link]{--k:var(--red);--kon:#fff}
 #sheet-entry[data-k] .sheet,#sheet-add[data-k] .sheet,#sheet-manifesto[data-k] .sheet{box-shadow:0 24px 60px rgb(0 0 0/.25),inset 0 0 0 3px var(--k)}
 #sheet-entry[data-k] .sheet-head,#sheet-add[data-k] .sheet-head,#sheet-manifesto[data-k] .sheet-head{background:var(--k)!important;color:var(--kon);border-bottom:0;transition:background .3s ease}
 #sheet-entry[data-k] .sheet-head button,#sheet-add[data-k] .sheet-head button,#sheet-manifesto[data-k] .sheet-head button{color:var(--kon)}
@@ -784,8 +780,8 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
   mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2 8 8 2M3.2 2H8v4.8' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='square'/%3E%3C/svg%3E") center/contain no-repeat}
 #sheet-add .picks label{--kk:var(--lilac)}
 #sheet-add .picks label:has([value=sensation]){--kk:var(--blue)}
-#sheet-add .picks label:has([value=artifact]){--kk:var(--red)}
-#sheet-add .picks label:has([value=link]){--kk:var(--char)}
+#sheet-add .picks label:has([value=artifact]){--kk:var(--char)}
+#sheet-add .picks label:has([value=link]){--kk:var(--red)}
 #sheet-add .picks span{display:flex;align-items:baseline;gap:.5em}
 #sheet-add .picks span::before{content:"";flex:none;width:.75em;height:.75em;border-radius:50%;background:var(--kk);transform:translateY(.05em)}
 #sheet-add .picks input:checked + span{box-shadow:inset 0 0 0 2px var(--kk);background:color-mix(in oklch,var(--kk) 14%,var(--paper))}
@@ -804,6 +800,22 @@ html.night .door[aria-current],html.night .door:active,html.night .roomnav .chip
 html.night .roomnav .chip{background:rgb(244 241 235/.14);color:var(--osd);box-shadow:inset 0 0 0 1px rgb(255 255 255/.3)}
 .ai-note{margin-top:28px;padding-top:18px;border-top:var(--hair) solid var(--ink)}
 .ai-note h3{margin:0 0 8px}
+/* 21 ONE BUTTON ── every pill (doors, filters, calls to act) shares the door chip's scale and its dark glass.
+   Quiet = light smoke; pressed, current or a call to act = deep smoke. */
+.room .btn,.sheet .btn,.room .filters button,.roomnav .chip{height:clamp(34px,2.7cqi,42px);padding:0 1.1em;gap:.6em;border-radius:999px;
+  font:400 clamp(11px,.82cqi,13px)/1 var(--mono);font-stretch:normal;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap;text-shadow:none;
+  -webkit-backdrop-filter:blur(12px) saturate(1.3);backdrop-filter:blur(12px) saturate(1.3);transition:background .2s var(--ui)}
+.room .filters button{background:rgb(18 17 15/.38);color:#F4F1EB;box-shadow:inset 0 0 0 1px rgb(255 255 255/.18)}
+.room .filters button:hover{background:rgb(18 17 15/.55)}
+.room .btn-act,.sheet .btn-act,.room .filters button[aria-pressed=true]{background:rgb(18 17 15/.72);color:#F4F1EB;box-shadow:inset 0 0 0 1px rgb(255 255 255/.22)}
+.room .btn-act:hover,.sheet .btn-act:hover{background:rgb(18 17 15/.86);color:#F4F1EB}
+.room .filters button sup{opacity:.7}
+.room .filters{gap:8px;box-shadow:none;border-radius:0;overflow:visible;flex-wrap:wrap}
+.room .filters button + button{box-shadow:inset 0 0 0 1px rgb(255 255 255/.18)}
+html.night .room .filters button{background:rgb(244 241 235/.14);color:var(--osd);box-shadow:inset 0 0 0 1px rgb(255 255 255/.3)}
+html.night .room .btn-act,html.night .sheet .btn-act,html.night .room .filters button[aria-pressed=true]{background:rgb(244 241 235/.72);color:#1C1A18;box-shadow:inset 0 0 0 1px rgb(255 255 255/.5)}
+.hd-r{justify-self:end;display:flex;align-items:center;gap:clamp(12px,1.4cqi,24px)}
+.runhead .hd-r .close{justify-self:auto}
 </style>
 </head>
 <body>
@@ -849,7 +861,7 @@ html.night .roomnav .chip{background:rgb(244 241 235/.14);color:var(--osd);box-s
         <header class="runhead">
           <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo" aria-hidden="true"></span></a>
           <span class="folio mono">care of TANNER — Part One: Story — p. 01</span>
-          <a class="close" href="#">Close ×</a>
+          <span class="hd-r"><button class="btn btn-act hd-cta" data-sheet="sheet-contact">Start a project <span aria-hidden="true">+</span></button><a class="close" href="#">Close ×</a></span>
         </header>
         <section class="opener">
           <span class="part mono">Part One</span>
@@ -912,7 +924,7 @@ html.night .roomnav .chip{background:rgb(244 241 235/.14);color:var(--osd);box-s
         <header class="runhead">
           <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo" aria-hidden="true"></span></a>
           <span class="folio mono">care of TANNER — Part Two: Practice — p. 02</span>
-          <a class="close" href="#">Close ×</a>
+          <span class="hd-r"><button class="btn btn-act hd-cta" data-sheet="sheet-contact">Start a project <span aria-hidden="true">+</span></button><a class="close" href="#">Close ×</a></span>
         </header>
         <section class="opener">
           <span class="part mono">Part Two</span>
@@ -1000,7 +1012,7 @@ html.night .roomnav .chip{background:rgb(244 241 235/.14);color:var(--osd);box-s
         <header class="runhead">
           <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo" aria-hidden="true"></span></a>
           <span class="folio mono">care of TANNER — Part Three: Orbit — p. 03</span>
-          <a class="close" href="#">Close ×</a>
+          <span class="hd-r"><button class="btn btn-act hd-cta" data-sheet="sheet-contact">Start a project <span aria-hidden="true">+</span></button><a class="close" href="#">Close ×</a></span>
         </header>
         <section class="opener">
           <span class="part mono">Part Three</span>
@@ -1023,7 +1035,7 @@ html.night .roomnav .chip{background:rgb(244 241 235/.14);color:var(--osd);box-s
         </section>
 
         <footer class="backpage">
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--lilac)"></span>Idea — words</li><li><span class="dot" style="--c:var(--red)"></span>Artifact — things made by hand: objects, ceramics, photographs</li><li><span class="dot" style="--c:var(--blue)"></span>Sensation — things lived: songs, clips, nights out</li><li><span class="dot" style="--c:var(--char)"></span>In orbit — people and what they make</li></ul></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--lilac)"></span>Idea — words</li><li><span class="dot" style="--c:var(--char)"></span>Artifact — things made by hand: objects, ceramics, photographs</li><li><span class="dot" style="--c:var(--blue)"></span>Sensation — things lived: songs, clips, nights out</li><li><span class="dot" style="--c:var(--red)"></span>In orbit — people and what they make</li></ul></div>
         </footer>
      </div>
     </article>
@@ -1716,7 +1728,7 @@ document.querySelectorAll('form.form').forEach(form => form.addEventListener('su
 
 /* ── world: the log ─────────────────────────────────────────────────── */
 const CATS = [['all','All'], ['idea','Ideas'], ['sensation','Sensations'], ['artifact','Artifacts'], ['link','In orbit']];
-const KDOT = {idea:'var(--lilac)', sensation:'var(--blue)', artifact:'var(--red)', link:'var(--char)'};
+const KDOT = {idea:'var(--lilac)', sensation:'var(--blue)', artifact:'var(--char)', link:'var(--red)'};
 const fmtDate = d => new Date(d + 'T12:00').toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
 WORLD.sort((a, b) => b.date.localeCompare(a.date));
 { const notes = WORLD.filter(e => e.cat !== 'link'), links = WORLD.filter(e => e.cat === 'link'), mix = [];
