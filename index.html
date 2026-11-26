@@ -727,7 +727,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 .pj-next .mono{display:block;margin-bottom:.6em;font-size:var(--t-mono);letter-spacing:.09em;color:var(--red)}
 .pj-next:hover,.pj-prev:hover{color:var(--red)}
 .pj-foot{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);row-gap:clamp(24px,3cqi,48px)}
-.pj-foot>.btn{grid-column:1/-1;grid-row:1;justify-self:start}
+.pj-foot>.btn,.pj-foot>.cta-row{grid-column:1/-1;grid-row:1;justify-self:start}
 .pj-foot .pj-next{grid-column:2;justify-self:end}
 .pj-prev{text-align:left;font:700 clamp(14px,1.05cqi,16px)/1.2 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.02em;cursor:pointer}
 .pj-prev .mono{display:block;margin-bottom:.6em;font-size:var(--t-mono);letter-spacing:.09em;color:var(--red)}
@@ -888,7 +888,7 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
       
         <div class="page">
           <section class="sec">
-            <div class="sidehead mono"><b>The practice</b><span class="n">01</span></div>
+            <div class="sidehead mono"><b>The origin</b><span class="n">01</span></div>
             <div class="body">
               <p class="lede"><span class="logo" role="img" aria-label="care of TANNER"></span> is a design practice and a namesake — architecture, interiors, objects, print and digital work, made with care for the people who use them.<sup>1</sup></p>
               <p>People, places, projects, objects, culture. The work lives in <em>Practice</em>; the friends, makers and things that surround it live in <em>Orbit</em>.<sup>2</sup> Good ideas, better company — the same ideas in different places.</p>
@@ -957,7 +957,7 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
 
         <div class="page">
           <section class="sec">
-            <div class="sidehead mono"><b>The practice</b><span class="n">01</span></div>
+            <div class="sidehead mono"><b>The studio</b><span class="n">01</span></div>
             <div class="body">
               <p class="lede"><span class="logo" role="img" aria-label="care of TANNER"></span> is an independent design practice in Brooklyn — architecture and interiors, objects, print and digital, worked as one landscape.</p>
               <p>A building, a room, a chair, a book, a website: each is a set of decisions about how someone will feel when they meet it. I take on work at any scale, from choosing the right lamp to seeing a building from first sketch through construction, and keep the same eye on every piece. Every project is a negotiation — between a client and a place, a budget and a wish, two materials meeting at an edge. The work is to find the middle and detail it well.</p>
@@ -1067,7 +1067,7 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
           <p id="pj-desc"></p>
           <div class="pj-gal" id="pj-gal"></div>
         </div>
-        <div class="pj-foot"><button type="button" class="pj-prev" id="pj-prev"></button><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a><button type="button" class="pj-next" id="pj-next"></button></div>
+        <div class="pj-foot"><button type="button" class="pj-prev" id="pj-prev"></button><p class="cta-row"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a><button type="button" class="btn-link" data-sheet="sheet-prices">See prices <span aria-hidden="true">→</span></button></p><button type="button" class="pj-next" id="pj-next"></button></div>
       </div>
     </div>
 
