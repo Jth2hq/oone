@@ -558,8 +558,8 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
 @keyframes pagein{from{opacity:0}to{opacity:1}}
 @keyframes fade{from{opacity:0}}
 @supports (animation-timeline:view()){
-  .tile,.contents li,.cv li,.svc li,.steps li{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 55%}
-  @keyframes rise{from{opacity:0;transform:translateY(20px)}}
+  .tile,.contents li,.cv li,.svc li,.steps li{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 30%}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}
@@ -1705,8 +1705,8 @@ function openProject(id){
   $('#pj-hero').parentElement.innerHTML = '<span id="pj-hero" class="wf-hero">' + wfBox(wf[0]) + '</span>';
   const pv = PROJECTS[(i - 1 + PROJECTS.length) % PROJECTS.length];
   const go = to => () => { const sh = $('.sheet.pj'); sh.classList.add('swap'); setTimeout(() => { openProject(to.id); sh.scrollTo({top:0}); requestAnimationFrame(() => sh.classList.remove('swap')); }, 320); };
-  $('#pj-next').innerHTML = `<span class="mono">Next</span>${esc(nx.title)} →`; $('#pj-next').onclick = go(nx);
-  $('#pj-prev').innerHTML = `<span class="mono">Previous</span>← ${esc(pv.title)}`; $('#pj-prev').onclick = go(pv);
+  $('#pj-next').textContent = 'Next →'; $('#pj-next').setAttribute('aria-label', `Next: ${nx.title}`); $('#pj-next').onclick = go(nx);
+  $('#pj-prev').textContent = '← Previous'; $('#pj-prev').setAttribute('aria-label', `Previous: ${pv.title}`); $('#pj-prev').onclick = go(pv);
   $('#pj-desc').textContent = p.desc;
   const SPEC = ['A more considered world', 'Ideas Spaces Objects People', 'Good ideas better company', 'The quick brown fox jumps over the lazy dog'];
   const rest = (p.imgs || []).slice(1);
