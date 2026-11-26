@@ -38,6 +38,9 @@
 
 /* 01 TOKENS ───────────────────────────────────────────────────────────── */
 @font-face{font-family:"lipstick";src:url(fonts/lipstick.woff2) format("woff2");font-display:swap}
+@font-face{font-family:"Cardo";src:url(fonts/cardo-400.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Cardo";src:url(fonts/cardo-400i.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:"Cardo";src:url(fonts/cardo-700.woff2) format("woff2");font-weight:700;font-style:normal;font-display:swap}
 :root{
   /* The loft: wall white, linen sheers, painted brick, stainless, a brass edge */
   --bone:#E8E4DC; --paper:#F4F1EB; --linen:#EAE4D9; --ink:#1C1A18; --ink-2:#5E5A54; --rule:rgb(28 26 24/.16); --hair:.5px;
@@ -833,6 +836,57 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
 .room .tile.photo .dot{background:var(--osd)}
 .tile.photo .cap{display:flex;flex-direction:column;gap:.6em}
 .tile.photo .cap .t{margin:0}
+
+/* 23 TYPE SYSTEM ── seven styles, one job each. Everything inside the pages and pop-ups uses only these.
+   1 PAGE TITLE   Story / Practice / Orbit only — sans 900, condensed, caps (the opener h1, unchanged)
+   2 SECTION      section names, spoken moments, project names (list + project view), step numbers — sans 900, condensed, caps
+   3 TITLE        pop-up titles, card + tile titles, step names, price tiles, the ballpark — sans 800, condensed, caps
+   4 LEDE         intro lines, first paragraphs, small headings (italic) — Cardo
+   5 BODY         paragraphs, lists, CV entries, prices, form choices — Cardo (names in bold)
+   6 LABEL        numbers, dates, tags, part + folio, close, filters, form field names, hand-offs — mono, caps
+   +  SIGNATURE   Josh Harrison, under the photo and as the sign-off — lipstick
+   Breaks: lipstick is only ever his name; red is the only accent; buttons keep their three scales (21 BUTTONS). */
+:root{--serif:"Cardo",Georgia,"Times New Roman",serif;
+  --t-sec:clamp(40px,6.4cqi,112px);--t-title:clamp(22px,2.2vw,32px);
+  --t-lede:clamp(21px,1.9vw,30px);--t-body:clamp(18px,1.35vw,20px)}
+html .vows h3{white-space:normal}
+html .room,html .sheet-wrap{font-family:var(--serif);font-size:var(--t-body)}
+html .room .sheet,html .sheet-wrap .sheet{font-size:var(--t-body)}
+/* 2 SECTION */
+html .room .sidehead b,html .room .sidehead.mono b,html .room .moment p,html .contents.rows .t,html .room .steps .num,html .sheet.pj h2{
+  font:900 var(--t-sec)/.86 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.02em}
+/* 4 LEDE */
+html .room .opener .deck,html .room .body .lede,html .room .intro,html .sheet-body .lede,html .essay-deck{
+  font:400 var(--t-lede)/1.22 var(--serif);letter-spacing:0;color:var(--ink)}
+html .room .body h3,html .sheet-body h3,html .ai-note h3,html .m-svc h4{
+  margin-top:1.6em;font:italic 400 var(--t-lede)/1.2 var(--serif);letter-spacing:0;text-transform:none;color:var(--ink)}
+html .m-svc h4{margin-top:0}
+/* 3 TITLE */
+html .sheet-body h2,html .room .svc h3,html .vows h3,html .room .steps b,html .room .tile .t,html .tally .sum,html .backpage .next b{
+  font:800 var(--t-title)/1 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.01em}
+/* 5 BODY */
+html .room p,html .room li,html .sheet-body p,html .sheet-body li,html .room .svc p,html .vows p,html .tile .p,html .m-name,html .m-price,
+html .contents .t small,html .cv .what,html .cv .what small,html .picks span,html .form input,html .form textarea,html .form select{
+  font-family:var(--serif);font-size:var(--t-body);line-height:1.45;letter-spacing:0}
+html .cv .what,html .room .cv .what{font-weight:700}
+html .cv .what small{font-weight:400;color:var(--ink-2)}
+html .m-price{font-weight:400;font-variant-numeric:lining-nums tabular-nums}
+html .tile .p{color:var(--ink-2)}
+/* 6 LABEL */
+html .room .mono,html .sheet .mono,html .sheet-head,html .sheet-head button,html .m-group h3,html .m-group h3 b,html .room .mono li,html .room .mono p,html .sheet .mono p,html .form .dim b,html .m-hand,html .picks .pp,html .field > span,html .form legend,html .refs,html .scen .tags,html .room .tags,html .cv .mono,html .notes li{
+  font-family:var(--mono);font-size:var(--t-mono);font-weight:400;font-style:normal;line-height:1.4;letter-spacing:.09em;text-transform:uppercase}
+html .form legend small{font-size:1em}
+html .form .picks small{font-size:1em;color:var(--ink-2)}
+html .sheet-body .m-group h3{margin:0 0 .4em;color:var(--red)}
+html .room b,html .sheet-body b,html .imperatives b{font-weight:700}
+/* + SIGNATURE */
+html .room .body h2.sig,html .sign{font:400 clamp(34px,3.2cqi,52px)/1 var(--script);text-transform:none;letter-spacing:0;color:var(--red);margin:.1em 0 .4em}
+html .sign{margin-top:1.6em}
+/* page closers: the same shape on every page — a label, a few words, one button */
+html .backpage.closer{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(14px,1.6cqi,22px);justify-items:start;padding:clamp(40px,6cqi,96px) var(--m);border-top:var(--hair) solid var(--ink)}
+html .backpage.closer .blurb{margin:0;max-width:34ch;font:400 var(--t-lede)/1.22 var(--serif);color:var(--ink)}
+html .backpage.closer .blurb:empty{display:none}
+html .opener .cta-row{margin-top:clamp(18px,2.2cqi,34px)}
 </style>
 </head>
 <body>
@@ -912,7 +966,7 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
             <div class="sidehead mono"><b>The author</b><span class="n">02</span></div>
             <div class="body">
               <figure class="portrait"><img src="img/800/supper.webp" srcset="img/800/supper.webp 800w, img/1600/supper.webp 1600w" sizes="(min-width:900px) 40vw, 90vw" alt="Josh Harrison at supper, laughing, in a teal room" loading="lazy" decoding="async" width="1600" height="1061"></figure>
-              <h2>Josh Harrison</h2>
+              <h2 class="sig">Josh Harrison</h2>
               <p>Brooklyn-based architect and designer working across buildings, interiors, furniture, print, brands and photography. Tanner is his middle name.</p>
               <h3>Experience</h3>
               <ol class="cv">
@@ -928,16 +982,11 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
               </ol>
             </div>
           </section>
-          <section class="sec">
-            <div class="sidehead mono"><b>Contact</b><span class="n">03</span></div>
-            <div class="body">
-              <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-hello">Get in touch <span aria-hidden="true">+</span></button></p>
-            </div>
-          </section>
         </div>
       
-        <footer class="backpage">
-          
+        <footer class="backpage closer">
+          <p class="blurb" id="blurb-story"></p>
+          <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-hello">Get in touch <span aria-hidden="true">→</span></button></p>
         </footer>
      </div>
     </article>
@@ -953,6 +1002,7 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
           <span class="part mono">Part Two</span>
           <h1>Practice</h1>
           <p class="deck">One practice, every scale. What are we making?</p>
+          <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">→</span></button></p>
         </section>
 
         <div class="page">
@@ -1015,8 +1065,9 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
 
         </div>
 
-        <footer class="backpage">
-          
+        <footer class="backpage closer">
+          <p class="blurb" id="blurb-practice"></p>
+          <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">→</span></button></p>
         </footer>
      </div>
     </article>
@@ -1038,7 +1089,7 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
           <h2 class="vh">The log</h2>
           <div class="toolbar">
             <nav class="filters" id="filters" aria-label="Filter the log"></nav>
-            <button class="btn btn-act add" id="add">Add to Orbit <span aria-hidden="true">+</span></button>
+            <button class="btn btn-act add" id="add">Add to Orbit <span aria-hidden="true">→</span></button>
           </div>
           <div class="tiles" id="tiles"></div>
         </div>
@@ -1048,7 +1099,9 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
           <span class="who mono">care of TANNER</span>
         </section>
 
-        <footer class="backpage">
+        <footer class="backpage closer">
+          <p class="blurb" id="blurb-orbit"></p>
+          <p class="cta-row"><button class="btn btn-act" data-add>Add to Orbit <span aria-hidden="true">→</span></button></p>
           <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--lilac)"></span>Idea — words</li><li><span class="dot" style="--c:var(--char)"></span>Artifact — things made by hand: objects, ceramics, photographs</li><li><span class="dot" style="--c:var(--blue)"></span>Sensation — things lived: songs, clips, nights out</li><li><span class="dot" style="--c:var(--red)"></span>In orbit — people and what they make</li></ul></div>
         </footer>
      </div>
@@ -1067,7 +1120,7 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
           <p id="pj-desc"></p>
           <div class="pj-gal" id="pj-gal"></div>
         </div>
-        <div class="pj-foot"><button type="button" class="pj-prev" id="pj-prev"></button><p class="cta-row"><a class="btn btn-act" href="#practice" data-scroll="contact">Start a project <span aria-hidden="true">→</span></a><button type="button" class="btn-link" data-sheet="sheet-prices">See prices <span aria-hidden="true">→</span></button></p><button type="button" class="pj-next" id="pj-next"></button></div>
+        <div class="pj-foot"><button type="button" class="pj-prev" id="pj-prev"></button><p class="cta-row"><button type="button" class="btn-link" data-sheet="sheet-prices">See prices <span aria-hidden="true">→</span></button></p><button type="button" class="pj-next" id="pj-next"></button></div>
       </div>
     </div>
 
@@ -1124,7 +1177,6 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
           <h2 id="prices-title" tabindex="-1">What it costs</h2>
           <ol class="vows" id="vows"></ol>
           <div class="menu" id="menu"></div>
-          <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">→</span></button></p>
         </div>
       </div>
     </div>
@@ -1666,7 +1718,7 @@ const $$m = n => '$' + n.toLocaleString('en-US');
 const priceOf = it => it.from ? `from ${$$m(it.from)}` : $$m(it.price) + (it.note && it.note.startsWith('per hour') ? '/hr' : '');
 $('#vows').innerHTML = [
   [`${$$m(PRICE.consult)}/hr`, 'Consulting, on anything here. The first 30 minutes are free.'],
-  [`${$$m(PRICE.low)}–${PRICE.high}/hr`, 'Design work: that rate times honest hours, in whole dollars. Bigger jobs get a written estimate first.'],
+  [`${$$m(PRICE.low)}–\u2060${PRICE.high}/hr`, 'Design work: that rate times honest hours, in whole dollars. Bigger jobs get a written estimate first.'],
   ['No markup', 'Furniture, materials and printing at cost. Trade discounts go to you.'],
   ['Up front', 'Where a job needs a licensed architect, a contractor or a maker, I say so and hand it off cleanly.']
 ].map(([h, t], i) => `<li><span class="num">0${i + 1}</span><h3>${h}</h3><p>${t}</p></li>`).join('');
@@ -1803,6 +1855,7 @@ $('#filters').addEventListener('click', e => {
   document.querySelectorAll('#filters button').forEach(x => x.setAttribute('aria-pressed', x === b));
   document.querySelectorAll('#tiles .tile').forEach(c => c.hidden = b.dataset.cat !== 'all' && c.dataset.cat !== b.dataset.cat);
 });
+document.querySelectorAll('[data-add]').forEach(b => b.onclick = () => $('#add').click());
 $('#add').onclick = () => { const k = document.querySelector('#add-form [name=kind]:checked'); $('#sheet-add').dataset.k = k ? k.value : 'idea'; openSheet('sheet-add', '#add-title'); };
 document.querySelectorAll('#add-form [name=kind]').forEach(r => r.addEventListener('change', () => { $('#sheet-add').dataset.k = r.value; }));
 
