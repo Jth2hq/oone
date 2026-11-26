@@ -659,8 +659,7 @@ html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
 /* world: flat, outlined, one voice */
 .room .toolbar{border-top:var(--hair) solid var(--ink)}
 .room .tile{border-radius:clamp(12px,1.2cqi,18px)}
-.room .tile.idea,.room .tile.sensation,.room .tile.artifact,.room .tile.link{background:color-mix(in srgb,var(--k) 18%,var(--paper));box-shadow:inset 0 0 0 1px var(--ink)}
-.room .tile.link{background:color-mix(in srgb,var(--k) 12%,var(--paper))}
+.room .tile.idea,.room .tile.sensation,.room .tile.artifact,.room .tile.link{background:transparent;box-shadow:inset 0 0 0 1px var(--ink)}
 .room .tile .t{font:800 clamp(18px,1.6cqi,26px)/1.02 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.005em}
 .room .tile .meta{text-transform:uppercase;letter-spacing:.09em}
 .room .tile .dot{background:var(--k)}
@@ -767,8 +766,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 #sheet-entry[data-k=artifact],#sheet-add[data-k=artifact]{--k:var(--char);--kon:#fff}
 #sheet-entry[data-k=sensation],#sheet-add[data-k=sensation]{--k:var(--blue);--kon:#fff}
 #sheet-entry[data-k=link],#sheet-add[data-k=link]{--k:var(--red);--kon:#fff}
-#sheet-entry[data-k] .sheet,#sheet-add[data-k] .sheet,#sheet-manifesto[data-k] .sheet{background:color-mix(in srgb,var(--k) 18%,var(--paper))!important;box-shadow:0 24px 60px rgb(0 0 0/.22),inset 0 0 0 1px var(--ink);transition:background .3s ease}
-#sheet-entry[data-k=link] .sheet,#sheet-add[data-k=link] .sheet{background:color-mix(in srgb,var(--k) 12%,var(--paper))!important}
+#sheet-entry[data-k] .sheet,#sheet-add[data-k] .sheet,#sheet-manifesto[data-k] .sheet{background:var(--paper)!important;box-shadow:0 24px 60px rgb(0 0 0/.22),inset 0 0 0 1px var(--ink)}
 #sheet-entry[data-k] .sheet-head,#sheet-add[data-k] .sheet-head,#sheet-manifesto[data-k] .sheet-head{background:transparent!important;color:var(--ink);border-bottom:1px solid var(--ink)}
 #sheet-entry[data-k] .sheet-head button,#sheet-add[data-k] .sheet-head button,#sheet-manifesto[data-k] .sheet-head button{color:var(--ink)}
 .en-kind{display:flex;align-items:center;gap:.6em;margin:0 0 .8em;text-transform:uppercase;letter-spacing:.09em;color:var(--ink)}
@@ -784,7 +782,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 #sheet-add .picks label:has([value=link]){--kk:var(--red)}
 #sheet-add .picks span{display:flex;align-items:baseline;gap:.5em}
 #sheet-add .picks span::before{content:"";flex:none;width:.75em;height:.75em;border-radius:50%;background:var(--kk);transform:translateY(.05em)}
-#sheet-add .picks input:checked + span{box-shadow:inset 0 0 0 2px var(--kk);background:color-mix(in oklch,var(--kk) 14%,var(--paper))}
+#sheet-add .picks input:checked + span{box-shadow:inset 0 0 0 1.5px var(--ink);background:transparent}
 .hud .caption.go{cursor:pointer;pointer-events:auto}
 .hud .caption.go .cap{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.25em}
 
@@ -800,29 +798,29 @@ html.night .door[aria-current],html.night .door:active,html.night .roomnav .chip
 html.night .roomnav .chip{background:rgb(244 241 235/.14);color:var(--osd);box-shadow:inset 0 0 0 1px rgb(255 255 255/.3)}
 .ai-note{margin-top:28px;padding-top:18px;border-top:var(--hair) solid var(--ink)}
 .ai-note h3{margin:0 0 8px}
-/* 21 ONE BUTTON ── every pill (doors, filters, calls to act) shares the door chip's scale and its dark glass.
-   Quiet = light smoke; pressed, current or a call to act = deep smoke. */
-.room .btn,.sheet .btn,.room .filters button,.roomnav .chip{height:clamp(34px,2.7cqi,42px);padding:0 1.1em;gap:.6em;border-radius:999px;
-  font:400 clamp(11px,.82cqi,13px)/1 var(--mono);font-stretch:normal;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap;text-shadow:none;
-  -webkit-backdrop-filter:blur(12px) saturate(1.3);backdrop-filter:blur(12px) saturate(1.3);transition:background .2s var(--ui)}
-.room .filters button{background:rgb(18 17 15/.38);color:#F4F1EB;box-shadow:inset 0 0 0 1px rgb(255 255 255/.18)}
-.room .filters button:hover{background:rgb(18 17 15/.55)}
-.room .btn-act,.sheet .btn-act,.room .filters button[aria-pressed=true]{background:rgb(18 17 15/.72);color:#F4F1EB;box-shadow:inset 0 0 0 1px rgb(255 255 255/.22)}
-.room .btn-act:hover,.sheet .btn-act:hover{background:rgb(18 17 15/.86);color:#F4F1EB}
-.room .filters button sup{opacity:.7}
-.room .filters{gap:8px;box-shadow:none;border-radius:0;overflow:visible;flex-wrap:wrap}
-.room .filters button + button{box-shadow:inset 0 0 0 1px rgb(255 255 255/.18)}
-html.night .room .filters button{background:rgb(244 241 235/.14);color:var(--osd);box-shadow:inset 0 0 0 1px rgb(255 255 255/.3)}
-html.night .room .btn-act,html.night .sheet .btn-act,html.night .room .filters button[aria-pressed=true]{background:rgb(244 241 235/.72);color:#1C1A18;box-shadow:inset 0 0 0 1px rgb(255 255 255/.5)}
-.roomnav .cta-float{right:0;bottom:calc(clamp(34px,2.7cqi,42px) + 10px);background:rgb(18 17 15/.72);box-shadow:inset 0 0 0 1px rgb(255 255 255/.22),0 6px 20px -10px rgb(0 0 0/.3)}
-.roomnav .cta-float:hover{background:rgb(18 17 15/.86)}
-html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box-shadow:inset 0 0 0 1px rgb(255 255 255/.5)}
+/* 21 BUTTONS ── three scales, each with one job. The room pills and the header are the frame and stay as they are;
+   everything inside a page speaks its own language, in ink on paper:
+   L  ACT    opens a form or sends one (Start a project, Get in touch, Add to Orbit, Send): ink outline pill, heading type.
+   M  GO     goes somewhere to read more (See prices, Visit, the process document): mono label on a hairline, arrow.
+   S  SORT   changes what is shown, never leaves the page (Orbit filters): mono label + dot, the chosen one underlined. */
+.room .btn-act,.sheet .btn-act{height:clamp(46px,3.4cqi,56px);padding:0 1.5em;gap:.7em;border-radius:999px;background:transparent;color:var(--ink);
+  box-shadow:inset 0 0 0 1.5px var(--ink);font:800 clamp(15px,1.2cqi,19px)/1 var(--sans);font-stretch:75%;letter-spacing:.02em;text-transform:uppercase;white-space:nowrap;
+  -webkit-backdrop-filter:none;backdrop-filter:none;transition:color .2s var(--ui),box-shadow .2s var(--ui)}
+.room .btn-act:hover,.sheet .btn-act:hover{background:transparent;color:var(--red);box-shadow:inset 0 0 0 1.5px var(--red)}
+.btn-link{display:inline-flex;align-items:center;gap:.6em;padding:.5em 0;border:0;border-bottom:1px solid var(--ink);background:none;color:var(--ink);
+  font:400 var(--t-mono)/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn-link:hover{color:var(--red);border-bottom-color:var(--red)}
+.room .cta-row,.sheet .cta-row{align-items:center;gap:clamp(16px,2cqi,32px)}
+.room .filters{gap:clamp(14px,1.6cqi,28px);box-shadow:none;border-radius:0;overflow:visible;flex-wrap:wrap;row-gap:6px}
+.room .filters button,.room .filters button + button,.room .filters button[aria-pressed=true]{height:32px;padding:0;gap:.5em;border-radius:0;background:none;color:var(--ink-2);
+  box-shadow:inset 0 -1px 0 transparent;font:400 var(--t-mono)/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;-webkit-backdrop-filter:none;backdrop-filter:none}
+.room .filters button:hover{color:var(--ink)}
+.room .filters button[aria-pressed=true]{color:var(--ink);box-shadow:inset 0 -1.5px 0 var(--ink)}
+.room .filters button sup{opacity:.6}
 /* 22 NO SPLIT WORDS ── nothing hyphenates or breaks mid-word; arrows ride with the last word */
 body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:normal}
 .tile .lw{white-space:nowrap}
 .field[hidden]{display:none}
-.room .ask{margin:clamp(28px,3cqi,48px) 0 .8em;font-size:var(--t-lede);line-height:1.3}
-.room .ask-2{margin-top:clamp(48px,5cqi,88px)}
 .cv .what small .ind{display:block;padding-left:1.4em}
 .tile .meta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tile .t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -830,7 +828,6 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
 .room .tile.photo .dot{background:var(--osd)}
 .tile.photo .cap{display:flex;flex-direction:column;gap:.6em}
 .tile.photo .cap .t{margin:0}
-@container screen (max-width:720px){.room .tile .t{font-size:min(15px,3.6cqi)}.room .tile .p{font-size:min(14px,3.4cqi)}}
 </style>
 </head>
 <body>
@@ -966,9 +963,6 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
             <div class="sidehead mono"><b>Where I can help</b><span class="n">02 · Scenarios</span></div>
             <div class="body">
               <p class="intro">Film photography is a hobby. I’ve designed wedding pieces for friends and helped my aunt through a house renovation. All of it by hand and by eye, and I’d like to help with yours. No project is too small to ask about.</p>
-              <p class="ask">Know what you want?</p>
-              <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">+</span></button></p>
-              <p class="ask ask-2">Still unsure? Here are some scenarios.</p>
               <ul class="svc scen">
                 <li><span class="num mono">01</span><h3>You just moved in, and nothing feels like yours yet.</h3><p>We walk the place together, then pick the furniture, lighting, art and colour that make it home: a plan you can shop at your own pace.</p><span class="tags mono">Interiors · Decoration</span></li>
                 <li><span class="num mono">02</span><h3>You’re renovating: a kitchen, a bath, a whole house.</h3><p>A layout that works, finishes that last, and a plan your contractor can price. Anything that needs a licensed pro, I say so up front.</p><span class="tags mono">Renovation · Layout</span></li>
@@ -1020,7 +1014,7 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
               <h2>What are we building?</h2>
               <p class="essay-deck">Tell me about the room, the thing, the problem or the wish — big or small.</p>
               <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">+</span></button>
-              <button class="btn btn-act" data-sheet="sheet-prices">See prices <span aria-hidden="true">+</span></button></p>
+              <button class="btn-link" data-sheet="sheet-prices">See prices <span aria-hidden="true">→</span></button></p>
             </div>
           </section>
         </div>
@@ -1089,7 +1083,7 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
           <p class="en-kind mono" id="en-kind"></p>
           <h2 id="en-title" tabindex="-1"></h2>
           <p id="en-text"></p>
-          <p><a class="btn btn-act en-go" id="en-go" target="_blank" rel="noopener" hidden></a></p>
+          <p><a class="btn-link en-go" id="en-go" target="_blank" rel="noopener" hidden></a></p>
         </div>
       </div>
     </div>
@@ -1732,7 +1726,7 @@ function openProject(id){
   const rest = (p.imgs || []).slice(1);
   $('#pj-gal').innerHTML = (p.spec ? `<div class="spec"><div class="tester"><div class="tbar mono">${p.spec.map((f, k) => `<button type="button" class="tf" data-k="${k}" aria-pressed="${k === 0}">${esc(f.family)}</button>`).join('')}<input type="range" min="20" max="160" value="72" aria-label="Size"><a class="tdl" href="${p.spec[0].file}" download>Download .otf</a></div><div class="tarea" contenteditable="true" spellcheck="false" style="font-size:72px;font-family:'${p.spec[0].family}',var(--sans)">${SPEC[0]}</div></div><p class="s-abc tabc" style="font-family:'${p.spec[0].family}',var(--sans)">abcdefghijklmnopqrstuvwxyz<br>ABCDEFGHIJKLMNOPQRSTUVWXYZ<br>0123456789</p></div>` : '') + wf.slice(1).map(k => `<figure>${wfBox(k)}</figure>`).join('');
   if (p.doc) {
-    $('#pj-gal').insertAdjacentHTML('beforeend', `<div class="pj-doc"><button class="btn btn-act" type="button" id="pj-doc">${esc(p.doc.label)} <span aria-hidden="true">+</span></button></div>`);
+    $('#pj-gal').insertAdjacentHTML('beforeend', `<div class="pj-doc"><button class="btn-link" type="button" id="pj-doc">${esc(p.doc.label)} <span aria-hidden="true">→</span></button></div>`);
     $('#pj-doc').onclick = () => {
       $('#proc-title').textContent = p.doc.title;
       $('#proc-pages').innerHTML = Array.from({length: p.doc.pages}, (_, k) => `<img src="${p.doc.dir}/p${String(k + 1).padStart(2, '0')}.webp" alt="Page ${k + 1}" loading="lazy" decoding="async" width="1632" height="1056">`).join('');
@@ -1808,6 +1802,10 @@ $('#tiles').addEventListener('click', ev => {
   if (e.photo && PHOTOS[e.photo]){ img.srcset = srcset(e.photo); img.sizes = '900px'; img.hidden = false; } else img.hidden = true;
   openSheet('sheet-entry');
 });
+/* a word never splits: a title whose longest word is wider than its tile steps down until it fits */
+const fitTitles = () => document.querySelectorAll('#tiles .t').forEach(t => { t.style.fontSize = ''; if (!t.clientWidth) return;
+  let fs = parseFloat(getComputedStyle(t).fontSize); while (t.scrollWidth > t.clientWidth + 1 && fs > 12){ fs -= .5; t.style.fontSize = fs + 'px'; } });
+new ResizeObserver(() => requestAnimationFrame(fitTitles)).observe($('#tiles'));
 document.querySelectorAll('#tiles .tile').forEach(t => t.querySelector('.dot').style.background = t.classList.contains('photo') ? 'var(--osd)' : KDOT[t.dataset.cat]);
 $('#filters').innerHTML = CATS.map(([k, label]) => {
   const n = k === 'all' ? WORLD.length : WORLD.filter(e => e.cat === k).length;
