@@ -379,6 +379,9 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .tally .note{color:var(--ink-2)}
 .vows{margin:0 0 clamp(24px,3cqi,40px);padding-left:1.4em;display:grid;gap:.5em;max-width:62ch}
 .vows b{font-weight:600}
+.vows-more{margin:0 0 clamp(24px,3cqi,40px)}
+@media (max-width:640px){#vows:not(.all) li:nth-child(n+4){display:none}#vows{margin-bottom:.9em}}
+@media (min-width:641px){#vows-more{display:none}#sheet-prices .sheet{width:min(1120px,100%)}#sheet-prices .sheet-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr);column-gap:clamp(32px,4cqi,64px);align-items:start}#sheet-prices h2,#sheet-prices .cta-row{grid-column:1/-1}#sheet-prices .vows{grid-column:1;margin:0;position:sticky;top:96px}#sheet-prices .menu{grid-column:2}}
 .m-group{margin-top:clamp(18px,2.4cqi,32px)}
 .m-group h3{margin:0 0 .4em;color:var(--red);font-weight:400}
 .m-svc{padding:14px 0;border-top:var(--hair) solid var(--ink)}
@@ -1118,8 +1121,9 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
         <div class="sheet-body">
           <h2 id="prices-title" tabindex="-1">What it costs</h2>
           <ol class="vows" id="vows"></ol>
+          <button type="button" class="btn-link vows-more" id="vows-more" aria-expanded="false"></button>
           <div class="menu" id="menu"></div>
-          <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">+</span></button></p>
+          <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">→</span></button></p>
         </div>
       </div>
     </div>
@@ -1669,6 +1673,9 @@ $('#vows').innerHTML = [
   'Bigger projects get a <b>written estimate</b> before anything starts — no surprise invoices.',
   'Artists, nonprofits and small independents can ask for the <b>community rate</b>: 25% off, no questions.'
 ].map(v => `<li>${v}</li>`).join('');
+const vowsMore = () => $('#vows-more').textContent = $('#vows').classList.contains('all') ? 'Show less' : `+ ${$('#vows').children.length - 3} more`;
+vowsMore();
+$('#vows-more').addEventListener('click', e => { e.currentTarget.setAttribute('aria-expanded', $('#vows').classList.toggle('all')); vowsMore(); });
 const mRow = (name, price, sub, talk) => `<div class="m-item"><span class="m-name">${esc(name)}${sub ? `<small class="mono">${esc(sub)}</small>` : ''}</span><span class="m-price ${talk ? 'talk' : ''}">${price}</span></div>`;
 const SMALL = 1000, small = it => !it.from && it.price < SMALL;
 $('#menu').innerHTML = NEEDS.map(g => `<section class="m-group"><h3 class="mono"><b>${g.dim}</b></h3>` + g.options.map(o => {
@@ -1678,12 +1685,6 @@ $('#menu').innerHTML = NEEDS.map(g => `<section class="m-group"><h3 class="mono"
     list.map(it => mRow(it.name, priceOf(it), [it.parts, it.note].filter(Boolean).join(' · '))).join('') +
     (m.handoff ? `<p class="m-hand mono">Hands off to — ${esc(m.handoff)}</p>` : '') + `</div>`;
 }).join('') + `</section>`).filter(h => h.includes('m-svc')).join('');
-document.querySelectorAll('#contact-form input[name=needs]').forEach(inp => {
-  const o = inp.nextElementSibling.textContent.trim(), list = (PRICE.prices[o] || []).filter(small); if (!PRICE.prices[o]) return;
-  if (!list.length){ inp.nextElementSibling.insertAdjacentHTML('beforeend', `<em class="pp">consult · ${$$m(PRICE.consult)}/hr</em>`); return; }
-  const fixed = list.filter(x => !(x.note || '').startsWith('per hour')), use = fixed.length ? fixed : list, min = Math.min(...use.map(x => x.price));
-  inp.nextElementSibling.insertAdjacentHTML('beforeend', `<em class="pp">${list.length > 1 ? 'from ' : ''}${$$m(min)}${fixed.length ? '' : '/hr'}</em>`);
-});
 document.querySelectorAll('#contact-form input[name=scope]').forEach(inp => {
   const t = PRICE.scope[inp.value]; if (t) inp.nextElementSibling.insertAdjacentHTML('beforeend', `<em class="pp">${t}</em>`);
 });
