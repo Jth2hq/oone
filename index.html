@@ -38,9 +38,6 @@
 
 /* 01 TOKENS ───────────────────────────────────────────────────────────── */
 @font-face{font-family:"lipstick";src:url(fonts/lipstick.woff2) format("woff2");font-display:swap}
-@font-face{font-family:"Cardo";src:url(fonts/cardo-400.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:"Cardo";src:url(fonts/cardo-400i.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap}
-@font-face{font-family:"Cardo";src:url(fonts/cardo-700.woff2) format("woff2");font-weight:700;font-style:normal;font-display:swap}
 :root{
   /* The loft: wall white, linen sheers, painted brick, stainless, a brass edge */
   --bone:#E8E4DC; --paper:#F4F1EB; --linen:#EAE4D9; --ink:#1C1A18; --ink-2:#5E5A54; --rule:rgb(28 26 24/.16); --hair:.5px;
@@ -380,13 +377,10 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .tally{display:grid;gap:4px;padding:16px 18px;border-radius:14px;background:color-mix(in oklch,var(--blue) 9%,var(--paper));box-shadow:inset 0 0 0 1px var(--rule)}
 .tally p{margin:0}.tally .sum{font:700 clamp(26px,2.6cqi,36px)/1 var(--sans);letter-spacing:-.01em}
 .tally .note{color:var(--ink-2)}
-.vows{list-style:none;margin:0 0 clamp(28px,3.4cqi,44px);padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,130px),1fr));gap:clamp(10px,1.2cqi,18px);max-width:none}
-.vows li{display:flex;flex-direction:column;gap:.55em;padding:clamp(14px,1.8cqi,24px);border:var(--hair) solid var(--ink);border-radius:clamp(12px,1.2cqi,18px)}
-.vows .num{font:400 var(--t-mono)/1 var(--mono);color:var(--acc-ink,var(--red))}
-.vows h3{margin:0;font:800 clamp(22px,2cqi,30px)/1 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.01em;color:var(--ink);white-space:nowrap}
-.vows p{margin:0;font-size:.92em;line-height:1.35;color:var(--ink)}
-@media (min-width:641px){.vows{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media (max-width:640px){.vows li{padding:14px 12px}.vows h3{font-size:19px}}
+.vows{list-style:none;margin:0 0 clamp(28px,3.4cqi,44px);padding:0;border-top:var(--hair) solid var(--ink);max-width:62ch}
+.vows li{display:grid;grid-template-columns:3em minmax(0,1fr);align-items:baseline;padding:.85em 0;border-bottom:var(--hair) solid var(--ink)}
+.vows .num{color:var(--acc-ink,var(--red))}
+.vows b{font-weight:700}
 .m-group{margin-top:clamp(18px,2.4cqi,32px)}
 .m-group h3{margin:0 0 .4em;color:var(--red);font-weight:400}
 .m-svc{padding:14px 0;border-top:var(--hair) solid var(--ink)}
@@ -837,56 +831,51 @@ body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:norma
 .tile.photo .cap{display:flex;flex-direction:column;gap:.6em}
 .tile.photo .cap .t{margin:0}
 
-/* 23 TYPE SYSTEM ── seven styles, one job each. Everything inside the pages and pop-ups uses only these.
-   1 PAGE TITLE   Story / Practice / Orbit only — sans 900, condensed, caps (the opener h1, unchanged)
+/* 23 TYPE SYSTEM ── six styles, one job each. Everything inside the pages and pop-ups uses only these.
+   1 PAGE TITLE   Story / Practice / Orbit only — sans 900, condensed, caps (the opener h1)
    2 SECTION      section names, spoken moments, project names (list + project view), step numbers — sans 900, condensed, caps
-   3 TITLE        pop-up titles, card + tile titles, step names, price tiles, the ballpark — sans 800, condensed, caps
-   4 LEDE         intro lines, first paragraphs, small headings (italic) — Cardo
-   5 BODY         paragraphs, lists, CV entries, prices, form choices — Cardo (names in bold)
-   6 LABEL        numbers, dates, tags, part + folio, close, filters, form field names, hand-offs — mono, caps
+   3 TITLE        every subheading: pop-up titles, card + tile titles, step names, CV + price group heads — sans 800, condensed, caps
+   4 BODY         all reading text, one size, one spacing: intro lines, paragraphs, lists, CV, prices, form choices — sans 400 (names 600)
+   5 LABEL        numbers, dates, tags, part + folio, close, filters, form field names, hand-offs — mono, caps
    +  SIGNATURE   Josh Harrison, under the photo and as the sign-off — lipstick
-   Breaks: lipstick is only ever his name; red is the only accent; buttons keep their three scales (21 BUTTONS). */
-:root{--serif:"Cardo",Georgia,"Times New Roman",serif;
-  --t-sec:clamp(40px,6.4cqi,112px);--t-title:clamp(22px,2.2vw,32px);
-  --t-lede:clamp(21px,1.9vw,30px);--t-body:clamp(18px,1.35vw,20px)}
-html .vows h3{white-space:normal}
-html .room,html .sheet-wrap{font-family:var(--serif);font-size:var(--t-body)}
-html .room .sheet,html .sheet-wrap .sheet{font-size:var(--t-body)}
+   Breaks: lipstick is only ever his name; red is the only accent; buttons keep their three scales (21 BUTTONS);
+   an Orbit tile title may shrink to fit one long word. */
+:root{--t-sec:clamp(40px,6.4cqi,112px);--t-title:clamp(20px,2vw,30px);--t-body:clamp(16px,1.2vw,18px)}
+html .room,html .sheet-wrap,html .room .sheet,html .sheet-wrap .sheet{font-family:var(--sans);font-size:var(--t-body)}
 /* 2 SECTION */
 html .room .sidehead b,html .room .sidehead.mono b,html .room .moment p,html .contents.rows .t,html .room .steps .num,html .sheet.pj h2{
   font:900 var(--t-sec)/.86 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.02em}
-/* 4 LEDE */
-html .room .opener .deck,html .room .body .lede,html .room .intro,html .sheet-body .lede,html .essay-deck{
-  font:400 var(--t-lede)/1.22 var(--serif);letter-spacing:0;color:var(--ink)}
-html .room .body h3,html .sheet-body h3,html .ai-note h3,html .m-svc h4{
-  margin-top:1.6em;font:italic 400 var(--t-lede)/1.2 var(--serif);letter-spacing:0;text-transform:none;color:var(--ink)}
-html .m-svc h4{margin-top:0}
-/* 3 TITLE */
-html .sheet-body h2,html .room .svc h3,html .vows h3,html .room .steps b,html .room .tile .t,html .tally .sum,html .backpage .next b{
-  font:800 var(--t-title)/1 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.01em}
-/* 5 BODY */
-html .room p,html .room li,html .sheet-body p,html .sheet-body li,html .room .svc p,html .vows p,html .tile .p,html .m-name,html .m-price,
+/* 4 BODY — one size, one spacing */
+html .room .opener .deck,html .room .body .lede,html .room .intro,html .sheet-body .lede,html .essay-deck,
+html .room p,html .room li,html .sheet-body p,html .sheet-body li,html .room .svc p,html .tile .p,html .m-name,html .m-price,
 html .contents .t small,html .cv .what,html .cv .what small,html .picks span,html .form input,html .form textarea,html .form select{
-  font-family:var(--serif);font-size:var(--t-body);line-height:1.45;letter-spacing:0}
-html .cv .what,html .room .cv .what{font-weight:700}
-html .cv .what small{font-weight:400;color:var(--ink-2)}
-html .m-price{font-weight:400;font-variant-numeric:lining-nums tabular-nums}
-html .tile .p{color:var(--ink-2)}
-/* 6 LABEL */
-html .room .mono,html .sheet .mono,html .sheet-head,html .sheet-head button,html .m-group h3,html .m-group h3 b,html .room .mono li,html .room .mono p,html .sheet .mono p,html .form .dim b,html .m-hand,html .picks .pp,html .field > span,html .form legend,html .refs,html .scen .tags,html .room .tags,html .cv .mono,html .notes li{
+  font-family:var(--sans);font-size:var(--t-body);font-weight:400;line-height:1.5;letter-spacing:0;color:var(--ink)}
+html .room .opener .deck,html .room .body .lede,html .room .intro{max-width:46ch}
+html .cv .what,html .room .cv .what{font-weight:600}
+html .cv .what small,html .m-name small,html .tile .p{color:var(--ink-2)}
+html .m-price{font-variant-numeric:tabular-nums}
+html .room b,html .sheet-body b,html .imperatives b{font-weight:600}
+/* 3 TITLE — every subheading */
+html .sheet-body h2,html .room .svc h3,html .room .steps b,html .room .tile .t,html .tally .sum,html .backpage .next b,
+html .room .body h3,html .sheet-body h3,html .ai-note h3,html .m-svc h4{
+  font:800 var(--t-title)/1 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.01em;font-style:normal;color:var(--ink)}
+html .room .body h3,html .ai-note h3{margin:2em 0 .7em}
+html .m-svc h4{margin:0 0 .5em}
+/* 5 LABEL */
+html .room .mono,html .sheet .mono,html .sheet-head,html .sheet-head button,html .m-group h3,html .m-group h3 b,html .room .mono li,html .room .mono p,html .sheet .mono p,html .form .dim b,html .m-hand,html .picks .pp,html .field > span,html .form legend,html .refs,html .scen .tags,html .room .tags,html .cv .mono,html .notes li,html .m-name small,html .vows .num{
   font-family:var(--mono);font-size:var(--t-mono);font-weight:400;font-style:normal;line-height:1.4;letter-spacing:.09em;text-transform:uppercase}
+html .m-name small{color:var(--ink-2)}
 html .form legend small{font-size:1em}
 html .form .picks small{font-size:1em;color:var(--ink-2)}
 html .sheet-body .m-group h3{margin:0 0 .4em;color:var(--red)}
-html .room b,html .sheet-body b,html .imperatives b{font-weight:700}
 /* + SIGNATURE */
 html .room .body h2.sig,html .sign{font:400 clamp(34px,3.2cqi,52px)/1 var(--script);text-transform:none;letter-spacing:0;color:var(--red);margin:.1em 0 .4em}
 html .sign{margin-top:1.6em}
 /* page closers: the same shape on every page — a label, a few words, one button */
 html .backpage.closer{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(14px,1.6cqi,22px);justify-items:start;padding:clamp(40px,6cqi,96px) var(--m);border-top:var(--hair) solid var(--ink)}
-html .backpage.closer .blurb{margin:0;max-width:34ch;font:400 var(--t-lede)/1.22 var(--serif);color:var(--ink)}
+html .backpage.closer .blurb{margin:0;max-width:46ch;font:400 var(--t-body)/1.5 var(--sans);color:var(--ink)}
 html .backpage.closer .blurb:empty{display:none}
-html .opener .cta-row{margin-top:clamp(18px,2.2cqi,34px)}
+html .body > .cta-row{margin-top:clamp(20px,2.4cqi,36px)}
 </style>
 </head>
 <body>
@@ -977,8 +966,8 @@ html .opener .cta-row{margin-top:clamp(18px,2.2cqi,34px)}
               </ol>
               <h3>Education</h3>
               <ol class="cv">
-                <li><span class="mono num">01</span><span class="what">University of Virginia<small>Master of Architecture</small></span><span class="mono">2020–22</span></li>
-                <li><span class="mono num">02</span><span class="what">University of Virginia<small>Bachelor of Science<span class="ind">Architecture, Design Thinking</span></small><small>Bachelor of Arts<span class="ind">American Studies, Visual and Popular Culture</span></small></span><span class="mono">2013–17</span></li>
+                <li><span class="mono num">01</span><span class="what">University of Virginia<small>M.Arch</small></span><span class="mono">2020–22</span></li>
+                <li><span class="mono num">02</span><span class="what">University of Virginia<small>BS Architecture, Design Thinking</small><small>BA American Studies, Visual + Popular Culture</small></span><span class="mono">2013–17</span></li>
               </ol>
             </div>
           </section>
@@ -1002,7 +991,6 @@ html .opener .cta-row{margin-top:clamp(18px,2.2cqi,34px)}
           <span class="part mono">Part Two</span>
           <h1>Practice</h1>
           <p class="deck">One practice, every scale. What are we making?</p>
-          <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">→</span></button></p>
         </section>
 
         <div class="page">
@@ -1011,6 +999,7 @@ html .opener .cta-row{margin-top:clamp(18px,2.2cqi,34px)}
             <div class="body">
               <p class="lede"><span class="logo" role="img" aria-label="care of TANNER"></span> is an independent design practice in Brooklyn — architecture and interiors, objects, print and digital, worked as one landscape.</p>
               <p>A building, a room, a chair, a book, a website: each is a set of decisions about how someone will feel when they meet it. I take on work at any scale, from choosing the right lamp to seeing a building from first sketch through construction, and keep the same eye on every piece. Every project is a negotiation — between a client and a place, a budget and a wish, two materials meeting at an edge. The work is to find the middle and detail it well.</p>
+              <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">→</span></button><button type="button" class="btn-link" data-sheet="sheet-prices">See prices <span aria-hidden="true">→</span></button></p>
             </div>
           </section>
 
@@ -1099,10 +1088,7 @@ html .opener .cta-row{margin-top:clamp(18px,2.2cqi,34px)}
           <span class="who mono">care of TANNER</span>
         </section>
 
-        <footer class="backpage closer">
-          <p class="blurb" id="blurb-orbit"></p>
-          <p class="cta-row"><button class="btn btn-act" data-add>Add to Orbit <span aria-hidden="true">→</span></button></p>
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--lilac)"></span>Idea — words</li><li><span class="dot" style="--c:var(--char)"></span>Artifact — things made by hand: objects, ceramics, photographs</li><li><span class="dot" style="--c:var(--blue)"></span>Sensation — things lived: songs, clips, nights out</li><li><span class="dot" style="--c:var(--red)"></span>In orbit — people and what they make</li></ul></div>
+        <footer class="backpage">
         </footer>
      </div>
     </article>
@@ -1120,7 +1106,7 @@ html .opener .cta-row{margin-top:clamp(18px,2.2cqi,34px)}
           <p id="pj-desc"></p>
           <div class="pj-gal" id="pj-gal"></div>
         </div>
-        <div class="pj-foot"><button type="button" class="pj-prev" id="pj-prev"></button><p class="cta-row"><button type="button" class="btn-link" data-sheet="sheet-prices">See prices <span aria-hidden="true">→</span></button></p><button type="button" class="pj-next" id="pj-next"></button></div>
+        <div class="pj-foot"><button type="button" class="pj-prev" id="pj-prev"></button><button type="button" class="pj-next" id="pj-next"></button></div>
       </div>
     </div>
 
@@ -1177,6 +1163,7 @@ html .opener .cta-row{margin-top:clamp(18px,2.2cqi,34px)}
           <h2 id="prices-title" tabindex="-1">What it costs</h2>
           <ol class="vows" id="vows"></ol>
           <div class="menu" id="menu"></div>
+          <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">→</span></button></p>
         </div>
       </div>
     </div>
@@ -1721,7 +1708,7 @@ $('#vows').innerHTML = [
   [`${$$m(PRICE.low)}–\u2060${PRICE.high}/hr`, 'Design work: that rate times honest hours, in whole dollars. Bigger jobs get a written estimate first.'],
   ['No markup', 'Furniture, materials and printing at cost. Trade discounts go to you.'],
   ['Up front', 'Where a job needs a licensed architect, a contractor or a maker, I say so and hand it off cleanly.']
-].map(([h, t], i) => `<li><span class="num">0${i + 1}</span><h3>${h}</h3><p>${t}</p></li>`).join('');
+].map(([h, t], i) => `<li><span class="num mono">0${i + 1}</span><span><b>${h}.</b> ${t}</span></li>`).join('');
 const mRow = (name, price, sub, talk) => `<div class="m-item"><span class="m-name">${esc(name)}${sub ? `<small class="mono">${esc(sub)}</small>` : ''}</span><span class="m-price ${talk ? 'talk' : ''}">${price}</span></div>`;
 const SMALL = 1000, small = it => !it.from && it.price < SMALL;
 $('#menu').innerHTML = NEEDS.map(g => `<section class="m-group"><h3 class="mono"><b>${g.dim}</b></h3>` + g.options.map(o => {
