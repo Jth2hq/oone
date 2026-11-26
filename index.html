@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="care of TANNER is a practice. Architecture, interiors, print and digital design by Josh Harrison, Brooklyn, NY — buildings, interiors, furniture, books and identity.">
+<meta name="description" content="care of TANNER is a practice. Architecture, interiors, print and digital design by Josh Harrison, Brooklyn, NY — buildings, interiors, furniture, books and identity.">
 <meta name="theme-color" content="#E8E4DC">
-<title>care of TANNER — Issue 01</title>
+<title>care of TANNER — Issue 01</title>
 <link rel="preconnect" href="https://use.typekit.net" crossorigin>
 <link rel="stylesheet" href="https://use.typekit.net/ohy2syh.css">
 <link rel="preload" href="fonts/lipstick.woff2" as="font" type="font/woff2" crossorigin>
@@ -15,7 +15,7 @@
 <link rel="apple-touch-icon" href="brand/favicon.png">
 <style>
 /* ═══════════════════════════════════════════════════════════════════════
-   care of TANNER — Issue 01, Autumn/Winter 2026
+   care of TANNER — Issue 01, Autumn/Winter 2026
 
    You are looking at a screen. Everything lives inside it, set in from the
    glass by ONE margin (--m). Anything that indents or offsets does so
@@ -27,8 +27,8 @@
 
    THE KEY.  ● charcoal brown: story, the person
              ● cobalt: practice, the work
-             ● lilac:  world — a note, never more than a tenth of a screen
-             ● red:    the accent — a voice, a number, the night light.
+             ● lilac:  world — a note, never more than a tenth of a screen
+             ● red:    the accent — a voice, a number, the night light.
                        Red is never a room; it runs through all of them.
 
    01 TOKENS  02 BASE  03 DEVICE  04 GLASS  05 REEL  06 STATEMENT
@@ -44,10 +44,10 @@
   --brass:#B39260; --steel:#C9CAC6;
   --osd:#F6F3EE;
 
-  --red:   #D8102F;                   /* the "care of" red — lifted from the logo */
-  --blue:  #3A55C9;                   /* cobalt, softened — the loft's blue light */
-  --char:  oklch(.36 .022 50);        /* ≈ #453B34 — walnut gone charcoal: worn, desaturated */
-  --lilac: #9479D2;                   /* soft lavender — the loft's purple light; takes white text */
+  --red:   #D8102F;                   /* the "care of" red — lifted from the logo */
+  --blue:  #3A55C9;                   /* cobalt, softened — the loft's blue light */
+  --char:  oklch(.36 .022 50);        /* ≈ #453B34 — walnut gone charcoal: worn, desaturated */
+  --lilac: #9479D2;                   /* soft lavender — the loft's purple light; takes white text */
   --blue-ink:oklch(.45 .17 262);      /* blue as text on paper (AA) */
   --lilac-ink:#6A45C4;
 
@@ -65,7 +65,7 @@
   --radius:clamp(16px,1.9vw,28px);
   --r-in:calc(var(--radius) - var(--reveal));
 
-  /* inside the screen (screen-relative — resolved where used) */
+  /* inside the screen (screen-relative — resolved where used) */
   --m:clamp(16px,2.4cqi,36px);          /* THE margin */
   --gutter:clamp(12px,1.6cqi,28px);
   --block:clamp(36px,5cqi,80px);        /* space between sections */
@@ -179,7 +179,7 @@ to{opacity:1;-webkit-mask-position:0 0;mask-position:0 0}}
 .post img{transition:filter 2.4s var(--breath)}
 html:not(.night) .post img{filter:none}
 html.night .post img{filter:brightness(.46) saturate(1.2) contrast(1.1)}
-/* BLOOMS — colour at each door, breathing. Soft light by day, lit by night. */
+/* BLOOMS — colour at each door, breathing. Soft light by day, lit by night. */
 .lamp{inset:-20%;mix-blend-mode:color;opacity:.11;animation:breathe 11s var(--breath) infinite alternate}
 .lamp.b-story{background:radial-gradient(70% 85% at 0% 100%,rgb(255 186 110/.85),color-mix(in oklch,rgb(255 186 110/.85) 55%,transparent) 30%,color-mix(in oklch,rgb(255 186 110/.85) 22%,transparent) 58%,color-mix(in oklch,rgb(255 186 110/.85) 6%,transparent) 82%,transparent 100%)}   /* the lamp, through linen */
 .lamp.b-day{background:radial-gradient(80% 70% at 85% 0%,rgb(255 252 244/.8),color-mix(in oklch,rgb(255 252 244/.8) 55%,transparent) 30%,color-mix(in oklch,rgb(255 252 244/.8) 22%,transparent) 58%,color-mix(in oklch,rgb(255 252 244/.8) 6%,transparent) 82%,transparent 100%);animation-delay:-5.2s} /* the window */
@@ -289,7 +289,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .opener .deck{margin:0;max-width:30ch;font:400 var(--t-lede)/1.3 var(--sans);color:var(--ink-2);letter-spacing:-.012em}
 .opener .cta{justify-self:start;margin-top:clamp(12px,1.8cqi,28px)}
 
-/* buttons — one red call to act, one quiet outline */
+/* buttons — one red call to act, one quiet outline */
 .btn{display:inline-flex;align-items:center;gap:.7em;height:clamp(44px,3.2cqi,52px);padding:0 1.6em;border-radius:999px;
   font:400 clamp(14px,1cqi,16px)/1 var(--sans);text-decoration:none;cursor:pointer;
   transition:transform .2s var(--ui),background .2s var(--ui)}
@@ -325,7 +325,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .cv .num{color:var(--red)}
 .cv .what{font-weight:500}
 .cv .what small{display:block;font-weight:400;color:var(--ink-2);font-size:.8em;margin-top:.35em}
-/* the essay — numbers hang in the margin of the list; each line stays one sentence */
+/* the essay — numbers hang in the margin of the list; each line stays one sentence */
 .essay #man-title + p::first-letter{float:left;font:800 3.4em/.82 var(--sans);font-stretch:75%;color:var(--red);padding:.06em .1em 0 0}
 .imperatives{counter-reset:i;list-style:none;margin:1.4em 0;padding:0;border-top:var(--hair) solid var(--ink)}
 .imperatives li{counter-increment:i;position:relative;padding:.9em 0 .9em 3.2em;border-bottom:var(--hair) solid var(--ink)}
@@ -409,7 +409,7 @@ html[data-room=story] #story,html[data-room=practice] #practice,html[data-room=w
 .needs-f button[aria-pressed=true] span{box-shadow:inset 0 0 0 1.5px var(--ink);background:color-mix(in oklch,var(--blue) 16%,#fff)}
 .pempty{color:var(--ink-2);margin:1em 0 0}
 .contents{list-style:none;margin:0;padding:0;border-top:var(--hair) solid var(--ink);max-width:none!important}
-/* the wall — one ink: every piece pulled through ink on paper; real colour on hover and inside the project */
+/* the wall — one ink: every piece pulled through ink on paper; real colour on hover and inside the project */
 .contents.wall{position:relative;border-top:0;columns:3 15em;column-gap:clamp(18px,2.4cqi,40px);padding:clamp(14px,1.6cqi,24px) 0 0}
 .contents.wall li{border:0;break-inside:avoid;margin:0 0 clamp(28px,3.4cqi,52px)}
 .contents.wall li:nth-child(3n+2){padding-top:clamp(0px,4cqi,64px)}
@@ -487,7 +487,7 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
 .tile.artifact{--k:var(--char);background:color-mix(in oklch,var(--char) 9%,var(--paper));box-shadow:none}
 .tile.link{--k:var(--red);background:#fff;box-shadow:inset 0 0 0 1px var(--rule)}
 .tile.link:hover{box-shadow:inset 0 0 0 1px var(--ink)}
-.tile.link .t::after{content:""}
+.tile.link .t .lw::after{content:""}
 .tile.link.soon{cursor:default}
 .tile .dot{--c:var(--k)}
 .tile.photo{grid-row:span 2;padding:0;color:var(--osd);background:#1d1c1a;box-shadow:none}
@@ -523,7 +523,7 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
 .spec{padding:clamp(20px,3cqi,40px) 0;border-top:var(--hair) solid var(--ink);color:var(--cherry,#c8102e)}
 .spec p{max-width:none;margin:0 0 .35em;line-height:1.05;text-wrap:balance}
 .spec .s-xl{font-size:clamp(48px,7cqi,104px)}.spec .s-l{font-size:clamp(32px,4.4cqi,64px)}.spec .s-m{font-size:clamp(22px,2.6cqi,36px)}
-.spec .s-abc{font-size:clamp(26px,3cqi,44px);letter-spacing:.04em;word-break:break-all}
+.spec .s-abc{font-size:min(clamp(26px,3cqi,44px),4.2cqi);letter-spacing:.04em}
 .spec a{color:var(--ink)}
 .tester{margin:0 0 1.2em;border:var(--hair) solid var(--ink);background:#fff}
 .tbar{display:flex;align-items:center;gap:1em;padding:.7em 1em;border-bottom:var(--hair) solid var(--ink);color:var(--ink-2);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
@@ -532,7 +532,7 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
 .tbar .tf{padding:.35em .8em;border-radius:999px;box-shadow:inset 0 0 0 1px var(--rule);font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--ink)}
 .tbar .tf[aria-pressed=true]{background:var(--red);color:#fff;box-shadow:none}
 .spec .tabc{line-height:1.25;color:var(--red)}
-.tarea{padding:.25em .35em;line-height:1.05;min-height:1.3em;outline:none;color:var(--red);overflow-wrap:anywhere}
+.tarea{padding:.25em .35em;line-height:1.05;min-height:1.3em;outline:none;color:var(--red)}
 .tarea:focus{background:color-mix(in oklch,var(--red) 4%,#fff)}
 .proc{display:grid;gap:14px}
 .proc img{display:block;width:100%;height:auto;background:#eceae5}
@@ -543,8 +543,8 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
 .pj-gal figcaption{margin-top:.6em;color:var(--ink-2);font-size:.82em}
 
 /* 15 MOTION ── a room wipes across the glass from its door ──────────────── */
-/* rooms open and close by animating the room itself — no full-screen snapshots (iOS freezes on them) */
-/* closing: no snapshot — the room itself draws back toward its own door over the landing */
+/* rooms open and close by animating the room itself — no full-screen snapshots (iOS freezes on them) */
+/* closing: no snapshot — the room itself draws back toward its own door over the landing */
 /* one continuous move: the next page fades in over whatever was showing, which stays put beneath it */
 .room.leaving{display:block;z-index:5}
 .room.opening,.room.closing{z-index:7;will-change:opacity}
@@ -579,7 +579,7 @@ html.night .contents.wall .lab{color:var(--lilac);border-color:var(--lilac)}
   .add{margin-left:0}
 }
 
-/* NIGHT inside the rooms: not an inverse — the same pages under a dimmed, warmed lamp.
+/* NIGHT inside the rooms: not an inverse — the same pages under a dimmed, warmed lamp.
    Paper drops to lamp-lit linen, ink stays ink, colour fields deepen and warm, nothing glows. */
 html.night .room,html.night .sheet-wrap{
   --paper:oklch(.68 .014 50);--bone:oklch(.66 .014 50);--linen:oklch(.64 .016 48);
@@ -596,7 +596,7 @@ html.night .picks span,html.night .form input,html.night .form textarea,html.nig
 html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
 
 /* 17 EDITORIAL PASS ── after studiomila.work: one ink, huge condensed capitals, small tracked mono labels, hairlines, air.
-   Same palette, same two families — only space, hierarchy and UI change. */
+   Same palette, same two families — only space, hierarchy and UI change. */
 .room{--block:clamp(64px,9cqi,150px);--rule:rgb(28 26 24/.22)}
 .room::before,.room::after{opacity:0}
 .room .mono,.room .sidehead,.room .folio,.room .part,.room .colophon,.room .tags,.room .who{text-transform:uppercase;letter-spacing:.09em;font-size:var(--t-mono)}
@@ -609,7 +609,7 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
 .room .opener h1{font-size:clamp(50px,max(14.5cqi,min(64px,17.4cqi)),260px);font-weight:900;line-height:.8;text-transform:uppercase;letter-spacing:-.03em;
   padding-bottom:clamp(14px,1.8cqi,30px);border-bottom:var(--hair) solid var(--ink)}
 .room .opener .deck{max-width:34ch;margin-top:clamp(18px,2.2cqi,34px);color:var(--ink);font-size:var(--t-lede)}
-/* sections: label, then a loud heading, then the content — stacked, full measure */
+/* sections: label, then a loud heading, then the content — stacked, full measure */
 .room .sec{border-top:var(--hair) solid var(--ink);row-gap:clamp(24px,3cqi,48px)}
 .room .sidehead{grid-column:1/-1;display:flex;flex-direction:column-reverse;gap:clamp(10px,1.2cqi,18px);color:var(--ink)}
 .room .sidehead .n{margin:0;color:var(--ink-2)}
@@ -639,7 +639,7 @@ html.night .sheet{box-shadow:0 24px 60px rgb(0 0 0/.55)}
 .room .cv{border-top:var(--hair) solid var(--ink)}
 .room .cv .num,.room .imperatives li::before{color:var(--ink-2)}
 .room .cv .what{font-weight:700}
-/* selected work: one project per row — name loud left, the line and the link right, the picture full width beneath */
+/* selected work: one project per row — name loud left, the line and the link right, the picture full width beneath */
 .room .pfilters{margin-bottom:clamp(24px,3cqi,48px)}
 .contents.rows{columns:auto;border-top:0;padding:0}
 .contents.rows li{margin:0;padding:0;border-top:var(--hair) solid var(--ink);border-bottom:0}
@@ -664,7 +664,7 @@ html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
 .room .tile .t{font:800 clamp(18px,1.6cqi,26px)/1.02 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.005em}
 .room .tile .meta{text-transform:uppercase;letter-spacing:.09em}
 .room .tile .dot{background:var(--k)}
-/* the next room, and the buttons — solid ink pills */
+/* the next room, and the buttons — solid ink pills */
 .room .backpage{border-top:var(--hair) solid var(--ink)}
 .room .backpage .next b{font:900 clamp(40px,6cqi,110px)/.86 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:-.02em}
 .room .btn-act,.sheet .btn-act{background:var(--ink);color:var(--paper);box-shadow:none;font:800 clamp(15px,1.15cqi,18px)/1 var(--sans);font-stretch:75%;text-transform:uppercase;letter-spacing:.02em}
@@ -672,7 +672,7 @@ html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
 .room .btn-act:hover,.sheet .btn-act:hover{background:var(--red)}
 .sheet-body h2{font-weight:900;text-transform:uppercase;font-size:clamp(32px,4cqi,64px);line-height:.88}
 .sheet-head{text-transform:uppercase;letter-spacing:.09em}
-/* baseline: monochrome — ink, paper, charcoal for breaks — and one accent, red, used sparingly. Pop-ups follow the same rules. */
+/* baseline: monochrome — ink, paper, charcoal for breaks — and one accent, red, used sparingly. Pop-ups follow the same rules. */
 #story,#practice,#world,.sheet-wrap{--c:var(--char);--c-ink:var(--char);--on-c:var(--paper);--acc:var(--red);--acc-ink:var(--red);--blue-ink:var(--ink);--lilac-ink:var(--ink)}
 .room .moment{background:#383634;color:var(--paper)}
 .room .sec .body > .cv:last-child li:last-child{border-bottom:0}
@@ -684,7 +684,7 @@ html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
 .room .opener h1{border-bottom:0;padding-bottom:0}
 .room .filters button{background:var(--paper)}
 .room .filters button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
-.room .tile.link .t::after{color:var(--red)}
+.room .tile.link .t .lw::after{color:var(--red)}
 .sheet .btn-act:hover,.room .btn-act:hover{background:var(--red);color:#fff}
 @media (max-width:640px){
   .contents.rows .row{grid-template-columns:1fr;gap:14px}
@@ -697,7 +697,7 @@ html.night .contents.rows .strip img{filter:url(#one-ink) brightness(.82)}
 html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0 0 0 1px rgb(255 255 255/.4)}
 .door:hover,.door:focus-visible{background:rgb(18 17 15/.55)}
 
-/* 19 PROJECT VIEW ── the row you clicked, opened up: same title, same caption line, same picture — now full width */
+/* 19 PROJECT VIEW ── the row you clicked, opened up: same title, same caption line, same picture — now full width */
 .sheet.pj{width:100%;max-width:none;height:100%;max-height:none;border-radius:0;padding:0 var(--m) var(--m);background:var(--paper)!important}
 .pj-bar{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;margin:0 calc(-1 * var(--m));padding:clamp(14px,1.6cqi,22px) var(--m);background:var(--paper);border-bottom:var(--hair) solid var(--ink)}
 .pj-bar>*{text-transform:uppercase;letter-spacing:.09em}
@@ -739,7 +739,7 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 .room .tile .dot{background:var(--k)}
 .room .filters .dot{display:inline-block}
 .room .key .dot{background:var(--c)}
-.room .tile.link .t::after{color:var(--char)}
+.room .tile.link .t .lw::after{color:var(--char)}
 /* full-bleed bands meet the next section with no stray inset rule */
 .room .moment + .page > .sec:first-child,.room .moment + .page > :first-child,.room .moment + .backpage{border-top:0}
 
@@ -753,13 +753,13 @@ html.night .roomnav .chip{background:#26231f;color:var(--osd);box-shadow:inset 0
 .sheet.pj.swap #pj-hero,.sheet.pj.swap .pj-row,.sheet.pj.swap .pj-cols{opacity:0}
 @media (prefers-reduced-motion:reduce){.sheet-wrap,.sheet-wrap .sheet{transition:opacity .2s linear}.sheet-wrap .sheet{transform:none}}
 
-/* links: no emoji arrow — a drawn hairline corner arrow, same colour as the dot */
-.tile.link .t::after,.room .tile.link .t::after{content:"";display:inline-block;width:.62em;height:.62em;margin-left:.32em;vertical-align:.12em;
+/* links: no emoji arrow — a drawn hairline corner arrow, same colour as the dot */
+.tile.link .t .lw::after,.room .tile.link .t .lw::after{content:"";display:inline-block;width:.62em;height:.62em;margin-left:.32em;vertical-align:.12em;
   background:currentColor;color:var(--char);
   -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2 8 8 2M3.2 2H8v4.8' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='square'/%3E%3C/svg%3E") center/contain no-repeat;
           mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M2 8 8 2M3.2 2H8v4.8' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='square'/%3E%3C/svg%3E") center/contain no-repeat;
   transition:transform .25s cubic-bezier(.2,.7,.2,1)}
-.tile.link:hover .t::after{transform:translate(2px,-2px)}
+.tile.link:hover .t .lw::after{transform:translate(2px,-2px)}
 .form .picks small{color:var(--ink-2);font-size:.88em}
 
 /* 22 ORBIT COLOUR IN POP-UPS ── the category's colour carries the head band, the marker and the action */
@@ -817,6 +817,17 @@ html.night .room .btn-act,html.night .sheet .btn-act,html.night .room .filters b
 .roomnav .cta-float{right:0;bottom:calc(clamp(34px,2.7cqi,42px) + 10px);background:rgb(18 17 15/.72);box-shadow:inset 0 0 0 1px rgb(255 255 255/.22),0 6px 20px -10px rgb(0 0 0/.3)}
 .roomnav .cta-float:hover{background:rgb(18 17 15/.86)}
 html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box-shadow:inset 0 0 0 1px rgb(255 255 255/.5)}
+/* 22 NO SPLIT WORDS ── nothing hyphenates or breaks mid-word; arrows ride with the last word */
+body{hyphens:manual;-webkit-hyphens:manual;overflow-wrap:normal;word-break:normal}
+.tile .lw{white-space:nowrap}
+.cv .what small .ind{display:block;padding-left:1.4em}
+.tile .meta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tile .p{-webkit-line-clamp:2}
+.room .tile.photo .dot{background:var(--osd)}
+.tile.photo .cap{display:flex;flex-direction:column;gap:.6em}
+.tile.photo .cap .t{margin:0}
+@container screen (max-width:720px){.room .tile .t{font-size:min(15px,3.6cqi)}.room .tile .p{font-size:min(14px,3.4cqi)}}
 </style>
 </head>
 <body>
@@ -862,7 +873,7 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
      <div class="room-scroll" tabindex="-1">
         <header class="runhead">
           <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo" aria-hidden="true"></span></a>
-          <span class="folio mono">care of TANNER — Part One: Story — p. 01</span>
+          <span class="folio mono">care of TANNER — Part One: Story — p. 01</span>
           <a class="close" href="#">Close ×</a>
         </header>
         <section class="opener">
@@ -875,11 +886,11 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
           <section class="sec">
             <div class="sidehead mono"><b>The practice</b><span class="n">01</span></div>
             <div class="body">
-              <p class="lede"><span class="logo" role="img" aria-label="care of TANNER"></span> is a design practice and a namesake — architecture, interiors, objects, print and digital work, made with care for the people who use them.<sup>1</sup></p>
-              <p>People, places, projects, objects, culture. The work lives in <em>Practice</em>; the friends, makers and things that surround it live in <em>Orbit</em>.<sup>2</sup> Good ideas, better company — the same ideas in different places.</p>
+              <p class="lede"><span class="logo" role="img" aria-label="care of TANNER"></span> is a design practice and a namesake — architecture, interiors, objects, print and digital work, made with care for the people who use them.<sup>1</sup></p>
+              <p>People, places, projects, objects, culture. The work lives in <em>Practice</em>; the friends, makers and things that surround it live in <em>Orbit</em>.<sup>2</sup> Good ideas, better company — the same ideas in different places.</p>
               <ol class="notes mono">
-                <li>1 — care of: the work is addressed to someone.</li>
-                <li>2 — world: notes, sightings, and links out to the people worth knowing.</li>
+                <li>1 — care of: the work is addressed to someone.</li>
+                <li>2 — world: notes, sightings, and links out to the people worth knowing.</li>
               </ol>
             </div>
           </section>
@@ -902,14 +913,14 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
               <h3>Experience</h3>
               <ol class="cv">
                 <li><span class="mono num">01</span><span class="what">Ralph Lauren<small>Project Manager, Store Design</small></span><span class="mono">2026 –</span></li>
-                <li><span class="mono num">02</span><span class="what">Wesley Moon Inc.<small>Designer — architecture, interiors, urban design</small></span><span class="mono">2024–26</span></li>
-                <li><span class="mono num">03</span><span class="what">Hart Howerton<small>Designer — resort, residential, master planning</small></span><span class="mono">2022–24</span></li>
-                <li><span class="mono num">04</span><span class="what">Bedrock Detroit<small>Architecture Coordinator — urban development, place-making</small></span><span class="mono">2017–20</span></li>
+                <li><span class="mono num">02</span><span class="what">Wesley Moon Inc.<small>Designer — architecture, interiors, urban design</small></span><span class="mono">2024–26</span></li>
+                <li><span class="mono num">03</span><span class="what">Hart Howerton<small>Designer — resort, residential, master planning</small></span><span class="mono">2022–24</span></li>
+                <li><span class="mono num">04</span><span class="what">Bedrock Detroit<small>Architecture Coordinator — urban development, place-making</small></span><span class="mono">2017–20</span></li>
               </ol>
               <h3>Education</h3>
               <ol class="cv">
                 <li><span class="mono num">01</span><span class="what">University of Virginia<small>Master of Architecture</small></span><span class="mono">2020–22</span></li>
-                <li><span class="mono num">02</span><span class="what">University of Virginia<small>Bachelor of Science, Architecture — Design Thinking</small><small>Bachelor of Arts, American Studies — Visual and Popular Culture</small></span><span class="mono">2013–17</span></li>
+                <li><span class="mono num">02</span><span class="what">University of Virginia<small>Bachelor of Science<span class="ind">Architecture, Design Thinking</span></small><small>Bachelor of Arts<span class="ind">American Studies, Visual and Popular Culture</span></small></span><span class="mono">2013–17</span></li>
               </ol>
             </div>
           </section>
@@ -925,7 +936,7 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
      <div class="room-scroll" tabindex="-1">
         <header class="runhead">
           <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo" aria-hidden="true"></span></a>
-          <span class="folio mono">care of TANNER — Part Two: Practice — p. 02</span>
+          <span class="folio mono">care of TANNER — Part Two: Practice — p. 02</span>
           <a class="close" href="#">Close ×</a>
         </header>
         <section class="opener">
@@ -938,8 +949,8 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
           <section class="sec">
             <div class="sidehead mono"><b>The practice</b><span class="n">01</span></div>
             <div class="body">
-              <p class="lede"><span class="logo" role="img" aria-label="care of TANNER"></span> is an independent design practice in Brooklyn — architecture and interiors, objects, print and digital, worked as one landscape.</p>
-              <p>A building, a room, a chair, a book, a website: each is a set of decisions about how someone will feel when they meet it. I take on work at any scale, from choosing the right lamp to seeing a building from first sketch through construction, and keep the same eye on every piece. Every project is a negotiation — between a client and a place, a budget and a wish, two materials meeting at an edge. The work is to find the middle and detail it well.</p>
+              <p class="lede"><span class="logo" role="img" aria-label="care of TANNER"></span> is an independent design practice in Brooklyn — architecture and interiors, objects, print and digital, worked as one landscape.</p>
+              <p>A building, a room, a chair, a book, a website: each is a set of decisions about how someone will feel when they meet it. I take on work at any scale, from choosing the right lamp to seeing a building from first sketch through construction, and keep the same eye on every piece. Every project is a negotiation — between a client and a place, a budget and a wish, two materials meeting at an edge. The work is to find the middle and detail it well.</p>
             </div>
           </section>
 
@@ -996,7 +1007,7 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
             <div class="sidehead mono"><b>Start a project</b><span class="n">05 · Contact</span></div>
             <div class="body">
               <h2>What are we building?</h2>
-              <p class="essay-deck">Tell me about the room, the thing, the problem or the wish — big or small.</p>
+              <p class="essay-deck">Tell me about the room, the thing, the problem or the wish — big or small.</p>
               <p class="cta-row"><button class="btn btn-act" data-sheet="sheet-contact">Start a project <span aria-hidden="true">+</span></button>
               <button class="btn btn-act" data-sheet="sheet-prices">See prices <span aria-hidden="true">+</span></button></p>
             </div>
@@ -1013,13 +1024,13 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
      <div class="room-scroll" tabindex="-1">
         <header class="runhead">
           <a class="home" href="#" aria-label="care of TANNER, home"><span class="logo" aria-hidden="true"></span></a>
-          <span class="folio mono">care of TANNER — Part Three: Orbit — p. 03</span>
+          <span class="folio mono">care of TANNER — Part Three: Orbit — p. 03</span>
           <a class="close" href="#">Close ×</a>
         </header>
         <section class="opener">
           <span class="part mono">Part Three</span>
           <h1>Orbit</h1>
-          <p class="deck">Notes, sightings, and the people worth knowing — add yours.</p>
+          <p class="deck">Notes, sightings, and the people worth knowing — add yours.</p>
         </section>
 
         <div class="page">
@@ -1037,12 +1048,12 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
         </section>
 
         <footer class="backpage">
-          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--lilac)"></span>Idea — words</li><li><span class="dot" style="--c:var(--char)"></span>Artifact — things made by hand: objects, ceramics, photographs</li><li><span class="dot" style="--c:var(--blue)"></span>Sensation — things lived: songs, clips, nights out</li><li><span class="dot" style="--c:var(--red)"></span>In orbit — people and what they make</li></ul></div>
+          <div class="colophon mono"><ul class="key" aria-label="Key"><li><span class="dot" style="--c:var(--lilac)"></span>Idea — words</li><li><span class="dot" style="--c:var(--char)"></span>Artifact — things made by hand: objects, ceramics, photographs</li><li><span class="dot" style="--c:var(--blue)"></span>Sensation — things lived: songs, clips, nights out</li><li><span class="dot" style="--c:var(--red)"></span>In orbit — people and what they make</li></ul></div>
         </footer>
      </div>
     </article>
 
-    <!-- ═══ SHEETS — overlays, inside the glass ═══ -->
+    <!-- ═══ SHEETS — overlays, inside the glass ═══ -->
     <div class="sheet-wrap" id="sheet-project">
       <div class="sheet pj" role="dialog" aria-modal="true" aria-labelledby="pj-title">
         <div class="pj-bar mono"><span id="pj-idx"></span><button class="x">Close ×</button></div>
@@ -1080,7 +1091,7 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
     </div>
     <div class="sheet-wrap" id="sheet-manifesto" data-k="idea">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="man-title">
-        <div class="sheet-head mono"><span>Orbit — Idea, December 2021</span><button class="x">Close ×</button></div>
+        <div class="sheet-head mono"><span>Orbit — Idea, December 2021</span><button class="x">Close ×</button></div>
         <div class="sheet-body essay">
           <h2 id="man-title" tabindex="-1">Home as Possibility</h2>
               <p>I write this with an acknowledgment of my privilege as both a white gay male within the Queer community and as someone that has always had a shelter over their head. I write this from the perspective of having grown up with a single mother raising two children, from having watched her make sacrificial life decisions in order to keep us within a dwelling, from having relocated so many times that growth was never to be held in one place. I know that, because of this, I walk with both an inability to settle and an understanding of home as the overwhelming, all-encompassing emotion of arrival.</p>
@@ -1107,7 +1118,7 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
 
     <div class="sheet-wrap" id="sheet-prices">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="prices-title">
-        <div class="sheet-head mono"><span>Practice — prices</span><button class="x">Close ×</button></div>
+        <div class="sheet-head mono"><span>Practice — prices</span><button class="x">Close ×</button></div>
         <div class="sheet-body">
           <h2 id="prices-title" tabindex="-1">What it costs</h2>
           <ol class="vows" id="vows"></ol>
@@ -1119,24 +1130,24 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
 
     <div class="sheet-wrap" id="sheet-contact">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="contact-title">
-        <div class="sheet-head mono"><span>Practice — start a project</span><button class="x">Close ×</button></div>
+        <div class="sheet-head mono"><span>Practice — start a project</span><button class="x">Close ×</button></div>
         <div class="sheet-body">
           <h2 id="contact-title" tabindex="-1">What are we building?</h2>
-              <form class="form" id="contact-form" data-subject="New project — care of TANNER">
+              <form class="form" id="contact-form" data-subject="New project — care of TANNER">
             <div class="row2">
               <label class="field"><span>Name</span><input name="name" autocomplete="name" required></label>
               <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
             </div>
             <fieldset>
               <legend>What do you need? <small>Click all that apply</small></legend>
-              <p class="dim mono"><b>2D</b> Flat — on paper and on screen</p>
+              <p class="dim mono"><b>2D</b> Flat — on paper and on screen</p>
               <div class="picks multi">
                 <label><input type="checkbox" name="needs" value="2D · A logo &amp; brand look"><span>A logo &amp; brand look</span></label>
-                <label><input type="checkbox" name="needs" value="2D · Design for print — stationery, posters, books"><span>Design for print — stationery, posters, books</span></label>
+                <label><input type="checkbox" name="needs" value="2D · Design for print — stationery, posters, books"><span>Design for print — stationery, posters, books</span></label>
                 <label><input type="checkbox" name="needs" value="2D · A website"><span>A website</span></label>
                 <label><input type="checkbox" name="needs" value="2D · Photography"><span>Photography</span></label>
               </div>
-              <p class="dim mono"><b>3D</b> Space and object — things you walk into or hold</p>
+              <p class="dim mono"><b>3D</b> Space and object — things you walk into or hold</p>
               <div class="picks multi">
                 <label><input type="checkbox" name="needs" value="3D · A design for a new building or addition"><span>A design for a new building or addition</span></label>
                 <label><input type="checkbox" name="needs" value="3D · Renovation &amp; layout planning"><span>Renovation &amp; layout planning</span></label>
@@ -1146,7 +1157,7 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
                 <label><input type="checkbox" name="needs" value="3D · Decorating &amp; styling a room"><span>Decorating &amp; styling a room</span></label>
                 <label><input type="checkbox" name="needs" value="3D · A custom piece of furniture"><span>A custom piece of furniture</span></label>
               </div>
-              <p class="dim mono"><b>4D</b> Time — things that unfold, move or change</p>
+              <p class="dim mono"><b>4D</b> Time — things that unfold, move or change</p>
               <div class="picks multi">
                 <label><input type="checkbox" name="needs" value="4D · An installation, display or event"><span>An installation, display or event</span></label>
                 <label><input type="checkbox" name="needs" value="4D · A shop or restaurant fit-out, opening to opening"><span>A shop or restaurant fit-out, opening to opening</span></label>
@@ -1154,7 +1165,7 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
                 <label><input type="checkbox" name="needs" value="4D · Planning for a property or neighbourhood, in phases"><span>Planning for a property or neighbourhood, in phases</span></label>
               </div>
               <div class="picks multi">
-                <label><input type="checkbox" name="needs" value="Not sure yet"><span>Not sure yet — let’s talk</span></label>
+                <label><input type="checkbox" name="needs" value="Not sure yet"><span>Not sure yet — let’s talk</span></label>
               </div>
             </fieldset>
             <fieldset>
@@ -1186,11 +1197,11 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
 
     <div class="sheet-wrap" id="sheet-add">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="add-title">
-        <div class="sheet-head mono"><span>Orbit — a submission</span><button class="x">Close ×</button></div>
+        <div class="sheet-head mono"><span>Orbit — a submission</span><button class="x">Close ×</button></div>
         <div class="sheet-body">
           <h2 id="add-title" tabindex="-1">Add to Orbit</h2>
           <p>A note, a sighting, a place, a person worth knowing. Everything is read before it goes up.</p>
-          <form class="form" id="add-form" data-subject="Orbit submission — care of TANNER">
+          <form class="form" id="add-form" data-subject="Orbit submission — care of TANNER">
             <fieldset>
               <legend>What is it?</legend>
               <div class="picks">
@@ -1202,7 +1213,7 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
             </fieldset>
             <label class="field"><span>Title</span><input name="title" required maxlength="80"></label>
             <label class="field"><span>Say it</span><textarea name="text" required maxlength="600"></textarea></label>
-            <label class="field"><span>Link (optional) — a shop, a studio, a friend, a portfolio</span><input name="url" type="url" placeholder="https://"></label>
+            <label class="field"><span>Link (optional) — a shop, a studio, a friend, a portfolio</span><input name="url" type="url" placeholder="https://"></label>
             <div class="row2">
               <label class="field"><span>Your name</span><input name="name" autocomplete="name" required></label>
               <label class="field"><span>Your email (not published)</span><input name="email" type="email" autocomplete="email" required></label>
@@ -1214,14 +1225,14 @@ html.night .roomnav .cta-float{background:rgb(244 241 235/.72);color:#1C1A18;box
       </div>
     </div>
 
-    <!-- THE GLASS — on top of everything, catches nothing -->
+    <!-- THE GLASS — on top of everything, catches nothing -->
     <div class="glass" aria-hidden="true"><div class="scan"></div><div class="grain"></div><div class="tube"></div><div class="band"></div></div>
   </div>
  </div>
 </div>
 
 <script>
-/* ═══ CONTENT — edit here, nothing below needs touching ════════════════
+/* ═══ CONTENT — edit here, nothing below needs touching ════════════════
    Images live in img/800 and img/1600 as .webp (photos/ keeps the masters).
    To add a photograph: export both widths with the same name, add a line
    to PHOTOS. To add a post to the reel: add a line to POSTS.            */
@@ -1271,24 +1282,24 @@ const PHOTOS = {
 };
 
 /* The reel is the Instagram grid. Designed posts are interleaved with the
-   film archive — one post, then three photographs.
+   film archive — one post, then three photographs.
      f      plain | stack | display | title | script | hand | list
      photo  a PHOTOS key         field  bone | ink | story | practice | world
      zone   story | practice | world  (the dot)
      pos    tr | ml | bl | c      project  a PROJECTS id (adds "Open project") */
 const POSTS = [
-  {f:'stack',   photo:'leap',  text:'People\nPlaces\nProjects\nProgress', pos:'tr', idx:'P-002', zone:'world', cap:'Good people, better culture — Brooklyn, NY'},
+  {f:'stack',   photo:'leap',  text:'People\nPlaces\nProjects\nProgress', pos:'tr', idx:'P-002', zone:'world', cap:'Good people, better culture — Brooklyn, NY'},
   {f:'hand',    field:'world',   text:'A more\nconsidered\nworld.', idx:'N-003', zone:'world', cap:'Notes from the studio'},
-  {f:'title',   field:'bone',    text:'Ideas\nSpaces\nObjects\nPeople', pos:'ml', idx:'002', zone:'story', cap:'care of TANNER — Brooklyn'},
+  {f:'title',   field:'bone',    text:'Ideas\nSpaces\nObjects\nPeople', pos:'ml', idx:'002', zone:'story', cap:'care of TANNER — Brooklyn'},
   {f:'display', photo:'corridor', text:'Same ideas,\ndifferent places', idx:'P-004', zone:'world', cap:'On the move'},
   {f:'stack',   photo:'checker-threshold', text:'Objects\nSpaces\nSystems\nfor a brighter everyday', pos:'bl', idx:'O-005', zone:'practice', cap:'Studio, Brooklyn'},
-  {f:'display', field:'practice', text:'Troubadour\nClub', idx:'TNR-03', zone:'practice', cap:'Hart Howerton — 2023', project:'troub'},
-  {f:'script',  photo:'festival-fan', text:'Good ideas,\nbetter company.', idx:'P-006', zone:'world', cap:'Late night, New York — 01:26'},
-  {f:'display', field:'ink',     text:'Covert\nRanch', idx:'TNR-04', zone:'practice', cap:'Hart Howerton — 2023', project:'ranch'},
+  {f:'display', field:'practice', text:'Troubadour\nClub', idx:'TNR-03', zone:'practice', cap:'Hart Howerton — 2023', project:'troub'},
+  {f:'script',  photo:'festival-fan', text:'Good ideas,\nbetter company.', idx:'P-006', zone:'world', cap:'Late night, New York — 01:26'},
+  {f:'display', field:'ink',     text:'Covert\nRanch', idx:'TNR-04', zone:'practice', cap:'Hart Howerton — 2023', project:'ranch'},
   {f:'list',    field:'bone',    text:'People\nPlaces\nProjects\nObjects\nCulture\nA brighter everyday', idx:'012', zone:'story', cap:'Index'},
-  {f:'display', field:'story',   text:'When Time\nTakes Over', idx:'TNR-05', zone:'practice', cap:'UVA thesis — 2022', project:'wtto'},
-  {f:'stack',   field:'bone',    text:'People\nSpaces\nMusic\nRepeat', pos:'c', idx:'N-007', zone:'world', cap:'Milan — 22:47'},
-  {f:'display', field:'practice', text:'COR Wellness\nCenter', idx:'TNR-06', zone:'practice', cap:'Bedrock Detroit — 2020', project:'cor'},
+  {f:'display', field:'story',   text:'When Time\nTakes Over', idx:'TNR-05', zone:'practice', cap:'UVA thesis — 2022', project:'wtto'},
+  {f:'stack',   field:'bone',    text:'People\nSpaces\nMusic\nRepeat', pos:'c', idx:'N-007', zone:'world', cap:'Milan — 22:47'},
+  {f:'display', field:'practice', text:'COR Wellness\nCenter', idx:'TNR-06', zone:'practice', cap:'Bedrock Detroit — 2020', project:'cor'},
 ];
 const FIRST = 'counter-long';   // the photograph the statement is written over
 
@@ -1297,37 +1308,37 @@ const FIRST = 'counter-long';   // the photograph the statement is written over
 const PROJECTS = [
   {id:'types',dims:['2D'],needs:[],title:'Type Studies',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2026',role:'Type design',client:'Two alphabets, drawn by hand',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    spec:[{family:'Type Study 01',file:'fonts/TypeStudy01-Regular.otf'},{family:'Type Study 02',file:'fonts/TypeStudy02-Regular.otf'}],
-   imgs:[['type-sketch-01','study 01 — sketch'],['type-digital-01','study 01 — digital concept'],['type-sketch-02','study 02 — sketch'],['type-digital-02','study 02 — digital concept']]},
+   imgs:[['type-sketch-01','study 01 — sketch'],['type-digital-01','study 01 — digital concept'],['type-sketch-02','study 02 — sketch'],['type-digital-02','study 02 — digital concept']]},
   {id:'studies',dims:['3D'],needs:[],title:'Studies in Detail',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'Ongoing',role:'Designer',client:'Interior architecture',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['studies-sink','']]},
-  {id:'matildahunter',dims:['2D','4D'],needs:['Design for print — stationery, posters, books'],title:'Matilda + Hunter',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2026',role:'Designer',client:'Wedding print suite',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
+  {id:'matildahunter',dims:['2D','4D'],needs:['Design for print — stationery, posters, books'],title:'Matilda + Hunter',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2026',role:'Designer',client:'Wedding print suite',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['mh-suite','']]},
-  {id:'fungbet',dims:['2D','4D'],needs:['Design for print — stationery, posters, books'],title:'Xo, E+A',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2025',role:'Designer',client:'Emily Fung & Andreas Betancourt — wedding',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
+  {id:'fungbet',dims:['2D','4D'],needs:['Design for print — stationery, posters, books'],title:'Xo, E+A',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2025',role:'Designer',client:'Emily Fung & Andreas Betancourt — wedding',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['fb-menu-tattoo','']]},
-  {id:'bigbaby',dims:['2D'],needs:['Design for print — stationery, posters, books'],title:'Big Baby Turns 30!',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2024',role:'Designer',client:'New Year’s Eve dinner',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
+  {id:'bigbaby',dims:['2D'],needs:['Design for print — stationery, posters, books'],title:'Big Baby Turns 30!',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2024',role:'Designer',client:'New Year’s Eve dinner',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['nye-stack','']]},
   {id:'troub',dims:['3D'],needs:[],title:'Troubadour Club',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2023',role:'Designer',client:'Hart Howerton',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',imgs:[['troub-elevation','']]},
   {id:'ranch',dims:['3D'],needs:[],title:'Covert Ranch',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2023',role:'Designer',client:'Hart Howerton',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',imgs:[['ranch-section','']]},
-  {id:'wtto',dims:['3D'],needs:[],title:'When Time Takes Over',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2022–23',role:'Author',client:'UVA',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',imgs:[['wtto-cover','']],doc:{label:'Click to view process',dir:'docs/wtto-process',pages:53,title:'When Time Takes Over — the making of, lecture at CU Denver, November 2022'}},
-  {id:'bcn',dims:['3D'],needs:[],title:'The Meeting Line',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2021',role:'Author',client:'UVA — ARCH 8010: Barcelona',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
+  {id:'wtto',dims:['3D'],needs:[],title:'When Time Takes Over',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2022–23',role:'Author',client:'UVA',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',imgs:[['wtto-cover','']],doc:{label:'Click to view process',dir:'docs/wtto-process',pages:53,title:'When Time Takes Over — the making of, lecture at CU Denver, November 2022'}},
+  {id:'bcn',dims:['3D'],needs:[],title:'The Meeting Line',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2021',role:'Author',client:'UVA — ARCH 8010: Barcelona',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['bcn-frames','']]},
-  {id:'pantry',dims:['3D'],needs:[],title:'Pantry for the Arts',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2022',role:'Author',client:'UVA — ARCH 7020: Foundation Studio IV',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
+  {id:'pantry',dims:['3D'],needs:[],title:'Pantry for the Arts',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2022',role:'Author',client:'UVA — ARCH 7020: Foundation Studio IV',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['pfa-lawn','']]},
-  {id:'edge',dims:['3D'],needs:[],title:'Centering the Edge',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2021',role:'Author',client:'UVA — ARCH 7010: Foundation Studio III',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
+  {id:'edge',dims:['3D'],needs:[],title:'Centering the Edge',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2021',role:'Author',client:'UVA — ARCH 7010: Foundation Studio III',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['cte-towers','']]},
-  {id:'cityspace',dims:['3D'],needs:[],title:'Library as Cityspace',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2021',role:'Author',client:'UVA — ARCH 6020',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
+  {id:'cityspace',dims:['3D'],needs:[],title:'Library as Cityspace',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2021',role:'Author',client:'UVA — ARCH 6020',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['lac-street','']]},
   {id:'pac',dims:['3D'],needs:[],title:'Performing Arts Center',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2021',role:'Renderings',client:'MGA Partners, Architects',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['pac-exterior','']]},
   {id:'dd139',dims:['4D'],needs:[],title:'Detroit Design 139',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2018',role:'Designer',client:'Exhibition',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'},
-  {id:'detroit',dims:['2D','4D'],needs:['Design for print — stationery, posters, books'],title:'Design for the City',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2017–19',role:'Designer',client:'Bedrock Detroit',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
+  {id:'detroit',dims:['2D','4D'],needs:['Design for print — stationery, posters, books'],title:'Design for the City',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2017–19',role:'Designer',client:'Bedrock Detroit',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['ddc-street','']]},
   {id:'staging',dims:['3D'],needs:[],title:'Staging',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2019–20',role:'Designer',client:'Bedrock Detroit',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',
    imgs:[['stage-living','']]},
   {id:'cor',dims:['3D'],needs:[],title:'COR Wellness Center',tag:'Lorem ipsum dolor sit amet, consectetur adipiscing.',year:'2020',role:'Coordinator',client:'Bedrock Detroit',desc:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.',imgs:[['cor-lobby','']]},
 ];
 
-/* Image plan — wireframes until the real images go in. One look across the site:
+/* Image plan — wireframes until the real images go in. One look across the site:
    photographs carry the landing reel's film grade; drawings are ink on paper; print is shot flat on paper. */
 const WF_T = {
   photo:  ['Photograph', 'colour film grade · daylight · level verticals', '3:2'],
@@ -1356,7 +1367,7 @@ const wfBox = k => { const [m, st, r] = WF_T[k]; return `<span class="wf" style=
      cat   idea | artifact | sensation | link
      link  href (use '#' for "soon"), kind (the source line), price (for sale) */
 const WORLD = [
-  {id:'manifesto',cat:'idea',date:'2021-12-01',title:'Home as Possibility',text:'On the closet, the bedroom, the house and the home — and six ways to design for the possibility of home.',sheet:'sheet-manifesto'},
+  {id:'manifesto',cat:'idea',date:'2021-12-01',title:'Home as Possibility',text:'On the closet, the bedroom, the house and the home — and six ways to design for the possibility of home.',sheet:'sheet-manifesto'},
   {id:'l1',cat:'idea',date:'2026-05-12',title:'Lorem ipsum dolor',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
   {id:'p1',cat:'artifact',date:'2026-05-02',title:'Consectetur adipiscing',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.',photo:'piazza-sphere'},
   {id:'l2',cat:'sensation',date:'2026-04-28',title:'Sed do eiusmod',text:'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore.'},
@@ -1401,7 +1412,7 @@ const feed = (() => {
   const used = new Set([FIRST]);
   const film = Object.keys(PHOTOS).filter(k => !used.has(k))
     .map((k, i) => ({f:'plain', photo:k, idx:'F-' + String(i + 1).padStart(2, '0'), zone:'world', cap:PHOTOS[k].title}));
-  const out = [{f:'plain', photo:FIRST, idx:'001', zone:'story', cap:'care of TANNER — Issue 01'}];
+  const out = [{f:'plain', photo:FIRST, idx:'001', zone:'story', cap:'care of TANNER — Issue 01'}];
   return out.concat(film);
 })();
 
@@ -1471,7 +1482,7 @@ function schedule(){ clearTimeout(timer); if (!paused) timer = setTimeout(() => 
 caption();
 document.addEventListener('visibilitychange', () => { if (document.hidden) clearTimeout(timer); else if (!document.documentElement.dataset.room) schedule(); });
 
-/* day is the spa, night is the club — set by the clock, or by hand */
+/* day is the spa, night is the club — set by the clock, or by hand */
 function setMode(night){
   document.documentElement.classList.toggle('night', night);
   document.querySelector('meta[name=theme-color]').content = night ? '#0A0A0D' : '#E8E4DC';
@@ -1514,7 +1525,7 @@ function route(){
     document.querySelectorAll('[data-go]').forEach(b => b.toggleAttribute('aria-current', b.dataset.go === next));
     const sc = next && document.querySelector(`#${next} .room-scroll`);
     if (sc){ sc.scrollTop = 0; sc.focus({preventScroll:true}); }
-    document.title = next ? `${next[0].toUpperCase() + next.slice(1)} — care of TANNER` : 'care of TANNER — Issue 01';
+    document.title = next ? `${next[0].toUpperCase() + next.slice(1)} — care of TANNER` : 'care of TANNER — Issue 01';
     if (next){ clearTimeout(timer); } else { schedule(); }
   };
   if (reduced){ swap(); return; }
@@ -1588,7 +1599,7 @@ document.addEventListener('click', e => {
   openSheet(id, id === 'sheet-contact' ? '#contact-title' : id === 'sheet-manifesto' ? '#man-title' : null);
 });
 /* ── prices: one list for the menu and the request form ── */
-const PRICE = {"consult": 100, "low": 55, "high": 85, "prices": {"A logo & brand look": [{"name": "Starter identity — mark, colours, type, a one-page guide", "price": 825, "hours": 15, "parts": "kickoff chat 2h · three directions 6h · refine one 4h · files + guide 3h"}, {"name": "Full brand system", "from": 2200, "note": "Let’s talk first"}], "Design for print — stationery, posters, books": [{"name": "Menu, one or two pages", "price": 375, "hours": 5, "parts": "concept 1.5h · layout 2.5h · one round of edits 1h"}, {"name": "Business cards", "price": 225, "hours": 3, "parts": "layout 2h · print-ready files 1h"}, {"name": "Poster", "price": 300, "hours": 4, "parts": "concept 1.5h · design 2h · files 0.5h"}, {"name": "Invitation suite — invite, details card, envelope", "price": 525, "hours": 7, "parts": "concept 2h · three pieces 4h · press-ready 1h"}, {"name": "Book or zine", "from": 2250, "note": "Let’s talk first"}], "A website": [], "Photography": [{"name": "Half-day film shoot", "price": 390, "hours": 6, "parts": "shoot 4h · scan edit + selects 2h"}], "A design for a new building or addition": [{"name": "Schematic design", "from": 8500, "note": "Let’s talk first"}], "Renovation & layout planning": [{"name": "One room — two layout options, one final plan", "price": 425, "hours": 5, "parts": "site visit + measure 1.5h · options 2.5h · final plan 1h"}, {"name": "Whole apartment", "price": 1275, "hours": 15, "parts": "site visit + measure 3h · options 8h · final plans 4h"}], "Architectural drawings & permits": [], "Furniture selection": [{"name": "One room — a shoppable list", "price": 425, "hours": 5, "parts": "chat 1h · sourcing 3h · the list + links 1h"}, {"name": "Each additional room", "price": 255, "hours": 3, "parts": "sourcing 2h · list 1h"}], "Lighting, paint & finishes": [{"name": "One room — palette + finish schedule", "price": 255, "hours": 3, "parts": "samples + palette 2h · schedule 1h"}, {"name": "Whole home", "price": 765, "hours": 9, "parts": "samples + palette 5h · schedules 4h"}], "Decorating & styling a room": [{"name": "Room plan — concept, layout, shopping list", "price": 525, "hours": 7, "parts": "visit 1.5h · concept board 2h · plan 2h · list 1.5h"}, {"name": "On-site styling day", "price": 75, "note": "per hour, as long as it takes"}], "A custom piece of furniture": [{"name": "Design + shop drawings", "price": 780, "hours": 12, "parts": "sketch options 4h · design 4h · shop drawings 4h"}], "An installation, display or event": [{"name": "Design drawings + coordination", "from": 1100, "note": "Let’s talk first"}], "A shop or restaurant fit-out, opening to opening": [{"name": "Design + coordination through opening", "from": 7500, "note": "Let’s talk first"}], "Motion, video & social content": [], "Planning for a property or neighbourhood, in phases": []}, "svc": {"A logo & brand look": {"rate": 55, "concept": true, "handoff": null}, "Design for print — stationery, posters, books": {"rate": 75, "concept": true, "handoff": "Printer — printing at cost"}, "A website": {"rate": 65, "concept": true, "handoff": "Developer builds it"}, "Photography": {"rate": 65, "concept": true, "handoff": "Lab — film + developing at cost"}, "A design for a new building or addition": {"rate": 85, "concept": true, "handoff": "Licensed architect of record for the permit set; general contractor builds"}, "Renovation & layout planning": {"rate": 85, "concept": true, "handoff": "General contractor builds"}, "Architectural drawings & permits": {"rate": 65, "concept": true, "handoff": "Licensed architect stamps and files; filing fees + expediter at cost"}, "Furniture selection": {"rate": 85, "concept": true, "handoff": null}, "Lighting, paint & finishes": {"rate": 85, "concept": true, "handoff": "Painter / electrician install"}, "Decorating & styling a room": {"rate": 75, "concept": true, "handoff": null}, "A custom piece of furniture": {"rate": 65, "concept": true, "handoff": "Fabricator builds — billed by the maker, no markup"}, "An installation, display or event": {"rate": 55, "concept": true, "handoff": "Fabricator and install crew build and hang — materials at cost"}, "A shop or restaurant fit-out, opening to opening": {"rate": 75, "concept": true, "handoff": "General contractor builds; architect of record where permits apply"}, "Motion, video & social content": {"rate": 55, "concept": true, "handoff": "Editor / animator produces"}, "Planning for a property or neighbourhood, in phases": {"rate": 75, "concept": true, "handoff": "Planners + civil engineers carry it forward"}}, "scope": {"A second opinion": "first 30 min free · then $100/hr", "Help choosing": "fixed prices", "A plan": "fixed prices", "Design & drawings": "fixed or quoted", "Building & making": "$55–85/hr · makers at cost", "All of it": "let’s talk"}};
+const PRICE = {"consult": 100, "low": 55, "high": 85, "prices": {"A logo & brand look": [{"name": "Starter identity — mark, colours, type, a one-page guide", "price": 825, "hours": 15, "parts": "kickoff chat 2h · three directions 6h · refine one 4h · files + guide 3h"}, {"name": "Full brand system", "from": 2200, "note": "Let’s talk first"}], "Design for print — stationery, posters, books": [{"name": "Menu, one or two pages", "price": 375, "hours": 5, "parts": "concept 1.5h · layout 2.5h · one round of edits 1h"}, {"name": "Business cards", "price": 225, "hours": 3, "parts": "layout 2h · print-ready files 1h"}, {"name": "Poster", "price": 300, "hours": 4, "parts": "concept 1.5h · design 2h · files 0.5h"}, {"name": "Invitation suite — invite, details card, envelope", "price": 525, "hours": 7, "parts": "concept 2h · three pieces 4h · press-ready 1h"}, {"name": "Book or zine", "from": 2250, "note": "Let’s talk first"}], "A website": [], "Photography": [{"name": "Half-day film shoot", "price": 390, "hours": 6, "parts": "shoot 4h · scan edit + selects 2h"}], "A design for a new building or addition": [{"name": "Schematic design", "from": 8500, "note": "Let’s talk first"}], "Renovation & layout planning": [{"name": "One room — two layout options, one final plan", "price": 425, "hours": 5, "parts": "site visit + measure 1.5h · options 2.5h · final plan 1h"}, {"name": "Whole apartment", "price": 1275, "hours": 15, "parts": "site visit + measure 3h · options 8h · final plans 4h"}], "Architectural drawings & permits": [], "Furniture selection": [{"name": "One room — a shoppable list", "price": 425, "hours": 5, "parts": "chat 1h · sourcing 3h · the list + links 1h"}, {"name": "Each additional room", "price": 255, "hours": 3, "parts": "sourcing 2h · list 1h"}], "Lighting, paint & finishes": [{"name": "One room — palette + finish schedule", "price": 255, "hours": 3, "parts": "samples + palette 2h · schedule 1h"}, {"name": "Whole home", "price": 765, "hours": 9, "parts": "samples + palette 5h · schedules 4h"}], "Decorating & styling a room": [{"name": "Room plan — concept, layout, shopping list", "price": 525, "hours": 7, "parts": "visit 1.5h · concept board 2h · plan 2h · list 1.5h"}, {"name": "On-site styling day", "price": 75, "note": "per hour, as long as it takes"}], "A custom piece of furniture": [{"name": "Design + shop drawings", "price": 780, "hours": 12, "parts": "sketch options 4h · design 4h · shop drawings 4h"}], "An installation, display or event": [{"name": "Design drawings + coordination", "from": 1100, "note": "Let’s talk first"}], "A shop or restaurant fit-out, opening to opening": [{"name": "Design + coordination through opening", "from": 7500, "note": "Let’s talk first"}], "Motion, video & social content": [], "Planning for a property or neighbourhood, in phases": []}, "svc": {"A logo & brand look": {"rate": 55, "concept": true, "handoff": null}, "Design for print — stationery, posters, books": {"rate": 75, "concept": true, "handoff": "Printer — printing at cost"}, "A website": {"rate": 65, "concept": true, "handoff": "Developer builds it"}, "Photography": {"rate": 65, "concept": true, "handoff": "Lab — film + developing at cost"}, "A design for a new building or addition": {"rate": 85, "concept": true, "handoff": "Licensed architect of record for the permit set; general contractor builds"}, "Renovation & layout planning": {"rate": 85, "concept": true, "handoff": "General contractor builds"}, "Architectural drawings & permits": {"rate": 65, "concept": true, "handoff": "Licensed architect stamps and files; filing fees + expediter at cost"}, "Furniture selection": {"rate": 85, "concept": true, "handoff": null}, "Lighting, paint & finishes": {"rate": 85, "concept": true, "handoff": "Painter / electrician install"}, "Decorating & styling a room": {"rate": 75, "concept": true, "handoff": null}, "A custom piece of furniture": {"rate": 65, "concept": true, "handoff": "Fabricator builds — billed by the maker, no markup"}, "An installation, display or event": {"rate": 55, "concept": true, "handoff": "Fabricator and install crew build and hang — materials at cost"}, "A shop or restaurant fit-out, opening to opening": {"rate": 75, "concept": true, "handoff": "General contractor builds; architect of record where permits apply"}, "Motion, video & social content": {"rate": 55, "concept": true, "handoff": "Editor / animator produces"}, "Planning for a property or neighbourhood, in phases": {"rate": 75, "concept": true, "handoff": "Planners + civil engineers carry it forward"}}, "scope": {"A second opinion": "first 30 min free · then $100/hr", "Help choosing": "fixed prices", "A plan": "fixed prices", "Design & drawings": "fixed or quoted", "Building & making": "$55–85/hr · makers at cost", "All of it": "let’s talk"}};
 
 /* ── practice: selected work, filtered by the same words as the contact form ── */
 const NEEDS = [...document.querySelectorAll('#contact-form .dim')].map(d => ({
@@ -1605,8 +1616,8 @@ function renderWork(){
     const pic = cover
       ? `<img src="img/800/${cover}.webp" srcset="img/800/${cover}.webp 800w, img/1600/${cover}.webp 1600w" sizes="90vw" alt="" loading="lazy" decoding="async">`
       : `<span class="blank">${esc(p.title)}</span>`;
-    return `<li><button data-project="${p.id}" aria-label="${esc(p.title)} — ${esc(p.client)}, ${esc(p.year)}">` +
-      `<span class="row"><span><span class="t">${esc(p.title)}</span><span class="cat">${esc([p.client, p.role, p.year].filter(Boolean).join(' / '))}</span></span>` +
+    return `<li><button data-project="${p.id}" aria-label="${esc(p.title)} — ${esc(p.client)}, ${esc(p.year)}">` +
+      `<span class="row"><span><span class="t">${esc(p.title)}</span><span class="cat">${esc([p.client, p.role, p.year].filter(Boolean).join('\u00a0/ '))}</span></span>` +
       `<span><span class="say">${esc(p.tag || '')}</span><span class="go">View project ›</span></span></span>` +
       `</button></li>`;
   }).join('');
@@ -1628,7 +1639,7 @@ $('#pfilters').addEventListener('click', e => {
 });
 renderWork();
 
-/* prices on the menu and in the form — a vow, not a checkout */
+/* prices on the menu and in the form — a vow, not a checkout */
 const $$m = n => '$' + n.toLocaleString('en-US');
 const priceOf = it => it.from ? `from ${$$m(it.from)}` : $$m(it.price) + (it.note && it.note.startsWith('per hour') ? '/hr' : '');
 $('#vows').innerHTML = [
@@ -1638,7 +1649,7 @@ $('#vows').innerHTML = [
   'Concrete jobs get <b>whole-dollar prices</b>. What you see is what you pay.',
   'The <b>first 30 minutes are free</b>. Asking costs nothing.',
   '<b>No markup</b> on furniture, materials or printing. Trade discounts go to you.',
-  'Bigger projects get a <b>written estimate</b> before anything starts — no surprise invoices.',
+  'Bigger projects get a <b>written estimate</b> before anything starts — no surprise invoices.',
   'Artists, nonprofits and small independents can ask for the <b>community rate</b>: 25% off, no questions.'
 ].map(v => `<li>${v}</li>`).join('');
 const mRow = (name, price, sub, talk) => `<div class="m-item"><span class="m-name">${esc(name)}${sub ? `<small class="mono">${esc(sub)}</small>` : ''}</span><span class="m-price ${talk ? 'talk' : ''}">${price}</span></div>`;
@@ -1648,7 +1659,7 @@ $('#menu').innerHTML = NEEDS.map(g => `<section class="m-group"><h3 class="mono"
   return `<div class="m-svc"><h4>${esc(o)}</h4>` +
     mRow('Consult', `${$$m(PRICE.consult)}/hr`, 'advice, review, a second set of eyes') +
     list.map(it => mRow(it.name, priceOf(it), [it.parts, it.note].filter(Boolean).join(' · '))).join('') +
-    (m.handoff ? `<p class="m-hand mono">Hands off to — ${esc(m.handoff)}</p>` : '') + `</div>`;
+    (m.handoff ? `<p class="m-hand mono">Hands off to — ${esc(m.handoff)}</p>` : '') + `</div>`;
 }).join('') + `</section>`).filter(h => h.includes('m-svc')).join('');
 document.querySelectorAll('#contact-form input[name=needs]').forEach(inp => {
   const o = inp.nextElementSibling.textContent.trim(), list = (PRICE.prices[o] || []).filter(small); if (!PRICE.prices[o]) return;
@@ -1673,15 +1684,15 @@ $('#contents').addEventListener('click', e => { const b = e.target.closest('[dat
 function openProject(id){
   const i = PROJECTS.findIndex(p => p.id === id); if (i < 0) return;
   const p = PROJECTS[i];
-  $('#pj-idx').textContent = `Practice — ${String(i + 1).padStart(2, '0')} / ${String(PROJECTS.length).padStart(2, '0')}`;
+  $('#pj-idx').textContent = `Practice — ${String(i + 1).padStart(2, '0')} / ${String(PROJECTS.length).padStart(2, '0')}`;
   $('#pj-title').textContent = p.title; $('#pj-tag').textContent = p.tag;
-  $('#pj-cat').textContent = [p.client, p.role, p.year].filter(Boolean).join(' / ');
+  $('#pj-cat').textContent = [p.client, p.role, p.year].filter(Boolean).join('\u00a0/ ');
   const cov = p.imgs && p.imgs[0] && p.imgs[0][0], nx = PROJECTS[(i + 1) % PROJECTS.length];
   const wf = WF[p.id] || ['photo'];
   $('#pj-hero').parentElement.innerHTML = '<span id="pj-hero" class="wf-hero">' + wfBox(wf[0]) + '</span>';
   const pv = PROJECTS[(i - 1 + PROJECTS.length) % PROJECTS.length];
   const go = to => () => { const sh = $('.sheet.pj'); sh.classList.add('swap'); setTimeout(() => { openProject(to.id); sh.scrollTo({top:0}); requestAnimationFrame(() => sh.classList.remove('swap')); }, 320); };
-  $('#pj-next').innerHTML = `<span class="mono">Next</span>${esc(nx.title)} →`; $('#pj-next').onclick = go(nx);
+  $('#pj-next').innerHTML = `<span class="mono">Next</span>${esc(nx.title)} →`; $('#pj-next').onclick = go(nx);
   $('#pj-prev').innerHTML = `<span class="mono">Previous</span>← ${esc(pv.title)}`; $('#pj-prev').onclick = go(pv);
   $('#pj-desc').textContent = p.desc;
   const SPEC = ['A more considered world', 'Ideas Spaces Objects People', 'Good ideas better company', 'The quick brown fox jumps over the lazy dog'];
@@ -1696,7 +1707,7 @@ function openProject(id){
     };
   }
   const rng = $('#pj-gal .tester input'), ta = $('#pj-gal .tarea');
-  if (rng && ta) rng.oninput = () => { ta.style.fontSize = rng.value + 'px'; };
+  if (rng && ta) { rng.oninput = () => { ta.style.fontSize = rng.value + 'px'; }; if (innerWidth < 640) { rng.value = 40; ta.style.fontSize = '40px'; } }
   document.querySelectorAll('#pj-gal .tf').forEach(b => b.onclick = () => {
     const f = p.spec[+b.dataset.k]; ta.style.fontFamily = `'${f.family}',var(--sans)`; $('#pj-gal .tabc').style.fontFamily = ta.style.fontFamily;
     $('#pj-gal .tdl').href = f.file; document.querySelectorAll('#pj-gal .tf').forEach(x => x.setAttribute('aria-pressed', x === b));
@@ -1721,7 +1732,7 @@ document.querySelectorAll('form.form').forEach(form => form.addEventListener('su
       headers:{'Content-Type':'application/json', Accept:'application/json'}, body:JSON.stringify(data)});
     if (!r.ok) throw 0;
     form.reset(); status.className = 'status mono ok';
-    status.textContent = form.id === 'add-form' ? 'Received — it goes up once it has been read.' : 'Sent. I’ll be in touch.';
+    status.textContent = form.id === 'add-form' ? 'Received — it goes up once it has been read.' : 'Sent. I’ll be in touch.';
   }catch{
     status.className = 'status mono err';
     status.textContent = 'That didn’t send. Please try again in a moment.';
@@ -1738,14 +1749,15 @@ WORLD.sort((a, b) => b.date.localeCompare(a.date));
   WORLD.splice(0, WORLD.length, ...mix); }
 $('#tiles').innerHTML = WORLD.map((e, i) => {
   const pic = e.photo && PHOTOS[e.photo];
-  const meta = `<span class="meta"><span class="dot"></span>${e.cat === 'link' ? esc(e.kind || 'link') + (e.price ? ' — ' + esc(e.price) : '') : e.cat + ' — ' + fmtDate(e.date)}</span>`;
+  const meta = `<span class="meta"><span class="dot"></span>${e.cat === 'link' ? esc(e.kind || 'link') : e.cat}</span>`;
+  const tt = esc(e.title).replace(/\s+(\S+)$/, ' <span class="lw">$1</span>').replace(/^(\S+)$/, '<span class="lw">$1</span>');
   if (pic) return `<button class="tile photo ${e.cat}" data-cat="${e.cat}" data-i="${i}">` +
       `<img srcset="${srcset(e.photo)}" sizes="(max-width:800px) 50vw, 25vw" alt="" loading="lazy" decoding="async">` +
-      `<span class="cap">${meta}<span class="t">${esc(e.title)}</span></span></button>`;
+      `<span class="cap">${meta}<span class="t">${tt}</span></span></button>`;
   if (e.cat === 'link')
-    return `<button class="tile link" data-cat="link" data-i="${i}">${meta}<span class="tb"><span class="t">${esc(e.title)}</span><span class="p">${esc(e.text)}</span></span></button>`;
+    return `<button class="tile link" data-cat="link" data-i="${i}">${meta}<span class="tb"><span class="t">${tt}</span><span class="p">${esc(e.text)}</span></span></button>`;
   const wide = e.text.length > 160 ? ' wide' : '';
-  return `<button class="tile ${e.cat}${wide}" data-cat="${e.cat}" data-i="${i}">${meta}<span class="tb"><span class="t">${esc(e.title)}</span><span class="p">${esc(e.text)}</span></span></button>`;
+  return `<button class="tile ${e.cat}${wide}" data-cat="${e.cat}" data-i="${i}">${meta}<span class="tb"><span class="t">${tt}</span><span class="p">${esc(e.text)}</span></span></button>`;
 }).join('');
 $('#tiles').addEventListener('click', ev => {
   const t = ev.target.closest('button.tile'); if (!t) return;
@@ -1753,8 +1765,8 @@ $('#tiles').addEventListener('click', ev => {
   if (e.sheet){ openSheet(e.sheet, '#man-title'); return; }
   const NAME = {idea:'Idea', sensation:'Sensation', artifact:'Artifact', link:'In orbit'};
   const sh = $('#sheet-entry'); sh.dataset.k = e.cat;
-  $('#en-meta').textContent = `Orbit — ${NAME[e.cat]}`;
-  $('#en-kind').innerHTML = `<span class="dot"></span>${esc(NAME[e.cat])}${e.cat === 'link' ? ' — ' + esc(e.kind || '') : ' — ' + fmtDate(e.date)}`;
+  $('#en-meta').textContent = `Orbit — ${NAME[e.cat]}`;
+  $('#en-kind').innerHTML = `<span class="dot"></span>${esc(NAME[e.cat])}${e.cat === 'link' ? '\u00a0— ' + esc(e.kind || '') : '\u00a0— ' + fmtDate(e.date)}`;
   $('#en-title').textContent = e.title; $('#en-text').textContent = e.text;
   const live = e.href && e.href !== '#', go = $('#en-go');
   go.hidden = e.cat !== 'link';
@@ -1763,7 +1775,7 @@ $('#tiles').addEventListener('click', ev => {
   if (e.photo && PHOTOS[e.photo]){ img.srcset = srcset(e.photo); img.sizes = '900px'; img.hidden = false; } else img.hidden = true;
   openSheet('sheet-entry');
 });
-document.querySelectorAll('#tiles .tile').forEach(t => t.querySelector('.dot').style.background = KDOT[t.dataset.cat]);
+document.querySelectorAll('#tiles .tile').forEach(t => t.querySelector('.dot').style.background = t.classList.contains('photo') ? 'var(--osd)' : KDOT[t.dataset.cat]);
 $('#filters').innerHTML = CATS.map(([k, label]) => {
   const n = k === 'all' ? WORLD.length : WORLD.filter(e => e.cat === k).length;
   const dot = k === 'all' ? '' : `<span class="dot" style="background:${KDOT[k]}"></span>`;
